@@ -1,0 +1,89 @@
+<div class="row esg-section">
+    <div class="moduleContainer">
+        <form name="form" (ngSubmit)="form.valid" #form="ngForm" class="custom-padding">
+            <div class="row mr-0 ml-0">
+                <div class="col-sm-2 col-md-2 col-xl-2 pc-lable">
+                    <div class="filter-label" title="Company">
+                        Portfolio Company
+                    </div>
+                    <div>
+                        <p-dropdown [filter]="true" [filterBy]="'companyName'" [virtualScroll]="true"
+                            [virtualScrollItemSize]="36"
+                            class="custom-scroller-position esg-pc-dropdown custom-searchable-dropdown"
+                            name="portfoliocompany" [options]="companyList" [(ngModel)]="selectedCompany"
+                            [displayField]="'companyName'" optionLabel="companyName"
+                            placeholder="Select company" (ngModelChange)="onCompanySelection(selectedCompany, $event)">
+                            <div class="text-danger">
+                                <div class="text-danger">
+                                    <ng-template let-company pTemplate="item">
+                                        <span class="TextTruncate" title="{{company.companyName}}">
+                                            {{company.companyName}}
+                                        </span>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-xl-4 apply-button">
+                    <button class="nep-button  button" type="submit" (click)="onApplyClick()"
+                        [disabled]="!form.valid || disableApply">Apply</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-12 dashboard">
+        <div class="row esg-model-page" *ngIf="showDivison">
+            <div class="tab col-lg-12 section-width">
+                <div
+                    class="tab-section-div esg-dashboard-header panel-heading pr-0 pl-0 custom-tab-panel-heading pb-0 border-bottom-0 panel-title custom-tabs custom-mat-tab">
+                    <nav mat-tab-nav-bar [tabPanel]="tabPanel" *ngIf="esgSubPageTabList?.length > 0">
+                        <a mat-tab-link [disableRipple]="true" *ngFor="let subTab of esgSubPageTabList"
+                            (click)="changeEsgSubPageTab(selectedSubpageData, subTab);" [active]="subTab.isActive"
+                            class="TextTruncate" title="{{subTab.alias}}">
+                            {{truncateTabName(subTab.alias, 26)}} </a>
+                    </nav>
+                </div>
+                <mat-tab-nav-panel #tabPanel>
+                    <div class="esg-chart col-lg-12">
+                        <div class="pull-right headerSize pb-1" *ngIf="showPeriod">
+                            <div class="d-inline  QMY_Container">
+                                <div class="d-inline custom-padding">
+                                    <div class="d-inline QMY_Text MStyle QMYStyle" *ngFor="let opt of filterOptions"
+                                        (click)="onChangePeriodOption(opt)" [ngClass]="opt.key ?'activeQMY':''">
+                                        {{opt.field}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <app-esg-chart [selectedSubpageData]="selectedSubpageData"
+                            [selectedCompany]="selectedCompany" [companyDetails] = "selectedCompanyDetails" [typeField]="defaultType" [disableApply]="disableApply" (valueChange)='QuaterandAnnual($event)'></app-esg-chart>
+                    </div>
+                    <div class="esg-data-table col-lg-12">
+                        <app-esg-datatable (refreshEsgData)="refreshEsgDataEventHandler($event)" (showFootNote)="showFootNoteEventHandler($event)"
+                            [selectedSubpageData]="selectedSubpageData" [typeField]="defaultType" [companyDetails] = "selectedCompanyDetails"
+                            [selectedCompany]="selectedCompany" ></app-esg-datatable>
+                    </div>
+                </mat-tab-nav-panel>
+                <div class="row mr-0 ml-0 esg-foot-note-section" *ngIf="showFootNote">
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 foot-note">
+                        Footnotes
+                    </div>
+                    <app-custom-quill-editor (onEditorValueChange)="onEditorValueChangeEvent($event)" [editorPlaceholder]="editorPlaceholder" [(ngModel)]="esgFootnoteText"></app-custom-quill-editor>
+                    <div class="footnote-save" [ngClass]="disableCancel && disableSave ? 'apply-opacity' : ''">
+                        <div class="footnote-save-buttons">
+                            <nep-button Type="Secondary" class="nepbtn-padding-right" [disabled]="disableCancel" (click)="onFootNoteCancel()">Cancel</nep-button>
+                            <nep-button Type="Primary" class="save-button" [disabled]="disableSave" (click)="onFootNoteSave()">Save</nep-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center esg-model-page no-data" *ngIf="!showDivison">
+            <div class="image-padding">
+                <img class="EmptyStateImgStyle" src="assets/dist/images/WorkFlowZeroState.svg" alt="" /><br />
+                <span class="font-weight-bold">Please provide the required inputs above</span><br />
+            </div>
+        </div>
+    </div>
+</div>

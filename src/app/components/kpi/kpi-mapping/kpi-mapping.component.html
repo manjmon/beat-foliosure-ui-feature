@@ -1,0 +1,14 @@
+<div class="row m-0  pr-0 pt-0  mb-0" >
+    <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12  pl-0 pr-0">
+        <div class="row ml-0 mr-0">
+            <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12  pl-0 pr-0">
+                <div class="row ml-0 mr-0">
+                    <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pr-0 pl-0">
+                        <app-portfolio-company-mapping (OnCopyCompanyEmit)="OnClear()"  [copyToCompanies]="selectedCopyToCompanyList" [kpiTypes]="kpiTypeList" [selectedKPIType]="kpiTypeSelected" [reload]="reload" [moduleID]="moduleID" [kpiType]=kpiType [companyId]=companyId></app-portfolio-company-mapping>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

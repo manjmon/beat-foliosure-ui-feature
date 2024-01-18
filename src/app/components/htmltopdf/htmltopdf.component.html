@@ -1,0 +1,58 @@
+<div *ngFor="let data of reportGraphData;let i=index" id="{{data.section}}///{{data.kpiId}}//{{data.kpi}}" #button class="htmlpdf-pr" >
+    <input type="hidden" value="{{i}}" id="{{i}}">
+    <div (loaded)="onItemLabelLoaded($event)" *ngIf="(data.section==templateSections.InvestmentGraph)">
+        <app-lineBar-chart-report *ngIf="data?.data[0].Results.length>0;else templateName" [data]="data?.data[0].Results" [xField]="data?.data[0].Columns[1]" [yBarFields]="[data?.data[0].Columns[2]]" [yLineFields]="[data?.data[0].Columns[3]]" [unit]="kpiUnit(data)">
+        </app-lineBar-chart-report>
+        <ng-template #templateName>
+            <div class="text-info mt-3 text-center">
+                No record found
+            </div>
+        </ng-template>
+    </div>
+    <div (loaded)="onItemLabelLoaded($event)" *ngIf="(data.section==templateSections.TradingGraph)">
+        <app-lineBar-chart-report *ngIf="data?.data[0].Results.length>0;else templateName" [data]="data?.data[0].Results" [xField]="data?.data[0].Columns[1]" [yBarFields]="graphHeaders" [yLineFields]="['% Change']" [unit]="kpiUnit(data)">
+        </app-lineBar-chart-report>
+        <ng-template #templateName>
+            <div class="text-info mt-3 text-center">
+                No record found
+            </div>
+        </ng-template>
+    </div>
+    <div (loaded)="onItemLabelLoaded($event)" *ngIf="(data.section==templateSections.CreditGraph)">
+        <app-lineBar-chart-report [lineColors]="lineColors" *ngIf="data?.data[0].Results.length>0;else templateName" [data]="data?.data[0].Results" [xField]="data?.data[0].Columns[1]" [yBarFields]="graphHeaders" [yLineFields]="['% Change']" [unit]="kpiUnit(data)">
+        </app-lineBar-chart-report>
+        <ng-template #templateName>
+            <div class="text-info mt-3 text-center">
+                No record found
+            </div>
+        </ng-template>
+    </div>
+    <div (loaded)="onItemLabelLoaded($event)" *ngIf="(data.section==templateSections.CompanyGraph)">
+        <app-lineBar-chart-report [lineColors]="lineColors" *ngIf="data?.data[0].Results.length>0;else templateName" [data]="data?.data[0].Results" [xField]="data?.data[0].Columns[1]" [yBarFields]="[data?.data[0].Columns[2],data?.data[0].Columns[4]]" [yLineFields]="[data?.data[0].Columns[3],data?.data[0].Columns[5]]"
+            [unit]="kpiUnit(data)">
+        </app-lineBar-chart-report>
+        <ng-template #templateName>
+            <div class="text-info mt-3 text-center">
+                No record found
+            </div>
+        </ng-template>
+    </div>
+    <div (loaded)="onItemLabelLoaded($event)" *ngIf="(data.section==templateSections.OperationalGraph)">
+        <app-lineBar-chart-report *ngIf="data?.data[0].Results.length>0;else templateName" [data]="data?.data[0].Results" [xField]="data?.data[0].Columns[1]" [yBarFields]="[data?.data[0].Columns[2]]" [yLineFields]="[data?.data[0].Columns[3]]" [unit]="kpiUnit(data)">
+        </app-lineBar-chart-report>
+        <ng-template #templateName>
+            <div  class="text-info mt-3 text-center">
+                No record found
+            </div>
+        </ng-template>
+    </div>
+    <div (loaded)="onItemLabelLoaded($event)" *ngIf="(data.section==templateSections.ImpactGraph)">
+        <app-lineBar-chart-report *ngIf="data?.data[0]?.Results.length>0;else templateName" [data]="data?.data[0]?.Results" [xField]="data?.data[0]?.Columns[1]" [yBarFields]="[data?.data[0]?.Columns[2]]" [yLineFields]="[data?.data[0]?.Columns[3]]" [unit]="kpiUnit(data)">
+        </app-lineBar-chart-report>
+        <ng-template #templateName>
+            <div class="text-info mt-3 text-center">
+                No record found
+            </div>
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+﻿
+    <div class="col-12 pl-0 pr-0 attribution-report">
+        <div class="row attribution-report-header  mr-0 ml-0">
+            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 horizontal-parent">
+                <div class="horizontal-child1 float-left menu-box-shadow" [ngClass]="enableLeft?'header-left-arrow':''">
+                    <a class="btn pt-2" (click)="moveLeft()" (mouseleave)="stopLeftScrolling()">
+                        <i class="fa fa-chevron-left arrow-style" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div class="horizontal-child2 float-right menu-box-shadow" [ngClass]="enableRight?'header-right-arrow':''">
+                    <a class="btn pt-2" (click)="moveRight()" (mouseleave)="stopRightScrolling()">
+                        <i class="fa fa-chevron-right arrow-style" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <div #panel class="horizontal-menu menu-box-shadow">
+                    <p-selectButton class="custom-border-hover" [options]="adhocDataScroll" name="sortBy"  [(ngModel)]="defaultSelectedTab" (onChange)="changeTabType(defaultSelectedTab)">
+                        <ng-template let-item pTemplate>
+                            <button *ngIf="selectedPeriodType.label=='Monthly'" [title]="item.MonthYear" class="nep-button nep-button-link nepbtn-td"> 
+                                <div [ngClass]="item.MonthYear==defaultSelectedTab?'default-style':''"> {{item.MonthYear}}</div>
+                            </button>
+                            <button *ngIf="selectedPeriodType.label=='Yearly'" [title]="item.Year" class="nep-button nep-button-link nepbtn-text">
+                                <div [ngClass]="item.Year==convertStringToInt(defaultSelectedTab)?'default-style':''"> {{item.Year}}</div>
+                            </button>
+                            <button *ngIf="selectedPeriodType.label=='Quarterly'" [title]="item.Quarter" class="nep-button nep-button-link nepbtn-text-decoration">
+                                <div [ngClass]="item.Quarter==defaultSelectedTab?'default-style':''"> {{item.Quarter}}</div>
+                            </button>
+                        </ng-template>
+                    </p-selectButton>
+                </div>
+            </div>
+        </div>
+    </div>

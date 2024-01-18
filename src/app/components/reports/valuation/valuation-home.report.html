@@ -1,0 +1,40 @@
+﻿<div class="row">
+    <div class="col-lg-12">
+        <div class="report-component">
+            <div class="card card-main">
+                <div class="card-header card-header-main">
+                    <div class="row">
+                        <div class="col-auto mr-auto">
+                            <div class="dropdown report-menu">
+                                <button class="btn btn-secondary dropdown-toggle pt-0 pb-0" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{reportCategoryTitle}}</button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <div *ngFor="let report of holdingsByList"> <a class="dropdown-item" (click)="changeReportType(report.value)">{{report.label}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto pt-1">
+                            <a class="btn  filter-btn p-1" title="Filter" (click)="showHideFilter()">
+                                <i [hidden]="masterModel.filterSection" class="fa fa-chevron-circle-down" ng-reflect-name="plus-square" title="Show Filter"></i>
+                                <i [hidden]="!masterModel.filterSection" class="fa fa-chevron-circle-up" ng-reflect-name="plus-square" title="Hide Filter"></i>
+                                <span class="filter-text">Filter</span>
+                            </a>
+                        </div>
+                        <div class="col-auto pt-1">
+                            <a class="nep-button nep-button-link nepbutn-home-pl" *ngIf="isDataAvailableInReports && (reportCategory!=4)" title="Export(Excel file)" (click)="exportTopHoldingReport()" [hideIfUnauthorized]='{featureId:feature.Report,action:"export"}'>
+                                <i aria-hidden="true" class="fa fa-file-excel-o"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div id="ValuationCharts" class="{{currentTabId=='ValuationCharts'? 'tab-pane active show':'tab-pane fade'}}">
+                            <holding-values #holdingValues [masterModel]="masterModel"></holding-values>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

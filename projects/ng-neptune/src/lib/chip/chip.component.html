@@ -1,0 +1,30 @@
+<mat-form-field style="width: 100%;" >
+<mat-chip-grid #chipList>
+    <span *ngIf="checkIfEmpty()">
+      <mat-chip-row [class]="customclass" *ngFor="let item of chipitems"
+          [removable]="!isReadonly" (removed)="OnRemoveItem(item)" [selectable]="selectable" >
+      {{item}}
+      <mat-icon matChipRemove *ngIf="!isReadonly">close</mat-icon>
+      </mat-chip-row>
+    </span>
+    <input *ngIf="!isReadonly" 
+           [attr.maxlength]="maxlen"
+           [placeholder]="placeholder"      
+           [class]="inputClass"
+           [matChipInputFor]="chipList"
+           [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+           (matChipInputTokenEnd)="OnAddItem($event)"
+           [formControl]="itemCtrl"
+           [matAutocomplete]="auto"
+           #itemInput
+           (click) = "openPanel()"
+           #automcomplete="matAutocompleteTrigger"
+           >
+  </mat-chip-grid>
+
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option *ngFor="let item of filteredItems  | async" [value]="item">
+      {{item}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

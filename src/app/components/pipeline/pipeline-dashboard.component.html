@@ -1,0 +1,47 @@
+<div class="charts" (resized)="onResized($event)">
+    <div class="row ml-0 mr-0">
+        <div class="col-sm-12 col-lg-12 col-xl-12 col-xs-12 col-12 col-md-12 pr-0 pl-0">
+            <div class="row mr-0 ml-0">
+                <div class="col-sm-6 col-lg-6 col-xl-6 col-xs-12 col-12 col-md-6 pr-2 pl-0 pb-2">
+                    <div class="chart-background">
+                        <div class="chart-title TextTruncate" title="Pipeline Status">Pipeline Status</div>
+                        <div class="line-chart-section">
+                            <app-pie-chart [isDisplay]="width" [nameField]="'name'" [valueField]="'count'" [data]="data['status']">
+                            </app-pie-chart>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-6 col-xl-6 col-xs-12 col-12 col-md-6 pr-0 pl-0 pb-2">
+                    <div class="chart-background">
+                        <div class="chart-title TextTruncate" title="Pipelines Strategies">Pipelines Strategies</div>
+                        <div class="line-chart-section">
+                            <app-pie-chart [isDisplay]="width" [nameField]="'name'" [valueField]="'count'" [data]="data['strategy']">
+                            </app-pie-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-12 col-xl-12 col-xs-12 col-12 col-md-12 pr-0 pl-0">
+            <div class="row mr-0 ml-0">
+                <div class="col-sm-6 col-lg-6 col-xl-6 col-xs-12 col-12 col-md-6 pr-2 pl-0 pb-2">
+                    <div class="chart-background">
+                        <div class="chart-title TextTruncate" title="Number of deals across sector">Number of deals across sector</div>
+                        <div class="line-chart-section pt-4">
+                            <app-bar-chart [isDisplay]="width" class="pipeline-chart" [isMultiColorBars]="true" [data]="data['sector']" [xField]="'name'" [yField]="'count'"></app-bar-chart>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-lg-6 col-xl-6 col-xs-12 col-12 col-md-6 pr-2 pl-0 pb-2">
+                    <div class="chart-background">
+                        <div class="chart-title TextTruncate" title="Number of deals by Primary contact">Number of deals by Primary contact</div>
+                        <div class="line-chart-section pt-4">
+                            <app-bar-chart [isDisplay]="width" class="pipeline-chart" [isMultiColorBars]="true" [data]="data['contact']" [xField]="'name'" [yField]="'count'"></app-bar-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

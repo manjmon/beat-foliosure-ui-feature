@@ -1,0 +1,161 @@
+@import "../../../../variables";
+
+.card {
+    margin-top: -4px !important;
+}
+
+.valuation-model-page {
+    background: $nep-white 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 12px $nep-shadow-color;
+    border: 1px solid $nep-divider;
+    border-radius: 4px;
+    opacity: 1;
+}
+.valuation-model-page .empty-state-1{
+    height: calc(100vh - 228px)!important;
+}
+
+.allvalues-valuation{
+    padding-top: 11px;
+    padding-right: 15px;
+}
+
+.tab-bg {
+    background-color: $nep-white  !important;
+}
+
+.nav-link {
+    background-color: transparent !important;
+    letter-spacing: 0px;
+    color: $nep-text-grey;
+    font-size: 0.9rem !important;
+    padding-top: 9px;
+    padding-bottom: 9px;
+
+    &.active {
+        background-color: $nep-base-grey  !important;
+        color: $nep-primary  !important;
+        font-size: 0.9rem !important;
+        font-weight: bold;
+    }
+}
+
+.custom-tabs>.nav-tabs .nav-link.active,
+.custom-tabs>.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+    color: $nep-nav-tab;
+    background-color: $nep-white;
+    border-color: $nep-nav-tab-border-color $nep-nav-tab-border-color $nep-white-secondary;
+    border-bottom: none !important;
+    top: 2px !important;
+    position: relative !important;
+}
+
+.p-action-padding {
+    padding: 0px 8px 0px 12px;
+}
+
+.p-label-padding {
+    padding-left: 12px;
+}
+
+.col-divider {
+    border-right: 1px solid #DEDFE0 !important;
+}
+
+.pref-icon {
+    padding-right: 12px !important;
+}
+
+.label-content-padding {
+    padding-top: 20px !important;
+}
+.position-label.label-content-padding {
+    display: inline-table;
+    padding-top: 15px !important;
+    padding-left: 15px !important;
+
+}
+.p-label-padding-style {
+    padding-left: 23px;
+}
+.filter-tab {
+    padding: 8px 0px 8px 20px !important;
+    font-weight: normal !important;
+}
+
+.filter-label
+{
+    letter-spacing: 0px;
+    color: #55565A;
+    opacity: 1;
+}
+
+::ng-deep .cutsom-height .quarterYearCntrl .cursorBut {
+    height: 30px !important;
+    padding-left: 12px;
+   border-bottom:  1px solid  #C9C9D4  !important;
+}
+ .custom-padding{
+    padding: 0.5rem 0 1rem 0;
+}
+::ng-deep .empty-state {
+    padding-top: 12%;
+    padding-bottom: 12%;
+    background-color: white;
+}
+.custom-padding-no-data {
+    padding-top: 1%;
+    padding-bottom: 1%;
+    background: #FAFAFB;
+}
+.disable-pointer-events{
+    pointer-events: none;
+    opacity: 0.65;
+}
+.custom-background{
+    background-color: antiquewhite;
+}
+.empty-state-1{
+    padding-top: 15%;
+    padding-bottom: 15%;
+}
+.custom-margin{
+    margin-top: -3px !important; 
+}
+.custom-padding-apply{
+    margin-left: -44px; 
+}
+.moduleContainer{
+    box-shadow: 0px 3px 6px #00000014;
+    border: 1px solid #DEDFE0;
+    border-radius: 4px;
+    opacity: 1;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    }
+
+    @media only screen and (max-width: 1920px) {
+        .smallScreen {margin-left: -50px !important;}
+    }
+    @media only screen and (max-width: 1536px) {
+        .smallScreen {margin-left: 25px !important;}
+    }
+    @media only screen and (max-width: 1440px)  {
+        .smallScreen {margin-left: 37px !important;}
+    }
+    @media only screen and (max-width: 1366px) {
+        .smallScreen {margin-left: 46px !important;}
+    }
+    @media only screen and (max-width: 1280px) {
+        .smallScreen {margin-left: 65px !important; }
+    }
+    @media only screen and (max-width: 1024px) {
+        .smallScreen {margin-left: 105px !important;}
+    }
+.button-padding{
+    margin-left: -41px;
+    padding-left: 36px;
+}
+
+ 

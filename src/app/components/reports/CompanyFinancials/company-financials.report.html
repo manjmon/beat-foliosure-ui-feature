@@ -1,0 +1,156 @@
+<div class="row kpis-report-section">
+<div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+	<form name="form" (ngSubmit)="form.valid && search(form)" #form="ngForm" id="report-form">
+		<div class="d-inline-block pr-3">
+			<p-dropdown [filter]="true" [filterBy]="'companyName'" [virtualScroll]="true" [virtualScrollItemSize]="30" class="access-subfeature custom-searchable-dropdown" name="module"
+			[options]="masterModel.portfolioCompanyList" [(ngModel)]="model.portfolioCompany" placeholder="Select Company"
+			optionLabel="companyName" [showClear]="false" (ngModelChange)="onCompanyChange()">
+			<ng-template let-company pTemplate="item">
+				<span title="{{company.companyName}}">
+					{{company.companyName}}
+				</span>
+			</ng-template>
+		</p-dropdown>
+		</div>
+		<div class="d-inline-block pr-3" *ngIf="showKPIFilter">
+			<p-multiSelect  [virtualScroll]="true" [virtualScrollItemSize]="30" [disabled]="sectorWiseOperationalKPIsLoading" name="KPIs" class="lp-report-Kpilineitems multi-select-custom custom-searchable-multiselect" #Funds="ngModel"
+			[options]="sectorWiseOperationalKPIs" defaultLabel="Select KPIs" [maxSelectedLabels]="1"
+			[selectedItemsLabel]="'{0} items selected'" [(ngModel)]="model.sectorwiseOperationalKPIs"
+			 optionLabel="kpi" (onChange)="OnKPIChanged()">
+			<ng-template let-kpi pTemplate="item">
+				<span title="{{kpi.kpi}}">
+					{{kpi.kpi}}
+				</span>
+			</ng-template>
+		</p-multiSelect>
+		</div>
+		<div class="d-inline-block pr-3">
+			<p-calendar class="kpis-calendar" name="timePeriod" [placeholder]="'Select Period'" 
+			showButtonBar="false" (onClearClick)="onDateClear()" [(ngModel)]="dateRange" #timePeriod selectionMode="range" 
+			[monthNavigator]="true" [yearNavigator]="true" [readonlyInput]="true" inputStyleClass="date-picker-input" 
+			dateFormat="dd/mm/yy" [showIcon]="true" yearRange={{yearRange}} (onSelect)="onDateSelect()" [maxDate]="today" [minDate]="minDate"></p-calendar>
+		</div>
+		<div class="float-right">
+			<button class=" width-120 nep-button nep-button-primary width-135 reset-update-portfolio-css ml-2"
+                        (click)="search($event)"        [disabled]="model.portfolioCompany==undefined && model.dateRange==undefined &&  model.sectorwiseOperationalKPIs == undefined">Apply</button>
+		</div>
+	</form>
+
+</div>
+</div>
+<div class="kpi-section-chart pr-2"   *ngFor="let report of reportData" (resized)="onResized($event)">
+	<div class="row mr-0 ml-0" [ngStyle]="{'height': 'calc(100% - 200px)'}">
+		<div class="col-sm-12 col-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0">
+				<div *ngIf="report.Results!=null && report.Results.length>0" class="Sub-Title">
+					<div class="row p-0" *ngIf="report.ReportType==reportType.CompanyFinancialKPIReport">
+						<div class="col-sm-6 col-md-6 col-6 col-xl-6 col-lg-6 m-0">
+							<div class="chart-title pb-2">Revenue</div>
+							<div class="chart-bg m-0">
+								<div class="report-chart">
+									<app-lineBar-chart [isDisplay]="width" [data]="report.chartData" [xField]="report.Columns[0]" [yBarFields]="['Revenue']" [yLineFields]="['% Change In Revenue']" [unit]="'$ in Mn'"></app-lineBar-chart>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-6 col-6 col-xl-6 col-lg-6 m-0">
+							<div class="chart-title pb-2">EBITDA</div>
+							<div class="chart-bg m-0">
+								<div class="report-chart">
+									<app-lineBar-chart [isDisplay]="width" [data]="report.chartData" [xField]="report.Columns[0]" [yBarFields]="['EBITDA']" [yLineFields]="['% Change In EBITDA']" [unit]="'$ in Mn'"></app-lineBar-chart>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-6 col-6 col-xl-6 col-lg-6 m-0">
+							<div class="chart-title pb-2">Net Debt</div>
+							<div class="chart-bg m-0 m-top15">
+								<div class=" report-chart">
+									<app-bar-chart [isDisplay]="width" [data]="report.chartData" [xField]="report.Columns[0]" [yField]="'Net Debt'" [valueSuffix]="'M'" [unit]="'$ in Mn'"></app-bar-chart>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-6 col-6 col-xl-6 col-lg-6 m-0">
+							<div class="chart-title pb-2">Leverage Multiple (Net Debt/ EBITDA)</div>
+							<div class="chart-bg m-0 m-top15">
+								<div class=" report-chart">
+									<app-bar-chart [isDisplay]="width" [data]="report.chartData" [xField]="report.Columns[0]" [yField]="'Leverage Multiple'" [valueSuffix]="'x'"></app-bar-chart>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-6 col-6 col-xl-6 col-lg-6 m-0">
+							<div class="chart-title pb-2">EBITDA Margin (EBITDA/ Revenue)</div>
+							<div class="chart-bg m-0 m-top15 m-bottom15">
+								<div class=" report-chart">
+									<app-bar-chart [isDisplay]="width" [data]="report.chartData" [xField]="report.Columns[0]" [yField]="'EBITDA Margin (%)'" [valueSuffix]=""></app-bar-chart>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-6 col-6 col-xl-6 col-lg-6 m-0">
+							<div class="chart-title pb-2">Valuation Multiple (Enterprise Value/ EBITDA)</div>
+							<div class="chart-bg m-0 m-top15 m-bottom15">
+								<div class=" report-chart">
+									<app-bar-chart [isDisplay]="width" [data]="report.chartData" [xField]="report.Columns[0]" [yField]="'Valuation Multiple'" [valueSuffix]="'x'"></app-bar-chart>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+
+					<div class="row" *ngIf="report.ReportType==reportType.CompanyOperationalKPIGrowth">
+						<div class="col-sm-6 col-md-6 col-6 col-xl-6 col-lg-6 m-0" *ngFor="let kpiReport of report.KPIReports">
+							<div class="chart-title pb-2">{{kpiReport.title}}  <span *ngIf="kpiReport!=null && kpiReport.data.length>0 && kpiReport.asOfDate!=undefined">(as of {{kpiReport.asOfDate|date : "dd MMM, y"}})</span></div>
+							<div class="chart-bg m-0  m-bottom15">
+								<div class=" report-chart">
+									<app-lineBar-chart [isDisplay]="width" [data]="kpiReport.data" [xField]="report.Columns[1]" [yBarFields]="[report.Columns[2]]" [yLineFields]="[report.Columns[3]]" [unit]="kpiReport.unit"></app-lineBar-chart>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="row" *ngIf="report.ReportType==reportType.CompanyFinancialPeerComparison">
+						<div class="col-sm-6 col-md-6 col-6 col-xl-6 col-lg-6 m-0">
+							<div class="chart-title pb-2">Leverage Multiple (Net Debt/ EBITDA)</div>
+							<div class="chart-bg m-0 m-top15">
+								<div class=" report-chart">
+									<app-bar-chart [isDisplay]="width" [data]="report.chartData" [xField]="report.Columns[1]" [yField]="'Leverage Multiple'" [valueSuffix]="'x'" [isMultiColorBars]="true"></app-bar-chart>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-6 col-6 col-xl-6 col-lg-6 m-0">
+							<div class="chart-title pb-2">EBITDA Margin (EBITDA/ Revenue)</div>
+							<div class="chart-bg m-0 m-top15 m-bottom15">
+								<div class=" report-chart">
+									<app-bar-chart [isDisplay]="width" [data]="report.chartData" [xField]="report.Columns[1]" [yField]="'EBITDA Margin (%)'" [valueSuffix]="" [isMultiColorBars]="true"></app-bar-chart>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6 col-md-6 col-6 col-xl-6 col-lg-6 m-0">
+							<div class="chart-title pb-2">Valuation Multiple (Enterprise Value/ EBITDA)</div>
+							<div class="chart-bg m-0 m-top15 m-bottom15">
+								<div class=" report-chart">
+									<app-bar-chart [isDisplay]="width" [data]="report.chartData" [xField]="report.Columns[1]" [yField]="'Valuation Multiple'" [valueSuffix]="'x'" [isMultiColorBars]="true"></app-bar-chart>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+					</div>	
+		</div>
+	</div>
+</div>
+<div  *ngIf="model.portfolioCompany==undefined && model.dateRange==undefined &&  model.sectorwiseOperationalKPIs == undefined">
+	<div class="row no-image-bg mr-0 ml-0" >
+		<div class="col-sm-12 col-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 text-center">
+			<div class="">
+				<img class="EmptyStateImgStyle" src="assets/dist/images/WorkFlowZeroState.svg" alt="" /><br />		
+				
+			</div >
+			<div class="mt-3" >
+				<span class="workflowZeroStateFontStyle custom-kpi-chart-text ">Please select portfolio company & KPIs to view the report</span>
+			</div>
+		</div>
+	</div>
+</div>
+
+

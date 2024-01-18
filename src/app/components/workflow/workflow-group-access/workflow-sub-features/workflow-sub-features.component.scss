@@ -1,0 +1,89 @@
+@import "../../../../../variables";
+.right-section-subfeature {
+    .tabradius {
+        border-radius: 4px;
+        margin: -1px;
+        border-right: none !important;
+        border-left: 1px solid $nep-nav-tab-border-color;
+    }
+    .border {
+        border: 1px solid $nep-nav-tab-border-color;
+        border-right: none !important;
+    }
+    .content-section {
+        background: $nep-white 0% 0% no-repeat padding-box;
+        overflow-y: auto;
+    }
+    .feature-header {
+        background: #FAFAFB 0% 0% no-repeat padding-box;
+        opacity: 1;
+        .sub-feature-section {
+            padding: 12px 16px;
+            display: inline-block;
+            width: 272px;
+        }
+    }
+    button[disabled] {
+        position: relative !important;
+        box-shadow: none !important;
+        cursor: not-allowed !important;
+    }
+    .btn-nep-primary {
+        background: $nep-primary 0% 0% no-repeat padding-box;
+        text-align: left;
+        letter-spacing: 0px;
+        color: $nep-white !important;
+        &:focus,
+        &:hover {
+            border-color: $nep-primary !important;
+        }
+    }
+    button {
+        border: 1px solid $nep-primary;
+        border-radius: 4px;
+        font-family: "Helvetica Neue LT W05_55 Roman",Arial, Verdana, Tahoma,sans-serif !important;
+    }
+    .group-right-sec {
+        padding: 12px 16px;
+        background: $nep-base-grey 0% 0% no-repeat padding-box;
+        border-top: 1px solid $nep-divider;
+        border-bottom: none;
+        border-left: none;
+        border-radius: 0px 0px 0px 4px;
+        opacity: 1;
+    }
+    input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+    }
+    .btn-nep-default {
+        background: $nep-white 0% 0% no-repeat padding-box;
+        &:focus,
+        &:hover {
+            border-color: $nep-primary !important;
+        }
+    }
+    .icons-ban {
+        color: $nep-icon-grey !important;
+    }
+    .empty-state {
+        padding-top: 25%;
+    }
+    .features-header {
+        width: 200px !important;
+        left: 60px !important;
+    }
+    .checkbox-header {
+        width: 60px !important;
+    }
+    .canView,
+    .canEdit,
+    .canImport,
+    .canExport {
+        width: 100px !important;
+    }
+}
+.custom-align-header{
+    text-align: center;
+}

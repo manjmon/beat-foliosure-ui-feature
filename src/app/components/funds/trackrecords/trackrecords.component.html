@@ -1,0 +1,295 @@
+<div class="align-items-start">
+    <div class="ui-widget-header ui-bb ui-wed-bb">
+        <div class="float-right plus-btn">
+            <a  title="Add">
+                <img class="tc-add" (click)="open(fundTrackRecordModel)" title="Add" src="assets/dist/images/plus.svg" /></a>
+            </div>
+        <div class="row mr-0 ml-0">
+            <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                <div class="float-left">
+                        <div class="allvalues-kpis TextTruncate" title="All values in: {{model?.currencyDetail?.currencyCode}}">All values in: {{model?.currencyDetail?.currencyCode}}</div>
+                </div>
+                    <div class="float-right"> 
+                        <div class="d-inline-block search">
+                            <span class="fa fa-search fasearchicon p-1"></span>
+                            <input #gbTrackRecord
+                            (input)="tblfundTrackRecord.filterGlobal($event.target.value, 'contains')"
+                            [(ngModel)]="globalFilter" type="text" pInputText
+                                class="search-text-company companyListSearchHeight TextTruncate" placeholder="Search"
+                                [(ngModel)]="globalFilter">
+                        </div>
+                        <div class="d-inline-block">
+                            <img class="p-action-padding download-excel" title="Export  (Excel file)"
+                                 src="assets/dist/images/Cloud-download.svg" (click)="exportFundHoldingValues()"/>
+                                 <span class="excel-load" *ngIf="isExportLoading"><i aria-hidden="true" class="fa fa-circle-o-notch fa-1x fa-fw"></i>
+                                </span>
+                        </div>
+                        <div class="d-inline">
+                            <span class="col-divider">
+                            </span>
+                        </div>
+                        <div class="d-inline-block pl-2 pref-icon"><img id="dropdownMenuButton" [matMenuTriggerFor]="menu"  src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter" alt="" #tRecordTrigger="matMenuTrigger"  /> </div>
+                    </div>
+                </div>
+            </div>         
+        </div>
+    <div class="datatable-container">
+        <p-table styleClass="p-datatable-gridlines" [hidden]="loading" class="Track-Records cashflow-tbl text-left custom-kpi-table migration-frozen-table"
+        [columns]="funddynamicCoulmns" [resizableColumns]="true" #tblfundTrackRecord
+        [value]="fundTrackRecords" [lazy]="true" (onLazyLoad)="loadTrackRecordsLazy($event)" 
+        [scrollable]="true" scrollHeight="40vh" [globalFilter]="gbTrackRecord" 
+            sortMode="multiple">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <ng-container *ngFor="let col of frozenFundTrackTableColumns; index as i">
+                        <th pFrozenColumn  scope="col" [ngStyle]="{'width':'303px'}">
+                            {{col.header}}
+                        </th>
+                    </ng-container>
+                    <ng-container *ngFor="let col of columns;let end = last">
+                        <th [ngClass]="(col.header=='Quarter')?'frozen-header-tr-Width':''" *ngIf="col.header=='Quarter'"
+                            title="{{col.displayName}}" class="TextTruncate-investor table-data-left" [pSortableColumn]="col.displayName">
+                            {{col.field}}
+                            <p-sortIcon [field]="col.displayName">
+                            </p-sortIcon>
+                        </th>
+                        <th class="TextTruncate" title="{{col.displayName}}" *ngIf="col.header!='Quarter' && !end"  [pSortableColumn]="!col.isCustom?col.name:'Quarter'" >
+                            {{col.displayName}}
+                            <p-sortIcon [field]="!col.isCustom?col.name:'Quarter'">
+                            </p-sortIcon>
+                        </th> 
+                        <th *ngIf="col.name=='Action'" title="{{col.displayName}}"> {{col.displayName}}</th>                                                                            
+                    </ng-container>                                     
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-fundTrackRecord  let-columns="columns">
+                <tr>    
+                    <ng-container *ngFor="let col of frozenFundTrackTableColumns; index as i">
+                        <td pFrozenColumn [ngStyle]="{'width':'303px'}" *ngIf="col.header==FundTrackRecordStatic.Quarter"
+                        [ngClass]="(col.header=='Quarter')?'frozen-header-tr-Width border-right-0':''"
+                        [ngClass]="(col.header==FundTrackRecordStatic.Quarter) ? 'table-data-left' : 'table-data-right'">
+                        <a class="click-view" (click)="openFunHoldingDetailForQuarter(fundTrackRecord)" title="View Details">{{
+                            fundTrackRecord.Quarter +' '+fundTrackRecord.Year }}</a>
+                    </td>
+                    </ng-container>            
+                    <ng-container *ngFor="let col of columns;let last = last">  
+                     <td *ngIf="col.header!=FundTrackRecordStatic.Quarter &&!last"  [ngClass]="(col.name==FundTrackRecordStatic.Quarter) ? 'table-data-left' : 'table-data-right'" >
+                        {{                        
+                        col.name==FundTrackRecordStatic.TotalNumberOfInvestments?(fundTrackRecord[col.displayName]!="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.noDecimal):fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.RealizedInvestments?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.noDecimal):fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.UnRealizedInvestments?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.noDecimal):fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.TotalInvestedCost?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.currencyDecimal):fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.TotalRealizedValue?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.currencyDecimal):fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.TotalUnRealizedValue?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.currencyDecimal ):fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.TotalValue?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.currencyDecimal):fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.Dpi?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.multipleDecimal )+"x":fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.Rvpi?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.multipleDecimal )+"x":fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.GrossMultiple?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.multipleDecimal)+"x":fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.NetMultiple?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.multipleDecimal)+"x":fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.GrossIRR?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.percentDecimal)+"%":fundTrackRecord[col.displayName]):
+                        col.name==FundTrackRecordStatic.NetIRR?(fundTrackRecord[col.displayName] !="NA"?(fundTrackRecord[col.displayName]|number : NumberDecimalConst.percentDecimal)+"%":fundTrackRecord[col.displayName]):
+                        col.dataType != Mdatatypes.Date?(
+                            col.dataType==Mdatatypes.Multiple?(fundTrackRecord[col.displayName]!="NA"?( fundTrackRecord[col.displayName] | number : NumberDecimalConst.multipleDecimal)+"x":fundTrackRecord[col.displayName]):
+                            col.dataType==Mdatatypes.Percentage?(fundTrackRecord[col.displayName]!="NA"?( fundTrackRecord[col.displayName] | number : NumberDecimalConst.percentDecimal)+"%":fundTrackRecord[col.displayName]):
+                            col.dataType==Mdatatypes.CurrencyValue?(fundTrackRecord[col.displayName]!="NA"?( fundTrackRecord[col.displayName] | number : NumberDecimalConst.currencyDecimal):fundTrackRecord[col.displayName]):
+                            col.dataType==Mdatatypes.Number?(fundTrackRecord[col.displayName]!="NA"?( fundTrackRecord[col.displayName] | number : NumberDecimalConst.noDecimal):fundTrackRecord[col.displayName]):fundTrackRecord[col.displayName]
+                         ):
+                         fundTrackRecord[col.displayName]!="NA"? (fundTrackRecord[col.displayName]| date:'MM/dd/yyyy' ):
+                         fundTrackRecord[col.displayName]
+                        }}
+                     </td>
+                    <td class="table-data-right" *ngIf="col.name=='Action'">
+                        <a (click)="open(fundTrackRecord)" class="text-center">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                    </ng-container>                   
+                </tr>
+
+            </ng-template>            
+          </p-table>
+          <app-empty-state [isGraphImage] ="false" *ngIf="fundTrackRecords?.length == 0"></app-empty-state>  
+    </div>
+</div>
+<p-overlayPanel [dismissable]="true" [appendTo]="'body'" [showCloseIcon]="true" #opTrackRecordValueUnit>
+    <div class="popup-bg p-2">
+        <h6 class="p-1 m-0 popup-title TextTruncate" title="Select Unit">Select Unit</h6>
+        <div class="ui-g row p-2 width-150">
+            <div class="col-sm-12 p-1">
+                <p-radioButton name="trackRecordValueUnitGroup" value="{{financialValueUnits.Absolute}}"
+                    label="Absolute" [(ngModel)]="trackRecordValueUnit" inputId="trackRecordValueUnit1"
+                    (onClick)="convertTrackRecordValueUnits();opTrackRecordValueUnit.hide()"></p-radioButton>
+            </div>
+            <div class="col-sm-12 p-1">
+                <p-radioButton name="trackRecordValueUnitGroup" value="{{financialValueUnits.Thousands}}"
+                    label="Thousands" [(ngModel)]="trackRecordValueUnit" inputId="trackRecordValueUnit2"
+                    (onClick)="convertTrackRecordValueUnits();opTrackRecordValueUnit.hide()"></p-radioButton>
+            </div>
+            <div class="col-sm-12 p-1">
+                <p-radioButton name="trackRecordValueUnitGroup" value="{{financialValueUnits.Millions}}"
+                    label="Millions" [(ngModel)]="trackRecordValueUnit" inputId="trackRecordValueUnit3"
+                    (onClick)="convertTrackRecordValueUnits();opTrackRecordValueUnit.hide()"></p-radioButton>
+            </div>
+            <div class="col-sm-12 p-1">
+                <p-radioButton name="trackRecordValueUnitGroup" value="{{financialValueUnits.Billions}}"
+                    label="Billions" [(ngModel)]="trackRecordValueUnit" inputId="trackRecordValueUnit4"
+                    (onClick)="convertTrackRecordValueUnits();opTrackRecordValueUnit.hide()"></p-radioButton>
+            </div>
+        </div>
+    </div>
+</p-overlayPanel>
+
+
+<p-dialog [contentStyleClass]="'track-record-popup'"  [resizable]="false" [appendTo]="'body'" [closeOnEscape]="false" [dismissableMask]="false" #pDialog
+    [(visible)]="displayCompanyFundHoldingsDialog" [modal]="true" [responsive]="true" [style]="{width: '80%'}"
+    [minY]="70" [maximizable]="false" [baseZIndex]="10000">
+    <p-header class="track-record-header">
+        {{headerText}} 
+    </p-header>
+    <div class="card">
+        <div class="row mr-0 ml-0 header-tr-bg">
+            <div class="col-12 pl-3 pr-0"> 
+            <div class="float-left pt-2 pb-2">
+                <span class="tr-popup-currency">All values in:
+                    {{model?.currencyDetail?.currencyCode}} ({{trackRecordValueUnit?.unitType}})</span>
+                
+            </div>
+            <div class="float-right search">
+                <span class="fa fa-search"></span> <input
+                #gbFundHolding type="text" pInputText placeholder="Search"
+                (input)="tblFundHolding.filterGlobal($event.target.value, 'contains')"
+                class="form-control search-box search-text-company companyListSearchHeight TextTruncate search-tr-popup mt-0" [(ngModel)]="globalFilterTrack">
+            </div>
+        </div>
+        </div>
+        <div class="card-body mb-0">
+            <div class="align-items-start">
+                <div class="ui-widget-header ui-track-bb ui-wed-bb" >
+                    <!-- <div class="row mr-0 ml-0">
+                        <div class="col-8  search"> </div>
+                               
+                                <div class="col-4 p-2">
+                                     <div class="float-right">
+                                        Values in
+                                        <a (click)="opdealTrackRecordValueUnit.toggle($event)" class="comment-btn p-1"> <span
+                                                class="choose-value">{{financialValueUnits[holdingValueUnit]}}
+                                                <i aria-hidden="true" class="fa fa-caret-down" aria-hidden="true"></i></span></a>
+                                                <p-overlayPanel [dismissable]="true" appendTo="'body'" class="custom-overlay-panel" [showCloseIcon]="true" #opdealTrackRecordValueUnit>
+                                                    <div class="popup-bg p-2">
+                                                        <h6 class="p-1 m-0 popup-title">Select Unit</h6>
+                                                        <div class="ui-g row p-2 width-150">
+                                                            <div class="col-sm-12 p-1">
+                                                                <p-radioButton name="holdingValueUnitGroup" value="{{financialValueUnits.Absolute}}"
+                                                                    label="Absolute" [(ngModel)]="holdingValueUnit" inputId="holdingValueUnit1"
+                                                                    (onClick)="convertFundHoldingValueUnits();opdealTrackRecordValueUnit.hide()"></p-radioButton>
+                                                            </div>
+                                                            <div class="col-sm-12 p-1">
+                                                                <p-radioButton name="holdingValueUnitGroup" value="{{financialValueUnits.Thousands}}"
+                                                                    label="Thousands" [(ngModel)]="holdingValueUnit" inputId="holdingValueUnit2"
+                                                                    (onClick)="convertFundHoldingValueUnits();opdealTrackRecordValueUnit.hide()"></p-radioButton>
+                                                            </div>
+                                                            <div class="col-sm-12 p-1">
+                                                                <p-radioButton name="holdingValueUnitGroup" value="{{financialValueUnits.Millions}}"
+                                                                    label="Millions" [(ngModel)]="holdingValueUnit" inputId="holdingValueUnit3"
+                                                                    (onClick)="convertFundHoldingValueUnits();opdealTrackRecordValueUnit.hide()"></p-radioButton>
+                                                            </div>
+                                                            <div class="col-sm-12 p-1">
+                                                                <p-radioButton name="holdingValueUnitGroup" value="{{financialValueUnits.Billions}}"
+                                                                    label="Billions" [(ngModel)]="holdingValueUnit" inputId="holdingValueUnit4"
+                                                                    (onClick)="convertFundHoldingValueUnits();opdealTrackRecordValueUnit.hide()"></p-radioButton>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </p-overlayPanel>
+                                    </div> 
+                                </div>
+                    </div> -->
+                </div>
+                <div class=""></div>
+                <p-table styleClass="p-datatable-gridlines" class="Track-Records cashflow-tbl text-left custom-kpi-table migration-frozen-table" [columns]="portfolioCompanyFundHolding"
+                    #tblFundHolding
+                    emptyMessage="{{blockedPortfolioCompanyFundHoldingTable? 'Please Wait...':'No record found'}}"
+                    [totalRecords]="totalPortfolioCompanyFundHoldingRecords" [value]="portfolioCompanyFundHolding"
+                    [lazy]="true" (onLazyLoad)="loadFundHoldingsLazy($event)"  [scrollable]="true"
+                    [globalFilter]="gbFundHolding" [multiSortMeta]="fundHoldingMultiSortMeta" sortMode="multiple">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <ng-container *ngFor="let columns of portfolioCompanyFundHoldingColumns; ">
+                                <th pFrozenColumn *ngIf="columns.name=='Quarter'" [ngStyle]="{'width':'300px'}" class="TextTruncate" title="Portfolio Company" pSortableColumn="companyName">Portfolio Company
+                                    <p-sortIcon *ngIf="totalPortfolioCompanyFundHoldingRecords > 1" field="companyName"></p-sortIcon>
+                                </th>
+                                <th pFrozenColumn *ngIf="columns.name=='Quarter'" [ngStyle]="{'width':'200px'}" class="TextTruncate" title="Quarter" pSortableColumn="{{columns.name}}">{{columns.displayName}}
+                                    <p-sortIcon *ngIf="totalPortfolioCompanyFundHoldingRecords > 1" field="{{columns.name}}"></p-sortIcon>
+                                </th>
+                            </ng-container>
+                            <ng-container *ngFor="let columns of portfolioCompanyFundHoldingColumns; index as h">
+                                <th class="TextTruncate" id="{{columns.subPageID}}" *ngIf="columns.name!='CompanyName' && columns.name!='Quarter'"
+                                    pSortableColumn="{{isCustom?columns.displayName:columns.name}}">
+                                    {{columns.displayName}}
+                                    <p-sortIcon *ngIf="totalPortfolioCompanyFundHoldingRecords > 1" field="{{isCustom?columns.displayName:columns.name}}"></p-sortIcon>
+                                </th>
+                            </ng-container>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-portfolioCompanyFundHolding>
+                        <tr>
+                            <ng-container class="TextTruncate"
+                                *ngFor="let col of portfolioCompanyFundHoldingColumns let idx = index">
+                                <td pFrozenColumn   [ngStyle]="{'width':'303px'}" *ngIf="idx==0">{{portfolioCompanyFundHolding['companyName']}}</td>
+                            </ng-container>
+                            <td pFrozenColumn [frozen]="col.name=='Quarter'"  *ngFor="let col of portfolioCompanyFundHoldingColumns let idx = index"
+                                [ngClass]="(col.name==DealTrackRecordInfo.TotalValue||col.name==DealTrackRecordInfo.Dpi||col.name==DealTrackRecordInfo.Rvpi||col.name==DealTrackRecordInfo.GrossMultiple||col.name==DealTrackRecordInfo.GrossIRR) ? ' table-data-right higlighted-cell' : 'table-data-right'"
+                                [ngClass]="(col.name==DealTrackRecordInfo.Quarter) ? '' : 'table-data-right'">                             
+                            {{
+                                (col.name==DealTrackRecordInfo.InvestmentCost)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":portfolioCompanyFundHolding[col.displayName]|
+                                number : NumberDecimalConst.currencyDecimal ):
+                                (col.name==DealTrackRecordInfo.RealizedValue)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":portfolioCompanyFundHolding[col.displayName]|
+                                number : NumberDecimalConst.currencyDecimal):
+                                (col.name==DealTrackRecordInfo.UnrealizedValue)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":portfolioCompanyFundHolding[col.displayName]|
+                                number : NumberDecimalConst.currencyDecimal):
+                                (col.name==DealTrackRecordInfo.TotalValue)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":portfolioCompanyFundHolding[col.displayName]|
+                                number : NumberDecimalConst.currencyDecimal):
+                                (col.name==DealTrackRecordInfo.Dpi)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":(portfolioCompanyFundHolding[col.displayName]|
+                                number : NumberDecimalConst.multipleDecimal )+"x"):
+                                (col.name==DealTrackRecordInfo.Rvpi)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":(portfolioCompanyFundHolding[col.displayName]|
+                                number : NumberDecimalConst.multipleDecimal )+"x"):
+                                (col.name==DealTrackRecordInfo.GrossMultiple)?((portfolioCompanyFundHolding[col.displayName]=="NA")?"NA":(portfolioCompanyFundHolding[col.displayName]|
+                                number:NumberDecimalConst.multipleDecimal)+"x"):
+                                (col.name==DealTrackRecordInfo.GrossIRR)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":(portfolioCompanyFundHolding[col.displayName]|
+                                number : NumberDecimalConst.currencyPercentMultiple)+"%"):
+                                col.dataType != Mdatatypes.Date?(
+                                    col.dataType==Mdatatypes.Multiple?(portfolioCompanyFundHolding[col.displayName]!="NA"?( portfolioCompanyFundHolding[col.displayName] | number:NumberDecimalConst.multipleDecimal)+"x":portfolioCompanyFundHolding[col.displayName]):
+                                    col.dataType==Mdatatypes.Percentage?(portfolioCompanyFundHolding[col.displayName]!="NA"?( portfolioCompanyFundHolding[col.displayName] | number:NumberDecimalConst.percentDecimal)+"%":portfolioCompanyFundHolding[col.displayName]):
+                                    col.dataType==Mdatatypes.CurrencyValue?(portfolioCompanyFundHolding[col.displayName]!="NA"?( portfolioCompanyFundHolding[col.displayName] | number : NumberDecimalConst.currencyDecimal):portfolioCompanyFundHolding[col.displayName]):
+                                    col.dataType==Mdatatypes.Number?(portfolioCompanyFundHolding[col.displayName]!="NA"?( portfolioCompanyFundHolding[col.displayName] | number : NumberDecimalConst.noDecimal):portfolioCompanyFundHolding[col.displayName]):portfolioCompanyFundHolding[col.displayName]
+                                ):
+                                portfolioCompanyFundHolding[col.displayName]!="NA"?
+                                (portfolioCompanyFundHolding[col.displayName]| date:'MM/dd/yyyy' ):
+                                portfolioCompanyFundHolding[col.displayName]
+                                }}  
+                                                  
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <app-empty-state [isGraphImage] ="false" *ngIf="portfolioCompanyFundHolding?.length == 0"></app-empty-state>  
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<mat-menu #menu="matMenu" [hasBackdrop]="true" class="fixed-menu">
+    <div class="filter-first" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+        <div class="row m-0 ">
+            <div class="col-12 pb-1 pt-3 label-align">
+                Values in:
+            </div>
+            <div class="col-12 pl-3 pr-3">
+                <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" name="Unit" 
+                class="tablefilter-dropdrown-width" [options]="unitTypeList" [(ngModel)]="trackRecordValueUnit" 
+                optionLabel="unitType" [showClear]="false" (onChange)="convertTrackRecordValueUnits()" tabindex="1"></p-dropdown>
+            </div>
+        </div>
+      
+    </div>
+</mat-menu>

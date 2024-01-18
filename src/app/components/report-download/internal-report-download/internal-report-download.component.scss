@@ -1,0 +1,68 @@
+.internal-report-download-section
+{
+border: 1px solid #DEDFE0;
+border-radius: 4px;
+box-shadow: 0px 0px 12px #00000014;
+.header-section
+{
+    background: #FAFAFB 0% 0% no-repeat padding-box;
+border-bottom: 1px solid #DEDFE0;
+border-radius: 4px 4px 0px 0px;
+opacity: 1;
+// height: 88px;
+padding-top: 0.75rem !important;
+}
+label {
+    display: flex !important;
+}
+.body-section
+{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    .company-header
+    {
+        letter-spacing: 0.17px;
+        color: #212121;
+        opacity: 1;
+        font-family: 'Helvetica Neue LT W05_65 Medium',Arial, Verdana, Tahoma,sans-serif!important;
+    }
+    .companyListSearchHeight {
+        height: 42px !important;
+        width: calc(100% - 20px) !important;
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+        border-right: none;
+        border-left: none !important;
+      
+    }
+    .search-header
+    {
+        padding: 0px !important;
+        width: 350px !important;
+    background: white!important;
+    }
+    .tr-no-data
+    {
+        border-bottom: none !important;
+        border-right: none !important;
+    }
+}
+.footer-section
+{
+    background: #FAFAFB 0% 0% no-repeat padding-box;
+border-top: 1px solid #DEDFE0;
+border-radius: 0px 0px 4px 4px;
+opacity: 1;
+height: 48px;
+.internal-reset-button
+{
+    padding-right: 12px !important;
+}
+.download-circle-loader
+{
+    color:#FFFFFF !important;
+}
+}
+.select-sheet{
+    padding-right:32px;
+}
+}

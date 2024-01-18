@@ -1,0 +1,252 @@
+﻿<div class="row mr-0 ml-0 firm-detail-section">
+    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 pr-0 pl-0 pb-3">
+        <div class="row mr-0 ml-0 card card-main static-card">
+            <div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+                <div class="static-pc-section fund-detail section1-height chart-area row mr-0 ml-0 mb-0">
+                    <div class="col-12 pr-0 pl-0">
+                        <div class="row mr-0 ml-0 pb-1 static-bg rowfirm-h firmdet-row-h">
+                            <div class="col-12 pr-0 pl-0 chart-title pc-section-header">
+                                <div class="float-right margin-right fund-static-header">
+                                    <a [routerLink]="['/add-firm',model.encryptedFirmID]" title="Edit "><img alt=""
+                                            src="assets/dist/images/EditIcon.svg"></a>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0">
+                            <div class="col-sm-12 pr-3 pt-3 pb-2">
+                                <div class="line-wrapper">
+                                    <span class="TextTruncate" title="Firm Information">Firm Information</span>
+                                    <div class="line ml-2"></div>
+                                </div>
+                            </div>
+                            <div class="row mr-0 ml-0pl-3 pr-3 Fund-section col-12 " >
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col-sm-2 pr-0 label-color"><label class="TextTruncate d-block" for="FirmName"  title="Firm Name">Firm
+                                                    Name</label></div>
+                                            <div class="col-sm-10 firm-value-padding">
+                                                <span class="detail-sec"><label class="TextTruncate d-block" title="{{model.firmName?model.firmName:'NA'}}">{{model.firmName?model.firmName:"NA"}}</label></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col-sm-2 firm-label-padding">
+                                                <label for="Website" class="TextTruncate d-block" title="Website">Website</label>
+                                            </div>
+                                            <div class="col-sm-10 firm-value-padding">
+
+                                                <span class="detail-sec"> <label class="d-block TextTruncate"><a class="click-view "
+                                                            href="//{{model.website}}"
+                                                            target="_blank" title="{{model.website?model.website:'NA'}}">{{model.website?model.website:"NA"}}</a></label></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0">
+                            <div class="col-sm-12 pr-3 custom1-pt pb-2">
+                                <div class="line-wrapper">
+                                    <span class="TextTruncate" title="Business Information">Business Information</span>
+                                    <div class="line ml-2"></div>
+                                </div>
+                            </div>
+                            <div class="pl-3 pr-3  col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" >
+                                <div class="TextTruncate  pr-0 pl-0">
+                                    <label class="business-section" title="{{model.businessDescription?model.businessDescription:'NA'}}">{{model.businessDescription?model.businessDescription:"NA"}}</label></div>
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0">
+                            <div class="col-sm-12 pt-2 pr-3 custom1-pt pb-2">
+                                <div class="line-wrapper">
+                                    <span class="TextTruncate" title="Geographic Locations"> Geographic Locations</span>
+                                    <div class="line ml-2"></div>
+                                </div>
+                            </div>
+                            <div class="row mr-0 ml-0 Fund-section col-12 " >
+                                <div class="col-12 pr-0 pl-0">
+                                    <div class="card pl-0 pr-0">
+                                        <div class="card-body mb-0">
+                                            <div class="table-responsive card-border">
+                                                <p-table styleClass="p-datatable-gridlines" class="firm-geographicLocations-table"  [paginator]="model.geographicLocations?.length > 10" 
+                                         [rowsPerPageOptions]="[20,50,100,200]" [value]="model.geographicLocations"   [scrollable]="model.geographicLocations?.length > 5?true:false"  [rows]="20"  sortMode="multiple">
+                                            <ng-template pTemplate="header">
+                                                <tr>
+                                                    <ng-container>
+                                                        <th pSortableColumn="region" title="Region" >Region
+                                                            <p-sortIcon field="region"></p-sortIcon>
+                                                        </th>
+                                                        <th pSortableColumn="country" title="Country">Country
+                                                            <p-sortIcon field="country"></p-sortIcon>
+                                                        </th>
+                                                        <th pSortableColumn="state" title="State">State
+                                                            <p-sortIcon field="state"></p-sortIcon>
+                                                        </th>
+                                                        <th pSortableColumn="city" title="City">City
+                                                            <p-sortIcon field="city"></p-sortIcon>
+                                                        </th>
+                                                    </ng-container>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-item>
+                                                <tr>
+                                                    <td title="{{item.region ?.region ? item.region ?.region : 'NA'}}">{{item.region ?.region ? item.region ?.region : "NA"}}</td>
+                                                    <td title="{{item.country ?.country ? item.country ?.country : 'NA'}}">{{item.country ?.country ? item.country ?.country : "NA"}}</td>
+                                                    <td title="{{item.state?.state ?item.state ?.state : 'NA'}}">{{item.state?.state ?item.state ?.state : "NA"}}</td>
+                                                    <td title="{{item.city?.city ? item.city ?.city:'NA'}}">{{item.city?.city ? item.city ?.city:"NA"}}</td>
+                                                </tr>
+                                               
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage" let-columns>
+                                                <tr>
+                                                    <td [attr.colspan]="4">
+                                                        <div class="text-center mt-4">
+                                                            <img alt="" src="assets/dist/images/empty-state.svg" alt="empty-state" class="showHandIcon pr-1 mt-0" />
+                                                        </div>
+                                                        <div class="text-center pt-2 empty-state-text"> No Data found </div>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0">
+                            <div class="col-sm-12 pr-3 pt-3 pb-2">
+                                <div class="line-wrapper">
+                                    <span title="Investment Professionals">Investment Professionals</span>
+                                    <div class="line ml-2"></div>
+                                </div>
+                            </div>
+                            <div class="row mr-0 ml-0 Fund-section col-12 " >
+                                <div class="col-12 pl-0 pr-0">
+                                    <div class="card pl-0 pr-0">
+                                        <div class="card-body mb-0">
+                                            <div class="table-responsive card-border">
+                                    <p-table styleClass="p-datatable-gridlines" class="firm-geographicLocations-table"  [paginator]="model.firmEmployees?.length > 10" 
+                                        [rowsPerPageOptions]="[20,50,100,200]" [value]="model.firmEmployees"  [scrollable]="model.firmEmployees?.length > 5?true:false"  [rows]="20"  sortMode="multiple">
+                                           <ng-template pTemplate="header">
+                                               <tr>
+                                                   <ng-container>
+                                                       <th pSortableColumn="employeeName" title="Employee Name">Employee Name
+                                                           <p-sortIcon field="employeeName"></p-sortIcon>
+                                                       </th>
+                                                       <th pSortableColumn="designation" title="Designation">Designation
+                                                           <p-sortIcon field="designation"></p-sortIcon>
+                                                       </th>
+                                                       <th pSortableColumn="emailId" title="Email">Email
+                                                           <p-sortIcon field="emailId"></p-sortIcon>
+                                                       </th>
+                                                       <th pSortableColumn="education" title="Education">Education
+                                                           <p-sortIcon field="education"></p-sortIcon>
+                                                       </th>
+                                                       <th pSortableColumn="pastExperience" title="Past Experience">Past Experience
+                                                        <p-sortIcon field="pastExperience"></p-sortIcon>
+                                                    </th>
+                                                   </ng-container>
+                                               </tr>
+                                           </ng-template>
+                                           <ng-template pTemplate="body" let-item>
+                                               <tr>
+                                                   <td title="{{item.employeeName?item.employeeName:'NA'}}">{{item.employeeName?item.employeeName:"NA"}}</td>
+                                                   <td title="{{item.designation?.designation?item.designation?.designation:'NA'}}">{{item.designation?.designation?item.designation?.designation:"NA"}}</td>
+                                                   <td title="{{item.emailId?item.emailId:'NA'}}">{{item.emailId?item.emailId:"NA"}}</td>
+                                                   <td title="{{item.education?item.education:'NA'}}">{{item.education?item.education:"NA"}}</td>
+                                                   <td title="{{item.pastExperience?item.pastExperience:'NA'}}">{{item.pastExperience?item.pastExperience:"NA"}}</td>
+                                               </tr>
+                                           </ng-template>
+                                           <ng-template pTemplate="emptymessage" let-columns>
+                                            <tr>
+                                                <td [attr.colspan]="5">
+                                                    <div class="text-center mt-4">
+                                                        <img alt="" src="assets/dist/images/empty-state.svg" alt="empty-state" class="showHandIcon pr-1 mt-0" />
+                                                    </div>
+                                                    <div class="text-center pt-2 empty-state-text"> No Data found </div>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                       </p-table>
+                                    </div>
+                                </div>
+                            </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mr-0 ml-0 header-section header-performance">
+            <div class="header-section col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                <div class="fund-header header-style pb-2 TextTruncate" title="Fund Details">
+                   Fund Details
+                </div>
+            </div>
+
+        <div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 col-xs-12 mr-0 ml-0 card card-main static-card1 pb-4 ">
+            <div class="row pr-0 pl-0">
+                <div class="col-12 pr-0 pl-0 static-pc-section fund-detail section1-height chart-area row mr-0 ml-0 mb-0 ">
+                        <div class="row mr-0 chart-title pc-section-header ml-0 pb-1 static-bg firmdetail-h">
+                                <div class="float-right">
+                                    <div class="d-inline-block search">
+                                        <span class="fa fa-search fasearchicon"></span>
+                                        
+                                        <input #tblfirmfunddetails
+                                            type="text" pInputText
+                                            (input)="tblFundHolding.filterGlobal($event.target.value, 'contains')"
+                                            class="search-text-company companyListSearchHeight TextTruncate"
+                                            placeholder="Search">
+                                    </div>
+                                </div> 
+                        </div>
+                        <div class="col-12 pl-0 pr-0">
+                        <div class="row mr-0 ml-0">
+                            <p-table styleClass="p-datatable-gridlines" #tblFundHolding class="firm-table cashflow-tbl Track-Records cashflow-tbl text-left custom-kpi-table borderless invested-table pc-table list-table"  [paginator]="model.funds?.length > 10" 
+                                [rowsPerPageOptions]="[20,50,100,200]" [globalFilterFields]="['fundName','strategy', 'accountType','sector']" [value]="model.funds"  [scrollable]="model.funds?.length > 5?true:false" [rows]="20"  sortMode="multiple">
+                                   <ng-template pTemplate="header">
+                                       <tr>
+                                           <ng-container>
+                                               <th pSortableColumn="fundName" title="Fund Name">Fund Name
+                                                   <p-sortIcon field="fundName"></p-sortIcon>
+                                               </th>
+                                               <th pSortableColumn="strategy" title="Strategy">Strategy
+                                                   <p-sortIcon field="strategy"></p-sortIcon>
+                                               </th>
+                                               <th pSortableColumn="accountType" title="Account Type">Account Type
+                                                   <p-sortIcon field="accountType"></p-sortIcon>
+                                               </th>
+                                               <th pSortableColumn="sector" title="Sector">Sector
+                                                   <p-sortIcon field="sector"></p-sortIcon>
+                                               </th>
+                                           </ng-container>
+                                       </tr>
+                                   </ng-template>
+                                   <ng-template pTemplate="body" let-item>
+                                       <tr>
+                                        <td>
+                                            <a *ngIf="item.fundName != ''" class="click-view TextTruncate" title="{{item.fundName}}" href="javascript:void(0);"
+                                                [routerLink]="['/fund-details', item.encryptedFundId]" title="View Details">{{ item.fundName?item.fundName:"NA" }}
+                                            </a>
+                                        </td>
+                                        <td><span title="{{ item.strategyDetail.strategy?item.strategyDetail.strategy:'NA'}}" *ngIf="item.strategyDetail">{{ item.strategyDetail.strategy?item.strategyDetail.strategy:"NA" }}</span>
+                                        </td>
+                                        <td><span title="{{ item.accountTypeDetail.accountType?item.accountTypeDetail.accountType:'NA'}}" *ngIf="item.accountTypeDetail">{{ item.accountTypeDetail.accountType?item.accountTypeDetail.accountType:"NA" }}</span>
+                                        </td>
+                                        <td class="table-data-left"><span title="{{item.sectorDetail?.sector?item.sectorDetail?.sector:'NA'}}" *ngIf="item.sectorDetail">
+                                                {{item.sectorDetail?.sector?item.sectorDetail?.sector:"NA"}} </span></td>
+                                       </tr>
+                                   </ng-template>
+                               </p-table>
+                               <app-empty-state [isGraphImage] ="false" *ngIf="model?.funds?.length == 0"></app-empty-state>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>

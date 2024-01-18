@@ -1,0 +1,76 @@
+<div class="shadow-sm chart-area w-100 " [ngClass]="tableResult?.length == 0 ?'border-top':''">
+  <div class="tbl-sec">
+    <p-table styleClass="p-datatable-gridlines" [resizableColumns]="true" #dt  [globalFilter]="gb"
+     [columns]="tableColumns" [value]="tableResult" [scrollable]="true"
+    class="OperationalKPI cashflow-tbl text-left custom-kpi-table migration-frozen-table"  *ngIf="tableResult.length > 0"
+    [scrollable]="true" scrollHeight="50vh">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <ng-container *ngFor="let col of tableFrozenColumns; index as i">
+                <th [frozen]="true" pFrozenColumn [ngStyle]="{'width':'339px'}">
+                    {{col.header}}
+                </th>
+            </ng-container>
+            <ng-container *ngFor="let col of columns; index as i">
+                <th>
+                    {{col.header}}
+                </th>
+            </ng-container>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <ng-container *ngFor="let col of tableFrozenColumns; index as i">
+                <td [frozen]="true" pFrozenColumn tabindex="0" class="prtcmny-det-o">
+                    <span class="content">
+                        <span class="TextTruncate" *ngIf="col.header =='KPI'" [title]="rowData[col.field]"
+                            [ngClass]="[(rowData.IsHeader||rowData.IsBoldKpi) ? 'showToolTip TextTruncate bold-text' :'showToolTip TextTruncate',rowData.IsHeader ? 'headerKpi bold-text' : rowData['IsBoldKpi'] ? 'bold-text': '',((rowData.ParentId !==0||rowData.ParentId ==0)&&!rowData.IsHeader)?'pl-3':'']">
+                            <span *ngIf="rowData.ParentId !== 0">- </span>{{rowData[col.field]}}
+                            <span *ngIf="rowData['KpiInfo'] =='#'">{{'('+rowData['KpiInfo'] +')'}}</span>
+                        </span>
+                    </span>
+                </td>
+            </ng-container>
+            <ng-container *ngFor="let col of columns; index as i">
+                <td tabindex="0" class="prtcmny-det-o"   [class.table-data-right]="col.field !='Kpi'" [class.table-data-right]="col.field !='Kpi'" [ngClass]="[(col.header !=='Kpi' && isErrorLog && printColumn(rowData,col)  && !rowData.IsHeader)?'kpi-set-bgcolor':'kpi-unset-bgcolor',(col.header !=='Kpi' && printCalcColumn(rowData,col)  && !rowData.IsHeader)?'kpi-set-calc-bgcolor':'kpi-unset-bgcolor']" (click)="onAuditLog(rowData,col)">
+                    <span class="content">
+                        <span *ngIf="col.header !='KPI'" [ngClass]="rowData.IsBoldKpi ? 'bold-text': ''" class="showToolTip TextTruncate">
+                            <span [title]="rowData['KpiInfo']=='Text'? rowData[col.field]:''"  *ngIf="rowData[col.field]!= undefined && rowData[col.field]!=null && rowData[col.field]!=''&& !rowData.IsHeader;else empty_Text">
+                                <container-element [ngSwitch]="rowData['KpiInfo']">
+                                    <container *ngSwitchCase="'#'">
+                                        <span [title]="rowData[col.field]"  [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number:'1.0-0' | minusSignToBrackets) : rowData[col.field]"></span>
+                                    </container>
+                                    <container *ngSwitchCase="'Text'">
+                                        <span class="float-left TextTruncate tr-width-v1 text-align-left" [title]="rowData[col.field]" [innerHtml]="rowData[col.field]"></span>
+                                    </container>
+                                    <container *ngSwitchCase="'%'">
+                                        <span [title]="rowData[col.field]"  [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number: NumberDecimalConst.percentDecimal | minusToBracketsWithPercentage: '%'): rowData[col.field]"></span>
+                                    </container>
+                                    <container *ngSwitchCase="'x'">
+                                        <span [title]="rowData[col.field]" *ngIf="rowData[col.field] != 'NA' && rowData[col.field] != ''" [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number: NumberDecimalConst.multipleDecimal)+'x': rowData[col.field]"></span>
+                                    </container>
+                                    <container *ngSwitchCase="'$'">
+                                        <span [title]="rowData[col.field]" *ngIf="rowData[col.field] != 'NA' && rowData[col.field] != ''" [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number: NumberDecimalConst.currencyDecimal | minusSignToBrackets: '') : rowData[col.field]"></span>
+                                    </container>
+                                    <container *ngSwitchDefault>
+                                    </container>
+                                </container-element>                                   
+                            </span>
+                            <ng-template #empty_Text class="detail-sec">
+                                <span [ngClass]="rowData['KpiInfo']=='Text'? 'float-left':'float-right'" *ngIf="!rowData[col.field + ' editable'] && !rowData.IsHeader">NA</span>
+                                <span  *ngIf="rowData.IsHeader">
+                                    <div></div>
+                                </span>
+                            </ng-template>
+                        </span>
+                    </span>
+                </td>
+            </ng-container>
+        </tr>
+    </ng-template>
+</p-table>
+<app-empty-state class="finacials-beta-empty-state" [isGraphImage] ="false"*ngIf="tableResult.length == 0"></app-empty-state> 
+  </div>
+</div>
+<app-loader-component id="companyKpiPop" *ngIf="isLoader"></app-loader-component>
+    <app-foot-note *ngIf="tableResult.length > 0" [moduleId]="kpiModuleId" [companyId]="model?.portfolioCompany?.portfolioCompanyID" class="custom-quill-editor"></app-foot-note>

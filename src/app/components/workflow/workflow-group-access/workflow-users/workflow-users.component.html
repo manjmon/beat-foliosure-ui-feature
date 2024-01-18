@@ -1,0 +1,100 @@
+<div class="right-section">
+    <div class="row mr-0 ml-0 tabradius border search-section usr-wrk-bb">
+        <div class="col-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 col-md-12 group-search pl-0 pr-0 bgColorFAFAFB">
+            <div class="float-right">
+                <div class="search d-inline-block">
+                    <span class="fa fa-search fasearchicon p-1"></span>
+                    <input #gb type="text" class="search-text-groups search-text-company companyListSearchHeight search-users" placeholder="Search" (input)="tblUser.filterGlobal($event.target.value, 'contains')" pInputText [(ngModel)]="globalFilter">
+                </div>
+                <div class="d-inline-block pr-3 pl-3">
+                    <a (click)="exportUserList()">
+                        <img class="p-action-padding download-excel" title="Export User (Excel file)" alt="export-file"
+                                         src="assets/dist/images/Cloud-download.svg" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 col-md-12 pl-0 pr-0 content-section custom-freezoncolumn-border" [ngStyle]="{'height':scrollHeight+'px'}">
+
+            <!-- UserList ui starts here -->
+            <div id="tableContainer">
+                <p-table styleClass="p-datatable-gridlines" #tblUser class="custom-user-access-table migration-frozen-table"  [columns]="headers" [value]="users" emptyMessage="{{blockedTable? 'Please Wait...':'No record found'}}"  [lazy]="true"
+                    [scrollHeight]="scrollHeight+'px'" (onLazyLoad)="loadUsersLazy($event)" scrollable="true" [globalFilter]="gb" sortMode="multiple">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <ng-container *ngFor="let col of frozenProfitAndLossCols; index as i">
+                                <th   [ngStyle]="{'width':'300px'}" pFrozenColumn *ngIf="col.header === 'checkbox' || col.header === 'Name'" id="col.header"  [ngClass]="col.field" [ngStyle]="col.field === 'checkbox' ?{'padding':'0px'}:{}">
+                                    <div *ngIf="col.header === 'Name'">
+                                        {{ col.header }}
+                                    </div>
+                                    <div *ngIf="col.header === 'checkbox'"  id="checkAll" class="user-wflow-w-pad">
+                                        <checkbox [disabled]="selectedSubGroupId === 0"   marginLeft="12px" marginTop="-9px" height="20px" width="20" [isChecked]="checkAll" (change)="handleCheckBox($event,'checkAll')" [value]=""></checkbox>
+                                    </div>
+                                </th>
+                            </ng-container>
+                            <ng-container *ngFor="let col of columns; index as i">
+                                <th *ngIf="col.header !== 'checkbox' && col.header !== 'Name'" id="col.header"  [ngClass]="col.field" [ngStyle]="col.field === 'checkbox' ?{'padding':'0px'}:{}">
+                                    <div >
+                                        {{ col.header }}
+                                    </div>
+                                </th>
+                               
+                            </ng-container>
+                          
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+
+                        <tr>
+                            <ng-container *ngFor="let col of frozenProfitAndLossCols; index as i">
+                                <td  pFrozenColumn  *ngIf="col.header == 'checkbox' || col.header === 'Name'"  [ngClass]="col.field">
+                                    <div *ngIf="col.header == 'Name'" title={{rowData[col.field]}} class="showToolTip TextTruncate">
+                                        <span>{{rowData[col.field]}}</span>
+                                    </div>
+                                    <div *ngIf="col.header === 'checkbox'" class="flow-user-wid-p">
+                                        <checkbox [disabled]="selectedSubGroupId === 0" marginLeft="4px" marginTop="-9px" height="20px" width="20" [isChecked]="rowData.isSelected" [value]="" (change)="handleCheckBox(rowData,'check')">
+                                        </checkbox>
+                                    </div>
+                                </td>
+                                </ng-container>
+                            <ng-container *ngFor="let col of columns; index as i">
+                                <td  [ngClass]="col.field"  *ngIf="col.header !== 'checkbox' && col.header !== 'Name'" style="width:200px">
+                                    <div *ngIf="col.header !== 'checkbox' && col.header !== 'Action'" title={{rowData[col.field]}} class="showToolTip TextTruncate">
+                                        <span>{{rowData[col.field]}}</span>
+                                    </div>
+                                    <div *ngIf="col.header === 'checkbox'" class="flow-user-wid-p">
+                                        <checkbox [disabled]="selectedSubGroupId === 0" marginLeft="4px" marginTop="-9px" height="20px" width="20" [isChecked]="rowData.isSelected" [value]="" (change)="handleCheckBox(rowData,'check')">
+                                        </checkbox>
+                                    </div>
+                                    <div *ngIf="col.header == 'Action'">
+                                        <div class="add-control-btn text-center">
+                                            <a class="" href="javascript:void(0);" title="Edit" (click)="editUser(rowData)" [hideIfUnauthorized]='{featureId:feature.User,action:"edit"}'><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                        </div>
+                                    </div>
+                                </td>
+                              
+                            </ng-container>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <!-- UserList ui ends here -->
+        </div>
+        <div class="col-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 col-md-12 pl-0 pr-0">
+            <div class="row mr-0 ml-0 group-right-sec">
+                <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12  pl-0 pr-0">
+                    <div class="float-left"> <span><button (click)="isOpenAddUser = true"  class="btn btn-nep-default" ><i  class="fa fa-plus" aria-hidden="true"></i> User</button></span></div>
+                    <div class="float-right">
+                        <span class="pr-2"><button [disabled]="setMapButton()"  (click)="resetUserMapping()" class="btn btn-nep-default" > Reset</button></span>
+                        <span><button [disabled]="setMapButton()" (click)="mapUsers()"  class="btn btn-nep-primary" > Map <span class="pl-1 circle-loader" *ngIf="loading">
+                            <i aria-hidden="true" class="fa fa-circle-o-notch fa-1x fa-fw"></i>
+                        </span></button></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-add-users (onClosePopUpClick)="closeUserPopup($event)" (userInfo)="updateUser" (onUserChanges)="loadUsers($event)" *ngIf="isOpenAddUser">
+
+</app-add-users>

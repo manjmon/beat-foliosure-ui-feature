@@ -1,0 +1,85 @@
+@import "../../../../variables";
+.portfolio-detail-component {
+    .chart-bg {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+}
+
+.allvalues{
+  float:left;
+  font-size:12px;
+  margin-right:12px;
+  color: $nep-icon-grey;
+  padding-left: 16px !important;
+  padding-top: 8px !important;
+}
+::ng-deep  .panel{
+  border:0px solid transparent !important;
+  border-radius:0px
+}
+.QMY_Container{
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #DEDFE0;
+  border-radius: 4px;
+  opacity: 1;
+  cursor: pointer;
+}
+.QMY_Text{
+  text-align: left;
+  font-size: 14px;
+  letter-spacing: 0px;
+  color: #55565A;
+  opacity: 1;
+}
+.QMYStyle{
+  position: relative;
+  top: -0.25rem;
+  padding: 0.2rem 0.75rem 0.2rem 0.75rem;
+}
+.YStyle{
+  margin-right: 0.25rem !important;
+}
+
+.activeQMY{
+  background: #F7F8FC 0% 0% no-repeat padding-box !important;
+  color: #021155 !important;
+  border-radius: 4px;
+}
+.headerSize {
+  font-size: 1.5rem;
+  padding-top:4px;
+  padding-right: 12px;
+}
+.backgroundColor{
+  background-color: #FAFAFB !important;
+}
+.topBorder{
+  border-top: 1px solid #dee2e6 !important; 
+}
+.custom-padding{
+  padding-left: 2px !important;
+  padding-right: 2px !important;
+}
+.custom-filter{
+  padding-right: 8px !important;
+  padding-top: 0px !important;margin-top: 3px!important;
+}
+.tr-all-values
+{
+  letter-spacing: 0.14px;
+  color: #55565A;
+  opacity: 1;
+  padding-top: 2px !important;
+}
+.tr-all-values-l{
+  padding: 6px 15px;
+}
+.tr-all-values-l-right{
+  padding-right: 8px;
+}
+.tr-all-values-right
+{
+  padding-right: 12px;
+  margin-right:0px !important;
+}

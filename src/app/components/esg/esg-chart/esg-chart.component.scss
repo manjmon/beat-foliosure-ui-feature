@@ -1,0 +1,88 @@
+@import "../../../../variables";
+
+.button {
+    background-color: #021157;
+    color: white;
+}
+
+.image-padding {
+    width: calc(100% + 15px);
+    position: relative;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+    left: 15px;
+}
+
+.img-center {
+    justify-content: center;
+    position: relative;
+    display: flex;
+    width: 100%;
+    text-align: center;
+}
+
+.esg-chart-icon {
+    justify-content: center;
+    position: relative;
+    display: flex;
+    width: 100%;
+    text-align: center;
+    top: 15%
+}
+
+.kpi-dropdown {
+    width: calc(100% + 15px);
+}
+
+app-empty-state.empty-chart {
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    height: 26vh;
+    display: flex;
+    justify-content: center;
+}
+
+.esg-barchart-dropdown {
+    display: flex;
+    height: 2.25rem;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 27px;
+    padding-left: 47px;
+}
+
+::ng-deep .esg-barchart-dropdown .p-dropdown.p-component {
+    width: 414px !important;
+}
+
+::ng-deep .esg-barchart-dropdown .p-dropdown-panel.p-component {
+    max-width: 414px !important;
+}
+
+.esgdrop-down-barchart {
+    height: 54px;
+    border-radius: var(--radius-xx-sm, 0rem);
+    border-bottom: 1px solid #DEDFE0;
+    background: #FAFAFB;
+}
+
+:host ::ng-deep text.highcharts-axis-title {
+    font-size: 14px !important;
+}
+
+@media only screen and (width: 1024px) {
+    .chart-bg {
+        margin: 0 !important;
+    }
+}
+@media only screen and (width: 1280px) {
+    app-empty-state.empty-chart {
+        font-weight: 600 !important;
+        font-size: 0.8rem !important;
+        height: 25vh;
+        padding-top: 0px !important;
+        display: flex;
+        justify-content: center;
+    }
+}

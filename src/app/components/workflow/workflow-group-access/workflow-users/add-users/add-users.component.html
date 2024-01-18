@@ -1,0 +1,196 @@
+<div class="nep-modal nep-modal-show nep-user-db-bg">
+    <div class="nep-modal-mask"></div>
+    <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nepadd-pr-d-t">
+        <div class="nep-card-header nep-modal-title p-0">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-6 user-header right-border">
+                    Add user
+                </div>
+                <div class="col-md-6 user-header">
+                    Bulk upload userlist
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-body">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-6 user-body right-border">
+                    <div class="add-user-component">
+                        <div class="card card-main">
+                            <div class="card-body mb-0">
+                                <form [formGroup]="form" name="form" class="mt-0" (ngSubmit)="f.valid && saveUser(f)">
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0">
+                                            <div class="form-group required mt-0 add-use-mt">
+                                                <div class="row mr-0 ml-0">
+                                                    <div class="col-12 pr-0 pl-0">
+                                                        <label for="FirstName" class="control-label">First Name </label>
+                                                    </div>
+                                                    <div class="col-12 pr-0 pl-0" title="{{submitted && f.firstName.errors?'Please enter first name':''}}">
+                                                        <input [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" formControlName="firstName" type="text" placeholder="Enter First Name" class="form-control" name="FirstName" [(ngModel)]="model.firstName" validateRequired inputValidator="validatePersonName"
+                                                            autocomplete="off" maxlength="50" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pr-0 pl-0">
+                                            <div class="form-group required mt-0">
+                                                <div class="row mr-0 ml-0">
+                                                    <div class="col-12 pr-0 pl-0">
+                                                        <label for="LastName" class="control-label">Last Name </label>
+                                                    </div>
+                                                    <div class="col-12 pr-0 pl-0" title="{{submitted && f.lastName.errors?'Please enter last name':''}}">
+                                                        <input [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" formControlName="lastName" type="text" placeholder="Enter Last Name" class="form-control" name="LastName" [(ngModel)]="model.lastName" validateRequired inputValidator="validatePersonName"
+                                                            autocomplete="off" maxlength="50" />
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pr-0 pl-0">
+                                            <div class="form-group required mt-0">
+                                                <div class="row mr-0 ml-0">
+                                                    <div class="col-12 pr-0 pl-0">
+                                                        <label for="EmailId" class="control-label">Email </label>
+                                                    </div>
+                                                    <div class="col-12 pr-0 pl-0" title="{{submitted && f.emailId.errors?'Please provide a valid email address':''}}">
+                                                        <input [ngClass]="{ 'is-invalid': submitted && f.emailId.errors }" formControlName="emailId" type="email" placeholder="Enter Email" class="form-control" name="EmailId" [(ngModel)]="model.emailID" validateRequired validateEmail autocomplete="off" maxlength="100"
+                                                            [readonly]="id != undefined" />
+
+                                                    </div>
+                                                    <!-- <div class="col-12 pr-0 pl-0" *ngIf="id != undefined">
+                                                        <span class="detail-sec">{{model.emailID}}</span>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pr-0 pl-0">
+                                            <div class="form-group required mt-0">
+                                                <div class="row mr-0 ml-0">
+                                                    <div class="col-12 pr-0 pl-0">
+                                                        <label for="PhoneNumber" class="control-label">Phone No </label>
+                                                    </div>
+                                                    <div class="col-12 pr-0 pl-0" title="{{submitted && f.phoneNo.errors?'Phone number should be of 5 to 15 digits.':''}}">
+                                                        <input [ngClass]="{ 'is-invalid': submitted && f.phoneNo.errors }" formControlName="phoneNo" type="text" placeholder="Enter Phone Number" class="form-control" name="PhoneNumber" pattern=".{5,15}" [(ngModel)]="model.phoneNumber" inputValidator="integer"
+                                                            maxlength="15" autocomplete="off" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pr-0 pl-0">
+                                            <div class="form-group required mt-0">
+                                                <div class="row mr-0 ml-0">
+                                                    <div class="col-12 pr-0 pl-0">
+                                                        <label for="Password" class="control-label">Country </label>
+                                                    </div>
+                                                    <div class="col-12 pr-0 pl-0" title="{{submitted && f.country.errors?'Country is required':''}}">
+                                                        <typeahead-control [ngClass]="{ 'is-country-invalid': submitted && f.country.errors }" formControlName="country" name="country" class="user-country" [loadingOptions]="countryList==undefined" [(ngModel)]="model.country" [optionList]="countryList" [isRequired]="true"
+                                                            [displayField]="'country'"></typeahead-control>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pr-0 pl-0">
+                                            <div class="form-group required mt-0">
+                                                <div class="row mr-0 ml-0">
+                                                    <div class="col-12 pr-0 pl-0">
+                                                        <label for="Organization" class="control-label">Organization Name </label>
+                                                    </div>
+                                                    <div class="col-12 pr-0 pl-0" data-title="{{submitted && f.organization.errors?'Please enter organization name':''}}">
+                                                        <input type="text" [ngClass]="{ 'is-invalid': submitted && f.organization.errors }" formControlName="organization" placeholder="Enter Organization" class="form-control" name="Organization" [(ngModel)]="model.organization" validateRequired autocomplete="off"
+                                                            maxlength="50" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 pr-0 pl-0">
+                                            <div class="form-group mt-0">
+                                                <div class="row mr-0 ml-0">
+                                                    <div class="col-12 pr-0 pl-0">
+                                                        <span>
+                                                            <mat-checkbox formControlName="isActive" class="text-center" name="IsActive"  [(ngModel)]="model.isActive" 
+                                                             class="mat-custom-checkbox">Active
+                                                            </mat-checkbox>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-6 user-body user-upload">
+                    <div class="row mr-0 ml-0 pb-3">
+                        <div class="col-md-12 pr-0 pl-0">
+                            <span class="upload-desc">Download excel template and bulk upload user. To download template, </span>
+                            <span *ngIf="userInfo==null"><a class="click-here" (click)="downloadTemplate()">Click here</a></span>
+                        </div>
+                    </div>
+                    <div class="row mr-0 ml-0">
+                        <div class="col-md-12 pr-0 pl-0 upload-desc desc-header">
+                            Note:-
+                        </div>
+                    </div>
+                    <div class="row mr-0 ml-0">
+                        <div class="col-md-12 pr-0 pl-0 upload-desc">
+                            1. Template includes sample data. Replace the same with relevant data.
+                        </div>
+                    </div>
+                    <div class="row mr-0 ml-0">
+                        <div class="col-md-12 pr-0 pl-0 upload-desc">
+                            2. Follow the format laid out in the template. Do not modify any headers.
+                        </div>
+                    </div>
+                    <div class="row mr-0 ml-0">
+                        <div class="col-md-12 pr-0 pl-0 upload-desc">
+                            3. File size limit is 20MB.
+                        </div>
+                    </div>
+                    <div class="row mr-0 ml-0 upload-sec" *ngIf="userInfo==null">
+                        <div class="col-md-12 pr-0 pl-0 upload-desc text-center">
+                            <div class="uploadButton d-flex">
+                                <div class="textEllipsis uploadLogoIcon" (click)="file.click()" title={{uploadFilePlaceholder}}>
+                                    <input class="hidefile" #file (click)="file.value = null" value="" accept=".xlsx,.xls" (change)="onSelect($event.target.files)" type="file">
+                                    <img *ngIf="browseicon" class="browseIcon" [src]="'assets/dist/images/Iconmaterial-computer.svg'" alt="">
+                                    <span class="beatColor browseButton">{{uploadFilePlaceholder}}</span>
+                                </div>
+                                <div *ngIf="!browseicon" class="icon">
+                                    <img *ngIf="ProgressCancel" class="pull-right" (click)="deleteiconclick(filename)" [src]="'assets/dist/images/ClearIcon.svg'" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mr-0 ml-0 mt-4">
+                        <div class="col-md-12 pr-0 pl-0">
+                            <div class="upload-error-section" [ngClass]="messageClass==='errorMessage' ? 'pb20 errorColor' : 'pb20 successColor'">
+                                <div id="errorSection" *ngFor="let message of messages">
+                                    <div [innerHtml]="message.safeHtml"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-footer  nep-modal-footer">
+            <div class="float-left">
+                <nep-button Type="Secondary" [disabled]="!form.valid && files.length==0" (click)="onReset()">
+                    Reset
+                </nep-button>
+            </div>
+            <div class="float-right">
+                <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                <nep-button Type="Secondary" (click)="onClosePopUpClick.emit($event)">
+                    Cancel
+                </nep-button>
+                <nep-button Type="Primary" [disabled]="!form.valid && files.length==0" (click)="saveUser(f)" class="user-add-pl">
+                    Confirm
+                </nep-button>
+            </div>
+
+        </div>
+    </div>
+</div>

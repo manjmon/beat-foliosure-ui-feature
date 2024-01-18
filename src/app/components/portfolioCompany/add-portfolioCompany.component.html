@@ -1,0 +1,641 @@
+﻿<div (resized)="onResized($event)" class="row main-row ">
+    <div class="col-md-12 pl-0 pr-0 mb-5">
+        <div class="card-body">
+            <p-growl [(value)]="msgs" [life]="msgTimeSpan"></p-growl>
+            <form name="form" class="mt-0 pt-0 pb-0 pl-0 pr-0" (ngSubmit)="savePortfolioCompany(f)" #f="ngForm">
+                <div class="row mr-0 ml-0">
+                    <div class="col-12 BusinessDescriptionlabel pl-0 pr-0 pb-2 TextTruncate" title="Company Information">
+                        <strong>Company Information</strong>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 bottom-spacing ">
+
+                        <div class="row flexmoduleContainer pr-0 d-flex ">
+                            <ng-container *ngFor="let staticField of pageFieldLists; let i=index">
+                                <div class="col-sm-6 col-md-3  padding-card-rem"
+                                    *ngIf="staticField.name == companyInformationConstants.CompanyName">
+                                    <div class="padding-left-rem TextTruncate"
+                                        [ngClass]="staticField.isMandatory ?  'required-field' : ''" for="CompanyName" title="{{staticField.displayName}}">
+                                        {{staticField.displayName}}</div>
+                                    <input type="text" class="form-control eachlabel-padding default-txt TextTruncate"
+                                        name="CompanyName"
+                                       
+                                        [(ngModel)]="model.companyName" #companyName="ngModel" validateRequired required
+                                        [placeholder]="'Enter '+staticField.displayName" validateBusinessName
+                                        autocomplete="off" maxlength="500"(mouseout)="setMasterCompanyName()" (change)="setMasterCompanyName()" />
+
+                                    <div *ngIf="(f.submitted || companyName?.dirty)" class="text-danger">
+                                        <p *ngIf="companyName.errors?.pattern">
+                                            Please enter valid company name</p>
+                                    </div>
+                                    <div *ngIf="(f.submitted || companyName?.dirty)" class="text-danger">
+                                        <p *ngIf="companyName.errors?.required">
+                                            Please enter company name</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3  padding-card-rem"
+                                    *ngIf="staticField.name == companyInformationConstants.MasterCompanyName">
+                                    <div class="padding-left-rem TextTruncate"
+                                        [ngClass]="staticField.isMandatory ?  'required-field' : ''" title="{{staticField.displayName}}">
+                                        {{staticField.displayName}}</div>
+                                    <input type="text" class="form-control eachlabel-padding default-txt TextTruncate"
+                                        name="masterCompanyName"                                   
+                                        [(ngModel)]="model.masterCompanyName" #masterCompanyName="ngModel" 
+                                        [placeholder]="'Enter '+staticField.displayName" 
+                                        autocomplete="off" />
+                                </div>
+                                <div class="col-sm-6 col-md-3 padding-card-rem"
+                                    *ngIf="staticField.name == companyInformationConstants.Website">
+                                    <div class="padding-left-rem TextTruncate"
+                                        [ngClass]="staticField.isMandatory ?  'required-field' : ''" for="Website" title="{{staticField.displayName}}">
+                                        {{staticField.displayName}}</div>
+                                    <input type="text" class="form-control eachlabel-padding default-txt TextTruncate" name="Website"
+                                        [(ngModel)]="model.website" #Website="ngModel" validateURL autocomplete="off"
+                                        [placeholder]="'Enter '+staticField.displayName" maxlength="100" />
+                                    <div *ngIf="Website.invalid && (Website.dirty ||f.submitted)" class="text-danger">
+                                        <p *ngIf="Website.errors.validateURL">Please provide a valid website url
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3 padding-card-rem"
+                                    *ngIf="staticField.name == companyInformationConstants.CompanyStatus">
+                                    <div class="padding-left-rem TextTruncate"
+                                        [ngClass]="staticField.isMandatory ?  'required-field' : ''" for="status" title="{{staticField.displayName}}">
+                                        {{staticField.displayName}}</div>
+                                    <typeahead-control class="header-cntrl typeheader-margin" name="status"
+                                        [(ngModel)]="model.status" [optionList]="statusOptions" [displayField]="'text'"
+                                        [placeholder]="'Select '+staticField.displayName" [resultField]="'value'"
+                                        #status="ngModel" validateRequired [isRequired]="false">
+                                    </typeahead-control>
+                                    <div *ngIf="status.invalid && (status.dirty ||f.submitted)" class="text-danger">
+                                        <div *ngIf="f.submitted && !status.valid" class="text-danger">Status is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3 padding-card-rem"
+                                    *ngIf="staticField.name ==companyInformationConstants.StockExchange_Ticker">
+                                    <div class="padding-left-rem TextTruncate"
+                                        [ngClass]="staticField.isMandatory ?  'required-field' : ''"
+                                        for="StockExchangeTicker" title="{{staticField.displayName}}">{{staticField.displayName}}</div>
+                                    <input type="text" class="form-control eachlabel-padding TextTruncate default-txt"
+                                        [placeholder]="'Enter '+staticField.displayName" name="StockExchangeTicker"
+                                        [(ngModel)]="model.stockExchange_Ticker" #StockExchangeTicker="ngModel"
+                                        autocomplete="off" maxlength="1000" />
+                                </div>
+
+                                <div class="col-sm-6 col-md-3 padding-card-rem"
+                                    *ngIf="staticField.name ==companyInformationConstants.Sector">
+                                    <div class="padding-left-rem TextTruncate"
+                                        [ngClass]="staticField.isMandatory ?  'required-field' : ''" for="sector" title="{{staticField.displayName}}">
+                                        {{staticField.displayName}}</div>
+                                    <div class="loading" *ngIf="masterModel==undefined"> <img alt=""
+                                            src="assets/dist/images/loading.gif" class="loading-img" />
+                                    </div>
+                                    <div *ngIf="masterModel!=undefined">
+                                        <typeahead-control class="header-cntrl typeheader-margin" name="sector"
+                                            [(ngModel)]="model.sectorDetail" [optionList]="masterModel.sectorList"
+                                            [displayField]="'sector'" #sector="ngModel" validateRequired
+                                            [placeholder]="'Select '+staticField.displayName" [isRequired]="false"
+                                            (selectItem)="onSectorChange()">
+                                        </typeahead-control>
+
+                                        <div *ngIf="sector.invalid && (sector.dirty ||f.submitted)" class="text-danger">
+                                            <div *ngIf="f.submitted && !sector.valid" class="text-danger">Sector is
+                                                required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                              
+                                <div class="col-sm-6 col-md-3 padding-card-rem"
+                                    *ngIf="staticField.name ==companyInformationConstants.SubSector">
+                                    <div class="padding-left-rem TextTruncate"
+                                        [ngClass]="staticField.isMandatory ?  'required-field' : ''" for="subsector" title="{{staticField.displayName}}">
+                                        {{staticField.displayName}}</div>
+                                    <typeahead-control class="header-cntrl typeheader-margin" name="subsector"
+                                        [(ngModel)]="model.subSectorDetail" [optionList]="subSectorList"
+                                        [placeholder]="'Select '+staticField.displayName" [displayField]="'subSector'"
+                                        #subsector="ngModel" [isRequired]="undefined">
+                                    </typeahead-control>
+                                    <div class="loading-input-controls" *ngIf="subSectorLoading"><i aria-hidden="true"
+                                            class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                                </div>
+                                <div class="col-sm-6 col-md-3 padding-card-rem" *ngIf="staticField.name ==companyInformationConstants.Currency">
+                                    <div class="padding-left-rem required-field TextTruncate"
+                                        [ngClass]="staticField.isMandatory ?  'required-field' : ''" for="currency" title="{{staticField.displayName}}">
+                                        {{staticField.displayName}}</div>
+                                    <typeahead-control class="header-cntrl typeheader-margin" name="reportingCurrency"
+                                        [(ngModel)]="model.reportingCurrencyDetail" [optionList]="masterModel?.reportingCurrencyList"
+                                        [displayField]="'currency'" [placeholder]="'Select '+staticField.displayName" #reportingCurrency="ngModel"
+                                        [isRequired]="true"  [enableVirtualScroll]="false"></typeahead-control>
+                                    <div *ngIf="(f.submitted || reportingCurrency.dirty) && !reportingCurrency.valid" class="text-danger">Reporting
+                                        Currency is required</div>
+                                </div>
+                                <div class="col-sm-6 col-md-3 padding-card-rem"
+                                    *ngIf="staticField.name ==companyInformationConstants.FinancialYearEnd">
+                                    <div class="padding-left-rem TextTruncate"
+                                        [ngClass]="staticField.isMandatory ?  'required-field' : ''"
+                                        for="fincancialyearend" title="{{staticField.displayName}}">{{staticField.displayName}}</div>
+                                    <typeahead-control class="header-cntrl typeheader-margin" name="financialYearEnd"
+                                        [placeholder]="'Select '+staticField.displayName"
+                                        [(ngModel)]="model.financialYearEnd" [optionList]="months"
+                                        [displayField]="'value'" #financialYearEnd="ngModel" [isRequired]="false">
+                                    </typeahead-control>
+                                    <div *ngIf="(f.submitted || financialYearEnd.dirty) && !financialYearEnd.valid"
+                                        class="text-danger">Financial Year End is required</div>
+                                </div>
+                                <div class="col-sm-6 col-md-3 padding-card-rem" [ngClass]="tRecordTrigger.menuOpen?  'company-group-modal-open' : ''" *ngIf="staticField.name ==companyInformationConstants.CompanyGroupId">
+                                    <div class="padding-left-rem  TextTruncate"
+                                        [ngClass]="staticField.isMandatory ?  'required-field' : ''" for="fincancialyearend"
+                                        title="{{staticField.displayName}}">{{staticField.displayName}}</div>
+                                        <span [matMenuTriggerFor]="menuGroup" #tRecordTrigger="matMenuTrigger">
+                                            <input [disabled]="true" type="text" class="form-control eachlabel-padding default-txt TextTruncate"
+                                                placeholder="Add/Select Group" value="{{selectedGroup}}" name="groupName" autocomplete="off" maxlength="500" />
+                                            <span 
+                                                class="p-button-icon pi pi-chevron-down  company-group-icon" aria-hidden="true"></span>
+                                        </span>
+                                </div>
+
+                                <div class="col-sm-6 col-md-3 padding-card-rem" *ngIf="false">
+                                    <div class="col-12">
+                                        <div class="desktop-m-3"></div>
+                                        <label class="d-inline-block TextTruncate" for="IsActive" title="Active">Active</label>&nbsp;&nbsp;
+                                        <input class="d-inline-block TextTruncate" type="checkbox" value="" name="IsActive"
+                                            [(ngModel)]="model.isActive" #IsActive="ngModel">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-3 padding-card-rem"
+                                    *ngIf="staticField.name ==companyInformationConstants.Customfield">
+                                    <div class="padding-left-rem TextTruncate" [ngClass]="staticField.isMandatory ?  'required-field' : ''"
+                                        for="Customfield" title="{{staticField.displayName}}">
+                                        {{staticField.displayName}} </div>
+                                        <input placeholder="Enter {{staticField.displayName}}"
+                                            *ngIf="(staticField.dataTypeId==mDataTypes.Number)&&(staticField.dataTypeId!=mDataTypes.FreeText)"
+                                            autocomplete="off" type="text" class="form-control eachlabel-padding default-txt TextTruncate"
+                                            [(ngModel)]="staticField.value == 'NA' ? '' : staticField.value" id="{{staticField.displayName}}"
+                                            name="{{staticField.displayName}}" (input)="numbersOnlyValidator($event)"
+                                            (blur)="AddOrUpdateCustomFieldValue($event,staticField)" />                                        
+                                        <input placeholder="Enter {{staticField.displayName}}"
+                                            *ngIf="(staticField.dataTypeId==mDataTypes.CurrencyValue||staticField.dataTypeId==mDataTypes.Percentage||staticField.dataTypeId==mDataTypes.Multiple)&&(staticField.dataTypeId!=mDataTypes.FreeText)"
+                                            autocomplete="off" type="text" class="form-control eachlabel-padding default-txt TextTruncate"
+                                            [(ngModel)]="staticField.value == 'NA' ? '' : staticField.value" id="{{staticField.displayName}}"
+                                            name="{{staticField.displayName}}" (input)="decimalNumbersOnlyValidator($event)" appTwoDigitDecimaNumber
+                                            (blur)="AddOrUpdateCustomFieldValue($event,staticField)" />
+                                        <p-calendar [appendTo]="'body'" placeholder="Enter {{staticField.displayName}}"
+                                            *ngIf="staticField.dataTypeId===mDataTypes.Date&&(staticField.dataTypeId!==mDataTypes.FreeText)"
+                                            class="pc-list-calender default-txt TextTruncate" id="{{staticField.displayName}}"
+                                            name="{{staticField.displayName}}" [(ngModel)]="staticField.value == 'NA' ? '' : staticField.value"
+                                            #{{staticField.name}} [monthNavigator]="true" [yearNavigator]="true" dateFormat="mm/dd/yy" readonlyInput="true"
+                                            [showIcon]="true" yearRange={{yearRange}} [maxDate]="today" [required]="false"
+                                            (onSelect)="onChangeDate($event,staticField)" (ngModelChange)="onChangeDate($event,staticField)"
+                                            >
+                                        </p-calendar>
+                                        <input *ngIf="staticField.dataTypeId===mDataTypes.FreeText" type="text"
+                                            class="form-control eachlabel-padding default-txt TextTruncate" name="Customfield"
+                                            [value]="staticField.value == 'NA' ? '' : staticField.value"
+                                            (blur)="AddOrUpdateCustomFieldValue($event,staticField)" [placeholder]="'Enter '+staticField.displayName"
+                                            autocomplete="off" maxlength="100" />
+                                        <input *ngIf="staticField.dataTypeId===0" type="text"
+                                            class="form-control eachlabel-padding default-txt TextTruncate" name="Customfield"
+                                            [value]="staticField.value == 'NA' ? '' : staticField.value"
+                                            (blur)="AddOrUpdateCustomFieldValue($event,staticField)" [placeholder]="'Enter '+staticField.displayName"
+                                            autocomplete="off" maxlength="100" />
+                                        <div *ngIf="staticField.dataTypeId===mDataTypes.List">
+                                            <span [matMenuTriggerFor]="i">
+                                                <!-- {{((customPortfolioGroupList|pcArrayFilter:staticField)[0]?.groupName)==null?'':((customPortfolioGroupList|pcArrayFilter:staticField)[0]?.groupName)}}
+                                                {{(customPortfolioGroupList|pcArrayFilter:staticField).length>1?((customPortfolioGroupList|pcArrayFilter:staticField).length-1):''}} -->
+                                                <input [disabled]="true" type="text" class="form-control eachlabel-padding default-txt TextTruncate"
+                                                    placeholder="Add/Select List" name="pcCustomList" autocomplete="off" maxlength="500" />
+                                                <span class="p-button-icon pi pi-chevron-down  company-group-icon" aria-hidden="true"></span>
+                                            </span>                                        
+                                            <mat-menu  #i="matMenu" [hasBackdrop]="true"
+                                                class="internal-report-preference-pop-up pc-group-pop-up" xPosition="before">
+                                                <add-portfolioCustomFields [menuTrigger]="i" (updateList)="CustomListAddOrUpdate($event)" [indexFieldId]="staticField.fieldID" [customListDetails]="pcCustomListDetails" [fieldId]="staticField.fieldID" [companyId]="model.portfolioCompanyID" [displayName]="staticField.displayName"></add-portfolioCustomFields>
+                                            </mat-menu>
+                                        </div>
+                                </div>
+                            </ng-container>
+                            <div class="row col-lg-12 col-md-12 col-sm-12 ">
+                                <div class="col-sm-6 col-md-3 padding-card-rem pb-0" *ngIf="companyLogoModel.isActive">
+                                    <div class="padding-left-rem" for="currency"></div>
+                                    <div class="border uploadCompanyLogo d-flex">
+                                        <div class="textEllipsis uploadLogoIcon" (click)="file.click()"
+                                            title={{browsetext}}>
+                                            <input class="hidefile TextTruncate" accept=".png,.jpg,.jpeg,.gif,.tiff,.bpg" #file
+                                                (click)="file.value = null" value=""
+                                                (change)="fileBrowseHandler($event.target.files)" type="file">
+                                            <img *ngIf="browseicon" class="pull-left broseicon"
+                                                [src]="'assets/dist/images/Iconmaterial-computer.svg'" alt="">
+                                            <span class="browsetext TextTruncate" title="{{browsetext}}">{{browsetext}}</span>
+                                        </div>
+                                        <div class="d-inline-block">
+                                            <div *ngIf="isFileUpload"
+                                                class="loading-input-controls-manual pl-2 pull-left loading-file">
+                                                <i aria-hidden="true"
+                                                    class="fa fa-circle-o-notch fa-pulse fa-1x fa-fw"></i>
+                                            </div>
+
+                                            <div *ngIf="deleticon"
+                                                class="loading-input-controls-manual pl-2 pull-left loading-file">
+                                                <i aria-hidden="true"
+                                                    class="fa fa-check fa-1x fa-fw"></i>
+                                            </div>
+
+                                            <div class="pl-2 pull-left" *ngIf="deleticon">
+                                                <img  (click)="deleteIconClick(filename)"
+                                                    [src]="'assets/dist/images/ClearIcon.svg'" alt="">
+
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row second-spacing pb-2 pl-3" *ngIf="false">
+                            <div class="col-12 BusinessDescriptionlabel pl-0 pr-0 TextTruncate" title="{{businessModel.displayName}}">
+                                {{businessModel.displayName}}
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="false">
+                            <div class="col-12 d-flex  flexmoduleContainer BusinessDescription-css pt-3 pb-3 pr-3 pl-3">
+                                <textarea type="text"
+                                    class="BusinessDescriptionlabel BusinessDescription-css form-control" rows="4"
+                                    name="BusinessDescription" [(ngModel)]="model.businessDescription"
+                                    #BusinessDescription="ngModel" autocomplete="off" 
+                                    [placeholder]="'Enter '+businessModel.displayName+' here...'"></textarea>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="row mr-0 ml-0" *ngIf="businessModel.isActive">
+                    <div class="col-12 BusinessDescriptionlabel    pl-0 pr-0 pb-2 TextTruncate" title="{{businessModel.displayName}}">
+                        <strong>{{businessModel.displayName}}</strong>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 bottom-spacing">
+                        <div class="row">
+                            <div class="col-12 d-flex  businessContainer BusinessDescription-css pl- pb-3 ">
+                                <textarea type="text"
+                                    class="BusinessDescriptionlabel BusinessDescription-css form-control" rows="4"
+                                    name="BusinessDescription" [(ngModel)]="model.businessDescription"
+                                    #BusinessDescription="ngModel" autocomplete="off" maxlength="1500"
+                                    [placeholder]="'Enter '+businessModel.displayName+' here...'"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row mr-0 ml-0">
+                    <div class="col-lg-12 col-md-12 col-sm-12 outer-section" *ngIf="tabList.length>0">
+                        <div class="row  ">
+                            <div class="panel panel-default pt-2 col-12 pl-0 pr-0 mr-0 tab-bg bg-color-none">
+                                <div class="panel-heading ">
+                                    <div class="panel-title">
+                                        <ul class="nav nav-tabs ">
+                                            <ng-container *ngFor="let tab of tabList">
+                                                <li class="nav-item " role="presentation" *ngIf="tab.isActive">
+                                                    <button (click)="selectTab(tab.name)"
+                                                        class="nav-link  nav-custom nav-pc TextTruncate"
+                                                        [ngClass]="tab.isSelected == true ? 'nav-active-tabcolor active' : 'nav-inactive-tabcolor'"
+                                                        id="{{tab.displayName}}-tab" type="button" role="tab1"
+                                                        aria-controls="home2"
+                                                        aria-selected="true" title="{{tab.displayName}}">{{tab.displayName}}</button>
+                                                </li>
+                                            </ng-container>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 border tabradius tabs-shadow mb-4" *ngIf="isGeographic">
+                        <form class="formcss" name="geographyForm" #geographyForm="ngForm">
+                            <div class="" [ngClass]="{ 'has-error': f.submitted }">
+                                <div *ngIf="locationModel==undefined"> <img src="assets/dist/images/loading.gif"
+                                        class="loading-img" />
+                                </div>
+                                <div *ngIf="locationModel!=undefined">
+                                    <location-control class="location-select" name="locations"
+                                        [(ngModel)]="geographicLocation" [locationMaster]="locationModel"
+                                        [countryRequired]="false" #Locations="ngModel"
+                                        [locationFieldConfigs]="locationFieldList">
+                                    </location-control>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 pl-3 top-spacing bottom-spacing pr-3">
+                                    <div class="pull-right"> <a class="geography-clear pr-3 TextTruncate"
+                                            (click)="clearGeographicLocation(geographyForm)" title="Clear">Clear
+                                            all</a>
+                                        <a class="nep-button nep-button-secondary TextTruncate"
+                                            (click)="addGeographicLocation(geographyForm)" title="Add Location">Add
+                                            Location</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row pb-0" *ngIf="model.geographicLocations?.length>0">
+                            <p-table styleClass="p-datatable-gridlines" class="geographicLocations-table custom-border-table-header" [resizableColumns]="true" [scrollable]="false"
+                                [rows]="100" [value]="model.geographicLocations" [lazy]="true" >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <ng-container *ngFor="let geo of locationFieldList">
+                                            <th scope="col" class="text-align-left " title="{{geo.displayName}}" *ngIf="geo.isActive">
+                                                {{geo.displayName}}</th>
+                                        </ng-container>
+                                        <th scope="col" class="text-center" title="Remove">Remove</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-location>
+                                    <tr>
+
+                                        <ng-container *ngFor="let geo of locationFieldList">
+                                            <td class="text-align-left" *ngIf="geo.isActive">
+                                                <span *ngIf="geo.name ==companyInformationConstants.Region" title="{{
+                                                    location?.region!=null
+                                                    ?location?.region?.region:'N/A' }}">{{
+                                                    location?.region!=null
+                                                    ?location?.region?.region:"N/A" }}</span>
+                                                <span *ngIf="geo.name ==companyInformationConstants.Country" title="{{
+                                                    location?.country?.country!=null?location?.country?.country:'N/A'
+                                                    }}">{{
+                                                    location?.country?.country!=null?location?.country?.country:"N/A"
+                                                    }}</span>
+                                                <span *ngIf="geo.name ==companyInformationConstants.State" title="{{
+                                                    location?.state?.state!=null?location?.state?.state:'N/A' }}">{{
+                                                    location?.state?.state!=null?location?.state?.state:"N/A" }}</span>
+                                                <span *ngIf="geo.name ==companyInformationConstants.City" title="{{
+                                                    location?.city?.city!=null?location?.city?.city:'N/A' }}"> {{
+                                                    location?.city?.city!=null?location?.city?.city:"N/A" }} </span>
+                                            </td>
+                                        </ng-container>
+                                        <td class="text-center"> <span
+                                                (click)="removeLocation(location.uniquelocationID)">
+                                                <img title="Remove Location" [src]="'assets/dist/images/Trash-icon.svg'"
+                                                    alt="">
+                                            </span>
+                                            <input type="hidden" value="{{location.uniquelocationID}}" />
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mr-0 ml-0">
+                    <div class="col-12 border tabradius tabs-shadow mb-4" *ngIf="isInvestment">
+                        <form class="card-body-form-form" name="employeeForm" #employeeForm="ngForm">
+                            <div class="row pt-3 pr-0 pl-3">
+                                <ng-container *ngFor="let investProf of investmentProfessionFieldList">
+                                    <div class="col-sm-6 col-md-3 padding-card-rem"
+                                        *ngIf="investProf.name ==companyInformationConstants.EmployeeName">
+                                        <div class="padding-left-rem required-field TextTruncate" title="{{investProf.displayName}}" for="EmployeeName">
+                                            {{investProf.displayName}}</div>
+                                        <input type="text" class="form-control  eachlabel-padding default-txt TextTruncate"
+                                            name="EmployeeName" [(ngModel)]="pcEmployee.employeeName"
+                                            #EmployeeName="ngModel" inputValidator="validatePersonName"
+                                            autocomplete="off" maxlength="100"
+                                            pattern="^(?!\s)(?!.*\s$)(?=.*[a-zA-Z0-9])[a-zA-Z0-9 '&()-\/,_ ]{2,}$"
+                                            [placeholder]="'Enter '+investProf.displayName" validateRequired required />
+                                        <div *ngIf="EmployeeName.invalid && (EmployeeName.dirty|| employeeForm.submitted)"
+                                            class="text-danger">
+                                            <p *ngIf="EmployeeName.errors.validateRequired">
+                                                Employee name is required</p>
+                                        </div>
+                                        <div *ngIf="(f.submitted || EmployeeName?.dirty)" class="text-danger">
+                                            <p *ngIf="EmployeeName.errors?.pattern">
+                                                Please enter valid Employee name</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 col-md-3 padding-card-rem"
+                                        *ngIf="investProf.name ==companyInformationConstants.Designation">
+                                        <div class="padding-left-rem TextTruncate" for="Designation" title="{{investProf.displayName}}">{{investProf.displayName}}</div>
+                                        <typeahead-control class="header-cntrl typeheader-margin" name="Designation"
+                                            [(ngModel)]="pcEmployee.designation" [optionList]="designationList"
+                                            [placeholder]="'Select '+investProf.displayName"
+                                            [displayField]="'designation'" #Designation="ngModel"
+                                            [isRequired]="undefined">
+                                        </typeahead-control>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 padding-card-rem"
+                                        *ngIf="investProf.name ==companyInformationConstants.Email">
+                                        <div class="padding-left-rem required-field TextTruncate" for="EmployeeEmail" title="{{investProf.displayName}}">
+                                            {{investProf.displayName}}</div>
+                                        <input type="email" class="form-control eachlabel-padding default-txt TextTruncate"
+                                            name="EmployeeEmail" [(ngModel)]="pcEmployee.emailId"
+                                            #EmployeeEmail="ngModel"
+                                            pattern="[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-zA-Z]{2,4}" required
+                                            [placeholder]="'Enter '+investProf.displayName" validateEmail
+                                            autocomplete="off" maxlength="100" validateRequired />
+                                        <div *ngIf="EmployeeEmail.invalid && (EmployeeEmail.dirty ||employeeForm.submitted)"
+                                            class="text-danger">
+                                            <p
+                                                *ngIf="!EmployeeEmail.errors.validateRequired && EmployeeEmail.errors.validateEmail">
+                                                Please enter valid email address</p>
+                                            <p *ngIf="EmployeeEmail.errors.validateRequired">
+                                                Employee email is required</p>
+                                        </div>
+                                        <div *ngIf="(f.submitted || EmployeeEmail?.dirty)" class="text-danger">
+
+                                            <p *ngIf="EmployeeEmail.errors?.pattern">
+                                                Please enter valid email addres</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 padding-card-rem"
+                                        *ngIf="investProf.name ==companyInformationConstants.Education">
+                                        <div class="padding-left-rem TextTruncate" for="Education" title="{{investProf.displayName}}">{{investProf.displayName}}</div>
+                                        <input type="text" class="form-control TextTruncate eachlabel-padding default-txt"
+                                            name="Education" [(ngModel)]="pcEmployee.education" #Education="ngModel"
+                                            [placeholder]="'Enter '+investProf.displayName"
+                                            inputValidator="noSpecialChars" autocomplete="off" maxlength="100" />
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 padding-card-rem"
+                                        *ngIf="investProf.name ==companyInformationConstants.PastExperience">
+                                        <div class="padding-left-rem TextTruncate" for="PastExperience" title="{{investProf.displayName}}">{{investProf.displayName}}
+                                        </div>
+                                        <input type="text" class="form-control TextTruncate eachlabel-padding default-txt"
+                                            name="PastExperience" [(ngModel)]="pcEmployee.pastExperience"
+                                            [placeholder]="'Enter '+investProf.displayName" #PastExperience="ngModel"
+                                            inputValidator="noSpecialChars" autocomplete="off" maxlength="500" />
+
+                                    </div>
+                                </ng-container>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 pt-0 bottom-spacing pr-3">
+                                    <div class="pull-right">
+                                        <a class="geography-clear pr-3 TextTruncate" (click)="clearEmployees(employeeForm)"
+                                            title="Clear">Clear all</a>
+                                        <a class="nep-button nep-button-secondary TextTruncate" (click)="addEmployees(employeeForm)"
+                                            title="{{employeeEditMode?'Update':'Add'}} Professional">{{employeeEditMode?'Update':'Add'}}
+                                            Professional</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="row pt-0 pb-0" *ngIf="model.pcEmployees?.length>0">
+
+                            <p-table styleClass="p-datatable-gridlines" class="geographicLocations-table" [resizableColumns]="true" [scrollable]="false"
+                                [rows]="100" [value]="model.pcEmployees" [lazy]="true" >
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <ng-container *ngFor="let investpro of investmentProfessionFieldList">
+                                            <th scope="col" class="text-align-left " title="{{investpro.displayName}}" *ngIf="investpro.isActive">
+                                                {{investpro.displayName}}</th>
+                                        </ng-container>
+                                        <th scope="col" title="Action">Action</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-employee>
+                                    <tr>
+                                        <ng-container *ngFor="let investpro of investmentProfessionFieldList">
+                                            <td class="text-align-left" *ngIf="investpro.isActive">
+
+                                                <span *ngIf="investpro.name ==companyInformationConstants.EmployeeName" title="{{
+                                                    employee?.employeeName || 'N/A' }}">
+                                                    {{
+                                                    employee?.employeeName || "N/A" }}</span>
+                                                <span
+                                                    *ngIf="investpro.name ==companyInformationConstants.Designation" title="{{
+                                                        employee?.designation?.designation || 'N/A' }} ">{{
+                                                    employee?.designation?.designation || "N/A" }} </span>
+                                                <span *ngIf="investpro.name ==companyInformationConstants.Email" title="{{
+                                                    employee?.emailId || 'N/A' }}"> {{
+                                                    employee?.emailId || "N/A" }}</span>
+                                                <span *ngIf="investpro.name ==companyInformationConstants.Education" title="{{
+                                                    employee?.education || 'N/A' }}"> {{
+                                                    employee?.education || "N/A" }} </span>
+                                                <span
+                                                    *ngIf="investpro.name ==companyInformationConstants.PastExperience" title="{{ employee?.pastExperience || 'N/A' }}">
+                                                    {{ employee?.pastExperience || "N/A" }} </span>
+                                            </td>
+                                        </ng-container>
+                                        <td>
+                                            <div class="add-control-btn">
+                                                <a class="btn btn-edit" title="Edit" (click)="editPCEmployee(employee)">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                            </div> <span *ngIf="false" (click)="removeEmployee(employee.emailId)"><a
+                                                    class="btn btn-remove">
+                                                    <i class="fa fa-trash"></i>
+                                                </a> </span>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row row-ad-d">
+                    <div class="col-12 border">
+                        <div class="pull-right pt-2 pb-2 pr-3">
+                            <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true"
+                                    class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                            <input id="hiddenreloadButton" type="button" value="{{resetText}}" title="{{resetText}}"
+                                (click)="formReset(f);" class="btn btn-warning reset-update-portfolio-css TextTruncate" />
+                            <button id="hiddenSaveButton" [disabled]="loading"
+                                class="btn btn-primary reset-update-portfolio-css TextTruncate" title="{{title}}">{{title}}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mr-0 ml-0">
+                    <div class="col-lg-12 col-md-12 col-sm-12 fixed-footer pr-0 pl-0" [ngStyle]="{'width': sideNavWidth}">
+                        <div class="pull-right pr-3 pt-2 pb-2">
+                            <div class="d-inline pr-2">
+                                <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true"
+                                        class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                                <input type="button" value="{{resetText}}" title="{{resetText}}"
+                                    onclick="document.getElementById('hiddenreloadButton').click()"
+                                    class="nep-button nep-button-secondary TextTruncate reset-update-portfolio-css" />
+                            </div>
+                            <div class="d-inline"> <button [disabled]="loading || !f.form.valid"
+                                    onclick="document.getElementById('hiddenSaveButton').click()"
+                                   
+                                    class=" width-120 nep-button nep-button-primary width-135 reset-update-portfolio-css ml-2 TextTruncate"
+                                    title="{{title}}">{{title}}</button></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" width="425" #cd>
+    <p-footer class="custom-button-hover">
+        <button type="button" pButton label="Yes" (click)="cd.accept()"></button>
+        <button type="button" pButton label="No" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+
+<mat-menu #menuGroup="matMenu" [hasBackdrop]="true" class="internal-report-preference-pop-up pc-group-pop-up" xPosition="before">
+    <div class="row mr-0 ml-0 pc-group-menu"  (click)="$event.stopPropagation();">
+     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 preference-header ">
+         <div class="float-left menu-header">
+             {{companyGroupPageField?.displayName}}
+         </div>
+         <div class="float-right close-icon cursor-filter" (click)="closePanel()">
+             <i class="pi pi-times"></i>
+         </div>
+     </div>
+     <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 preference-content pr-0 pl-0 border-bottom-0">
+         <div class="row mr-0 ml-0">     
+            <div class="col-12 col-sm-12 col-lg-12 col-md-12 col-xl-12 pr-0 pl-0" *ngIf="groupList?.length > 0">
+                <div class="kpi-sec-search">
+                    <div  class="search"><span  class="fa fa-search fasearchicon p-1"></span><input  (click)="$event.stopPropagation();"  type="text"  placeholder="Search" [(ngModel)]="searchGroup" class="search-text-company companyListSearchHeight"></div>
+                </div>
+            </div>  
+            <div class="col-12 col-sm-12 col-lg-12 col-md-12 col-xl-12 company-group-boundary" *ngIf="groupList?.length > 0">
+                <div class="row mr-0 ml-0  company-group-list"  cdkDropList  (cdkDropListDropped)="drop($event)">
+                    <div class="col-12 col-sm-12 col-lg-12 col-md-12 col-xl-12 company-group-list-padding drag-item pl-0 pr-0 company-group-box" cdkDragBoundary=".company-group-boundary"  *ngFor="let group of groupList | groupFilter:searchGroup; let i = index" cdkDrag >
+                        <div class="company-group-custom-placeholder" *cdkDragPlaceholder></div>
+                            <div class="float-left drag-item-content">
+                                <div class="dot-img">
+                                    <img cdkDragHandle  src="assets/dist/images/6dots.svg" alt="">
+                                </div>
+                            </div>
+                            <div class="d-inline-block group-content">
+                                <p-radioButton class="edit-mode-radio-button" (click)="$event.stopPropagation();selectedGroupId = group.groupId" name="{{group.groupName}}" value="{{group.groupName}}" [(ngModel)]="selectedGroup"></p-radioButton>
+                                <label *ngIf="!group.isEditable"  for="group" class="mb-0 pl-2 TextTruncate" title="">{{group?.groupName}}</label>
+                               <input *ngIf="group.isEditable" [name]="'group' + i" [(ngModel)]="group.groupName" type="text" class="form-control eachlabel-padding default-txt TextTruncate edit-mode-input"
+                                        name="groupName"   validateRequired required  value="{{group.groupName}}"                                    
+                                        autocomplete="off" maxlength="500" />        
+                            </div>
+                            <div class="float-right">
+                                <div class="float-left  icon-edit">
+                                   <a *ngIf="!group.isEditable" target="_self"(click)="editGroup(group)"><img  src="assets/dist/images/EditIcon.svg" alt="edit"></a> 
+                                   <a *ngIf="group.isEditable" target="_self" (click)="group.isEditable = false;cancelSelection(group)"><img  src="assets/dist/images/red-tick.svg" alt="delete"></a>
+                                </div>
+                                <div class="float-right  icon-delete">
+                                    <a *ngIf="!group.isEditable" target="_self" (click)="deleteGroup(group)"><img  src="assets/dist/images/delete.svg" alt="delete"></a>
+                                    <a [ngStyle]="{'pointer-events': group.groupName == null || group.groupName == '' ? 'none' : '' }" *ngIf="group.isEditable" target="_self"(click)="updateGroup(group)"><img  src="assets/dist/images/green-tick.svg" alt="edit"></a> 
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>   
+             <div class="col-12 col-sm-12 col-lg-12 col-md-12 col-xl-12 content-p" [ngClass]="groupList?.length > 0 ?'company-grp-add-btn-b' :''">              
+                 <div class="d-inline-block add-text">
+                    <input (focus)="myFunc($event)" (click)="$event.stopPropagation();" [(ngModel)]="groupName" type="text" placeholder="Enter group name here…" />
+                 </div>
+                 <div class="d-inline-block add-btn" >
+                     <button (click)="$event.stopPropagation();addCompanyGroup()" [class.isdisabled]="groupName==null || groupName ==''" [disabled]="groupName==null || groupName ==''">Add</button>
+                 </div>
+             </div>
+         </div>
+     </div>
+    </div>
+ </mat-menu>

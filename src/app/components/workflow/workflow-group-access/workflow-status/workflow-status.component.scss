@@ -1,0 +1,53 @@
+.workflowZeroStateFontStyle {
+    font-size: 12px;
+    color: #7F7F7F;
+}
+
+.EmptyStateImgStyle {
+    padding-left: 4%;
+}
+
+.Title {
+    width: 343px;
+    height: 41px;
+    padding: 12px 16px;
+}
+
+#WorkFlowStatusZeroState {
+    padding-left: 35%;
+    padding-top: 25%;
+}
+
+.infoIconSpan {
+    padding-left: 8px;
+    top: -1px;
+    position: relative;
+}
+
+.infoIconImg {
+    height: 16px;
+    width: 16px;
+}
+
+.actions {
+    display: none;
+}
+
+.backgroundStyleOnHover:hover {
+    background: #EFF0F9 0% 0% no-repeat padding-box !important;
+}
+
+.backgroundStyleOnHover:hover .actions {
+    display: block !important;
+}
+
+.pl6 {
+    padding-left: 6px !important;
+}
+
+.yellowInfoIcon {
+    padding-right: 8px;
+    top: -2px;
+    position: relative;
+}
+

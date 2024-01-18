@@ -1,0 +1,41 @@
+<div class="portfolio-detail-component"  (resized)="onResized($event)">
+    <div class="chart-area section1-height chart-section-height">
+        <div class="esgdrop-down-barchart" *ngIf="companyKPIList.length !== 0">
+            <p-dropdown name="companyKPI" 
+                class="custom-p-dropdown access-subfeature custom-searchable-dropdown icon-dropdown report-custom-dropdown chart-dropdown esg-barchart-dropdown"
+                [options]="companyKPIList" title="{{selectedCompanyKPI?.kpiName}}" optionLabel="kpiName" [(ngModel)]="selectedCompanyKPI"
+                (onChange)="OnCompanyKPIChange()">
+                <ng-template let-object pTemplate="item">
+                    <div tooltipPosition="top" tooltipStyleClass="bg-tooltip-report" [pTooltip]="object?.parentkpi"
+                        class="custom-ui-label custom-delete-hover custom-zindex-parent">
+                        <span title="{{object?.kpiName}}" class="img-pad TextTruncate">
+                            {{object?.kpiName}}
+                        </span>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+        <div class="chart-bg">
+            <div *ngIf="KPIChartData==null || KPIChartData.length==0 || ifNoDataAvailable">
+                <div class="row mr-0 ml-0">
+                    <div class="col-sm-12 pl-0 pr-0">
+                        <div class="text-info">
+                            <app-empty-state class="empty-chart pt-3" [isGraphImage]="true"></app-empty-state>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mr-0 ml-0 pt-3" *ngIf="KPIChartData!=null && KPIChartData?.length>0">
+                <div class="col-sm-12 pl-0 pr-0">
+                    <app-lineBar-chart [isDisplay]="width" [data]="KPIChartData" [xField]="xField"
+                        [yBarFields]="yBarFields" [isScrollBar]="true"
+                        [yLineFields]="selectedCompanyKPI['kpiInfo']!= '%' && selectedCompanyKPI['kpiInfo']!= 'x'?yLineFields:[]"
+                        [yLineFieldText]="selectedCompanyKPI['kpiInfo']!= '%' && selectedCompanyKPI['kpiInfo']!= 'x'?'% Change In Value':''"
+                        [unit]="moduleCurrency" [barColors]="yShades">
+                    </app-lineBar-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-loader-component *ngIf="isLoaded"></app-loader-component>

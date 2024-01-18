@@ -1,0 +1,142 @@
+<div class="header head-pl">
+    <a class="logo text-left custom-header-left-width">
+        <app-breadcrumb name="breadcrumb"></app-breadcrumb>
+    </a>
+    <mat-menu #menu1="matMenu">
+        <div class="excelPlugin-menu">
+            <button type="button" mat-menu-item (click)="setUpload()">
+                <span>
+                    Upload
+                </span>
+            </button>
+            <button type="button" mat-menu-item (click)="download()">
+                <span>
+                    Download
+                </span>
+            </button>
+        </div>
+    </mat-menu>
+    <div class="header-right">
+        <a class="excel-plugin-container" *ngIf="isUploadDownload" [matMenuTriggerFor]="menu1"  #t="matMenuTrigger" [class.opened]="t.menuOpen">
+            <img class="excel-icon-container" [src]="'assets/dist/images/excelPlugin-excel.svg'" alt="">
+            <span class="excel-text">
+                Excel Plugin
+            </span>
+        </a>
+        <a class="excel-plugin-container" *ngIf="pluginStatus!=''" (click)="checkStatus()">
+            <img class="excel-icon-container" [src]="'assets/dist/images/excelPlugin-excel.svg'" alt="">
+            <span class="excel-text">
+                Excel Plugin 
+            </span>
+            <span class="excel-plugin-load" *ngIf="isPluginLoader"></span>
+        </a>
+        <a class="vl" *ngIf="pluginStatus!=''|| isUploadDownload" ></a>
+        <a class="link notification-bell" (click)="openSideNav()" pRipple><i class="fa fa-bell-o" aria-hidden="true"></i>
+            <span *ngIf="isNotify" class="circle"></span>
+        </a>
+        <a class="vl"></a>
+        <a (click)="openSideNavfile()" > 
+            <div class="circle-container"  >
+                <img #circleImage class="arrow-image"   alt="" src= "{{imagehandlingarrow()}}"/>
+                <img  class="circle-image" [ngClass]="[isSpin === true ? 'img-spinner' : '']"  alt=""  src="{{imagehandlingcircle()}}" />
+        </div>
+    </a>
+        <a class="vl"></a>
+        <a>
+            <button class="btn-primary-round dropdown-toggle user-info-logout" id="dropdownMenuButton" [matMenuTriggerFor]="menu"> {{userName}}
+            </button>
+        </a>
+        <mat-menu #menu="matMenu">
+            <div *ngIf="!isIdsEnabled">
+                <button mat-menu-item [routerLink]="['/change-password',userId]" [queryParams]="{action:'changePassword'}">
+                    <span class="nav-link" 
+                        > <span class='glyphicon glyphicon-th-list'></span>
+                        Change
+                        Password </span>
+                </button>
+                <button mat-menu-item [routerLink]="['/login']">
+                    <span class="nav-link" > <span class='glyphicon glyphicon-th-list'></span>
+                        Log
+                        out </span>
+                </button>
+            </div>
+            <div *ngIf="isIdsEnabled">
+                <button mat-menu-item (click)="resetPassword()">
+                    <span class="nav-link glyphicon glyphicon-th-list">
+                        <span >Change Password</span></span>
+                </button>
+                <button mat-menu-item [routerLink]="['/out']" [queryParams]="{action:'logout'}">
+                    <span class="nav-link">
+                        <span class='glyphicon glyphicon-th-list'></span>
+                        Log out </span>
+                </button>
+            </div>
+        </mat-menu>
+    </div>
+</div>
+<p-sidebar class="notification-sidebar" (onHide)="sidenavClosed()" [showCloseIcon]="false" [(visible)]="isOpenSideNav" position="right">
+    <div class="row mr-0 ml-0 pl-0">
+        <div class="col-12 col-sm-12 sidebar-header pt-3 pb-3">
+            <div class="d-inline-block notification-h1">Notifications</div>
+            <div class="float-right d-inline-block" *ngIf="notificationList.length>0">
+                <span (click)="updateMarkAll()" class="mark-read-all showToolTip">
+                    <img src="assets/dist/images/mark-all-as-read.svg" title="Mark as all read" class="showHandIcon"/>
+                </span>
+                <span (click)="clearAll()" class="mark-read-all showToolTip pl-2 mark-tooltip-d">
+                    <i class="fa fa-trash showHandIcon" aria-hidden="true" title="Clear all"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row mr-0 ml-0  doc-border sidebar-padding" *ngFor="let message of notificationList;">
+        <div class="col-12 col-sm-12 pl-0">
+            <div class="row">
+                <div class="col-2">
+                    <div class="circle-user"> {{message.shortUserName}}</div>
+                </div>
+                <div class="col-10">
+                    <div class="row rowhead-mt">
+                        <div class="col-12 pl-0 pr-0">
+                            <div class="sidebar-content-title">
+                                <div class="sidebar-users">
+                                    {{message.assignedUserName}}
+                                </div>
+                                <div class="sidebar-desc"> shared documents with you</div>
+                            </div>
+                            <div *ngIf="!message.isRead" class="mark-dot mark-read-dot">
+
+                            </div>
+                            <div pRipple *ngIf="message.isRead" title="Mark it as read" (click)="updateNotification(message)" class="mark-dot mark-unread-dot showToolTip">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 pl-0 pt-2 pb-0">
+                            <div class="document-title">
+                                <div class="pb-2 showToolTip" title="View all documents"><a class="expand-doc" (click)="isExpand(message)"><span class="pr-2"><i [ngClass]="message.isExpanded?'fa fa-chevron-down':'fa fa-chevron-right'" aria-hidden="true"></i></span></a> {{message?.documentList.length}} Documents
+                                    shared
+                                </div>
+                                <div *ngIf="message.isExpanded">
+                                    <div class="expand-doc pb-1 pt-1 text-truncate" *ngFor="let document of message?.documentList">
+                                        <span class="pr-1 d-inline-block"><img [src]="getFileIcons(document.documentName+document.extension)"/></span>
+                                        <span>
+                                            <a (click)="openDocument(document)"  class="text-truncate txt-head-mw">
+                                                {{document.documentName}}
+                                            </a>
+                                           </span>
+                                    </div>
+                                </div>
+                                <div class="pt-2 doc-date">
+                                    {{message.notificationDate|date:'dd-MMM-yyyy'}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</p-sidebar>
+<app-common-upload *ngIf="isOpenUpload"  (onClosePopUpClick)="closePopup($event)"></app-common-upload>
+<app-file-status-side-nav [isOpensideNavfield]="isOpensideNavfiel" (cancelledSpin)="childData($event)"></app-file-status-side-nav>

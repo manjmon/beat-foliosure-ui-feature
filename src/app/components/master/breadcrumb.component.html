@@ -1,0 +1,9 @@
+<nav #navBreadcrumb aria-label="breadcrumb">
+    <div class="TextTruncate breadcrumb-width">
+        <img *ngIf='EnableBack' class="bread-m-r" src="assets/dist/images/back arrow.svg"
+            (click)="GoBack()" alt="">
+        <span title="Dashboard"  class="headerheadding breadcrumb-width TextTruncate"  *ngIf="!currentItem?.label">Dashboard</span>
+        <span title="{{ currentItem?.label }}" class="headerheadding breadcrumb-width TextTruncate"  *ngIf="!customHeaderEnable">{{ currentItem?.label }}</span>
+        <span title="{{ customHeader }}" class="headerheadding breadcrumb-width TextTruncate"  id="HeaderNameID" *ngIf="customHeaderEnable">{{ customHeader }}</span>
+    </div>
+</nav>

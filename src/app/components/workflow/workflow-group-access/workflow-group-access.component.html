@@ -1,0 +1,33 @@
+<div class="row access-section  mr-0 ml-0">
+    <div class="col-md-4 col-lg-4 col-xl-4 col-sm-4 col-4 col-xs-4 pl-0 pr-0">
+        <app-workflow-groups (GetUsersByGroup)="setGroupandSubgroupId($event)" [isReloadGroups]="isReloadGroups" (unsetReloadGroups)="unsetReloadGroups()">
+        </app-workflow-groups>
+    </div>
+    <div class="col-md-8 col-lg-8 col-xl-8 col-sm-8 col-8 col-xs-8 right-section pr-0">
+        <div class="panel panel-default pt-2 tab-bg border-left-0 border-right-0">
+            <div class="panel-heading">
+                <div class="panel-title custom-tabs pc-tabs">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item" role="presentation" *ngFor="let tab of tabList;" (click)="selectTab(tab)">
+                            <button class="nav-link nav-custom" [ngClass]="tab.active?'active':''" id="home-tab" data-bs-toggle="tab" type="button" role="tab" aria-controls="home" aria-selected="true">
+                                {{tab.name}}
+                       </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div *ngIf="tabName=='Users'">
+                <app-workflow-users [GroupDetails]="selectedGroupData" [scrollHeight]="windowHeight" (ReloadGroups)="ReloadGroups()"></app-workflow-users>
+            </div>
+            <div *ngIf="tabName=='Features'">
+                <app-workflow-features [groupId]="selectedGroupId" [scrollHeight]="windowHeight" ></app-workflow-features>
+            </div>
+            <div *ngIf="tabName=='Sub features'">
+                <app-workflow-sub-features [groupId]="selectedGroupId" [scrollHeight]="windowHeight" ></app-workflow-sub-features>
+            </div>
+            <div *ngIf="tabName=='Workflow'">
+                <app-workflow-status [GroupDetails]="selectedGroupData" [scrollHeight]="windowHeight" ></app-workflow-status>
+            </div>
+        </div>
+    </div>
+</div>

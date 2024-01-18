@@ -1,0 +1,117 @@
+<div class="row mr-0 ml-0 internal-report-download-section">
+    <div class="col-12 col-sm-12 col-xs-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0">
+        <div class="row mr-0 ml-0">
+            <div class="col-12 col-sm-12 col-xs-12 col-md-12 col-lg-12 col-xl-12 pl-3 pr-3  header-section report-download">
+                <div class="float-left pr-3 pt-2 pb-2">
+            <label id="reportTemplate" for="reportTemplate" class="nep-form-label custom-tab-p label_title repository-custom-padding">Report Template(s)
+                    </label>
+                    <p-dropdown (onChange)="getCompaniesByTemplateId();" [filter]="true" [filterBy]="'templateName'" [virtualScrollItemSize]="30"
+                    class="access-subfeature custom-searchable-dropdown"   
+                    [(ngModel)]="selectedTemplate"  name="copyToFeature"  [resetFilterOnHide]=true [options]="templateList" defaultLabel="Select Template"
+                     optionLabel="templateName">
+                    <ng-template  let-template pTemplate="item">
+                    <span tooltipPosition="top"
+                    tooltipStyleClass="bg-tooltip-report"
+                    [pTooltip]="template?.excelTemplateName"  title="{{template?.templateName}}">{{template?.templateName}}</span> 
+                    </ng-template>
+               </p-dropdown>
+                </div>
+                <div class="d-inline-block pr-3 pt-2 pb-2"  *ngIf="selectedTemplate?.excelTemplateName =='Monthly Template'">
+                    <label id="periodRange" for="periodRange" class="nep-form-label custom-tab-p label_title repository-custom-padding">As on Month
+                    </label>
+                    <p-calendar (onSelect)="setStatus()" #monthCalendar  [styleClass]="'internal-report-calendar download-calendar'" class="tablefilter-dropdrown-width" [readonlyInput]="true"
+                    inputStyleClass="p-custom-calendar date-picker-input" name="startPeriod"   [(ngModel)]="asonMonth"  dateFormat="M yy" [showIcon]="true" yearRange={{yearRange}} [yearNavigator]="true" view="month"
+                    placeholder="Select month">
+                </p-calendar>
+                </div>
+                <div class="d-inline-block pt-2 pb-2" [ngClass]="selectedPeriod?.name !='Custom Period' ? 'select-sheet':'pr-3'"> 
+                    <label id="period" for="period" class="nep-form-label custom-tab-p label_title repository-custom-padding">Period
+                    </label>
+                    <p-dropdown (onChange)="setStatus();dateRange = null;"  class="access-subfeature custom-searchable-dropdown" name="period" [options]="templateOptions" [(ngModel)]="selectedPeriod" placeholder="Select Period" optionLabel="name" [showClear]="false"></p-dropdown>
+                </div>
+                <div class="d-inline-block select-sheet pt-2 pb-2"  *ngIf="selectedPeriod?.name =='Custom Period'">
+                    <label id="periodRange" for="periodRange" class="nep-form-label custom-tab-p label_title repository-custom-padding">Period Range
+                    </label>
+                    <p-calendar (onSelect)="setStatus()" (onClose)="dateRangeSelected()" #myCalendar  [styleClass]="'internal-report-calendar download-calendar'" class="tablefilter-dropdrown-width" [readonlyInput]="true"
+                    inputStyleClass="p-custom-calendar date-picker-input" name="startPeriod"  [(ngModel)]="dateRange"  dateFormat="M yy" [showIcon]="true" yearRange={{yearRange}} [yearNavigator]="true" view="month"
+                    placeholder="Select from & to month" selectionMode="range">
+                </p-calendar>
+                </div>
+                <div class="pt-2 pb-2"  [ngClass]="selectedTemplate?.isCompanyTab ? 'd-inline-block':'d-none'">
+                    <label id="lblCompanyToggle" for="toggle" class="nep-form-label custom-tab-p label_title repository-custom-padding">Multiple Sheets
+                    </label>
+                    <p-inputSwitch class="field-hide-toggle" name="company-tab" id="idcompanyToggle"
+                    [(ngModel)]="isCompanySheetToggle"
+                    >
+                </p-inputSwitch>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-xs-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 body-section body-inter-h">
+                <p-table styleClass="p-datatable-gridlines" [globalFilterFields]="['companyName']" #tblCompany class="custom-user-access-table"  [columns]="headers" [value]="companyList"   [resizableColumns]="true" 
+                [scrollable]="true"  [scrollHeight]="'calc(100vh - 320px)'"  sortMode="multiple">  
+             <ng-template pTemplate="colgroup" let-columns>
+                 <colgroup>
+                     <col *ngFor="let col of columns; index as i" />
+                 </colgroup>
+             </ng-template>
+
+             <ng-template pTemplate="header" let-columns>
+                 <tr>
+                     <th id="col.header" *ngFor="let col of columns; index as i" [ngClass]="col.field" [ngStyle]="col.field === 'checkbox' ?{'padding':'0px','width':'60px'}:{}">
+                         <div class="company-header" *ngIf="col.header !== 'checkbox'">
+                             {{ col.header }}
+                         </div>
+                         <div *ngIf="col.header === 'checkbox'" id="checkAll" class="text-center">
+                             <mat-checkbox class="text-center" #checkAllBox [checked]="isCheckAll" [disabled]="companyList?.length == 0" class="mat-custom-checkbox mat-subfeature-checkbox" (change)="handleHeaderCheckBox($event);">
+                             </mat-checkbox>
+                         </div>
+                     </th>
+                     <th id="idReport" class="search-header">
+                        <div class="kpi-sec-search">
+                            <div  class="search"><span  class="fa fa-search fasearchicon p-1"></span><input #gb (input)="tblCompany.filterGlobal($event.target.value, 'contains')" type="text" placeholder="Search company" class="search-text-company companyListSearchHeight"></div>
+                        </div>
+                    </th>
+                 </tr>
+             </ng-template>
+             <ng-template pTemplate="body" let-rowData let-columns="columns">
+
+                 <tr>
+                     <td class="inter-rept-w">
+                         <div >
+                             <checkbox  marginLeft="4px" marginTop="-9px" height="20px" width="20" [isChecked]="rowData?.isSelected" [value]="" (change)="handleCheckBox(rowData,$event)">
+                             </checkbox>
+                         </div>
+                     </td>
+                     <td colspan="2" class="TextTruncate showToolTip kpi-column" title="{{rowData.companyName}}">
+                         {{rowData.companyName}}
+                     </td>
+                 </tr>
+             </ng-template>
+             <ng-template pTemplate="emptymessage" let-columns>               
+                 <tr [ngStyle]="{height:'calc(100vh - 344px)'}">
+                     <td  [attr.colspan]="columns.length" class="text-center tr-no-data">
+                         <app-empty-state [message]="'No Companies mapped to the selected template'" [isGraphImage] ="false"></app-empty-state> 
+                     </td>
+                 </tr>
+             </ng-template>
+         </p-table>
+            </div>
+            <div class="col-12 col-sm-12 col-xs-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 footer-section">
+                <div class="float-right pr-3 pb-2 pt-2">
+                    <div class="d-inline-block internal-reset-button">
+                        <nep-button Type="Secondary" (click)="resetAll();" [disabled]="isEnable">
+                        Reset
+                    </nep-button>
+                    </div>
+                    <div class="d-inline-block">
+                        <nep-button Type="Primary" (click)="download();" [disabled]="isEnable">
+                            Download <i aria-hidden="true" *ngIf="isDownload"
+                            class="download-circle-loader fa fa-circle-o-notch fa-1x fa-fw"></i>
+                        </nep-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

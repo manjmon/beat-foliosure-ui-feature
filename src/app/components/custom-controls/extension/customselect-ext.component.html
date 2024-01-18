@@ -1,0 +1,21 @@
+<div disabled id ="customSelectExtComponent" #customselect (click)="$event.stopPropagation()" class="disabled-div custom-select nep-input nep-input-textarea nep-input-focus nep-input-inline nep-select" [ngClass]="{'lpreport-select' : lpreportSelect}" (click)="openSelect()">
+    <div [ngClass]="{'nep-select-focus' : openOption}" tabindex="0" class="nep-select-inner nep-select-drop-down">
+        <div class="nep-select-result" ><span  #text title="{{selectedValue.name}}" class="nep-select-ellipsis pr8">
+            <img class="imageStyle" *ngIf="imagePath != ''" src={{imagePath}} alt="" />
+            {{selectedValue.name}}</span>
+            <span tabindex="-1" class="pi pi-chevron-down ptStyle"></span>
+        </div>
+        <div [ngStyle]="{'display': openOption ? 'block' : 'none' }" [ngClass]="{'nep-hidable-show' : openOption}" class="nep-list nep-hidable nep-hidable-fade nep-hidable-scale-y nep-hidable-animation-240 nep-select-options nep-select-control-mouse" type="default">
+            <div class="nep-scroll">
+                <div class="nep-scroll-iframe"></div>
+                <div class="nep-scroll-inner custom-select-scroll">
+                    <div class="custom-ext-mt">
+                        <a *ngFor="let data of selectList" tabindex="-1" class="nep-custom-option nep-select-option nep-select-hover option-0" title="{{data.name}}" (click)="selectedOption(data)" >
+                            <img  *ngIf="imagePath != ''" src={{imagePath}}  alt="" />
+                            {{data.name}}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,6 @@
+﻿
+	<p-overlayPanel #opTooltip [showCloseIcon]="true" [dismissable]="true" [appendTo]="'body'">
+		<ng-content></ng-content>
+	</p-overlayPanel>
+	<a (click)="opTooltip.toggle($event)">	<img class="FCinfoIconImg" [src]="'assets/dist/images/InfoGrey.svg'" alt="" /></a>
+

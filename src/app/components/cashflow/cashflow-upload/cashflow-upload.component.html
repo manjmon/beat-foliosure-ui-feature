@@ -1,0 +1,175 @@
+<div class="nep-modal nep-modal-show nepshow-d-bg">
+    <div class="nep-modal-mask"></div>
+    <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nepshadow-po-d">
+        <div class="nep-card-header nep-modal-title p-0">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-12 user-header">
+                    <div class="float-left TextTruncate" title="Download excel template and bulk upload cashflow data">Download excel template and bulk upload cashflow data</div>
+                    <a (click)="onClose()">
+                        <div class="float-right close-icon">
+                            <i class="pi pi-times"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-body">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-12 user-body user-upload">
+                    <div class="add-user-component">
+                        <div class="card card-main">
+                            <div class="card-body mb-0">
+                                <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 user-upload pr-0 pl-0">
+                                    <div class="row mr-0 ml-0 pb-3">
+                                        <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 col-xl-6 pr-0 pl-0">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-12 pr-0 pl-0">
+                                                    <label for="fund" class="TextTruncate" title="Fund">Fund</label>
+                                                </div>
+                                                <div class="col-12 pr-0 pl-0">
+                                                    <typeahead-control class="cashflow-fund" [placeholder]="'Select fund'" name="fund" [loadingOptions]="fundsLoading" [(ngModel)]="selectedFund" [optionList]="fundList" [isRequired]="true" [displayField]="'fundName'" #fund="ngModel" (selectItem)="onFundChange($event)"></typeahead-control>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-lg-6 col-xs-6 col-xl-6 pr-0 pl-0">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-12 pr-0 pl-0">
+                                                </div>
+                                                <div class="col-12 pr-0 pl-0 download-icon" *ngIf="isPageConfig!=''">
+                                                    <a (click)="DownloadTemplate()">
+                                                        <div class="download-fund-excel float-right">
+                                                            <img src="assets/dist/images/cashflow-download.svg" class="showHandIcon pr-1" /> Template
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc desc-header TextTruncate" title="Note:-">
+                                            Note:-
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc TextTruncate" title="1. Template includes sample data. Replace the same with relevant data.">
+                                            1. Template includes sample data. Replace the same with relevant data.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc TextTruncate" title="2. Follow the format laid out in the template. Do not modify any headers.">
+                                            2. Follow the format laid out in the template. Do not modify any headers.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc TextTruncate" title="3. File size limit is 20MB.">
+                                            3. File size limit is 20MB.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc TextTruncate" title="4. Transaction Date is MMM/dd/yyyy,MM/dd/yyyy format.">
+                                            4. Transaction Date is MMM/dd/yyyy,MM/dd/yyyy format.
+                                        </div>
+                                    </div>
+                                    <!-- <div class="row mr-0 ml-0" *ngIf="safeHtml">
+                                        <div class="col-md-12 pr-0 pl-0 pt-2">
+                                            <div class="upload-error-section" [ngClass]="messageClass==='errorMessage' ? 'pb20 errorColor' : 'pb20 successColor'">
+                                                <div id="errorSection">
+                                                    <div [innerHtml]="safeHtml"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="row mr-0 ml-0 mt-4" *ngIf="errorUploadDetails.length>0">
+                                        <div class="col-md-12 pr-0 pl-0 table-responsive card-border">
+                                            <p-table styleClass="p-datatable-gridlines"  #dt [value]="errorUploadDetails" [scrollHeight]="180 +'px'"
+                                                [scrollable]="true">
+                                                <ng-template pTemplate="header">
+                                                    <tr>
+                                                        <th>
+                                                            <span class="errorColor pr-2">
+                                                                <img class="error-info-icon"
+                                                                    [src]="'assets/dist/images/red_info_icon.svg'"
+                                                                    alt="">
+                                                            </span><span
+                                                                class="error-title errorColor pl-1">Errors</span>
+                                                        </th>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="body" let-message>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="row mr-0 ml-0">
+                                                                <div class="col-md-1 pl-0 pr-0">
+                                                                    <span class="errorColor" *ngIf="message.row>0">{{message.cellCode}}</span>
+                                                                </div>
+                                                                <div class="col-md-11 pl-1 pl-0" style="white-space: break-spaces;">                                                                   
+                                                                    <span class="pl-0" title="{{message.statusDescription}}">{{message.statusDescription}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+                                                    </tr>
+                                                </ng-template>
+                                            </p-table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-footer  nep-modal-footer user-upload">
+            <div *ngIf="displayUpdateConfirmationDialog && cashflowCalculationData.length > 0">
+                <div class="row mr-0 ml-0">
+                    <div class="col-md-12 pr-0 pl-0  desc-header alert-message">
+                        Alert
+                    </div>
+                </div>
+                <div class="row mr-0 ml-0">
+                    <div class="col-md-12 pr-0 pl-0 upload-desc">
+                        Fund holding data of quarter {{currentQuarter}} for following companies will be overwritten:
+                    </div>
+                </div>
+                <div class="row mr-0 ml-0 pb-3">
+                    <div class="col-md-12 pr-0 pl-0 upload-desc error-companies" *ngFor="let item of cashflowCalculationData; index as i">
+                        {{i+1}}.{{item.portfolioCompanyName}}
+                    </div>
+                </div>
+            </div>
+            <div class="float-right">
+                <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                <div class="upload-sec d-inline-block">
+                    <div class="upload-desc">
+                        <div class="uploadButton d-flex" [ngStyle]="{'padding-right': browseicon ? '9px' : '6px' }">
+                            <div class="textEllipsis uploadLogoIcon" (click)="file.click()" title={{uploadFilePlaceholder}}>
+                                <input class="hidefile" #file (click)="file.value = null" value="" accept=".xlsx,.xls" (change)="onSelect($event.target.files)" type="file">
+                                <img *ngIf="browseicon" class="browseIcon" [src]="'assets/dist/images/Iconmaterial-computer.svg'" alt="">
+                                <span class="beatColor browseButton">{{uploadFilePlaceholder}}</span>
+                            </div>
+                            <div *ngIf="!browseicon" class="icon">
+                                <a (click)="deleteIconClick(filename)">
+                                    <img *ngIf="ProgressCancel" class="pull-right"  [src]="'assets/dist/images/ClearIcon.svg'" alt="">
+                                </a>
+                                <i *ngIf="value == 1" aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <a (click)="onUpload()">
+                    <nep-button Type="Primary" class="nepbt-p" *ngIf="!displayUpdateConfirmationDialog" [disabled]="files.length==0 || selectedFund==undefined">
+                        Upload
+                    </nep-button>
+                </a>
+                <a (click)="isOverwriteHoldings=true;saveDataFlag()">
+                    <nep-button Type="Primary" class="nepbt-pl" *ngIf="displayUpdateConfirmationDialog && cashflowCalculationData.length > 0">
+                        Update
+                    </nep-button>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

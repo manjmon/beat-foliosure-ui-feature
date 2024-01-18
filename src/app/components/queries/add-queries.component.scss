@@ -1,0 +1,24 @@
+@import "../../../variables";
+.query-result.btn-preview{
+    color: $nep-dark-thick !important;
+    background-color: $nep-light-border;
+    border-color: $nep-light-border !important;
+}
+.btn-clear1.query-clear{
+    color: $nep-dark-thick !important;
+    background-color: $nep-light-border;
+    border-color: $nep-light-border !important;
+}
+.btn-primary.query-primary{
+    color: $nep-dark-thick !important;
+    background-color: $nep-light-border;
+    border-color: $nep-light-border !important;
+}
+.btn-export.query-export{
+    color: $nep-dark-thick !important;
+    background-color: $nep-light-border;
+    border-color: $nep-light-border !important;
+}
+textarea.form-control.query-height {
+    height: 300px;
+}

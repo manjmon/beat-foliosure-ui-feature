@@ -1,0 +1,166 @@
+﻿<div (resized)="onResized($event)" class="row mr-0 ml-0 add-pipeline add-pipe-mh">
+    <div class="col-lg-12 pr-0 pl-0">
+        <div class="add-user-component">
+            <div class="card card-main">
+                <div class="card-body">
+                    <form class="mr-0 ml-0 pr-0 pl-0 mt-0" name="form" [formGroup]="form">
+                        <div class="row mr-0 ml-0 desc-section desc-header">
+                            <div class="col-md-12 col-xs-12 col-lg-12 col-sm-12 col-lg-12 col-12 pr-0 pl-0">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-sm-3 col-md-3 pl-0">
+                                        <div class="form-group">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-12 pl-0">
+                                                    <label for="FirstName" class="TextTruncate" title="Pipeline Name">Pipeline Name</label>
+                                                </div>
+                                                <div class="col-12 pl-0">
+                                                    <input type="text" formControlName="pipelineName" placeholder="Enter Pipeline Name" class="form-control TextTruncate eachlabel-padding default-txt" name="PipelineName" [(ngModel)]="model.pipelineName" validateRequired autocomplete="off" maxlength="100" />
+                                                    <div *ngIf="form.get('pipelineName').errors?.required && submitted" class="text-danger">
+                                                        Pipeline Name is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 pl-0">
+                                        <div class="form-group" [ngClass]="{ 'has-error': submitted && !form.get('firmName').valid }">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-12 pl-0">
+                                                    <label for="firm" class="TextTruncate" title="Firm">Firm</label>
+                                                </div>
+                                                <div class="col-12 pl-0">
+                                                    <typeahead-control [placeholder]="'Select Firm'" formControlName="firmName" name="firm" [loadingOptions]="firmLoading" [(ngModel)]="model.firmDetails" [optionList]="masterModel.firmList" [displayField]="'firmName'">
+                                                    </typeahead-control>
+                                                    <div *ngIf="form.get('firmName').errors?.required && submitted" class="text-danger">
+                                                        Firm is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-sm-3 col-md-3 pl-0">
+                                        <div class="form-group" [ngClass]="{ 'has-error': submitted && !form.controls['accountType'].valid }">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-12 pl-0">
+                                                    <label for="accountType" class="TextTruncate" title="Account Type">Account Type</label>
+                                                </div>
+                                                <div class="col-12 pl-0">
+                                                    <typeahead-control [placeholder]="'Select Account Type'" formControlName="accountType" name="accountType" [loadingOptions]="accountTypeLoading" [(ngModel)]="model.accountTypeDetails" [optionList]="masterModel.accountTypeList" [displayField]="'accountType'"></typeahead-control>
+                                                    <div *ngIf="form.get('accountType').errors?.required && submitted" class="text-danger">Account type is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 pl-0 pr-0">
+                                        <div class="form-group">
+                                            <div class="row mr-0 ml-0">
+
+                                                <div class="col-12 pl-0">
+                                                    <label for="strategy" title="Sector" class="TextTruncate">Sector</label>
+                                                </div>
+                                                <div class="col-12 pl-0 pr-0">
+                                                    <typeahead-control [placeholder]="'Select Sector'" formControlName="sector" name="sector" [loadingOptions]="strategyLoading" [(ngModel)]="model.sectorList" [optionList]="masterModel.sectorList" [displayField]="'sector'">
+                                                    </typeahead-control>
+                                                    <div *ngIf="form.get('sector').errors?.required && submitted" class="text-danger">Sector is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-top col-md-12 col-xs-12 col-lg-12 col-sm-12 col-lg-12 col-12 pr-0 pl-0">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-sm-3 col-md-3 pl-0">
+                                        <div class="form-group">
+                                            <div class="row mr-0 ml-0">
+
+                                                <div class="col-12 pl-0">
+                                                    <label for="strategy" class="TextTruncate" title="Strategy">Strategy</label>
+                                                </div>
+                                                <div class="col-12 pl-0">
+                                                    <typeahead-control [placeholder]="'Select Strategy'" formControlName="strategy" name="strategy" [loadingOptions]="strategyLoading" [(ngModel)]="model.strategyDetails" [optionList]="masterModel.strategyList" [displayField]="'strategy'">
+                                                    </typeahead-control>
+                                                    <div *ngIf="form.get('strategy').errors?.required && submitted" class="text-danger">Strategy is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 pl-0">
+                                        <div class="form-group">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-12 pl-0">
+                                                    <label for="Status" class="TextTruncate" title="Stage">Stage</label>
+                                                </div>
+                                                <div class="col-12 pl-0">
+                                                    <typeahead-control [placeholder]="'Select Stage'" formControlName="status" name="status" [loadingOptions]="statusLoading" [(ngModel)]="model.pipelineStatus" [optionList]="masterModel.statusList" [displayField]="'status'"></typeahead-control>
+                                                    <div *ngIf="form.get('status').errors?.required && submitted" class="text-danger">Status is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 pl-0">
+                                        <div class="form-group">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-12 pl-0">
+                                                    <label for="Status" class="TextTruncate" title="Primary Contact">Primary Contact</label>
+                                                </div>
+                                                <div class="col-12 pl-0">
+                                                    <typeahead-control [placeholder]="'Select Primary Contact'" formControlName="primaryContact" placeholder="Primary Contact" name="primaryContact" [loadingOptions]="statusLoading" [(ngModel)]="model.primaryContact" [optionList]="masterModel.usersList" [displayField]="'name'"></typeahead-control>
+                                                    <div *ngIf="form.get('primaryContact').errors?.required && submitted" class="text-danger">Primary Contact is required</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-sm-3 pl-0 pr-0">
+                                        <div class="form-group">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-12 pl-0">
+                                                    <label for="closingDate" class="TextTruncate" title="Closing Date">Closing Date</label>
+                                                </div>
+                                                <div class="col-12 pl-0 pr-0">
+                                                    <div class="input-group calendar">
+                                                        <p-calendar placeholder="Select Closing Date"  class="form-control pipe-add-bb" formControlName="closingDate" [(ngModel)]="model.closingDate" name="closingDate" [monthNavigator]="true" [yearNavigator]="true" dateFormat="dd/mm/yy"
+                                                            readonlyInput="true" [showIcon]="true" yearRange={{yearRange}} [maxDate]="today" [required]="true">
+                                                        </p-calendar>
+                                                        <div *ngIf="form.get('closingDate').errors?.required && submitted" class="text-danger">Closing Date is required</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0 desc-section desc-section-pad">
+                            <div class="col-sm-12 col-md-12 pl-0 pr-0">
+                                <div class="form-group">
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-12 pr-0 pl-0">
+                                            <label for="Description" class="TextTruncate" title="Description"> Description</label>
+                                        </div>
+                                        <div class="col-12 pr-0 pl-0">
+                                            <textarea type="text" formControlName="description" class="form-control description-text pr-0 pl-0" rows="4" name="description" placeholder="Enter Description" [(ngModel)]="model.description" autocomplete="off" maxlength="500"></textarea>
+                                            <div *ngIf="form.get('description').errors?.required && submitted" class="text-danger">Closing Date is required</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="row mr-0 ml-0 fixed-footer" [ngStyle]="{'width': sideNavWidth}">
+    <div class="col-lg-12 col-md-12 col-sm-12  pr-0 pl-0">
+        <div class="pull-right pr-3 pt-2 pb-2">
+            <div class="d-inline pr-2">
+                <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                <input type="button" [disabled]="!form.valid && !submitted" value="{{resetText}}" title="{{resetText}}" (click)="formReset(form)" class="nep-button nep-button-secondary reset-update-portfolio-css TextTruncate" />
+            </div>
+            <div class="d-inline TextTruncate"> <button [disabled]="!form.valid && !submitted" (click)="addPipeline()" class="btn btn-primary reset-update-portfolio-css" title="{{title}}">{{title}}</button></div>
+        </div>
+    </div>
+</div>

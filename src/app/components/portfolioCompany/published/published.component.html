@@ -1,0 +1,303 @@
+<div class="portfolio-company-list-table">
+    <div class="row  mr-0 ml-0 filter-bg border-top" [ngClass]="pcStaticConfiguartionData ?.length == 0 ?'border-bottom':''">
+        <div class="col-lg-12 col-md-12 col-sm-12 pl-0 pr-0">
+            <div class="float-right">
+                <div class="d-inline-block search">
+                    <span class="fa fa-search fasearchicon p-1"></span>
+                    <input #gb pInputText type="text"
+                        (input)="searchLoadPCLazy()"
+                        class="search-text-company TextTruncate companyListSearchHeight" [(ngModel)]="globalFilter"
+                        placeholder="Search Company">
+                </div>
+                <div class="d-inline-block" [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"export"}'>
+                    <img class="showHandIcon" title="Export Deal (Excel file)"
+                        src="assets/dist/images/Cloud-download.svg" [matMenuTriggerFor]="menu" alt=""/>
+                </div>
+                <div class="d-inline cloud-icon"
+                    [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"export"}'></div>
+                <div class="d-inline-block">
+                    <div class="add-icon">
+                        <a [routerLink]="['/add-portfolio-company']" title="Add Portfolio Company"
+                            [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"add"}'> <img
+                                class="showHandIcon" title="Add Portfolio Company"
+                                src="assets/dist/images/plus.svg"  alt="" /></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-table styleClass="p-datatable-gridlines" styleClass="p-datatable-gridlines" [scrollHeight]="'calc(100vh - 240px)'" 
+    class="cashflow-tbl text-left custom-kpi-table borderless company-financial-border custom-table-paginator" 
+ [resizableColumns]="true" #tblPortfolio
+        emptyMessage="{{blockedTable? 'Please Wait...':'No record found'}}" [totalRecords]="totalRecords" [value]="pcStaticConfiguartionData"
+        [lazy]="true" (onLazyLoad)="loadPortfolioLazy($event)"  scrollable="true" 
+        [rows]="20" [globalFilter]="gb" sortMode="multiple">
+        <ng-template pTemplate="header">
+            <tr>
+                <th id= "header" pSortableColumn="{{item.sortFieldName}}" title="{{item.header}}" *ngFor="let item of headers">{{item.header}}
+                    <p-sortIcon field="{{item.sortFieldName}}"></p-sortIcon>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-pc>
+            <tr>
+                <td class="TextTruncate" *ngIf = "pc.valueColumn1 != null" >
+                    <a *ngIf = "pc.valueColumn1.link != '' && pc.valueColumn1.name != 'Website'" class="click-view TextTruncate" title="{{pc.valueColumn1.value}}" 
+                    href="javascript:void(0);"
+                    [routerLink]="[pc.valueColumn1.link, pc.valueColumn1.encryptedId]"
+                    title="View Details"
+                    [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"view"}'>{{pc.valueColumn1.value}}
+                    </a>
+
+                    <a *ngIf = "pc.valueColumn1.link != '' && pc.valueColumn1.name == 'Website'" class="click-view TextTruncate linkStyle" 
+                    title="{{pc.valueColumn1.value}}" href="//{{pc.valueColumn1.value}}" target="_blank"
+                    [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"view"}'>{{pc.valueColumn1.value}}
+                    </a>
+
+                    <div class="float-left TextTruncate sector-width float-cur" *ngIf = "pc.valueColumn1.link == ''">
+                        <span class="">{{pc.valueColumn1.value}}</span>
+                    </div>
+
+                    <div class="float-right" *ngIf="headers.length == 1">
+                        <span class="float-right company-buttons" *ngIf="isWorkflow">
+                            <button type="button"
+                                *ngIf="(pc.valueColumn1.workflowRequestId!=null && pc.valueColumn1.workflowRequestId>0) && (isEditDraft())"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'
+                                (click)="setCompanyValues(pc);encryptedPortfolioCompanyId=pc.valueColumn1.pcEncryptedId;draftName=pc.valueColumn1.draftName;redirectToDraft(pc.valueColumn1.workflowRequestId)">
+                                View Draft
+                            </button>
+                            <button type="button"
+                                *ngIf="(pc.valueColumn1.workflowRequestId==null || pc.valueColumn1.workflowRequestId==0) && (isCreateDraft())"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'
+                                (click)="setCompanyValues(pc);isOpenNewDraft=true;encryptedPortfolioCompanyId=pc.valueColumn1.pcEncryptedId ">
+                                New Draft
+                            </button>
+                        </span>
+                        <span class="float-right company-buttons" *ngIf="!isWorkflow">
+                            <button type="button" [routerLink]="['/add-portfolio-company',pc.valueColumn1.pcEncryptedId]"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'>
+                                Edit
+                            </button>
+                        </span>
+                    </div>
+                    
+                </td>
+
+                <td class="TextTruncate" *ngIf = "pc.valueColumn2 != null" >
+                    <a *ngIf = "pc.valueColumn2.link != ''  && pc.valueColumn2.name != 'Website'" class="click-view TextTruncate" title="{{pc.valueColumn2.value}}" href="javascript:void(0);"
+                    [routerLink]="[pc.valueColumn2.link, pc.valueColumn2.encryptedId]"
+                    title="View Details"
+                    [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"view"}'>{{pc.valueColumn2.value}}</a>
+
+                    <a *ngIf = "pc.valueColumn2.link != '' && pc.valueColumn2.name == 'Website'" class="click-view TextTruncate linkStyle" 
+                    title="{{pc.valueColumn2.value}}" href="//{{pc.valueColumn2.value}}" target="_blank"
+                    [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"view"}'>{{pc.valueColumn2.value}}
+                    </a>
+
+                    <div class="float-left TextTruncate sector-width float-cur" *ngIf = "pc.valueColumn2.link == ''">
+                        <span class="">{{pc.valueColumn2.value}}</span>
+                    </div>
+
+                    <div class="float-right" *ngIf="headers.length == 2">
+                        <span class="float-right company-buttons" *ngIf="isWorkflow">
+                            <button type="button"
+                                *ngIf="(pc.valueColumn2.workflowRequestId!=null && pc.valueColumn2.workflowRequestId>0) && (isEditDraft())"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'
+                                (click)="setCompanyValues(pc);encryptedPortfolioCompanyId=pc.valueColumn2.pcEncryptedId;draftName=pc.valueColumn2.draftName;redirectToDraft(pc.valueColumn2.workflowRequestId)">
+                                View Draft
+                            </button>
+                            <button type="button"
+                                *ngIf="(pc.valueColumn2.workflowRequestId==null || pc.valueColumn2.workflowRequestId==0) && (isCreateDraft())"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'
+                                (click)="setCompanyValues(pc);isOpenNewDraft=true;encryptedPortfolioCompanyId=pc.valueColumn2.pcEncryptedId ">
+                                New Draft
+                            </button>
+                        </span>
+                        <span class="float-right company-buttons" *ngIf="!isWorkflow">
+                            <button type="button" [routerLink]="['/add-portfolio-company',pc.valueColumn2.pcEncryptedId]"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'>
+                                Edit
+                            </button>
+                        </span>
+                    </div>
+                </td>
+
+                <td class="TextTruncate" *ngIf = "pc.valueColumn3 != null" >
+                    <a *ngIf = "pc.valueColumn3.link != ''  && pc.valueColumn1.name != 'Website'" class="click-view TextTruncate" title="{{pc.valueColumn3.value}}" href="javascript:void(0);"
+                    [routerLink]="[pc.valueColumn3.link, pc.valueColumn3.encryptedId]"
+                    title="View Details"
+                    [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"view"}'>{{pc.valueColumn3.value}}</a>
+
+                    <a *ngIf = "pc.valueColumn3.link != '' && pc.valueColumn3.name == 'Website'" 
+                    class="click-view TextTruncate linkStyle" 
+                    title="{{pc.valueColumn3.value}}" href="//{{pc.valueColumn3.value}}" target="_blank"
+                    [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"view"}'>{{pc.valueColumn3.value}}
+                    </a>
+                    <div class="float-left TextTruncate sector-width float-cur" *ngIf = "pc.valueColumn3.link == ''">
+                        <span class="">{{pc.valueColumn3.value}}</span>
+                    </div>
+
+                    <div class="float-right" *ngIf="headers.length == 3">
+                        <span class="float-right company-buttons" *ngIf="isWorkflow">
+                            <button type="button"
+                                *ngIf="(pc.valueColumn3.workflowRequestId!=null && pc.valueColumn3.workflowRequestId>0) && (isEditDraft())"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'
+                                (click)="setCompanyValues(pc);encryptedPortfolioCompanyId=pc.valueColumn3.pcEncryptedId;draftName=pc.valueColumn3.draftName;redirectToDraft(pc.valueColumn3.workflowRequestId)">
+                                View Draft
+                            </button>
+                            <button type="button"
+                                *ngIf="(pc.valueColumn3.workflowRequestId==null || pc.valueColumn3.workflowRequestId==0) && (isCreateDraft())"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'
+                                (click)="setCompanyValues(pc);isOpenNewDraft=true;encryptedPortfolioCompanyId=pc.valueColumn3.pcEncryptedId ">
+                                New Draft
+                            </button>
+                        </span>
+                        <span class="float-right company-buttons" *ngIf="!isWorkflow">
+                            <button type="button" [routerLink]="['/add-portfolio-company',pc.valueColumn3.pcEncryptedId]"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'>
+                                Edit
+                            </button>
+                        </span>
+                    </div>
+                </td>
+
+                <td class="TextTruncate" *ngIf = "pc.valueColumn4 != null" >
+                    <a *ngIf = "pc.valueColumn4.link != ''  && pc.valueColumn1.name != 'Website'" class="click-view TextTruncate" title="{{pc.valueColumn4.value}}" href="javascript:void(0);"
+                    [routerLink]="[pc.valueColumn4.link, pc.valueColumn4.encryptedId]"
+                    title="View Details"
+                    [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"view"}'>{{pc.valueColumn4.value}}</a>
+                    
+                    <a *ngIf = "pc.valueColumn4.link != '' && pc.valueColumn4.name == 'Website'" class="click-view TextTruncate linkStyle" 
+                    title="{{pc.valueColumn4.value}}" href="//{{pc.valueColumn4.value}}" target="_blank"
+                    [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"view"}'>{{pc.valueColumn4.value}}
+                    </a>
+                    <div class="float-left TextTruncate sector-width float-cur" *ngIf = "pc.valueColumn4.link == ''">
+                        <span class="">{{pc.valueColumn4.value}}</span>
+                    </div>
+
+                    <div class="float-right" *ngIf="headers.length == 4">
+                        <span class="float-right company-buttons" *ngIf="isWorkflow">
+                            <button type="button"
+                                *ngIf="(pc.valueColumn4.workflowRequestId!=null && pc.valueColumn4.workflowRequestId>0) && (isEditDraft())"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'
+                                (click)="setCompanyValues(pc);encryptedPortfolioCompanyId=pc.valueColumn4.pcEncryptedId;draftName=pc.valueColumn4.draftName;redirectToDraft(pc.valueColumn4.workflowRequestId)">
+                                View Draft
+                            </button>
+                            <button type="button"
+                                *ngIf="(pc.valueColumn4.workflowRequestId==null || pc.valueColumn4.workflowRequestId==0) && (isCreateDraft())"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'
+                                (click)="setCompanyValues(pc);isOpenNewDraft=true;encryptedPortfolioCompanyId=pc.valueColumn4.pcEncryptedId ">
+                                New Draft
+                            </button>
+                        </span>
+                        <span class="float-right company-buttons" *ngIf="!isWorkflow">
+                            <button type="button" [routerLink]="['/add-portfolio-company',pc.valueColumn4.pcEncryptedId]"
+                                class="nep-button nep-button-secondary"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"edit"}'>
+                                Edit
+                            </button>
+                        </span>
+                    </div>
+                    
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <paginator-control *ngIf="pcStaticConfiguartionData?.length >0" class="custom-table-paginator" [rowsPerPage]="pcStaticConfiguartionData?.length" [totalRecords]="totalRecords" [totalPage]="totalPage" [inputSearch] = "globalFilter" (loadPortfolioLazy)="loadPortfolioLazy($event)"></paginator-control>
+    <app-empty-state [isGraphImage] ="false" *ngIf="pcStaticConfiguartionData?.length == 0"></app-empty-state>  
+</div>
+<mat-menu #menu="matMenu">
+    <div>
+        <button mat-menu-item>
+            <span class="pc-menu nav-link pl-0 pr-0 TextTruncate" (click)="exportPortfolioCompanyList()">
+                <img title="Export  (Excel file)" src="assets/dist/images/MS_Excel.svg" />
+                Export List </span>
+        </button>
+        <button mat-menu-item *ngIf="!isTaabo">
+            <span class=" pc-menu nav-link pl-0 pr-0 TextTruncate" (click)="exportPortfolioCompanyKPIDataList()">
+                <img title="Export (Excel file)" src="assets/dist/images/MS_Excel.svg" />
+                Bulk Export </span>
+        </button>
+    </div>
+</mat-menu>
+
+<div class="nep-modal nep-modal-show nepmdl-d-bg"  *ngIf="isOpenNewDraft">
+    <div class="nep-modal-mask"></div>
+    <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nepcrd-p-d-t">
+        <div class="nep-card-header nep-modal-title p-0">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-12 user-header TextTruncate" title="Select Draft Details">
+                    Select Draft Details
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-body">
+            <form [formGroup]="form" name="form" (ngSubmit)="f.valid && saveDraft()">
+                <div class="row mr-0 ml-0 form-group required">
+                    <div class="col-12 pr-0 pl-0">
+                        <label for="draft" class="control-label TextTruncate" title="Draft type">Draft type </label>
+                    </div>
+                    <div class="col-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                        <p-dropdown (onChange)="reportYear=null;reportPeriod=null;" formControlName="reportName"
+                            [(ngModel)]="reportType" class="custom-p-dropdown draft-select TextTruncate" [style]="{width:'100%'}"
+                            name="reportType" [options]="reportTypes" placeholder="Select draft type" optionLabel="name"
+                            [showClear]="false">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="row mr-0 ml-0 control-padding ">
+                    <div class="col-6 col-sm-6 col-xs-6 col-lg-6 col-xl-6 pr-2 pl-0 form-group required"
+                        *ngIf="reportType!=null && reportType?.name=='LP Report'">
+                        <label for="draft" class="control-label TextTruncate" title="Report Quarter">Report Quarter </label>
+                        <p-dropdown formControlName="period" [(ngModel)]="reportPeriod"
+                            class="custom-p-dropdown draft-select TextTruncate" name="quarter" [options]="quarterOptions"
+                            placeholder="Select Quarter" optionLabel="text">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-6 col-sm-6 col-xs-6 col-lg-6 col-xl-6 pr-2 pl-0 form-group required"
+                        *ngIf="reportType!=null && reportType?.name=='Monthly Report'">
+                        <label for="draft" class="control-label TextTruncate" title="Report Month">Report Month </label>
+                        <p-dropdown formControlName="period" [(ngModel)]="reportPeriod"
+                            class="custom-p-dropdown draft-select" name="quarter" [options]="monthlyOptions"
+                            placeholder="Select Month" optionLabel="text">
+                        </p-dropdown>
+                    </div>
+                    <div class="col-6 col-sm-6 col-xs-6 col-lg-6 col-xl-6 pr-0 pl-2 form-group required"
+                        *ngIf="reportType!=null">
+                        <label for="draft" class="control-label TextTruncate" title="Report Year">Report Year </label>
+                        <p-dropdown [disabled]="reportPeriod == null" formControlName="year" [(ngModel)]="reportYear"
+                            class="custom-p-dropdown draft-select TextTruncate" name="year" [options]="yearOptions"
+                            placeholder="Select Year" optionLabel="text">
+                        </p-dropdown>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="nep-card-footer  nep-modal-footer">
+            <div class="float-right">
+                <div class="loading-input-controls-manual" *ngIf="isLoading"><i aria-hidden="true"
+                        class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                <nep-button class="TextTruncate" Type="Secondary" title="Cancel" (click)="isOpenNewDraft=false;form.reset();">
+                    Cancel
+                </nep-button>
+                <nep-button [disabled]="!form.valid" class="TextTruncate txt-trunc-pl" title="Confirm" (click)="saveDraft()" Type="Primary">
+                    Confirm
+                </nep-button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

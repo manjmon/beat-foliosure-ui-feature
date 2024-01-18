@@ -1,0 +1,113 @@
+<div *ngIf="isWithSector && !isLoading">
+  <p-treeTable [value]="dataCollection" [columns]="ColumsWithoutSector" [frozenColumns]="frozenCols" [scrollable]="true"
+    scrollHeight="400px"  frozenWidth="300px" (onNodeExpand)="setActive($event.node.data)"
+    (onNodeCollapse)="setActive($event.node.data)">
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+        <col *ngFor="let col of columns" style="width: 200px" />
+      </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns" styleClass="ValuationHeader" title="{{ col.header }}" [ngClass]="col.header === 'TargetName' ? 'ValuationHeader' : ''">
+          <span *ngIf="col.header=='LTM' || col.header=='NTM'"> {{kpiFirstName}}{{col.header}} {{kpiLastName}}</span>       
+          <span *ngIf="col.header!='LTM' && col.header!='NTM'">{{col.header }}</span>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData="rowData" let-columns="columns" let-rowNode>
+      <tr class="{{ rowData.cssClass }} table-row market-data-row" [ngClass]="rowData.expanded ? 'row-expanded' : 'row-collapsed'">
+        <td class="{{ rowData.cssClass }}" *ngFor="let col of columns; let i = index" [ngClass]="rowData.isHeader ? 'row-no-border' : ''" [class.table-data-right]="true">
+          <span class="{{ rowData.cssClass }}" *ngIf="rowData[col.field] != undefined && rowData[col.field] != null && rowData[col.field] !== '' && rowData[col.field] !== 'NA'; else empty_Text">
+            <span class="{{ rowData.cssClass }}" *ngIf="col.field == 'EV' || col.field == 'EquityValue'" [innerHtml]="isNumberCheck(rowData[col.field]) ? isNumberNMCheck(rowData[col.field]) && col.field !== 'EV' && col.field !== 'EquityValue' ? 'NM' : (rowData[col.field] | number : NumberDecimalConst.currencyDecimal | minusSignToBrackets) : rowData[col.field]"></span>
+            <span class="{{ rowData.cssClass }}" *ngIf="col.field != 'EV' && col.field != 'EquityValue'" title="{{rowData[col.field] < 0 ? 'Not Meaningful': ''}}" [innerHtml]="isNumberCheck(rowData[col.field]) ? isNumberNMCheck(rowData[col.field]) && col.field !== 'EV' && col.field !== 'EquityValue' ? 'NM' : (rowData[col.field] | number : NumberDecimalConst.multipleDecimal) + 'x' : 'NM'"></span>
+          </span>
+          <ng-template #empty_Text class="detail-sec">
+            <span class="{{ rowData.cssClass }}" *ngIf="!rowData['isHeader']" title="Not Applicable" [innerHtml]="printNAForSector(rowData, col)"></span>
+          </ng-template>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="frozenbody" let-rowNode let-rowData="rowData">
+      <tr class="{{ rowData.cssClass }} table-row market-data-row" [ngClass]="rowData.expanded ? 'row-expanded' : 'row-collapsed'">
+        <td class="{{ rowData.cssClass }}" [ngClass]="rowData.isHeader ? 'row-no-border' : 'custom-border-valuation'">
+          <p-treeTableToggler [rowNode]="rowNode" [ngClass]="rowData.isHeader ? 'tree-structure' : 'no-tree-structure'" *ngIf="rowData.isHeader"></p-treeTableToggler>
+          <checkbox class="tree-checkbox" [isChecked]="rowData?.IsSelected" marginLeft="4px" marginTop="-9px" height="20px" width="20" *ngIf="!rowData.isHeader && rowData.cssClass == ''" (change)="handleCheckBoxVal(rowData, $event)"></checkbox>
+          <span title="{{ rowData.name }}" class="TextTruncate">{{rowData.name}}</span>
+        </td>
+      </tr>
+    </ng-template>
+  </p-treeTable>
+</div>
+
+<div *ngIf="!isWithSector && !isLoading" class="top-padding-marketData impliedev migration-frozen-table">
+  <p-table styleClass="p-datatable-gridlines border-size" class="valuation-f-table" [columns]="ColumsWithoutSector"
+    [value]="dataCollection" [scrollable]="true" scrollHeight="500px" [scrollable]="true" scrollHeight="600px">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <ng-container *ngFor="let col of frozenCols">
+          <th pFrozenColumn class="peer-padding frozen-header" title="{{ col.header }}">
+            {{ col.header }}
+          </th>
+        </ng-container>
+        <ng-container *ngFor="let col of columns">
+          <th class="peer-padding" class="financial-header" title="{{ col.header }}">
+            <span *ngIf="col.header=='LTM' || col.header=='NTM'"> {{kpiFirstName}}{{col.header}} {{kpiLastName}}</span>       
+            <span *ngIf="col.header!='LTM' && col.header!='NTM'">{{col.header}}</span>
+          </th>
+        </ng-container>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr class="{{ rowData.cssClass }}">
+        <ng-container *ngFor="let col of frozenCols">
+          <td class="{{ rowData.cssClass }}" pFrozenColumn class="peer-padding">
+            <span *ngIf="col.field == 'TargetName'" title="{{ rowData[col.field] }}">
+              <checkbox class="tree-checkbox-without-sector" *ngIf="rowData.cssClass == ''" [isChecked]="rowData?.IsSelected" marginLeft="4px" marginTop="-9px" height="20px" width="20" (change)="handleCheckBoxVal(rowData, $event)"></checkbox>
+              <span class="{{ rowData.cssClass }} TextTruncate peersNameCol">{{rowData[col.field]}}</span>
+            </span>
+          </td>
+        </ng-container>
+        <ng-container *ngFor="let col of columns">
+          <td class="{{ rowData.cssClass }} peer-padding" [class.table-data-right]="isStaticCloumnHeader(col.field)">
+            <span class="{{ rowData.cssClass }}" *ngIf="
+                rowData[col.field] != undefined &&
+                  rowData[col.field] != null &&
+                  rowData[col.field] !== '';
+                else empty_Text
+              ">
+              <span class="{{ rowData.cssClass }}" *ngIf="
+                  col.field != 'TargetName' &&
+                  (col.field == 'EV' || col.field == 'EquityValue')
+                " [innerHtml]="
+                  isNumberCheck(rowData[col.field])
+                    ? isNumberNMCheck(rowData[col.field]) && col.field !== 'EV' && col.field !== 'EquityValue' ? 'NM' : (rowData[col.field]
+                      | number : NumberDecimalConst.currencyDecimal
+                      | minusSignToBrackets)
+                    : rowData[col.field]
+                "></span>
+
+              <span class="{{ rowData.cssClass }}" *ngIf="
+                  col.field != 'TargetName' &&
+                  col.field != 'EV' &&
+                  col.field != 'EquityValue' &&
+                  rowData[col.field] != 'NA'
+                " title="{{rowData[col.field] < 0 ? 'Not Meaningful': ''}}" [innerHtml]="
+                  isNumberCheck(rowData[col.field])
+                    ? isNumberNMCheck(rowData[col.field]) && col.field !== 'EV' && col.field !== 'EquityValue' ? 'NM' : (rowData[col.field]
+                        | number : NumberDecimalConst.multipleDecimal) + 'x'
+                    :  rowData[col.field] + 'x'
+                "></span>
+                <span class="{{ rowData.cssClass }}" title="Not Applicable" *ngIf="rowData[col.field] == 'NA'">{{rowData[col.field]}}</span>
+            </span>
+            <ng-template #empty_Text class="detail-sec">
+              <span class="{{ rowData.cssClass }}" title="Not Applicable" [innerHtml]="printNAForWithoutSector(rowData, col)"></span>
+            </ng-template>
+          </td>
+        </ng-container>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<app-loader-component *ngIf="isLoading"></app-loader-component>

@@ -1,0 +1,226 @@
+@import "../../../../variables";
+.card {
+    margin-top: -4px !important;
+}
+
+.financial-tab-header {
+    text-align: left;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: $nep-dark-black;
+    font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+}
+
+.financial-page {
+    background: $nep-white 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 12px $nep-shadow-color;
+    border: 1px solid $nep-divider;
+    border-radius: 4px;
+    opacity: 1;
+}
+.headerfontsize-beta
+{
+    font-size: 0.75rem;
+}
+.allvalues{
+  float:right;
+  font-size:12px;
+  margin-right:12px;
+  color: $nep-icon-grey;
+}
+
+.tab-bg {
+    background-color: $nep-white !important;
+}
+
+.outer-section {
+    background: $nep-base-grey 0% 0% no-repeat padding-box;
+    border: 1px solid $nep-divider;
+    border-radius: 4px 4px 4px 4px;
+    opacity: 1;
+    box-shadow: 0px 0px 12px $nep-shadow-color;
+}
+
+.nav-link {
+    background-color: transparent !important;
+    letter-spacing: 0px;
+    color: $nep-text-grey;
+    font-size: 0.9rem !important;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    &.active {
+        background-color: $nep-base-grey !important;
+        font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+        color: $nep-primary !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+.custom-tabs>.nav-tabs .nav-link.active,
+.custom-tabs>.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link {
+    color: $nep-nav-tab;
+    background-color: $nep-white;
+    border-color: $nep-nav-tab-border-color $nep-nav-tab-border-color $nep-white-secondary;
+    border-bottom: none !important;
+    top: 2px !important;
+    position: relative !important;
+}
+.headerfontsize {
+    font-size: 1.5rem;
+    padding-top:3px;
+}
+
+.rem {
+    padding-right: 0.75rem;
+}
+
+.leftrem {
+    padding-left: 0.75rem;
+}
+
+.label-align {
+    padding-left: 32px;
+}
+
+.cursor-filter {
+    cursor: pointer;
+}
+
+input:focus {
+    outline: none !important;
+}
+.cloud_download {
+    padding: 4px 12px;
+}
+
+.textsplit {
+    border-right: 1px solid $gray-600;
+    position: absolute;
+    top: 40%;
+    bottom: 0;
+    height: 16px;
+}
+
+.top-right-radius {
+    border-top-right-radius: 4px;
+}
+
+.top-left-radius {
+    border-top-left-radius: 4px;
+    border-bottom: none !important;
+}
+
+.search-text {
+    border-top: none !important;
+    border-bottom: none !important;
+    border-right: 1px solid #efefef;
+    border-left: 1px solid #efefef;
+    width: 303px;
+    height: 30px;
+    background: $nep-white 0% 0% no-repeat padding-box;
+}
+
+.footersubdiv {
+    padding-right: 16px;
+    padding-bottom: 16px;
+}
+
+.filter-first {
+    background: $nep-white 0% 0% no-repeat padding-box;
+    overflow-y: auto;
+    height: 256px;
+}
+
+.filter-footer {
+    padding-top: 32px;
+    float: right;
+}
+
+.btn-app {
+    color: $nep-white;
+    background-color: $nep-button-primary;
+    border-color: $nep-white !important;
+    border-radius: 4px;
+    width: 76px;
+    height: 24px;
+    text-align: center;
+    font-size: 0.75rem;
+    border: 1px solid #021155 !important;
+    padding-bottom: 0.063rem !important;
+}
+
+.btn-reset {
+    color: $nep-button-primary;
+    background-color: $nep-white;
+    border-color: $nep-button-primary !important;
+    border-radius: 4px;
+    width: 76px;
+    height: 24px;
+    text-align: center;
+    font-size: 0.75rem;
+    border: 1px solid #021155;
+    padding-bottom: 0.063rem !important;
+}
+
+.QMY_Container{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #DEDFE0;
+    border-radius: 4px;
+    opacity: 1;
+    cursor: pointer;
+}
+
+.QMY_Text{
+    text-align: left;
+    font-size: 14px;
+    letter-spacing: 0px;
+    color: #55565A;
+    opacity: 1;
+}
+.QMYStyle{
+    position: relative;
+    top: -0.25rem;
+    padding: 0.2rem 0.75rem 0.2rem 0.75rem;
+    border-radius: 4px;
+}
+.MStyle{
+    margin-left: 0.25rem !important;
+}
+.YStyle{
+    margin-right: 0.25rem !important;
+}
+
+.activeQMY{
+    background: #F7F8FC 0% 0% no-repeat padding-box !important;
+    color: #021155 !important;
+}
+
+.download-container{
+    top: -0.2rem;
+    position: relative;
+}
+
+.divider-position{
+    position: relative;
+    top:0.19rem;
+}
+
+.download-circle-loader
+{
+    color:#021155  !important;
+    font-size: 16px !important;
+}
+.btn-cursor-none{
+    pointer-events: none !important;
+    cursor: none;
+}
+.rcalcLegend {
+    background: #D2EDFD 0% 0% no-repeat padding-box;
+    border: 1px solid #55565A;
+    border-radius: 4px;
+    height: 16px;
+    width: 16px;
+    padding-left: 16px;
+}

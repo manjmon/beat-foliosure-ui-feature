@@ -1,0 +1,155 @@
+@import "../../../variables";
+
+.client-reporting-section {
+    .panel-heading {
+        border-bottom: none !important;
+    }
+    .no-data-report{
+    border-top: none !important;
+    background: transparent !important;
+    }
+    .datatable-container
+    {
+        background: $nep-white !important;
+    }
+    margin:-20px;
+
+    .fixed-top-section {
+        background: #FAFAFB 0% 0% no-repeat padding-box;
+        opacity: 1;
+        padding: 12px 20px;
+        border: 1px solid #DEDFE0;
+        box-shadow: 0px 3px 6px #00000014;
+
+        .fund-splitButton {
+            .download-investor-excel {
+                background: $nep-primary 0% 0% no-repeat padding-box;
+                border-radius: 4px;
+                opacity: 1;
+                cursor: pointer;
+                padding: 5px 12px;
+                padding-bottom: 7px !important;
+                color: $nep-white;
+            }
+        }
+    }
+
+    .portfolio-company-list-section {
+        margin: 20px;
+
+        .performance-section {
+            .outer-section {
+                background: $nep-base-grey 0% 0% no-repeat padding-box;
+                border: 1px solid $nep-divider;
+                border-radius: 4px 4px 4px 4px;
+                opacity: 1;
+                box-shadow: 0px 0px 12px $nep-shadow-color;
+            }
+
+            .nav-link {
+                background-color: $nep-white  !important;
+                letter-spacing: 0px;
+                color: $nep-text-grey;
+                font-size: 0.9rem !important;
+                padding-top: 9px;
+                padding-bottom: 9px;
+
+                &.active {
+                    background-color: #FAFAFB !important;
+                    font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+                    color: $nep-primary  !important;
+                    font-size: 0.9rem !important;
+                }
+            }
+
+            .tab-bg {
+                background-color: $nep-white  !important;
+            }
+
+            .content-bg {
+                background-color: $nep-white  !important;
+            }
+        }
+
+        .companyListSearchHeight {
+            height: 40px !important;
+            width: 400px !important;
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+        }
+
+        .content-mr{
+            margin-top: -2px !important;
+        }
+
+        .cloud-icon {
+            border-right: 1px solid $nep-divider;
+        }
+
+        .showHandIcon {
+            margin-top: -4px !important;
+            padding: 9px 12px;
+        }
+    }
+
+    .cdk-row-height {
+        height: 44px !important;
+    }
+    .row-white-space{
+        white-space: pre !important;
+    }
+    .pl3{
+        padding-left: 1rem !important;
+    }
+    .pr3{
+        padding-right: 1rem !important;
+    }
+    .select-pr-expand{
+        padding-top: 12px;
+    }
+    @media only screen and (min-width : 980px) and (max-width : 1024px) {
+        .pt-p{
+            padding-top: 12px;
+        }
+        .select-pr:nth-child(3){
+            padding-right: 0px !important;
+        }
+        .select-pr:nth-child(4){
+            padding-top: 12px !important;
+        }
+        .select-pr-expand:nth-child(4){
+            padding-left: 16px !important;
+        }
+                .download-Selector {
+        
+                    bottom: 0px;
+                    position: absolute;
+                    right: 0px;
+        
+                }
+    }
+    @media only screen and (min-width : 1025px) and (max-width : 1280px) {
+        .select-pr:nth-child(3){
+            padding-right: 0px !important;
+        }
+        .select-pr:nth-child(4){
+            padding-top: 12px !important;
+        }
+                .download-Selector {
+        
+                    bottom: 0px;
+                    position: absolute;
+                    right: 0px;
+        
+                }
+    }
+    .tab-name-max-width{
+        max-width: 800px !important;
+    }
+}
+.label-padding-css{
+    padding-bottom: 8px !important;
+}
+.client-card-margin{
+    margin-bottom: 0px !important;
+}

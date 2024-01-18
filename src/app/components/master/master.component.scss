@@ -1,0 +1,52 @@
+﻿.wrapper {
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
+}
+
+.content-page {
+    height: 100vh;
+    .content {
+        height: calc(100% - 50px);
+        overflow-y: auto;
+    }
+}
+
+.menu-expanded {
+    margin-left: 240px;
+}
+
+.menu-collapsed {
+    margin-left: 60px;
+}
+
+.side-bar-font{
+    font-size: 14px;
+    border: none;
+    color: white;
+    // height: 16px;
+    color: #FFFFFF;
+}
+
+.expanded-menu
+{
+  padding: 10px 0px 9px 8px !important;
+}
+
+::ng-deep{
+  .mat-custom-sidenav{
+    ::-webkit-scrollbar-thumb {
+      background-color: hsla(0,0%,90%,.5)!important;
+      max-height: 20% !important;
+      height: 10% !important;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: transparent !important;
+    }
+  }
+}
+
+.bgColorWhite{
+  background-color: #FFFFFF !important;
+}
+

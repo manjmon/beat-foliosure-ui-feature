@@ -1,0 +1,71 @@
+﻿<div class="row">
+    <div class="col-lg-12">
+        <div class="add-user-component">
+            <div class="card card-main">
+                <div class="card-header card-header-main p-0">
+                    <div class="row mr-0 ml-0 fundlist-header">
+                        <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                            <div class="float-right">
+                                <div class="d-inline-block search">
+                                    <span class="fa fa-search fasearchicon p-1"></span>
+                                    <input #gb pInputText type="text"
+                                    (input)="searchLoadPCLazy()"
+                                        class="search-text-company companyListSearchHeight TextTruncate" placeholder="Search"
+                                        [(ngModel)]="globalFilter">
+                                </div>
+                                <div class="d-inline-block"
+                                    [hideIfUnauthorized]='{featureId:feature.Firm,action:"export"}'>
+                                    <a (click)="exportFirmList()">
+                                        <img class="p-action-padding download-excel" title="Export Firm (Excel file)"
+                                         src="assets/dist/images/Cloud-download.svg" />
+                                    </a>
+                                </div>
+                                <div class="d-inline" [hideIfUnauthorized]='{featureId:feature.Fund,action:"export"}'>
+                                    <span class="col-divider">
+                                    </span>
+                                </div>
+                                <div class="d-inline-block"
+                                    [hideIfUnauthorized]='{featureId:feature.Firm,action:"add"}'>
+                                    <div class="add-icon p-add-padding">
+                                        <a [routerLink]="['/add-firm']" title="Add Firm">
+                                            <img class="" title="Add Firm" src="assets/dist/images/plus.svg" /></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p-table styleClass="p-datatable-gridlines" #tblFirm class="cashflow-tbl text-left custom-kpi-table borderless company-financial-border invested-table pc-table list-table custom-table-paginator" [scrollHeight]="'calc(100vh - 188px)'"  [totalRecords]="totalRecords" [value]="firms" [lazy]="true" (onLazyLoad)="loadFirmsLazy($event)"  scrollable="true"  [rows]="20"
+                         [globalFilter]="gb" sortMode="multiple">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="FirmName" class="TextTruncate" title="Firm Name" >Firm Name
+                                    <p-sortIcon field="FirmName"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="Website" class="TextTruncate" title="Website">Website
+                                    <p-sortIcon field="Website"></p-sortIcon>
+                                </th>
+                                <th pSortableColumn="mappingFirmGeographicLocation.Min(Country.Country)" class="TextTruncate" title="Headquarter">Headquarter
+                                    <p-sortIcon field="mappingFirmGeographicLocation.Min(Country.Country)"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-firm>
+                            <tr>
+                                <td><a class="click-view" title="View Details" (click)="setHeaderName(firm.firmName)" href="javascript:void(0);" [routerLink]="['/firm-details', firm.encryptedFirmID]" [hideIfUnauthorized]='{featureId:feature.Firm,action:"view"}'>{{firm.firmName}}</a></td>
+                                <td><a title="View Website" href="//{{firm.website}}" target="_blank">{{firm.website}}</a></td>
+                                <td><span *ngIf="firm.geographicLocations"><span *ngIf="firm.geographicLocations[0]?.region !=null"> {{ firm.geographicLocations[0].region?.region }}, </span>{{ firm.geographicLocations[0]?.country?.country }}<span *ngIf="firm.geographicLocations[0]?.state !=null">, {{ firm.geographicLocations[0].state?.state }}</span>
+                                    <span *ngIf="firm.geographicLocations[0]?.city!=null">, {{ firm.geographicLocations[0].city?.city }}</span>
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <paginator-control class="custom-table-paginator" *ngIf="firms?.length >0" [rowsPerPage]="firms?.length" [totalRecords]="totalRecords"  [totalPage]="totalPage" [inputSearch] = "globalFilter" (loadPortfolioLazy)="loadFirmsLazy($event)"></paginator-control>
+                    <app-empty-state [isGraphImage] ="false" *ngIf="firms?.length == 0"></app-empty-state>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

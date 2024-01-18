@@ -1,0 +1,374 @@
+﻿<div (resized)="onResized($event)" class="row mr-0 ml-0 firm-detail-section add-firm-section">
+    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 pr-0 pl-0">
+        <form name="form" class="mt-0 pt-0 pb-0 pl-0 pr-0" (ngSubmit)="f.form.valid && saveFirm(f)" #f="ngForm">
+            <div class="row mr-0 ml-0 pt-0 header-section custom-padding-bottom header-performance">
+                <div class="header-section col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                    <div class="fund-header pb-2 TextTruncate" title="Firm Information">
+                    Firm Information
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 col-xs-12 mr-0 ml-0 card card-main static-card pb-4">
+                    <div class="row mr-0 ml-0">
+                        <div class="col-md-6 col-sm-12 col-12 col-lg-4 col-xl-3 col-xs-3 pl-0 pr-0">
+                            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !FirmName.valid }">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-12 pl-0">
+                                        <label for="FirmName" class="TextTruncate mandatory-label" title="Firm Name">Firm Name</label>
+                                    </div>
+                                    <div class="col-12 pl-0">
+                                        <input type="text"placeholder="Enter Name"  class="form-control TextTruncate mandatory-label " name="FirmName" [(ngModel)]="model.firmName" #FirmName="ngModel" validateBusinessName autocomplete="off" maxlength="100" required />
+                                        <div *ngIf="FirmName.invalid && (FirmName.dirty|| f.submitted)" class="text-danger">
+                                            <p *ngIf="!FirmName.errors.validateRequired && FirmName.errors.validateBusinessName">
+                                                Please enter valid firm name
+                                            </p>
+                                            <p *ngIf="FirmName.errors.validateRequired">Firm name is required
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12 col-12 col-lg-4 col-xl-3 col-xs-3 pl-0 pr-0">
+                            <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !Website.valid }">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-12">
+                                        <label for="Website" class="TextTruncate" title="Website">Website</label>
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="text" placeholder="Enter website" class="form-control TextTruncate" name="Website" [(ngModel)]="model.website" #Website="ngModel" validateURL autocomplete="off" maxlength="100" />
+                                        <div *ngIf="Website.invalid && (Website.dirty ||f.submitted)" class="text-danger">
+                                            <p *ngIf="Website.errors.validateURL">Please provide a valid website url
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mr-0 ml-0 header-section ">
+                <div class="header-section col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                    <div class="fund-header">
+                        <label  class="fund-header pl-0 TextTruncate fund-header-pl" for="BusinessDescription" title="Business Description">Business Description</label>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 col-xs-12 mr-0 ml-0 card card-main static-card custom-textarea">
+                    <div class="row mr-0 ml-0">
+                        <div class="form-group" class="col-12 pl-0 pr-0" [ngClass]="{ 'has-error': f.submitted && !BusinessDescription.valid }">
+                            <textarea type="text" placeholder="Enter business description" class="form-control" rows="4" name="BusinessDescription" [(ngModel)]="model.businessDescription" #BusinessDescription="ngModel" autocomplete="off" maxlength="500"></textarea>
+                                <div *ngIf="!BusinessDescription.valid && (BusinessDescription.dirty||f.submitted)" class="text-danger">
+                                    <p *ngIf="(BusinessDescription.dirty) || BusinessDescription.errors.validateRequired">
+                                        Business description is required
+                                    </p>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mr-0 ml-0 header-section static-card1 header-performance tab-header mb-3">
+                <div class="col-lg-12 pl-0 pr-0">
+                    <div class="card-body portafolio-table">
+                        <div class="row performance-section mr-0 ml-0">
+                            <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 outer-section pl-0 pr-0">
+                                <div class="panel panel-default border-0 pt-0 tab-bg">
+                                    <div class="panel-heading pt-2">
+                                        <div class="panel-title custom-tabs">
+                                            <ul class="nav nav-tabs nav-custom">
+                                                <a *ngFor="let tab of tabList;" (click)="selectTab(tab)">
+                                                    <li class="nav-item" role="presentation" >
+                                                        <button class="nav-link nav-custom TextTruncate" title="{{tab.aliasname}}" [ngClass]="tab.active?'active':''" id="home-tab" data-bs-toggle="tab" type="button" role="tab" aria-controls="home" aria-selected="true">
+                                                          {{tab.aliasname}}
+                                                       </button>
+                                                    </li>
+                                                </a>
+
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="content-bg">
+                                    <div *ngIf="tabName=='Geographic-Locations'">
+                                        <div class="row ml-0 mr-0">
+                                            <div class="col-sm-12 pl-0 pr-0">
+                                                <form ngForm name="geographyForm" #geographyForm="ngForm">
+                                                    <div [ngClass]="{ 'has-error': f.submitted }">
+                                                        <div *ngIf="masterModel==undefined">
+                                                            <img src="assets/dist/images/loading.gif" class="loading-img" />
+                                                        </div>
+                                                        <div *ngIf="masterModel!=undefined">
+                                                            <div class="location-con pl-3 pr-3">
+                                                                <location-control name="locations" class="custom-firm-padding" [(ngModel)]="geographicLocation" [locationMaster]="masterModel" [countryRequired]="false" #Locations="ngModel">
+                                                                </location-control>
+    
+                                                                <div class="row headquarter-row">
+                                                                    <div class="col-12 pl-0 pr-0">
+                                                                        <div class="form-group custom-form-group formgroup-fl">
+                                                                            <mat-checkbox 
+                                                                                class="mat-custom-checkbox tree-chk-box TextTruncate" name="isHeadquarter" title="Headquarter" [(ngModel)]="geographicLocation.isHeadquarter"
+                                                                                >Headquarter</mat-checkbox>
+                                                                            
+                                                                        </div>
+                                                                        <div class="form-group custom-form-group formgrup-fr">
+                                                                         
+                                                                                    <div class="add-control-btn">
+                                                                                        <a class="geography-clear pr-3 TextTruncate" (click)="clearGeographicLocation(geographyForm)" title="Clear all">Clear all</a>
+                                                                                        <a class="nep-button nep-button-primary custom-bgcolor TextTruncate" (click)="addGeographicLocation(geographyForm)" title="Add Location">Add Location</a>
+                                                                                        
+                                                                                    </div>
+
+                                                                         </div>
+
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <div class="table-responsive" *ngIf="model.geographicLocations.length>0">
+                                                    <p-table styleClass="p-datatable-gridlines" class="add-firm-geographicLocations-table" [paginator]="model.geographicLocations?.length > 10"
+                                                        [rowsPerPageOptions]="[20,50,100,200]" [value]="model.geographicLocations"  [scrollable]="model.geographicLocations?.length > 5?true:false"
+                                                        [rows]="20"  sortMode="multiple">
+                                                        <ng-template pTemplate="header">
+                                                            <tr>
+                                                                <ng-container>
+                                                                    <th pSortableColumn="region" title="Region">Region
+                                                                        <p-sortIcon field="region"></p-sortIcon>
+                                                                    </th>
+                                                                    <th pSortableColumn="country" title="Country">Country
+                                                                        <p-sortIcon field="country"></p-sortIcon>
+                                                                    </th>
+                                                                    <th pSortableColumn="state" title="State">State
+                                                                        <p-sortIcon field="state"></p-sortIcon>
+                                                                    </th>
+                                                                    <th pSortableColumn="city" title="City">City
+                                                                        <p-sortIcon field="city"></p-sortIcon>
+                                                                    </th>
+                                                                    <th pSortableColumn="isheadquarter" title="Is Headquarter">Is Headquarter
+                                                                        <p-sortIcon field="isheadquarter"></p-sortIcon>
+                                                                    </th>
+                                                                    <th pSortableColumn="Remove" title="Remove">Remove
+                                                                        <p-sortIcon field="Remove"></p-sortIcon>
+                                                                    </th>
+                                                                </ng-container>
+                                                            </tr>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="body" let-item>
+                                                            <tr>
+                                                                <td><span title="{{ item?.region?.region }}">{{ item?.region?.region }}</span>
+                                                                </td>
+                                                                <td><span title="{{ item?.country?.country }}">{{ item?.country?.country }}</span>
+                                                                </td>
+                                                                <td><span title="{{ item?.state?.state }}">{{ item?.state?.state }}</span>
+                                                                </td>
+                                                                <td><span title="{{ item.city?.city }}">{{ item.city?.city }}</span>
+                                                                </td>
+                                                                <td><span title="{{item.isHeadquarter?'Yes':'No'}}">{{item.isHeadquarter?"Yes":"No"}} </span></td>
+                                                                <td class="text-center">
+                                                                    <a (click)="removeLocation(item.uniquelocationID)">
+                                                                        <span>
+                                                                            <img title="Remove Location" [src]="'assets/dist/images/Trash-icon.svg'"
+                                                                            alt="">
+                                                                        </span>
+                                                                    </a>
+                                                                    <input type="hidden" value="{{item.uniquelocationID}}" />
+                                                                </td>
+                                                            </tr>
+                                                        </ng-template>
+                                                    </p-table>
+                                                    <app-empty-state [isGraphImage]="false" *ngIf="model.geographicLocations?.length == 0"></app-empty-state>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="tabName=='Investment-Professionals'" class="text-center">
+                                        <div class="row ml-0 mr-0">
+                                            <div class="col-sm-12 pl-0 pr-0">
+                                                <form name="employeeForm" class="col-12" #employeeForm="ngForm">
+                                                    <div class="row">
+                                                        <div class="col-12 col-sm-6 col-md-6 col-xl-3 col-lg-4">
+                                                            <div class="form-group" [ngClass]="{ 'has-error': f.submitted }">
+                                                                <div class="row">
+                                                                    <div class="col-12 text-align-left">
+                                                                        <label for="EmployeeName TextTruncate" title="Employee Name">Employee Name</label>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <input type="text" autocomplete="off" placeholder="Enter Employee Name" class="form-control TextTruncate" name="EmployeeName" [(ngModel)]="firmEmployee.employeeName" #EmployeeName="ngModel" inputValidator="validatePersonName" autocomplete="off" maxlength="100" validateRequired />
+                                                                        <div *ngIf="EmployeeName.invalid && (EmployeeName.dirty|| employeeForm.submitted)" class="text-danger">
+                                                                            <p *ngIf="EmployeeName.errors.validateRequired">
+                                                                                Employee name is required
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-sm-6 col-md-6 col-xl-3 col-lg-4">
+                                                            <div class="form-group custom-margin-top" [ngClass]="{ 'has-error': f.submitted }">
+                                                                <div class="row">
+                                                                    <div class="col-12 text-align-left">
+                                                                        <label for="Designation TextTruncate" title="Designation">Designation</label>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <typeahead-control name="designation" [(ngModel)]="firmEmployee.designation" [optionList]="designationList" [displayField]="'designation'" #designation="ngModel" [isRequired]="undefined">
+                                                                        </typeahead-control>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-sm-6 col-md-6 col-xl-3 col-lg-4">
+                                                            <div class="form-group" [ngClass]="{ 'has-error': f.submitted }">
+                                                                <div class="row">
+                                                                    <div class="col-12 text-align-left">
+                                                                        <label for="EmployeeEmail TextTruncate" title="Employee Email">Employee Email</label>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <input type="text" autocomplete="off" class="form-control TextTruncate" placeholder="Enter Employee Email" name="EmployeeEmail" [(ngModel)]="firmEmployee.emailId" #EmployeeEmail="ngModel" validateEmail autocomplete="off" maxlength="100" validateRequired />
+                                                                        <div *ngIf="EmployeeEmail.invalid && (EmployeeEmail.dirty ||employeeForm.submitted)" class="text-danger">
+                                                                            <p *ngIf="!EmployeeEmail.errors.validateRequired && EmployeeEmail.errors.validateEmail">
+                                                                                Please enter valid email address
+                                                                            </p>
+                                                                            <p *ngIf="EmployeeEmail.errors.validateRequired">
+                                                                                Employee email is required
+                                                                            </p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-sm-6 col-md-6 col-xl-3 col-lg-4">
+                                                            <div class="form-group" [ngClass]="{ 'has-error': f.submitted }">
+                                                                <div class="row">
+                                                                    <div class="col-12 text-align-left">
+                                                                        <label for="Education TextTruncate" title="Education">Education</label>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <input type="text" autocomplete="off" class="form-control TextTruncate" placeholder="Enter Education" name="Education" [(ngModel)]="firmEmployee.education" #Education="ngModel" autocomplete="off" inputValidator="noSpecialChars" maxlength="100" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-sm-6 col-md-6 col-xl-3 col-lg-4">
+                                                            <div class="form-group" [ngClass]="{ 'has-error': f.submitted }">
+                                                                <div class="row">
+                                                                    <div class="col-12 text-align-left">
+                                                                        <label for="PastExperience TextTruncate" title="Past Experience">Past Experience</label>
+                                                                    </div>
+                                                                    <div class="col-12">
+                                                                        <input type="text" autocomplete="off" class="form-control TextTruncate" placeholder="Enter Past Experience" name="PastExperience" [(ngModel)]="firmEmployee.pastExperience" #PastExperience="ngModel" inputValidator="noSpecialChars" autocomplete="off" maxlength="500" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row headquarter-row">
+                                                        <div class="col-12 pl-0 pr-0">
+                                                            <div class="form-group custom-form-group form-firm-fl">
+                                                             
+                                                                <div class="add-control-btn">
+                                                                    <a class=" geography-clearnep-button nep-button-secondary pr-2" (click)="clearEmployees(employeeForm)" title="Clear all">Clear all</a>
+                                                                    <a class="nep-button nep-button-primary custom-bgcolor" (click)="addEmployees(employeeForm)" title="{{employeeEditMode?'Update':'Add'}} Professional">{{employeeEditMode?"Update":"Add"}} Professional</a>
+                                                                 
+                                                                </div>
+                                                                   
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                </form>
+                                                <div class="table-responsive" *ngIf="model?.firmEmployees?.length>0">
+                                                    <p-table styleClass="p-datatable-gridlines" class="add-firm-geographicLocations-table" [paginator]="model.firmEmployees?.length > 10"
+                                                        [rowsPerPageOptions]="[20,50,100,200]" [value]="model.firmEmployees"  [scrollable]="model.firmEmployees?.length > 5?true:false"
+                                                        [rows]="20"  sortMode="multiple">
+                                                        <ng-template pTemplate="header">
+                                                            <tr>
+                                                              
+                                                                <ng-container>
+                                                                    <th pSortableColumn="employeeName" title="Employee Name">Employee Name
+                                                                        <p-sortIcon field="employeeName"></p-sortIcon>
+                                                                    </th>
+                                                                    <th pSortableColumn="designation" title="Designation">Designation
+                                                                        <p-sortIcon field="designation"></p-sortIcon>
+                                                                    </th>
+                                                                    <th pSortableColumn="emailId" title="Employee Email">Employee Email
+                                                                        <p-sortIcon field="emailId"></p-sortIcon>
+                                                                    </th>
+                                                                    <th pSortableColumn="education" title="Education">Education
+                                                                        <p-sortIcon field="education"></p-sortIcon>
+                                                                    </th>
+                                                                    <th pSortableColumn="pastExperience" title="Past Experience">Past Experience
+                                                                        <p-sortIcon field="pastExperience"></p-sortIcon>
+                                                                    </th>
+                                                                    <th pSortableColumn="Remove" title="Action">Action
+                                                                        <p-sortIcon field="Remove"></p-sortIcon>
+                                                                    </th>
+                                                                </ng-container>
+                                                            </tr>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="body" let-item>
+                                                            <tr>
+                                                                <td><span *ngIf="item.employeeName" title="{{ item.employeeName  }}">{{ item.employeeName  }}</span>
+                                                                </td>
+                                                                <td><span *ngIf="item.designation" title="{{ item.designation.designation }}">{{ item.designation.designation }}</span>
+                                                                </td>
+                                                                <td><span *ngIf="item.emailId" title="{{ item.emailId }}">{{ item.emailId }}</span>
+                                                                </td>
+                                                                <td><span *ngIf="item.education" title="{{ item.education }}">
+                                                  {{ item.education }} </span>
+                                                                </td>
+                                                                <td><span *ngIf="item.pastExperience" title="{{ item.pastExperience }}">
+                                                  {{ item.pastExperience }} </span>
+                                                                </td>
+                                                                <td class="text-center"> 
+                                                                    <div class="add-control-btn">
+                                                                        <a class="btn btn-edit" title="Edit" (click)="removeFirmEmployee(item)">
+                                                                            <img title="Remove Location" [src]="'assets/dist/images/Trash-icon.svg'"
+                                                                            alt="">
+                                                                        </a>
+                                                                    </div>
+                                                                    <span *ngIf="false" (click)="removeEmployee(item.emailId)">
+                                                  <a class="btn btn-remove">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                                  </a>
+                                                  </span>
+                                                                </td>
+                                                            </tr>
+                                                        </ng-template>
+                                                    </p-table>
+                                                    <app-empty-state [isGraphImage]="false" *ngIf="model.firmEmployees?.length == 0"></app-empty-state>
+    
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center ml-0 mr-0 fixed-footer custom-footer" [ngStyle]="{'width': sideNavWidth}">
+                <div class="col-12 pl-0 pr-0">
+                    <div class="form-group update-row float-right">
+                        <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                        <input type="button" value="{{resetText}}" title="{{resetText}}" (click)="formReset(f)" [disabled]="loading" class="btn TextTruncate btn-warning mr-2 TextTruncate" />
+                        <button type="submit" class=" width-120 nep-button nep-button-primary width-135 reset-update-portfolio-css ml-2 TextTruncate"
+                        [disabled]="loading || !f.form.valid" title="{{title}}">{{title}}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle" width="425" #cd>
+    <p-footer class="custom-button-hover">
+        <button type="button" pButton label="Yes" (click)="cd.accept()"></button>
+        <button type="button" pButton label="No" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

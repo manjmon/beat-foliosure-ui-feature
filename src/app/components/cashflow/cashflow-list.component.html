@@ -1,0 +1,88 @@
+﻿<div class="row">
+    <div class="col-lg-12">
+        <div class="add-user-component">
+            <div class="card card-main">
+                <div class="card-header card-header-main p-0">
+                    <div class="row mr-0 ml-0 fundlist-header">
+                        <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                            <div class="float-left">
+                                <div class="fundlist-title TextTruncate" title="Funds - Cashflows">
+                                    Funds - Cashflows
+                                </div>
+                            </div>
+                            <div class="float-right">
+                                <div class="d-inline-block search">
+                                    <span class="fa fa-search fasearchicon p-1"></span>
+                                    <input #gb pInputText type="text" (input)="tblCashflowFile.filterGlobal($event.target.value, 'contains')" class="search-text-company companyListSearchHeight TextTruncate" placeholder="Search Cashflow" [(ngModel)]="globalFilter">
+                                </div>
+                                <div class="d-inline-block" [hideIfUnauthorized]='{featureId:feature.Cashflow,action:"import"}'>
+                                    <div class="add-icon p-add-padding">
+                                        <a href="javascript:void" (click)="isOpenUpload=true" title="Upload Cashflow">
+                                            <img class="" title="Upload Cashflow" src="assets/dist/images/plus.svg" /></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p-table styleClass="p-datatable-gridlines" class="fundlist-table cashflow-tbl text-left custom-kpi-table borderless company-financial-border" dataKey="fundName" [resizableColumns]="true" #tblCashflowFile [totalRecords]="totalRecords" [value]="uploadedFileArray" [lazy]="true" expandableRows="true" (onLazyLoad)="loadCashflowFileLazy($event)" scrollable="true" [scrollHeight]="windowHeight+'px'"
+                        [rows]="100"  [globalFilter]="gb" [multiSortMeta]="[{field:'CashflowFileId',order:-1}]" sortMode="multiple">
+                        <ng-template pTemplate="header">
+                            <tr class="cashflowlist-d">
+                                <th pSortableColumn="fundDetail.fundName" title="Funds">Funds
+                                    <p-sortIcon field="fundDetail.fundName"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-cashflow let-expanded="expanded" let-columns="columns">
+                            <tr class="cashflow-row" [ngClass]="cashflow.isExpanded?'fund-collapsed':'fund-expanded'">
+                                <td>
+                                    <span>  <button (click)="setActive(cashflow)" type="button" pButton [pRowToggler]="cashflow" class="cashflow-expand-button p-0 fundlist-expand TextTruncate" 
+                                        [icon]="expanded ? 'ui-row-toggler fa fa-fw ui-clickable fund-expanded' : 'ui-row-toggler ui-clickable fund-collapsed'" title="{{cashflow.fundID}}"></button>{{cashflow.fundID}}</span>
+                                    <span> {{cashflow.fundName}}</span>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template let-cashflowData pTemplate="rowexpansion" let-columns="columns">
+                            <tr>
+                                <td colspan="2" class="toggler-row">
+                                    <div class="ui-g ui-fluid p-0">
+                                        <div class="col-12 p-0">
+                                            <p-table styleClass="p-datatable-gridlines" class="fundlist-tree-table" [resizableColumns]="true" dataKey="uniqueFileId" [value]="cashflowData.cashflowUplaodedFiles" [lazy]="true"  [scrollable]="true" class="Child-table">
+                                                <ng-template pTemplate="header">
+                                                    <tr class="cashflowlist-d1">
+                                                        <th pSortableColumn="file name" title="File Name">File Name
+                                                            <p-sortIcon field="file name"></p-sortIcon>
+                                                        </th>
+                                                        <th pSortableColumn="Timestamp" title="Timestamp">Timestamp
+                                                            <p-sortIcon field="Timestamp"></p-sortIcon>
+                                                        </th>
+                                                        <th title="Action">Action</th>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="body" let-cashflow>
+                                                    <tr class="fund-tree-table">
+                                                        <td class="cashflow-list"><a class="click-view company-name" (click)="setHeaderName(cashflow)" href="javascript:void(0);" [routerLink]="['/cashflow', cashflow.encryptedCashflowFileID]" title="View Details" [hideIfUnauthorized]='{featureId:feature.Cashflow,action:"view"}'>{{cashflow.fileName  }}</a></td>
+                                                        <td title="{{(cashflow.createdOn | date:'MM/dd/yyyy HH:mm:ss')||'NA'}}">{{(cashflow.createdOn | date:'MM/dd/yyyy HH:mm:ss')||"NA"}}</td>
+                                                        <td>
+                                                            <a (click)="exportCashflowFile(cashflow.fileUploadDetails)" [hideIfUnauthorized]='{featureId:feature.Cashflow,action:"export"}'>
+                                                                <img title="Export Cashflow (Excel file)"  src="assets/dist/images/cashflow-download.svg" class="showHandIcon" />
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </ng-template>
+                                            </p-table>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-cashflow-upload *ngIf="isOpenUpload" (onClosePopUpClick)="closePopup($event)"></app-cashflow-upload>
+<app-loader-component *ngIf="isLoading"></app-loader-component>

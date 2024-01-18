@@ -1,0 +1,101 @@
+<div *ngIf="isWithSector && !isLoading">
+    <p-treeTable [value]="dataCollection" [columns]="ColumsWithoutSector" [frozenColumns]="frozenCols"
+        [scrollable]="true" scrollHeight="400px" frozenWidth="600px" (onNodeExpand)="setActive($event.node.data)"
+        (onNodeCollapse)="setActive($event.node.data)">
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns" style="width:250px">
+            </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" [ttSortableColumn]="col.field" [ngClass] ="col.header === 'Peers'? 'ValuationHeader': ''">
+                    {{col.header}}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData="rowData" let-columns="columns" let-rowNode>
+            <tr class="table-row market-data-row" [ngClass]="rowData.expanded?'row-expanded':'row-collapsed'">
+                <td *ngFor="let col of columns; let i = index" [ngClass]="rowData.isHeader?'row-no-border':''"
+                [class.table-data-right]="true">
+                    <span
+                        *ngIf="rowData[col.field]!= undefined && rowData[col.field]!=null && rowData[col.field]!=='' ;else empty_Text">
+                        <span
+                            [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number : NumberDecimalConst.currencyDecimal| minusSignToBrackets): rowData[col.field]"></span>
+                    </span>
+                    <ng-template #empty_Text class="detail-sec">
+                        <span title="Not Applicable" *ngIf="!rowData['isHeader']">NA </span>
+                    </ng-template>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="frozenbody" let-rowNode let-rowData="rowData">
+            <tr class="table-row market-data-row " [ngClass]="rowData.expanded?'row-expanded':'row-collapsed'">
+                <td [ngClass]="rowData.isHeader?'row-no-border':''">
+                    <p-treeTableToggler [rowNode]="rowNode" [ngClass]="rowData.isHeader?'tree-structure':'no-tree-structure'"></p-treeTableToggler>
+                    <span title="{{rowData.name}}" class="TextTruncate">{{rowData.name}}</span>
+                </td>
+                <td [ngClass]="rowData.isHeader?'row-no-border': 'custom-border-valuation'">
+                    <span *ngIf="rowData.ticker!= undefined && rowData.ticker!=null && rowData.ticker!=='' ;else empty_Text"><span>{{rowData.ticker}} </span></span>
+                    <ng-template #empty_Text class="detail-sec">
+                        <span title="Not Applicable" *ngIf="!rowData['isHeader']">NA </span>
+                    </ng-template>
+                </td>
+            </tr>
+        </ng-template>
+    </p-treeTable>
+    <app-empty-state [isGraphImage] ="false" *ngIf="dataCollection==null || dataCollection.length==0"></app-empty-state>  
+</div>
+
+<div *ngIf="!isWithSector && !isLoading" class="top-padding-marketData impliedev migration-frozen-table"> 
+    <p-table styleClass="p-datatable-gridlines border-size" class="valuation-f-table" [columns]="ColumsWithoutSector" [value]="dataCollection" [scrollable]="true"
+        scrollHeight="500px" [scrollable]="true" scrollHeight="600px">
+        <ng-template pTemplate="header" let-columns>
+
+            <tr>
+                <ng-container *ngFor="let col of frozenCols; index as i">
+                    <th pFrozenColumn title="{{col.header}}" class="frozen-header peer-padding">
+                        {{col.header}}
+                    </th>
+                </ng-container>
+                <ng-container *ngFor="let col of columns; index as i">
+                    <th class="peer-padding" title="{{col.header}}" class="financial-header">
+                        {{col.header}}
+                    </th>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <ng-container *ngFor="let col of frozenCols; index as i">
+                    <td pFrozenColumn class="peer-padding" >
+                        <span *ngIf="col.field == 'peers' || col.field == 'ticker'" title="{{rowData[col.field]}}">
+                            <span class="TextTruncate"
+                                *ngIf="rowData[col.field]!= undefined && rowData[col.field] !=null && rowData[col.field] !='' ;else empty_Text"><span>{{rowData[col.field]}}
+                                </span>
+                            </span>
+                            <ng-template #empty_Text class="detail-sec">
+                                <span title="Not Applicable">NA</span>
+                            </ng-template>
+                        </span>
+                    </td>
+                </ng-container>
+                <ng-container *ngFor="let col of columns; index as i">
+                    <td  class="peer-padding"
+                    [class.table-data-right]="isStaticCloumnHeader(col.field)">
+                        <span
+                            *ngIf="rowData[col.field]!= undefined && rowData[col.field]!=null && rowData[col.field]!=='';else empty_Text">
+                            <span *ngIf="col.field != 'peers'"
+                                [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number : NumberDecimalConst.currencyDecimal | minusSignToBrackets): rowData[col.field]"></span>
+                        </span>
+                        <ng-template #empty_Text class="detail-sec">
+                            <span title="Not Applicable">NA</span>
+                        </ng-template>
+                    </td>
+                </ng-container>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-empty-state [isGraphImage] ="false" *ngIf="dataCollection==null || dataCollection.length==0"></app-empty-state>  
+</div>
+<app-loader-component *ngIf="isLoading"></app-loader-component>

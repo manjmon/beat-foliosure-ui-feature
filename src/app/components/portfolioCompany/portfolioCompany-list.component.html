@@ -1,0 +1,32 @@
+﻿<div class="row portfolio-company-list-section">
+    <div class="col-lg-12">
+        <div class="card-body portafolio-table">
+            <div class="row performance-section mr-0 ml-0">
+                <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 outer-section pl-0 pr-0">
+                    <div class="panel panel-default pt-2 tab-bg border-left-0 border-right-0">
+                        <div class="panel-heading">
+                            <div class="panel-title custom-tabs pc-tabs">
+                                <ul class="nav nav-tabs ">
+                                    <li class="nav-item" role="presentation" *ngFor="let tab of tabList;" (click)="selectTab(tab)">
+                                        <button class="nav-link nav-custom"  title="{{tab.name}}" [ngClass]="tab.active?'active':''" id="home-tab" data-bs-toggle="tab" type="button" role="tab" aria-controls="home" aria-selected="true">
+                                          {{tab.name}}
+                                       </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-bg">
+                        <div *ngIf="tabName=='Published'">
+                            <pc-published (onDraftEmitter)="changesModelevent($event)"></pc-published>
+                        </div>
+                        <div *ngIf="appConfig?.IsWorkflowEnable && tabName=='Active Drafts'" class="text-center">
+                            <!-- <img alt="" class="mt-4 mb-4" src="assets/dist/images/no-data.svg" /> -->
+                            <app-portfolio-company-draft-list></app-portfolio-company-draft-list>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

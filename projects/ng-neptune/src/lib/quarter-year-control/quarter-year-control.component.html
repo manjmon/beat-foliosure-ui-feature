@@ -1,0 +1,66 @@
+﻿
+    <div [ngClass]="ControlName? ControlName:''"  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0 custdiv querter-year-button-style" >
+        <button [ngClass]="ControlName? ControlName:''"  *ngIf="initialInput" [ngStyle]="{'width': width+'px'}" class="drop-toggle custbtn1 flat cursorBut" (click)="showHideButton(initialInput,$event)">
+            <span [ngClass]="ControlName? ControlName:''" class="SelectYear ">{{placeHolder}}</span>
+            <img *ngIf="!showDropDown" [ngClass]="ControlName? ControlName:''" class="p-action-padding qy-img-css" title="{{placeHolder}}" src="assets/dist/images/Group 8763.svg" alt="" />
+            <img *ngIf="showDropDown" [ngClass]="ControlName? ControlName:''" class="p-action-padding qy-img-css" title="{{placeHolder}}" src="assets/dist/images/Group 8763-1.svg" alt="" />
+
+        </button>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 paddingNone" *ngIf="!initialInput">
+            <button *ngIf="!enableInitButton" [ngClass]="showDropDown? 'custBorder':''"  [ngStyle]="{'width': width+'px'}" class="drop-toggle custbtn2 flat cursorBut"
+                 (click)="showHideModal(showDropDown,$event)">
+                <span [ngClass]="ControlName? ControlName:''" class="SelectYear">{{placeHolder}}</span>
+                <img  *ngIf="!showDropDown" alt="" [ngClass]="ControlName? ControlName:''" class="p-action-padding qy-img-css" title="Select quarter and year" src="assets/dist/images/Group 8763.svg" />
+                <img  *ngIf="showDropDown" alt="" [ngClass]="ControlName? ControlName:''" class="p-action-padding qy-img-css" title="Select quarter and year" src="assets/dist/images/Group 8763-1.svg" />
+            </button>
+            <button *ngIf="enableInitButton" [ngClass]="showDropDown? 'custBorder':''" [ngStyle]="{'width': width+'px'}" class="drop-toggle {{ControlName}} custbtn3 flat cursorBut"
+                (click)="showHideModal(showDropDown,$event)">
+                <span [ngClass]="ControlName? ControlName:''" class="custQuarter">{{calendarYear[0].quarter}} {{calendarYear[0].year}}</span>
+                <img *ngIf="!showDropDown" alt="" [ngClass]="ControlName? ControlName:''" class="p-action-padding qy-img-css" title="{{calendarYear[0].quarter}} {{calendarYear[0].year}}" src="assets/dist/images/Group 8763.svg" />
+                <img *ngIf="showDropDown" alt="" [ngClass]="ControlName? ControlName:''" class="p-action-padding qy-img-css" title="{{calendarYear[0].quarter}} {{calendarYear[0].year}}" src="assets/dist/images/Group 8763-1.svg" />
+            </button>
+        </div>
+        
+        <div id="drop-show" class="drop-show {{ControlName}}" [ngClass]="enableModalTop? 'topModalShow':''"  [ngStyle]="{'width': width+'px'}" *ngIf="showDropDown">
+                <div class="row paddingNone">
+                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 paddingNone leftArrowBtn">
+                        <a class="custom-arrow" [ngClass]="ControlName? ControlName:''" *ngIf="showHideYearModal" (click)="nextPreviousYear('left','allYear')">
+                            <i [ngClass]="allYears[0][0].year==startYear ? 'cursorNone':''" class="pi pi-chevron-left {{ControlName}}" aria-hidden="true"></i>
+                        </a>
+                        <a class="custom-arrow " [ngClass]="ControlName? ControlName:''" *ngIf="!showHideYearModal" (click)="nextPreviousYear('left','singleYear')">
+                            <i [ngClass]="selectedYear==startYear ? 'cursorNone':''" class="pi pi-chevron-left {{ControlName}}" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div id="textAlign" class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 paddingNone textAlign {{ControlName}}">
+                        <button id="cusButton2" *ngIf="showHideYearModal" type="button" class="cusButton pt-2 pb-2 {{ControlName}}" (click)="showHideYear(showHideYearModal,$event)">
+                            <span [ngClass]="ControlName? ControlName:''">{{allYears[0][0].year}} - {{allYears[3][2].year}}</span>
+                        </button>
+                        <button id="cusButton2"  *ngIf="!showHideYearModal" type="button" class="cusButton {{ControlName}} pt-2 pb-2" (click)="showHideYear(showHideYearModal,$event)">
+                            <span [ngClass]="ControlName? ControlName:''">{{selectedYear}}</span>
+                        </button>
+                    </div>
+                    <div [ngClass]="ControlName? ControlName:''" class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 paddingNone rightArrowBtn">
+                        <a [ngClass]="ControlName? ControlName:''" class="custom-arrow" *ngIf="showHideYearModal" (click)="nextPreviousYear('right','allYear')">
+                            <i [ngClass]="allYears[3][2].year==lastYear ? 'cursorNone':''" class="pi pi-chevron-right {{ControlName}}" aria-hidden="true"></i>  
+                        </a>
+                        <a  class="custom-arrow"  [ngClass]="ControlName? ControlName:''" *ngIf="!showHideYearModal" (click)="nextPreviousYear('right','singleYear')">
+                            <i [ngClass]="selectedYear==lastYear ? 'cursorNone':''" class="pi pi-chevron-right {{ControlName}}" aria-hidden="true"></i>  
+                        </a>
+                    </div>
+                </div>
+
+                <div [ngClass]="ControlName? ControlName:''" class="row paddingNone quarterButton pt-2"  *ngIf="!showHideYearModal">
+                    <div [ngClass]="calendarYear[0].quarter=='Q1' ? 'selectedQuarter':'unselectedQuarter'" class="quarteryear col-3 {{ControlName}}" (click)="selectQuarter('Q1')"><span class="{{ControlName}}">Q1</span></div>
+                    <div [ngClass]="calendarYear[0].quarter=='Q2' ? 'selectedQuarter':'unselectedQuarter'" class="quarteryear col-3 {{ControlName}}" (click)="selectQuarter('Q2')"><span class="{{ControlName}}">Q2</span></div>
+                    <div [ngClass]="calendarYear[0].quarter=='Q3' ? 'selectedQuarter':'unselectedQuarter'" class="quarteryear col-3 {{ControlName}}" (click)="selectQuarter('Q3')"><span  class="{{ControlName}}">Q3</span></div>
+                    <div [ngClass]="calendarYear[0].quarter=='Q4' ? 'selectedQuarter':'unselectedQuarter'" class="quarteryear col-3 {{ControlName}}" (click)="selectQuarter('Q4')"><span class="{{ControlName}}">Q4</span></div>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
+                    <div [ngClass]="ControlName? ControlName:''" class="row paddingNone" *ngIf="showHideYearModal" >
+                            <div [ngClass]="ControlName? ControlName:''" class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 row row-Padding paddingNone"  *ngFor="let years of allYears">
+                                <span class="cell-Padding {{ControlName}}"  [ngClass]="year.year==calendarYear[0].year ? 'selectedYear':'unSelectedYear'"  (click)="selectYear(year.year,$event)" *ngFor="let year of years">{{year.year}}</span>
+                            </div>
+                    </div>
+                </div>
+        </div>
+    </div>

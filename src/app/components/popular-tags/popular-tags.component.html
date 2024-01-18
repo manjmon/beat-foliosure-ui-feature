@@ -1,0 +1,16 @@
+<div class="ml-3" >
+  <div *ngIf="!loader">
+    <div  class="popularTags">Recent Tags</div>
+    <div *ngIf="tags.length == 0" class="notags">
+      No details to show!
+    </div>
+    <div class="row mr-0 ml-0" *ngIf="tags.length > 0">
+      <div title={{tag}} class="pTags showToolTip" *ngFor="let tag of tags">
+        {{tag}} 
+      </div>
+    </div>
+  </div>
+  <div class="pop-mar-t poplr-mt" *ngIf="loader">
+    <img class="tagLoader" src="assets/dist/images/loading-small.gif" alt="" />
+  </div>
+</div>

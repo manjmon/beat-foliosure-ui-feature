@@ -1,0 +1,208 @@
+<div class="nep-modal nep-modal-show fund-tr-model deal-track-model nep-mdl-dsply-bg add-rep custom-calendar-width">
+    <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default mdl-nep-dflt-pr-dif modal-default-height">
+        <div class="nep-card-header nep-modal-title p-0">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-12 col-lg-12 col-12 col-xl-12 col-sm-12 pr-0 pl-0  user-header">
+                    <div class="float-left TextTruncate" title="Upload Document">Upload Document</div>
+                    <div class="float-right close-icon">
+                        <i class="pi pi-times" (click)="openModal(null,null)"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-body hight-container">
+            <div class="row mr-0 ml-0 modal-default-height">
+                <div class="col-2 pl-0 pr-0">
+
+                    <div class="left-container modal-default-height left-c-image-height" appDnd (fileDropped)="onFileDropped($event)">
+                        <div class="top-left-container">
+                            <input type="file" #fileDropRef id="fileDropRef" multiple
+                                (change)="fileBrowseHandler($event.target.files)" class="add-rep-cur-point"/>
+                            <img class="uploadFile" [src]="getIcons('uploadFile')" alt="" />
+                            <p class="drop-icon"></p>
+                            <p class="drop-icon">Drop files here<br>or</p>
+                            <button class="repository-browse-btn">Browse</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 pl-0 pr-0 center-container">
+                    <div class="default-height">
+                        <div class="uploadedCount">
+                            <span class="uploaded-Count-span" id="uploadedCount">Uploaded ({{this.files.length}} out of {{this.files.length}})</span>
+                            <span *ngIf="((validationError!='' && uploadedFilesCount>1) || isRetry)"
+                                class="applyRedColor aplyred-fr" >
+                                <img [src]="getIcons('error')" alt="" />
+                                Failed
+                            </span>
+                        </div>
+                        <div class="files-list overflowProgressGroup">
+                            <div [ngClass]="files.length - 1 === i? 'single-file' : 'single-file'"
+                                *ngFor="let file of files; let i = index">
+                                <div
+                                    [ngClass]="file.imagePath.includes('error') ? 'file-icon errorimageicon' : 'file-icon imageicon'">
+                                    <img [src]="file?.imagePath" alt="" class="name nepOption" />
+                                </div>
+                                <div class="info info-style-cur">
+                                    <h1 (click)="renameIfError(file)" *ngIf="!file.isError" title={{file?.displayName}}
+                                        [class]="file?.fileNameClass">
+                                        {{ file?.displayName }}
+                                    </h1>
+                                    <input documentname type="text" class="nep-input fontStyle14 inlineInput"
+                                        *ngIf="file.isError" name="fileName" [value]="file.displayName"
+                                        [(ngModel)]="file.displayName" (blur)="documentBulkNameOnBlur(file,i)"
+                                        (keyup.enter)="documentBulkNameOnBlur(file,i)">
+                                    <p *ngIf="!file.isError" class="size">
+                                        {{ formatBytes(file?.size) }}
+                                    </p>
+                                    <span *ngIf="file?.error!=undefined && file?.error!='' && !file.isError"
+                                        class="applyRedColor aply-clr-pad-lft">Name already exist
+                                    </span>
+                                    <span *ngIf="file?.retry" class="retry showHandIcon"
+                                        (click)="upload(file,i,true)">Retry</span>
+                                    <app-progress id="fileUploadProgressBar" *ngIf="file?.progress !== 100"
+                                        [progress]="file?.progress">
+                                    </app-progress>
+                                </div>
+                                <div (click)="openDelete(file)">
+                                    <img class="showHandIcon" [src]="getIcons('deleteicon')" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 pl-0 pr-0 page-auto-set">
+                        <div class="row mr-0 ml-0 ">
+                            <div class="col-md-12 col-lg-12 col-12 col-xl-12 col-sm-12 pr-0 pl-0 repository-custom-header user-header">
+                                <div class="float-left repository-add-file TextTruncate">Add File Details</div>
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0">
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="fix1 pt-3 col-12">
+                                        <p id="docName" for="documentname" class="nep-form-label custom-tab-p label_title repository-custom-padding">Document
+                                            Name
+                                        </p>
+                                        <input documentname type="text"
+                                            class="nep-input nep-input-bottom-border content fontStyle14 "
+                                            id="documentname" *ngIf="files.length === 1 || files.length === 0"
+                                            name="documentName" [(ngModel)]="newDocument.Name"
+                                            (blur)="documentNameOnBlur()"
+                                            placeholder="Enter the document title">
+                                        <div class="disabledDiv" id="documentname" *ngIf="files.length > 1">
+                                            <div class="disabledText">Enter the document title</div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="files.length == 1" for="documentnameValidationError"
+                                        class="nep-error errormessage">{{validationError}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="fix1 col-12">
+                                        <p for="dateofdocument" class="nep-form-label custom-tab-p label_title repository-custom-padding">Date of Document</p>
+                                        <p-calendar class="repository-calendar" name="docDate" showButtonBar="true"
+                                            [(ngModel)]="newDocument.DateOfDocument" name="documentDate"
+                                            [monthNavigator]="true" [yearNavigator]="true" [readonlyInput]="true"
+                                            inputStyleClass="date-picker-input" dateFormat="dd-M-yy" [showIcon]="true"
+                                            yearRange="1947:2050" [inputStyle]="{'padding': '0.5vw'}" 
+                                            placeholder="Select date"></p-calendar>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div id="docTypeDiv" class="fix1 col-12">
+                                        <p for="documenttype" class="nep-form-label custom-tab-p label_title repository-custom-padding">Document Type</p>
+                                        <typeahead-control name="documenttype" [optionList]="documentTypes"
+                                            [displayField]="'name'" (selectItem)="onDocumentTypeChanged()"
+                                            [resultField]="'id'" [(ngModel)]="newDocument.DocumentType"
+                                            placeholder="Select document type">
+                                        </typeahead-control>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fix-common col-12">
+                                        <p for="documentsubtype" class="nep-form-label custom-tab-p label_title repository-custom-padding">Document Sub-Type
+                                        </p>
+                                        <typeahead-control [optionList]="documentSubTypes" [displayField]="'name'"
+                                            [resultField]="'id'" name="documentsubtype"
+                                            [(ngModel)]="newDocument.DocumentSubType"
+                                            placeholder="Select document subtype">
+                                        </typeahead-control>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row">
+                                    <div class="fix2 pt-3 col-12">
+                                        <p for="firmname" class="nep-form-label  custom-tab-p label_title repository-custom-padding">Firm Name</p>
+                                        <typeahead-control name="firm" id="firmname" [optionList]="firms"
+                                            [displayField]="'firmName'" [resultField]="'firmID'"
+                                            [(ngModel)]="newDocument.FirmId" placeholder="Search or select firm">
+                                        </typeahead-control>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fix2 col-12">
+                                        <p for="fundname" class="nep-form-label custom-tab-p label_title repository-custom-padding">Fund Name</p>
+                                        <typeahead-control name="fund" id="fundname" [optionList]="funds"
+                                            [displayField]="'fundName'" [resultField]="'fundID'"
+                                            [(ngModel)]="newDocument.FundId" placeholder="Search or select fund">
+                                        </typeahead-control>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fix2 col-12">
+                                        <p for="portfoliocompany" class="nep-form-label custom-tab-p label_title repository-custom-padding TextTruncate" title="Portfolio Company Name">Portfolio Company
+                                            Name
+                                        </p>
+                                        <typeahead-control name="portfoliocompany" id="portfoliocompany"
+                                            [optionList]="porfoliocompanies" [displayField]="'companyName'"
+                                            [resultField]="'portfolioCompanyID'"
+                                            [(ngModel)]="newDocument.PortfolioCompanyId"
+                                            placeholder="Search or select company">
+                                        </typeahead-control>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="fix-common col-12">
+                                        <p for="dealid" class="nep-form-label custom-tab-p label_title repository-custom-padding" >Deal ID</p>
+                                        <typeahead-control name="dealid" id="dealid" [optionList]="deals"
+                                            [displayField]="'dealCustomID'" [resultField]="'dealID'"
+                                            [(ngModel)]="newDocument.DealId" placeholder="Search deal ID">
+                                        </typeahead-control>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row pl-0 pr-0 tagDiv">
+                            <div class="col-12 pl-0 pr-0 repository-tag-name">
+                                <textarea id="tags" class="form-control comment-textarea frmcntr-resizeNo" placeholder="Enter tags here, separated by comma, to search documents…" 
+                                    autocomplete="off"  rows="4" cols="50" name="newDocument.Tags" [(ngModel)]="newDocument.Tags" maxlength="500"></textarea>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-footer  nep-modal-footer repository-background-color">
+            <div class="text-right nep-card-right">
+                <button class="nep-button nep-button-secondary" (click)="openModal(null,null)">Cancel</button>
+                <button [disabled]="disableSaveButton" class="nep-button nep-button-primary"
+                    (click)="Save()">Save</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<confirm-modal *ngIf="confirmDiscard" class="repository-modal" primaryButtonName="Yes" secondaryButtonName="No"
+        (primaryButtonEvent)="YesOnCancel()" modalTitle="Confirm" (secondaryButtonEvent)="NoOnCancel()">
+        <div>
+            Are you sure you want to cancel without saving?</div>
+    </confirm-modal>
+
+    <confirm-modal *ngIf="confirmDelete" primaryButtonName="Yes" secondaryButtonName="No"
+        (primaryButtonEvent)="OnDeleteUploadedFile()" modalTitle="Confirm" (secondaryButtonEvent)="NoOnCancel()">
+        <div>
+            Are you sure you want to discard the uploaded document?</div>
+    </confirm-modal>
+    <app-loader-component *ngIf="loading"></app-loader-component>

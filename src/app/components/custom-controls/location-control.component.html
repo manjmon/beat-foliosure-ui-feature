@@ -1,0 +1,36 @@
+﻿<div class="row pl-3 pr-0 pt-3">
+	<ng-container *ngFor="let locationConfig of pageFields">
+		<div class="col-sm-6 col-md-6  col-lg-3 pl-0 pr-3 firm-custom-padding" *ngIf="locationConfig.name == 'Region' && locationConfig.isActive">
+			<div class="locationcntrl-padding-left-lbl TextTruncate" for="fundName" title="{{locationConfig.displayName}}"> {{locationConfig.displayName}}</div>
+			<typeahead-control [placeholder]="'Select '+locationConfig.displayName" name="location_region" [(ngModel)]="location.region" [optionList]="locationMaster.regionList"
+				[isRequired]="regionRequired" [displayField]="'region'" #location_region="ngModel"
+				(selectItem)="onRegionChange()" (clearItem)="onRegionChange()">
+			</typeahead-control>
+			<i aria-hidden="true" *ngIf="loadingRegion" class="fa fa-spinner fa-pulse fa-3x fa-fw loading-input-controls"></i>
+		</div>
+		<div class="col-sm-6 col-md-6  col-lg-3 pl-0 pr-3 firm-custom-padding" *ngIf="locationConfig.name == 'Country' && locationConfig.isActive">
+			<div  class="locationcntrl-padding-left-lbl TextTruncate" title="{{locationConfig.displayName}}" [ngClass]="locationConfig.isMandatory ?  'required-field' : ''" 
+			for="fundName"> {{locationConfig.displayName}}</div>
+			<typeahead-control [placeholder]="'Select '+locationConfig.displayName" [loadingOptions]="loadingCountry" name="location_country"
+					[(ngModel)]="location.country" [optionList]="locationMaster.countryList"
+					[isRequired]="countryRequired" [displayField]="'country'" #location_country="ngModel"
+					(selectItem)="onCountryChange()" (clearItem)="onCountryChange()"></typeahead-control>
+		</div>
+
+		<div class="col-sm-6 col-md-6  col-lg-3 pl-0 pr-3 firm-custom-padding" *ngIf="locationConfig.name == 'State' && locationConfig.isActive">		
+			<div  class="locationcntrl-padding-left-lbl TextTruncate" title="{{locationConfig.displayName}}" for="fundName"> {{locationConfig.displayName}}</div>					
+			<typeahead-control [placeholder]="'Select '+locationConfig.displayName" [loadingOptions]="loadingState" [disabled]="loadingState" name="location_state"
+				[(ngModel)]="location.state" [displayField]="'state'" [optionList]="locationMaster.stateList"
+				[isRequired]="stateRequired" #location_state="ngModel" (selectItem)="onStateChange()" (clearItem)="onStateChange()">
+			</typeahead-control>
+     </div>
+
+	 <div class="col-sm-6 col-md-6  col-lg-3 pl-0 pr-3 firm-custom-padding" *ngIf="locationConfig.name == 'City' && locationConfig.isActive">
+		<div  class="locationcntrl-padding-left-lbl TextTruncate" title="{{locationConfig.displayName}}" for="fundName">{{locationConfig.displayName}}</div>
+		<typeahead-control [placeholder]="'Select '+locationConfig.displayName" [loadingOptions]="loadingCity" [disabled]="loadingCity" name="location_city"
+						[(ngModel)]="location.city" [displayField]="'city'" [optionList]="locationMaster.cityList"
+						[isRequired]="cityRequired" #location_city="ngModel" (selectItem)="onLocationChange()"
+						(clearItem)="onLocationChange()"></typeahead-control>
+	</div>
+	</ng-container>
+</div>

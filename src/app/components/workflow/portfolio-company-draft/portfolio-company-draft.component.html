@@ -1,0 +1,185 @@
+<div class="row draft-section">
+    <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0">
+        <div class="row mr-0 ml-0  status-section">
+            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0">
+                <div class="float-left status">
+                    <div class="TextTruncate showToolTip status-title">
+                        {{workflowDetails!=null?workflowDetails.statusName:''}}</div>
+                </div>
+                <div class="report-title">
+                    {{workflowDetails!=null?workflowDetails.draftName:''}}
+                </div>
+                <div class="float-right action"
+                    *ngIf="workflowDetails!=null && workflowDetails.isActionButtons && workflowDetails.workflowSectionLevels.length > 0">
+                    <div class="d-inline-block pr-3" *ngIf="workflowDetails.isStart">
+                        <ng-container  *ngIf="workflowDetails.totalApproved != null && workflowDetails.totalApproved > 0">
+                            <span class="status-count pr-3">
+                                Marked as Approved
+                                ({{workflowDetails.totalApproved}}/{{workflowDetails.workflowSectionLevels.length}})
+                            </span>
+                        </ng-container>
+                        <span class="status-count">
+                            Marked for review
+                            ({{workflowDetails.totalMarked==null?0:workflowDetails.totalMarked}}/{{workflowDetails.workflowSectionLevels.length-workflowDetails.totalApproved}})
+                        </span>
+                    </div>
+                    <div class="d-inline-block pr-3" *ngIf="!workflowDetails.isEnd && !workflowDetails.isStart">
+                        <span class="status-count pr-3">
+                            Marked for Rework
+                            ({{workflowDetails.totalRework==null?0:workflowDetails.totalRework}}/{{workflowDetails.workflowSectionLevels.length}})
+                        </span>
+                        <span class="status-count">
+                            Marked as Approved
+                            ({{workflowDetails.totalApproved==null?0:workflowDetails.totalApproved}}/{{workflowDetails.workflowSectionLevels.length}})
+                        </span>
+                    </div>
+                    <div class="d-inline-block pr-3" *ngIf="workflowDetails.isEnd">
+                        <span class="status-count pr-3">
+                            Marked for Rework
+                            ({{workflowDetails.totalRework==null?0:workflowDetails.totalRework}}/{{workflowDetails.workflowSectionLevels.length}})
+                        </span>
+                        <span class="status-count">
+                            Marked for Publishing
+                            ({{workflowDetails.totalApproved==null?0:workflowDetails.totalApproved}}/{{workflowDetails.workflowSectionLevels.length}})
+                        </span>
+                    </div>
+                    <div class="d-inline-block">
+                        <span class="pr-2"><button class="btn btn-nep-default"
+                                (click)="showConfirmDiscardDraft()">Discard
+                            </button></span>
+                    </div>                
+                    <div class="d-inline-block"
+                        *ngIf="workflowDetails?.workflowSectionLevels?.length != workflowDetails?.totalApproved || !workflowDetails.isEnd">
+                        <span><button class="btn btn-nep-primary" [disabled]="!workflowDetails.isSubmit"
+                                (click)="showSubmitCancelModel=true;">Submit</button></span>
+                    </div>
+
+                    <div class="d-inline-block"
+                        *ngIf="workflowDetails?.workflowSectionLevels?.length == workflowDetails?.totalApproved && workflowDetails.isEnd">
+                        <span><button class="btn btn-nep-primary"
+                                (click)="showSubmitPublishModel=true;companyRedirect=true">Publish</button></span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div *ngIf="workflowDetails!=null && workflowDetails.isStart && workflowDetails.isActionButtons"
+            class="row mr-0 ml-0 edit-section-header">
+            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0">
+                <div class="workflow-draft">
+                    <mat-accordion>
+                        <mat-expansion-panel [expanded]="panelOpenState" (opened)="panelOpenState = true"
+                            (closed)="panelOpenState = false">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Select data to edit
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <mat-panel-description>
+                                <div class="row draft-content">
+                                    <div class="col-md-3 col-lg-3 col-xl-3 col-sm-3 col-3 col-xs-3 pl-3 pr-0">
+                                        <div class="title">
+                                            Reports
+                                        </div>
+                                        <div class="checkbox-section text-truncate" *ngFor="let item of reportDataList">
+                                            <mat-checkbox [checked]="item.isChecked"
+                                                (change)="handleCheckBox($event,item)"
+                                                class="mat-custom-checkbox text-center">
+                                            </mat-checkbox>
+                                            <span class="pl-2 checkbox-title">{{item.name}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9 col-lg-9 col-xl-9 col-sm-9 col-9 col-xs-9 pl-0 pr-0">
+                                        <div class="title">
+                                            Portfolio company sections
+                                        </div>
+                                        <ng-container *ngFor="let item of permissionList">
+                                            <div class="d-inline-block checkbox-section text-truncate">
+                                                <mat-checkbox [checked]="item.isChecked"
+                                                    class="mat-custom-checkbox text-center"
+                                                    (change)="handleCheckBox($event,item)">
+                                                </mat-checkbox> <span class="pl-2 checkbox-title"
+                                                    title="{{item.subFeatureName}}">{{item.displayName}}</span>
+                                            </div>
+
+                                        </ng-container>
+
+                                    </div>
+                                </div>
+                            </mat-panel-description>
+                            <mat-action-row>
+                                <div class="float-right draft-action">
+                                    <span class="pr-2"><button [disabled]="isDisabledBtn" class="btn btn-nep-default"
+                                            (click)="getPermissions()">Reset</button></span>
+                                    <span><button [disabled]="isDisabledBtn" class="btn btn-nep-default"
+                                            (click)="submit()"><i *ngIf="isLoader" class="fa fa-circle-o-notch"
+                                                aria-hidden="true"></i> Done</button></span>
+                                </div>
+                            </mat-action-row>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+            </div>
+        </div>
+        </div>
+</div>
+        <app-workflow-companyinfo *ngIf="isCompanyInfo" (onStatusChanges)="resetStatus($event)"
+            (onCompanyInfoModel)="setCompanyInfoModel($event)" [dataInformation]="datapermissionList"
+            [workflowDetails]="workflowDetails" [CompanyInformation]="companyinformation"></app-workflow-companyinfo>
+        <app-workflow-investment-kpi *ngIf="isInvestmentKPI" (onStatusChanges)="resetStatus($event)"
+            [model]="companyInfoModel" [dataInformation]="datapermissionList" [workflowDetails]="workflowDetails"
+            [CompanyInformation]="companyinformation"></app-workflow-investment-kpi>
+        <app-workflow-company-kpi *ngIf="isCompanyKPI" (onStatusChanges)="resetStatus($event)"
+            [model]="companyInfoModel" [dataInformation]="datapermissionList"></app-workflow-company-kpi>
+        <app-workflow-operational-kpi *ngIf="isOperationalKPI" (onStatusChanges)="resetStatus($event)"
+            [model]="companyInfoModel" [dataInformation]="datapermissionList" [workflowDetails]="workflowDetails"></app-workflow-operational-kpi>
+        <app-workflow-tradingrecords-kpi *ngIf="isTradingRecordsKPI" (onStatusChanges)="resetStatus($event)"
+            [model]="companyInfoModel" [dataInformation]="datapermissionList" [workflowDetails]="workflowDetails"
+            [CompanyInformation]="companyinformation"></app-workflow-tradingrecords-kpi>
+           
+    <div *ngIf="showConfirmDiscardDraftModel">
+        <modal customwidth="489px" modalTitle="Discard Draft" primaryButtonName="Confirm" secondaryButtonName="Cancel"
+            (primaryButtonEvent)="discardDraft($event)" (secondaryButtonEvent)="cancelConfirmDiscardDraft($event)">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    {{workflowConstants.DiscardMessage}}
+                </div>
+            </div>
+        </modal>
+    </div>
+    <div *ngIf="showSubmitCancelModel">
+        <modal customwidth="489px" modalTitle="Confirm Submit" primaryButtonName="Confirm" secondaryButtonName="Cancel"
+            (primaryButtonEvent)="moveToNextLevel()" (secondaryButtonEvent)="showSubmitCancelModel=false;">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    {{workflowDetails.isEnd
+                    ?workflowConstants.PublishConfirmMessage:workflowConstants.SubmitConstantsBetweenProcess}}
+                </div>
+            </div>
+        </modal>
+    </div>
+
+    <div *ngIf="showSubmitPublishModel">
+        <modal customwidth="489px" modalTitle="Confirm Submit" primaryButtonName="Confirm" secondaryButtonName="Cancel"
+            (primaryButtonEvent)="publishWorkFlow()" (secondaryButtonEvent)="showSubmitPublishModel=false;">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    {{workflowDetails.isEnd
+                    ?workflowConstants.PublishConfirmMessage:workflowConstants.SubmitConstantsBetweenProcess}}
+                </div>
+                </div>  
+        </modal>
+
+    </div>
+
+    <div *ngIf="showUnselectSelectionModel">
+        <modal customwidth="489px" modalTitle="Section Deselection" primaryButtonName="Confirm" secondaryButtonName="Cancel"
+            (primaryButtonEvent)="showUnselectSelectionModel = false;" (secondaryButtonEvent)="sectionDelectionCancel()">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    {{workflowConstants.SectionDeselection}}
+                </div>
+            </div>
+        </modal>
+    </div>
+    <app-loader-component *ngIf="isLoader"></app-loader-component>

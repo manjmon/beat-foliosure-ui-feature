@@ -1,0 +1,96 @@
+.nep-modal {
+    .nep-card {
+        width: 720px !important;
+        top: 15% !important;
+        .nep-card-header {
+            padding: 0px !important;
+            .user-header {
+                font-size: 24px;
+                letter-spacing: 0.29px;
+                color: #000000;
+                opacity: 1;
+                padding: 16px 20px !important;
+            }
+        }
+        .nep-card-footer {
+            padding: 16px 20px !important;
+        }
+        .nep-card-body {
+            padding: 0px !important;
+            .user-body {
+                padding: 16px 20px !important;
+            }
+            .user-upload {
+                letter-spacing: 0px;
+                color: #212121;
+                a {
+                    color: #021155 !important;
+                    text-decoration: underline !important;
+                }
+                .upload-desc {
+                    letter-spacing: 0px !important;
+                    color: #212121 !important;
+                }
+                .desc-header {
+                    font-weight: bold;
+                }
+                .uploadButton {
+                    cursor: pointer;
+                    height: 32px;
+                    border: 1px solid #021155;
+                    border-radius: 4px;
+                    padding-left: 9px;
+                    padding-top: 2px;
+                    opacity: 1;
+                }
+                .browseIcon {
+                    padding-right: 8px;
+                    padding-top: 4px;
+                }
+                .browseButton {
+                    top: 2.5px;
+                    position: relative;
+                }
+                .upload-sec {
+                    padding-top: 20px !important;
+                }
+            }
+        }
+        .right-border {
+            border-right: 1px solid #DEDFE0;
+        }
+        .click-here {
+            font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+        }
+        label {
+            margin-top: 0px;
+            letter-spacing: 0px;
+            color: #55565A;
+        }
+        .form-control {
+            letter-spacing: 0px !important;
+            color: #212121 !important;
+            opacity: 1 !important;
+        }
+        .errorColor {
+            color: #c62828 !important;
+        }
+        .successColor {
+            color: #388e3c !important;
+        }
+        .form-control.is-invalid {
+            border-bottom: 1px solid #c62828 !important;
+        }
+        .form-control.is-invalid:focus {
+            box-shadow: none !important;
+        }
+        .upload-error-section {
+            height: 160px;
+            overflow-y: auto;
+        }
+        .form-group.required .control-label:after {
+            content: "*";
+            color: red;
+        }
+    }
+}

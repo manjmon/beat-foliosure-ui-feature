@@ -1,0 +1,126 @@
+<div class="right-section workflow-feature-section">
+    <div class="row mr-0 ml-0 tabradius border search-section srch-pb-none">
+        <div class="col-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 col-md-12  feature-header pl-0 pr-0">
+            <div class="feature-title">
+                Select features to give access
+            </div>
+        </div>
+        <form name="form">
+            <div class="col-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 col-md-12 pl-0 pr-0 content-section" [ngStyle]="{'height':scrollHeight+'px'}">
+                <div class="row mr-0 ml-0" *ngIf="!isLoader">
+                    <div class="col-sm-12 pl-0 pr-0">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-sm-12 pr-0 pl-0 p-treeTable-custom-style custom-freezoncolumn-border">
+                                <p-treeTable [frozenColumns]="frozenCols" frozenWidth="321px" #tblFeature class="custom-kpi-table" [scrollHeight]="scrollHeight-47+'px'" [style]="{width:'100%'}" [scrollable]="true" [resizableColumns]="true" [value]="featureList" class="feature-tree"
+                                    [columns]="cols" [(selection)]="model.selectedFeatures" selectionMode="checkbox">
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <col *ngFor="let col of columns; index as i" />
+                                        </colgroup>
+                                    </ng-template>
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngFor="let col of columns" [ngClass]="[col.header === 'Features'?'features-header':'' || col.header === 'checkbox'?'features-checkbox checkbox-header':'' || col.header=='Full Access'?'Full-Access':'',col.field]">
+                                                <div *ngIf="col.header !== 'checkbox'" [ngClass]="col.header === 'Add' || col.header === 'Edit' || col.header === 'View' || col.header === 'Export' || col.header === 'Import' || col.header === 'Full Access'?'custom-align-header':''">
+                                                    {{ col.header }}
+                                                </div>
+                                                <div [ngClass]="groupId==='0'?'feature-disabled':''" *ngIf="col.header === 'checkbox'">
+                                                    <p-treeTableHeaderCheckbox [ngClass]="groupId==='0' ?'not-clickable':''" (click)="onSelectFeature($event)"></p-treeTableHeaderCheckbox>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowNode let-rowCanAdd let-rowCanEdit let-rowCanView let-rowData="rowData" let-columns="columns">
+                                        <tr>
+
+                                            <td class="action-header content-p canAdd">
+                                                <i class="fa fa-ban icons-ban" title="Not applicable" [hidden]="!isActionHidden(rowData, 'Add')" aria-hidden="true"></i>
+                                                <span [ngClass]="groupId==='0'?'feature-disabled':''">
+                                                    <mat-checkbox [ngClass]="groupId==='0'?'not-clickable':''" (change)="checkAnyDataChange(rowData,'canAdd')" name="chkAdd{{rowData.features.featureId}}" [(ngModel)]="rowData.canAdd" [hidden]="isActionHidden(rowData, 'Add')" #canAdd="ngModel" [disabled]="!rowData.featureEnabled"
+                                                    class="mat-custom-checkbox text-center">
+                                                </mat-checkbox>
+                                                </span>
+                                            </td>
+                                            <td class="action-header content-p canEdit">
+                                                <i class="fa fa-ban icons-ban" title="Not applicable" [hidden]="!isActionHidden(rowData, 'Edit')" aria-hidden="true"></i>
+                                                <span [ngClass]="groupId==='0'?'feature-disabled':''">
+                                                    <mat-checkbox [ngClass]="groupId==='0'?'not-clickable':''" (change)="checkAnyDataChange(rowData,'canEdit')" name="chkEdit{{rowData.features.featureId}}" [(ngModel)]="rowData.canEdit" [hidden]="isActionHidden(rowData, 'Edit')" #canEdit="ngModel" [disabled]="!rowData.featureEnabled"
+                                                    class="mat-custom-checkbox text-center">
+                                                </mat-checkbox>
+                                                </span>
+                                            </td>
+                                            <td class="action-header content-p canView">
+                                                <i class="fa fa-ban icons-ban" title="Not applicable" [hidden]="!isActionHidden(rowData, 'View')" aria-hidden="true"></i>
+                                                <span [ngClass]="groupId==='0'?'feature-disabled':''">
+                                                    <mat-checkbox [ngClass]="groupId==='0'?'not-clickable':''" (change)="checkAnyDataChange(rowData,'canView')" name="chkView{{rowData.features.featureId}}" [(ngModel)]="rowData.canView" [hidden]="isActionHidden(rowData, 'View')" #canView="ngModel" [disabled]="!rowData.featureEnabled"
+                                                    class="mat-custom-checkbox text-center">
+                                                </mat-checkbox>
+                                                </span>
+                                            </td>
+                                            <td class="action-header content-p canExport">
+                                                <i class="fa fa-ban icons-ban" title="Not applicable" [hidden]="!isActionHidden(rowData, 'Export')" aria-hidden="true"></i>
+                                                <span [ngClass]="groupId==='0'?'feature-disabled':''">
+                                                    <mat-checkbox [ngClass]="groupId==='0'?'not-clickable':''" (change)="checkAnyDataChange(rowData,'canExport')" name="chkExport{{rowData.features.featureId}}" [(ngModel)]="rowData.canExport" [hidden]="isActionHidden(rowData, 'Export')" #canExport="ngModel"
+                                                    [disabled]="!rowData.featureEnabled" class="mat-custom-checkbox text-center">
+                                                </mat-checkbox>
+                                                </span>
+                                            </td>
+                                            <td class="action-header content-p canImport">
+                                                <i class="fa fa-ban icons-ban" title="Not applicable" [hidden]="!isActionHidden(rowData, 'Import')" aria-hidden="true"></i>
+                                                <span [ngClass]="groupId==='0'?'feature-disabled':''">
+                                                    <mat-checkbox [ngClass]="groupId==='0'?'not-clickable':''" (change)="checkAnyDataChange(rowData,'canImport')" name="chkImport{{rowData.features.featureId}}" [(ngModel)]="rowData.canImport" [hidden]="isActionHidden(rowData, 'Import')" #canImport="ngModel"
+                                                    [disabled]="!rowData.featureEnabled" class="mat-custom-checkbox text-center">
+                                                </mat-checkbox>
+                                                </span>
+                                            </td>
+                                            <td class="action-header content-p Full-Access-td">
+                                                <p-inputSwitch [disabled]="groupId==='0' || !rowData.featureEnabled" [ngModelOptions]="{standalone: true}" (onChange)="setFullAccess(rowData);" [(ngModel)]="rowData['isFullAccess']" *ngIf="rowData?.features?.feature=='Portfolio Company'"></p-inputSwitch>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="frozenbody" let-rowNode let-rowData="rowData">
+                                        <tr>
+                                            <td style="text-align:left !important;" [ngClass]="groupId==='0'?'feature-disabled':''" class="features-checkbox content-p">
+                                                <p-treeTableToggler class="tree-toggler" [rowNode]="rowNode"></p-treeTableToggler>
+                                                <span></span>
+                                                <p-treeTableCheckbox class="features-toggle-checkbox" [ngClass]="groupId==='0'?'not-clickable':''" [value]="rowNode" (click)="onSelectFeature(rowData);checkAnyDataChange(rowData,null)"></p-treeTableCheckbox>
+                                            </td>
+                                            <td class="features-header content-p">
+                                                {{rowData.features.aliasName}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-treeTable>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <app-loader-component *ngIf="isLoader"></app-loader-component>
+            </div>
+            <div class="col-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 col-md-12 pl-0 pr-0">
+                <div class="row mr-0 ml-0 group-right-sec">
+                    <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12  pl-0 pr-0" *ngIf="!isLoader">
+                        <div class="float-right">                          
+                            <span class="pr-2"><button  value="Reset" title="Reset" (click)="formReset()" [disabled]="isDisabledBtn"
+                                class="btn btn-nep-default"> Reset</button></span>
+                            <span><button (click)="saveFeature()" [disabled]="isDisabledBtn" class="btn btn-primary" title="Map" class="btn btn-nep-primary">
+                                Map <span class="pl-1 circle-loader" *ngIf="loadingMap">
+                                    <i aria-hidden="true" class="fa fa-circle-o-notch fa-1x fa-fw"></i>
+                                </span></button></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div *ngIf="isConfirmFullAccess">
+    <modal customwidth="489px" modalTitle="Confirmation" primaryButtonName="Confirm" secondaryButtonName="Cancel" (primaryButtonEvent)="OnFullAccess()" (secondaryButtonEvent)="OnCancelFullAccess()">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12">
+                {{message}}
+            </div>
+
+        </div>
+    </modal>
+</div>

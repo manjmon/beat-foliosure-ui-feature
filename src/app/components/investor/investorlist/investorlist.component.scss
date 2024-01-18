@@ -1,0 +1,106 @@
+@import "../../../../variables";
+.search-text-company {
+    font-size: 12px !important;
+}
+.add-user-component {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #DEDFE0;
+    opacity: 1;
+    border-radius: 4px 4px 0px 0px;
+    box-shadow: 0px 0px 12px #00000014 !important;
+}
+
+.card-header {
+    background: #FAFAFB 0% 0% no-repeat padding-box !important;
+    border-bottom: 1px solid #DEDFE0;
+}
+
+.card-header-main {
+    font-size: 14px !important;
+}
+
+.card-body {
+    margin-bottom: 0px !important;
+}
+
+.fundlist-header {
+    padding: 0px 16px;
+    .fundlist-title {
+        padding: 10px 0px;
+        font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif !important;
+        font-weight: initial !important;
+        font-size: 14px !important;
+    }
+    .p-action-padding {
+        padding: 0px 8px 0px 12px;
+    }
+    .p-add-padding {
+        padding: 0px 0px 0px 16px;
+    }
+    .col-divider {
+        border-right: 1px solid #DEDFE0;
+    }
+    .search-text-company {
+        height: 40px !important;
+    }
+}
+
+.cashflow-row:hover {
+    background: #EFF0F9 0% 0% no-repeat padding-box !important;
+    cursor: pointer !important;
+}
+
+.toggler-row {
+    padding: 0px !important;
+}
+
+button {
+    width: 24px !important;
+    height: 24px !important;
+}
+
+.showHandIcon {
+    cursor: pointer;
+    margin-top: 0px !important;
+}
+
+.cashflow-list {
+    padding-left: 64px !important;
+    a:hover {
+        color: $nep-primary !important;
+        text-decoration: underline;
+    }
+}
+
+.fund-expanded {
+    background-color: transparent !important;
+}
+
+.fund-collapsed {
+    background-color: #F7F8FC !important;
+}
+.fund-list-table
+{
+    tr{
+       
+        th{
+            border:none !important;
+            padding: 12px 16px !important;
+        }
+    }
+    thead{
+        tr{
+            border-bottom: 1px solid $nep-divider !important;
+        }
+    }
+}
+.sectorHeadQuarter{
+    background: #fff 0 0 no-repeat padding-box;
+    border: 1px solid #dedfe0;
+    border-radius: 4px;
+    opacity: 1;
+    padding: 4px 12px;
+}
+.header-bottom{
+    padding-bottom: 1.25rem;
+}

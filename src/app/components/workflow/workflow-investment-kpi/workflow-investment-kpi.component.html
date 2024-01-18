@@ -1,0 +1,424 @@
+<div class="row mr-0 ml-0  investment-section" *ngIf="showInvestment">
+    <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12  section-header">
+        <div class="float-left">
+            <div class="investment-header">
+                Investment KPI
+            </div>
+        </div>
+        <div class="float-right">
+            <div *ngIf="sectionData.isActionButtons" class="float-left upload-investmentKpi" (click)="isOpenUpload=true">
+                <img class="" src="assets/dist/images/upload-popup.svg" alt="" />
+            </div>
+            <div class="float-right review-btn"  *ngIf="workflowDetails.isStart && sectionData.isActionButtons" >
+                <button
+                    [disabled]="!sectionData?.isEdited ||  sectionData.statusId == -1 ||  sectionData?.isMarkedForReview "
+                    class="btn btn-nep-primary" (click)="investmentSubmitReview()">Mark for
+                    Review</button>
+            </div>
+
+            <div *ngIf="!workflowDetails.isStart && !workflowDetails.isEnd && sectionData.isActionButtons"
+                class="float-right review-btn d-inline-block workflow-toggle">
+                <mat-button-toggle-group [(ngModel)]="toggleStatus">
+                    <mat-button-toggle [disabled]="sectionData.isRework"
+                        (click)="showCommentPopup(sectionData.isRework)" value="Rework">Rework</mat-button-toggle>
+                    <mat-button-toggle [disabled]="sectionData.isApprove" value="Approve"
+                        (click)="showCommentPopup(sectionData.isApprove)">Approve</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+
+            <div *ngIf="workflowDetails.isEnd && sectionData.isActionButtons"
+            class="float-right review-btn  d-inline-block workflow-toggle">
+            <mat-button-toggle-group [(ngModel)]="toggleStatus">
+                <mat-button-toggle [disabled]="sectionData.isRework"
+                    (click)="showCommentPopup(sectionData.isRework)" value="Reject">Rework</mat-button-toggle>
+                <mat-button-toggle [disabled]="sectionData.isApprove"
+                    (click)="showCommentPopup(sectionData.isApprove)" value="Publish">Approve</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="portfolio-company-table" *ngIf="showInvestment">
+    <div class="filter-bg pc-border-bottom">
+        <div class="row mr-0 ml-0">
+            <div class=" col-lg-12 col-md-12 col-sm-12 pl-0 pr-0">
+                <div class="allvalues-kpis">All values in:
+                    {{model?.reportingCurrencyDetail!=null?model.reportingCurrencyDetail?.currencyCode:reportingCurrency}}
+                    ({{unitOfCurrency}})</div>
+                <div class="pull-right headerfontsize">
+                    <div class="d-inline-block search">
+                        <span class="fa fa-search fasearchicon"></span>
+                        <input #gb pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text"
+                            class="search-text-company" placeholder="Search" [(ngModel)]="globalFilter">
+                    </div>
+                    <div class="d-inline-block cloud_download" *ngIf="sectionData?.isActionButtons">
+                        <div class="d-inline-block">
+                            <img src="assets/dist/images/Cloud-download.svg"  (click)="downloadInvestmentExcel()" class="cursor-filter" alt=""/>
+                            <span
+                                class="excel-load" *ngIf="exportInvestmentKPILoading">
+                                <i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                            </span> 
+                        </div>
+                    </div>
+                    <div class="d-inline-block cloud_download">
+                        <div class="d-inline-block"><img id="dropdownMenuButton" [matMenuTriggerFor]="menu"
+                                src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter" alt=""
+                                #investmentMenuTrigger="matMenuTrigger" /> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="align-items-start">
+        <p-table styleClass="p-datatable-gridlines" #dt [resizableColumns]="true" [globalFilter]="gb" [columns]="objInvestmentKPIList.cols"
+            scrollHeight="350px" scrollDirection="both" [value]="objInvestmentKPIList.Results" [scrollable]="true"
+            class="cashflow-tbl custom-kpi-table"  [globalFilterFields]="investmentKPICols"
+             *ngIf="objInvestmentKPIList.Results != null && objInvestmentKPIList.Results.length > 0">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <ng-container *ngFor="let col of frozenCols;">
+                        <th pFrozenColumn [ngStyle]="{'width':'340px'}">
+                            {{ col.header }}
+                        </th>
+                    </ng-container>
+                    <ng-container *ngFor="let col of columns;">
+                        <th>
+                            {{ col.header }}
+                        </th>
+                    </ng-container>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" #model let-rowData let-columns="columns">
+                <tr *ngIf="sectionData.isActionButtons">
+                    <ng-container *ngFor="let col of frozenCols;">
+                        <td pFrozenColumn tabindex="0" class="kpiwrk-out kpi-unset-bgcolor">                     
+                        <span class="content">
+                            <span class="ui-column-title">{{ col.header }}</span>
+                            <span *ngIf="col.header =='KPI'" title={{rowData[col.field]}}
+                                class="showToolTip TextTruncate">
+                                <span *ngIf="rowData['IsChild']">-</span> {{rowData[col.field]}} 
+                            </span>
+                        </span>
+                    </td> 
+                    </ng-container>
+                    <ng-container *ngFor="let col of columns;">
+                        <td  tabindex="0" class="kpiwrk-out" 
+                        [class.table-data-right]="col.field !='KPI'"
+                        [attr.title]="col.header !=='KPI' && printColumn(rowData,col)? 'Click to view this cell logs' : ''"
+                        [ngClass]="(col.header !=='KPI' && printColumn(rowData,col))?'kpi-set-bgcolor':'kpi-unset-bgcolor'"
+                        [ngClass]="(rowData[col.field + ' editable'] && col.header !=='KPI')?'p-0':''"
+                        [ngClass]="printColumn(rowData,col)?'newValueBackground':''"
+                        (dblclick)="onEditInit(rowData,col)">
+                        
+                        <span class="content">
+                            <span class="ui-column-title">{{ col.header }}</span>
+                            <span *ngIf="col.header !='KPI'">
+                                <input autofocus *ngIf="rowData[col.field + ' editable'] && rowData['KpiInfo'] !='Text'"
+                                    class="openDocInputText fontStyle14 companyText" pattern="/^-?\d+\.?\d*$/"
+                                    (keypress)="validateMaxLength($event)" type="number" 
+                                    [(ngModel)]="rowData[col.field]" required
+                                    (blur)="onColumnEditComplete(i, col, rowData)" (keyup)="validateNumber($event)"
+                                    (keyup.enter)="onColumnEdit($event)"  >
+                                <input autofocus *ngIf="rowData[col.field + ' editable'] && rowData['KpiInfo'] =='Text'"
+                                    class="openDocInputText fontStyle14 companyText" type="text"
+                                    [value]="rowData[col.field]" [(ngModel)]="rowData[col.field]" required
+                                    (blur)="onColumnEditComplete(i, col, rowData)" (keyup.enter)="onColumnEdit($event)"  #myInput >
+                                <span
+                                    *ngIf="rowData[col.field]!= undefined && rowData[col.field]!=null && rowData[col.field]!='';else empty_Text">
+                                    <span
+                                        *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('(%)') == -1 && rowData['KPIWithInfo'].indexOf('($)') == -1 && rowData['KPIWithInfo'].indexOf('(x)') == -1 && !rowData[col.field + ' editable']"
+                                        [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number
+                            : (showFinancialKPIValueDecimals?(modelInvestmentKpi.decimalPlaces!=null
+                            ? modelInvestmentKpi.decimalPlaces.value:defaultDecimalPlace):defaultDecimalPlace) | minusSignToBrackets) : rowData[col.field]"></span>
+                                    <span
+                                        *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('($)') > -1 && !rowData[col.field + ' editable']"
+                                        [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number
+                                : NumberDecimalConst.currencyDecimal | minusSignToBrackets) : rowData[col.field]"></span>
+                                    <span
+                                        *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('(%)') > -1 && !rowData[col.field + ' editable']"
+                                        [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number: NumberDecimalConst.percentDecimal)+'%': rowData[col.field]"></span>
+                                    <span
+                                        *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('(x)') > -1 && rowData[col.field] != 'NA' && rowData[col.field] != '' && !rowData[col.field + ' editable']"
+                                        [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number: NumberDecimalConst.multipleDecimal)+'x': rowData[col.field]+'x'"></span>
+                                </span>
+                                <ng-template #empty_Text class="detail-sec"><span
+                                        *ngIf="!rowData[col.field + ' editable']">NA</span>
+                                </ng-template>
+                            </span>
+                        </span>
+                    </td> 
+                    </ng-container> 
+                </tr>
+                <tr *ngIf="!sectionData.isActionButtons">
+                    <ng-container *ngFor="let col of frozenCols;">
+                        <td pFrozenColumn  tabindex="0" class="kpiwrk-out kpi-unset-bgcolor" >
+                        <span class="content">
+                            <span class="ui-column-title">{{ col.header }}</span>
+                            <span *ngIf="col.header =='KPI'" title={{rowData[col.field]}}
+                                class="showToolTip TextTruncate">
+                                <span *ngIf="rowData['IsChild']">-</span> {{rowData[col.field]}} <span
+                                    *ngIf="rowData['KpiInfo'] =='#'">{{'('+rowData['KpiInfo'] +')'}}</span>
+                            </span>
+                        </span>
+                    </td> 
+                    </ng-container>
+                    <ng-container *ngFor="let col of columns;">
+                        <td  tabindex="0" class="kpiwrk-out" 
+                        [class.table-data-right]="col.field !='KPI'"
+                        [attr.title]="col.header !=='KPI' && printColumn(rowData,col)? 'Click to view this cell logs' : ''"
+                        [ngClass]="(col.header !=='KPI' && printColumn(rowData,col))?'kpi-set-bgcolor':'kpi-unset-bgcolor'"
+                        [ngClass]="(rowData[col.field + ' editable'] && col.header !=='KPI')?'p-0':''"
+                        [ngClass]="printColumn(rowData,col)?'newValueBackground':''"
+                        >                      
+                        <span class="content">
+                            <span class="ui-column-title">{{ col.header }}</span>
+                            <span *ngIf="col.header !='KPI'">
+                                <input autofocus *ngIf="rowData[col.field + ' editable'] && rowData['KpiInfo'] !='Text'"
+                                    class="openDocInputText fontStyle14 companyText" pattern="/^-?\d+\.?\d*$/"
+                                    (keypress)="validateMaxLength($event)" type="number" [value]="rowData[col.field]"
+                                    [(ngModel)]="rowData[col.field]" required
+                                    (blur)="onColumnEditComplete(i, col, rowData)" (keyup)="validateNumber($event)"
+                                    (keyup.enter)="onColumnEdit($event)"  >
+                                <input autofocus *ngIf="rowData[col.field + ' editable'] && rowData['KpiInfo'] =='Text'"
+                                    class="openDocInputText fontStyle14 companyText" type="text"
+                                    [value]="rowData[col.field]" [(ngModel)]="rowData[col.field]" required
+                                    (blur)="onColumnEditComplete(i, col, rowData)" (keyup.enter)="onColumnEdit($event)"  #myInput >
+                                <span
+                                    *ngIf="rowData[col.field]!= undefined && rowData[col.field]!=null && rowData[col.field]!='';else empty_Text">
+                                    <span
+                                        *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('(%)') == -1 && rowData['KPIWithInfo'].indexOf('($)') == -1 && rowData['KPIWithInfo'].indexOf('(x)') == -1 && !rowData[col.field + ' editable']"
+                                        [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number
+                            : (showFinancialKPIValueDecimals?(modelInvestmentKpi.decimalPlaces!=null
+                            ? modelInvestmentKpi.decimalPlaces.value:defaultDecimalPlace):defaultDecimalPlace) | minusSignToBrackets) : rowData[col.field]"></span>
+                                    <span
+                                        *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('($)') > -1 && !rowData[col.field + ' editable']"
+                                        [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number
+                                : NumberDecimalConst.currencyDecimal | minusSignToBrackets) : rowData[col.field]"></span>
+                                    <span
+                                        *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('(%)') > -1 && !rowData[col.field + ' editable']"
+                                        [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number: NumberDecimalConst.percentDecimal)+'%': rowData[col.field]"></span>
+                                    <span
+                                        *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('(x)') > -1 && rowData[col.field] != 'NA' && rowData[col.field] != '' && !rowData[col.field + ' editable']"
+                                        [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number: NumberDecimalConst.multipleDecimal)+'x': rowData[col.field]+'x'"></span>
+                                </span>
+                                <ng-template #empty_Text class="detail-sec"><span
+                                        *ngIf="!rowData[col.field + ' editable']">NA</span>
+                                </ng-template>
+                            </span>
+                        </span>
+                    </td> 
+                    </ng-container> 
+                </tr>
+            </ng-template>
+        </p-table>
+        <div *ngIf="(objInvestmentKPIList.Results == null || objInvestmentKPIList.Results.length==0) && !isLoader">
+            <app-empty-state [isGraphImage]="false" *ngIf="(objInvestmentKPIList.Results == null || objInvestmentKPIList.Results.length==0) && !isLoader"></app-empty-state>
+        </div>
+    </div>
+    <div *ngIf="confirmUpdate">
+        <confirm-modal customwidth="640px" modalTitle="Update Value" primaryButtonName="Update"
+            secondaryButtonName="Cancel" (primaryButtonEvent)="OnKpiUpdate($event)"
+            (secondaryButtonEvent)="OnKpiUpdateCancel($event)">
+            <div>
+                <div class="row">
+                    <div class="col-8 col-kpi-flw-fs-lh">Investment KPI - {{updateModel.header}}
+                    </div>
+                    <div class="col-4 text-right style3 coltxt-kpi-clr-fs">
+                    </div>
+                </div>
+                <div class="row rowkpi-wrk-mt">
+                    <div class="col-6">
+                        <div class="wrk-inv-kpi-clr-fs-lh">{{updateModel.rowName}} ( Current )
+                        </div>
+                        <div class="invflw-clr">
+                            <span
+                                *ngIf="updateModel.previousVal!=undefined && updateModel.previousVal!=''">{{updateModel.previousVal}}</span>
+                            <span *ngIf="updateModel.previousVal==undefined || updateModel.previousVal==''">NA</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="wrk-inv-kpi-clr-fs-lh">{{updateModel.rowName}} ( New )
+                        </div>
+                        <div class="invflw-clr">
+                            <span
+                                *ngIf="updateModel.updatedVal!=='' && updateModel.updatedVal!==undefined ">{{updateModel.updatedVal}}</span>
+                            <span *ngIf="updateModel.updatedVal==='' || updateModel.updatedVal===undefined || updateModel.updatedVal===null">NA</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="work-flow-kpi-mt-fs-lk-h">
+                    Are you sure want to replace the current value with the new value?
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+    <div *ngIf="infoUpdate">
+        <confirm-modal IsInfoPopup="true" customwidth="400px" modalTitle="Change Values in Selection"
+            primaryButtonName="OK" (primaryButtonEvent)="CloseInfo()">
+            <div>
+                <div class="invstflow-lh">
+                    To edit cell data please select numbers in <b><i>'Absolute'</i></b> under <b><i>Values in</i></b>
+                    dropdown
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+    <div>
+        <app-loader-component *ngIf="isLoader"></app-loader-component>
+    </div>
+</div>
+<div class="row mr-0 ml-0 company-history" *ngIf="showInvestment">
+    <div class="col-lg-12 edit-section-header pl-0 pr-0 company-inform workflow-section-footer">
+        <div class="workflow-draft text-center">
+            <div class="pull-left">
+                <div class="historycomments-p">
+                    <button class="btn btn-nep-default history-pl-pr">
+                        <img alt="" src="assets/dist/images/Icon-material-history.svg" class="loading-img" />
+                    </button>
+                </div>
+            </div>
+            <div class="d-inline-block  text-cente pt-3">
+                <div class="text-center status-color">
+                    <span class="round-dot-default"
+                        *ngIf="sectionData == null || (sectionData!=null && !sectionData.isMarkedForReview && !sectionData.isApprove && !sectionData.isRework && !sectionData.isEdited)">
+                    </span>
+                    <span class="round-dot-default round-dot-blue"
+                        *ngIf="(sectionData!=null && sectionData.isMarkedForReview) || (sectionData.isEdited && !sectionData.isApprove && !sectionData.isRework)">
+                    </span>
+                    <span class="round-dot-default round-dot-green" *ngIf="sectionData!=null && sectionData.isApprove">
+                    </span>
+                    <span class="round-dot-default round-dot-red" *ngIf="sectionData!=null && sectionData.isRework">
+                    </span>
+                   <ng-container *ngIf="sectionData.isRework; then then_LabelContent  else else_labelContent  ">
+
+                   </ng-container>
+                    
+                </div>
+            </div>
+
+
+
+            <div class="pull-right">
+                <div class="historycomments-p">
+                    <button class="btn btn-nep-default history-pl-pr" (click)="openCommentsPopUp()">
+                        <img alt="" src="assets/dist/images/Comment.svg" class="loading-img" />
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-menu #menu="matMenu" [hasBackdrop]="true" class="fixed-menu">
+    <app-kpitablefilters (Valuesfilter)="onConvertValueUnits($event)" (Kpifilter)="kpiTable_GlobalFilter($event)"
+        isDefaultMillion="true">
+    </app-kpitablefilters>
+</mat-menu>
+<app-workflow-bulk-upload [workflowMappingId]="mappingId" (onClosePopUpClick)="closePopup($event)"
+    [strModuleType]="'InvestmentKPI'" [kpiType]="'Investment KPIs'" [moduleName]="'investment kpi'"
+    *ngIf="isOpenUpload"></app-workflow-bulk-upload>
+<div *ngIf="infoUpdate">
+    <confirm-modal IsInfoPopup="true" customwidth="400px" modalTitle="Change Values in Selection" primaryButtonName="OK"
+        (primaryButtonEvent)="CloseInfo()">
+        <div>
+            <div class="kpiinvs-lh">
+                To edit cell data please select numbers in <b><i>'Absolute'</i></b> under <b><i>Values in</i></b>
+                dropdown
+            </div>
+        </div>
+    </confirm-modal>
+</div>
+
+<confirm-modal *ngIf="showAddCommentPopup" primaryButtonName="Done" secondaryButtonName="Cancel"
+    modalTitle="Add Comment" (primaryButtonEvent)="SaveComment()" [disablePrimaryButton]="disableAddCommentDoneBtn"
+    (secondaryButtonEvent)="resetAddCommentPopup()" customTop="18%" customwidth="500px">
+    <div class="addCommentPopup">
+        <textarea autocomplete="off" class="form-control comment-textarea addCommentTextArea" [(ngModel)]="comment"
+            (input)="OnInputAddComment($event.target.value)"
+            placeholder="Click to enter any comments regarding changes done"></textarea>
+    </div>
+</confirm-modal>
+
+<div *ngIf="isOpenCommentsPopup">
+    <div class="nep-modal nep-modal-show custom-modal nep-cus-inv-bg-d">
+        <div class="nep-modal-mask"></div>
+        <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nep-crd-inv-pr-d-t">
+            <div class="nep-card-header nep-modal-title">
+                <span>Comments</span>
+                <span class="float-right close-icon" (click)="closeCommentPopup()">
+                    <em class="pi pi-times"></em>
+                </span>
+            </div>
+            <div class="nep-card-body">
+                <div class="image-container" *ngIf="commentsList.length === 0">
+                    <img class="EmptyStateImgStyle" src="assets/dist/images/empty-message.svg" alt="" /><br /><br />
+                    <span class="font-weight-bold">No comments yet!</span><br />
+                    <span class="workflowZeroStateFontStyle">Please edit data and add comments to mark the section for
+                        review</span>
+                </div>
+                <div *ngIf="commentsList.length != 0">
+                    <div class="row pb-2" *ngFor="let comment of commentsList">
+                        <div class="col-12">
+                            <div class="circle-user d-inline-block">{{comment.shortUserName}}</div>
+                            <span class="user d-inline">{{comment.userName}} ({{comment.userRole}})</span><span
+                                class="comment-info">{{comment.commentedDateTime}}</span>
+                        </div>
+                        <div class="col-12 comment-desc">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-12 pr-0 pl-0" *ngIf="!comment.isEditable">
+                                    <span class="comments pr-3">
+                                        {{comment.comments}}
+                                    </span>
+
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-xs-12 pl-0 pr-0" *ngIf="comment.isEditable">
+                                    <div class="custom-nep-input">
+                                        <textarea [(ngModel)]="commentDesc" [value]="comment.comments"
+                                            (input)="onInputUpdateComment(comment ,$event.target.value)"
+                                            class="group-text p-2" rows="2" spellcheck="false" data-ms-editor="true"
+                                            placeholder="Enter Comments">
+                                                </textarea>
+
+                                    </div>
+                                    <div class="float-right pt-1 pb-1 comment-button">
+                                        <span class="pr-2">
+                                            <button class="btn btn-nep-default" (click)="closeComment(comment)">
+                                                <em class="fa fa-close"></em>
+                                            </button>
+                                        </span>
+                                        <span>
+                                            <button [disabled]="disableUpdateButton" class="btn btn-nep-default"
+                                                (click)="updateComment(comment)">
+                                                <em class="fa fa-check"></em>
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-12 pr-0 pl-0 pt-1" *ngIf="!comment.isEditable">
+                                    <span class="edit-icon edit-kpi-cur">
+                                        Edit
+                                    </span>
+                                    <!-- <span class="edit-icon" (click)="editComment(comment)">
+                                        Edit
+                                    </span> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #then_LabelContent>
+    {{
+      workflowDetails.isStart && sectionData.isEdited ? 'Edited' : 'Marked for Rework'
+    }}
+</ng-template>
+<ng-template #else_labelContent><span class="pl-2 status-positon">
+    {{sectionData.isMarkedForReview ?'Marked for Review':sectionData.isApprove?'Marked as Approved':sectionData.isEdited?'Edited':workflowDetails.statusName}}
+</span></ng-template>
+

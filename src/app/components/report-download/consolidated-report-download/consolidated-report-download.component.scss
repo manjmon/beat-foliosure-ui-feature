@@ -1,0 +1,102 @@
+.consolidated-report-download-section
+{
+border: 1px solid #DEDFE0;
+border-radius: 4px;
+box-shadow: 0px 0px 12px #00000014;
+
+.header-section
+{
+    background: #FAFAFB 0% 0% no-repeat padding-box;
+border-bottom: 1px solid #DEDFE0;
+border-radius: 4px 4px 0px 0px;
+opacity: 1;
+height: 48px;
+}
+.body-section
+{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    .company-header
+    {
+        letter-spacing: 0.17px;
+        color: #212121;
+        opacity: 1;
+        font-family: 'Helvetica Neue LT W05_65 Medium',Arial, Verdana, Tahoma,sans-serif!important;
+    }
+    .companyListSearchHeight {
+        height: 42px !important;
+        width: calc(100% - 20px) !important;
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+        border-right: none;
+        border-left: none !important;
+      
+    }
+    .search-header
+    {
+        padding: 0px !important;
+        width: 350px !important;
+    background: white!important;
+    }
+    .tr-no-data
+    {
+        border-bottom: none !important;
+        border-right: none !important;
+    }
+}
+.footer-section
+{
+    background: #FAFAFB 0% 0% no-repeat padding-box;
+border-top: 1px solid #DEDFE0;
+border-radius: 0px 0px 4px 4px;
+opacity: 1;
+height: 48px;
+.internal-reset-button
+{
+    padding-right: 12px !important;
+}
+.download-circle-loader-fa-circle-o-notch
+{
+    color:#FFFFFF !important;
+}
+.fa-circle-o-notch{
+    color: #FFFFFF !important;
+}
+}
+
+.consolidated-report-template{
+    padding-top: 20px !important;
+    padding-bottom: 12px !important;
+    padding-left: 12px !important;
+}
+.consolidated-report-template:nth-child(1){
+    padding-left: 16px !important;
+}
+.consolidated-report-template:nth-child(4){
+    padding-left: 20px !important;
+}
+    
+p {
+    margin: 0px 0 8px !important;
+    text-align: left;
+letter-spacing: 0px;
+color: #55565A;
+opacity: 1;
+}
+.custom-p-dropdown .p-dropdown .p-dropdown-label{
+    text-align: left !important;
+letter-spacing: 0px !important;
+color: #212121 !important;
+opacity: 1 !important;
+}
+.padding-top-download{
+    margin-top: 28px !important;
+    
+    .download-circle-loader
+{
+    color:#FFFFFF !important;
+}
+}
+}
+.disableDiv{
+    pointer-events:none;
+}

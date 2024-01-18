@@ -1,0 +1,280 @@
+<div class="row kpi-list-section">
+    <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12  pl-0 pr-0">
+        <div class="card-body kpi-list-table mb-0">
+            <div class="row performance-section mr-0 ml-0">
+                <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pl-0 pr-0">
+                    <div class="panel panel-default tab-bg border-left-0 border-right-0">
+                        <div class="panel-heading">
+                            <div class="panel-title custom-tabs pc-tabs">
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item" role="presentation" *ngFor="let tab of tabList;" (click)="onTabClick(tab)">
+                                        <button class="nav-link nav-custom" [ngClass]="tab.active?'active':''" id="home-tab" data-bs-toggle="tab" type="button" role="tab" aria-controls="home" aria-selected="true">
+                                            {{tab.name}}
+                                       </button>
+                                    </li>
+                                </ul>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-bg ">
+                        <div class="custom-outer-margin" *ngIf="tabName=='KPI List'">
+                            <p-table styleClass="p-datatable-gridlines" #tblkpi  class="kpi-list-table-fs cashflow-tbl text-left custom-kpi-table borderless company-financial-border invested-table pc-table list-table kpi-list-table ustom-user-access-table internal-report-tbl" 
+                            [virtualScroll]="true" [virtualRowHeight]="46"
+                                emptyMessage="{{blockedTable? 'Please Wait...':'No record found'}}"
+                                scrollable="true" 
+                                sortMode="multiple" 
+                                [value]="kpiList"
+                                [globalFilterFields]="['kpi','kpiInfoType', 'description','profitAndLossLineItem','balanceSheetLineItem','cashFlowLineItem','esgLineItem']"
+                                [resizableColumns]="true"
+                                [columns]="kpiHeaders">
+                            <ng-template pTemplate="caption" class="custom-data-table">
+                                <div class="row border-bottom mr-0 ml-0 margin-top-header filter-bg">
+                                    <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pl-0 pr-0">
+                                        <div class="float-left kpi-list-searchbox-width search-kpi-left col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
+                                            <div class="d-inline-block search-box-width search">
+                                                <span class="fa fa-search p-1  kpi-search-icon"></span>
+                                                <input #gb pInputText type="text"
+                                                    class="search-text-company companyListSearchHeight"
+                                                    placeholder="Search KPI"
+                                                    (input)="tblkpi.filterGlobal($event.target.value, 'contains')">
+                                            </div>
+                                        </div>
+                                           <div class="float-right custom-right-header">
+                                        <div class="d-inline-block btn-kpi-left">
+                                            <nep-button Type="Primary" (click)="ShowAddKPI=true;Openpopup()">
+                                                <em class="fa fa-plus"></em> KPI
+                                            </nep-button>
+                                        </div>                                 
+                                    </div>
+                                                                       
+                                    <div class="float-right dropdown-kpi-right custom-right-header">
+                                        <div class="d-inline-block custom-right-select">         
+                                            <p-dropdown [virtualScrollItemSize]="30" class="kpi-list-new-group custom-searchable-dropdown kpi-new-group" name="module" 
+                                            (onChange)="GetSelectedKpiData($event?.value)"  [options]="groupModel" optionLabel="pageConfigAliasName"
+                                               [(ngModel)]="selectedKpiType"  [showClear]="false" [group]="true" [filter]="true" filterBy="pageConfigAliasName">
+                                                <ng-template let-group pTemplate="group">
+                                                    <div title="{{ group.name }}" class="flex align-items-center" >
+                                                        <span class="TextTruncate" title="{{group.name}}">{{ group.name }}</span>
+                                                    </div>
+                                                </ng-template>
+                                                <ng-template let-options pTemplate="item">
+                                                    <span id="kpi-type-name" class="TextTruncate" title="{{options.pageConfigAliasName}}">
+                                                        {{options.pageConfigAliasName}}
+                                                    </span>
+                                                </ng-template>
+                                            </p-dropdown>
+                                        </div>
+                                    </div>
+                                  
+                                    </div>
+                                </div>
+                            </ng-template>
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <ng-container *ngFor="let col of columns">
+                                            <th id="col.header" *ngIf="col.sort===true && kpiList.length !== 0" [ngClass]="col.headerWidthClass">
+                                                <span class="tableHeadersStyle">{{col.header}}</span>
+                                                <p-sortIcon *ngIf="col.sort===true" [field]="col.field" [pSortableColumn]="col.field"></p-sortIcon>
+                                            </th>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                    <tr>
+                                        <td id="{{$index+1|number}}" *ngFor="let col of columns;let i=index;let last=last" [ngClass]="col.valueWidthClass" class="cellPadding">
+                                            <div  title="{{rowData[col.field]}}"  *ngIf="col.field !== 'description'">
+                                                <span class="text-truncate d-inline-block kpi-title"  [ngClass]="(rowData.isBoldKPI || rowData.isHeader) && col.header == 'KPI Name' ? 'font-weight-bold':''">{{rowData[col.field]}}</span>
+                                                <div class="float-right company-buttons"  *ngIf="last">
+                                                    <div (click)="deletePopUpFun(rowData)">
+                                                        <img src='assets/dist/images/delete.svg' alt="" />
+                                                    </div>
+                                                </div>
+                                                <div class="float-right company-buttons margin12" *ngIf="last">
+                                                    <div (click)="OnEdit(rowData)">
+                                                        <img src='assets/dist/images/EditIcon.svg' alt="" />
+                                                    </div>
+                                                </div>
+                                                <span *ngIf="col.header == 'KPI Name'" class="pl-3 pr-3 kpi-header" >
+                                                    <img *ngIf="rowData.isHeader" class="img-header" src="assets/dist/images/kpi-header.svg" alt="kpi-header.svg"  [pTooltip]="'Header KPI'" tooltipPosition="top"
+                                                    tooltipStyleClass="bg-grey-tooltip-color"/>  
+                                                    <img class="pl-2 formula-image" *ngIf="!rowData?.isHeader && rowData?.kpiInfo !='Text'"  [ngClass]="rowData.formula!=null && rowData.formula!='' ?'d-inline-block':'d-none'"  (click)="openFormulaPopup(rowData)" src="assets/dist/images/formula.svg" alt="formula.svg" />              
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <zero-state-kpi *ngIf="kpiList.length === 0"></zero-state-kpi>
+                        </div>
+                        <div class="custom-outer-margin-right" *ngIf="tabName=='Mapping'">
+                            <app-kpi-mapping [kpiTypeList]="kpiTypes" [kpiTypeSelected]="selectedKpiType" 
+                            [reload]="isReload" [moduleID]="selectedKpiType?.moduleID" [kpiType]=selectedKpiType?.name 
+                            *ngIf="tabName=='Mapping'">
+                
+                            </app-kpi-mapping>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup div -->
+    <div *ngIf="ShowAddKPI">
+        <div id="kpi-add-dialog"  class="col-12 col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 AddOrUpdateKpi add-or-update-modal">
+        <div class="nep-modal nep-modal-show kpi-add-edit-modal nep-kpi-bg">
+            <div class="nep-modal-mask"></div>
+            <div [style.width]="customwidth"[style.top]="customTop"  class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nep-kpilist-pr">
+              <div class="nep-card-header" [ngClass]="hasHeaderStyle? 'nep-modal-title-custom':'nep-modal-title'" >
+                {{modalTitle}}
+                <div class="float-right close-icon cursor-filter">
+                  <i class="pi pi-times" (click)="onCloseAddKpiModal()" ></i>
+              </div>
+              </div>
+              <div class="nep-card-body">
+                <div class="row mr-0 ml-0 main-row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 pl-0 pr-0 ">
+                                <div class="popupcommon-labelpadding kpi-mandatory-label">KPI Name</div>
+                                <nep-input [ngClass]="{'custom-error-kpi-input':isError}" (onChange)="onKpiNameChange($event)" (onBlur)="onKpiNameUpdate(); " (mouseout)="onKpiNameChange($event);onKpiNameUpdate();" [value]="addKpiName" [placeholder]=placeholderKPIName class="kpis-custom-select custom-nep-input default-txtcolor"></nep-input>
+                                <div *ngIf="isError" class="nep-error">{{ErrorMessage}}</div>
+                            </div>
+                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12">
+                                <div class="row kpi-label-padding pl-0 pr-0">
+                                    <div class="col-6 col-md-6 col-sm-6 col-lg-6 col-xs-6 col-xl-6 kpi-label-value pl-0 pr-0" *ngIf="!UpdateKpi">
+                                        <div class="popupcommon-labelpadding kpi-mandatory-label">KPI Type</div>                                                                         
+                                            <div class="flex justify-content-center">
+                                                <p-dropdown [options]="groupModel" class="kpi-list-new-popup custom-kpilist-dropdown custom-searchable-dropdown showClear kpi-new-group-popup" name="module"
+                                                (ngModelChange)="onSelectKpiGroup($event)" [(ngModel)]="selectedAddKpiType" [group]="true"  optionLabel="pageConfigAliasName"
+                                                [filter]="true" filterBy="pageConfigAliasName" [showClear]="false">
+                                           
+                                                    <ng-template let-group pTemplate="group">
+                                                        <div class="flex align-items-center">
+                                                            <span class="TextTruncate" title="{{group.name}}">{{ group.name}}</span>
+                                                        </div>
+                                                    </ng-template>
+                                                    <ng-template let-options pTemplate="item">
+                                                        <span id="kpi-type-name" class="TextTruncate" title="{{options.pageConfigAliasName}}">
+                                                            {{options.pageConfigAliasName}}
+                                                        </span>
+                                                    </ng-template>
+                                                </p-dropdown>
+                                            </div>
+                                        </div>                               
+                                    <div class="col-6 col-md-6 col-sm-6 col-lg-6 col-xs-6 col-xl-6 kpi-label-value pl-0 pr-0 kpi-padding-top">
+                                        <div class="popupcommon-labelpadding kpi-mandatory-label">KPI Info</div>
+                                        <!-- <app-select class="kpis-custom-select custom-kpi-select" [selectList]=kpiInfoTypes (OnSelect)="onSelectKpiInfo($event)" [selectedValue]="selectedKpiInfoType"></app-select> -->
+                                        <p-dropdown [filter]="false"
+                                            class="kpi-list-new-popup custom-kpilist-dropdown custom-searchable-dropdown showClear kpi-new-group-popup" name="kpiInfoModule" [options]="kpiInfoTypes" [(ngModel)]="selectedKpiInfoType"
+                                            placeholder="Select KPI Info" optionLabel="name" [showClear]="false" (ngModelChange)="onSelectKpiInfo($event)">
+                                            <ng-template let-kpiInfo pTemplate="item">
+                                                <span title="{{kpiInfo.name}}">
+                                                    {{kpiInfo.name}}
+                                                </span>
+                                            </ng-template>
+                                        </p-dropdown>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6 col-lg-6 col-xs-6 col-xl-6 kpi-label-value pl-0 pr-0 kpi-padding-top" *ngIf="selectedKpiInfoType.name !='Text'">
+                                        <div class="popupcommon-labelpadding kpi-mandatory-label">FX Conversion Methodology</div>
+                                        <!-- <app-select class="kpis-custom-select custom-kpi-select" [selectList]=methodologyList (OnSelect)="onSelectMethodology($event)" [selectedValue]="selectedMethodology"></app-select> -->
+                                        <p-dropdown [filter]="false"
+                                            class="kpi-list-new-popup custom-kpilist-dropdown custom-searchable-dropdown showClear kpi-new-group-popup"
+                                            name="MethodologyModule" [options]="methodologyList" [(ngModel)]="selectedMethodology"
+                                            placeholder="Select Conversion Methodology" optionLabel="name" [showClear]="false"
+                                            (ngModelChange)="onSelectMethodology($event)">
+                                            <ng-template let-Methodology pTemplate="item">
+                                                <span title="{{Methodology.name}}">
+                                                    {{Methodology.name}}
+                                                </span>
+                                            </ng-template>
+                                        </p-dropdown>
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="col-6 col-md-6 col-sm-6 col-lg-6 col-xs-6 col-xl-6 pl-0 pr-2 kpi-padding-bottom"
+                                *ngIf="( (selectedAddKpiType.field === 'ProfitAndLoss'||
+                                                    selectedAddKpiType.field === 'BalanceSheet' || selectedAddKpiType.field === 'CashFlow' || selectedAddKpiType.field === 'TradingRecords' || selectedAddKpiType.field === 'Operational' || selectedAddKpiType.field === 'Company' || selectedAddKpiType.field === 'Investment' 
+                                                     || selectedAddKpiType.field === 'Economic Contribution' || selectedAddKpiType.field === 'Climate Change' || selectedAddKpiType.field === 'Governance' || selectedAddKpiType.field === 'Anti Bribery & Corruption' || selectedAddKpiType.field === 'Headcount'
+                                                     || selectedAddKpiType.field === 'Recruitment' || selectedAddKpiType.field === 'Retention & Stability' || selectedAddKpiType.field === 'Employee Engagement Survey'
+                                                     || selectedAddKpiType.field === 'Training' || selectedAddKpiType.field === 'Diversity & Inclusion' || selectedAddKpiType.field === 'Gender Pay Gap' || selectedAddKpiType.field === 'Health & Safety' 
+                                                     || selectedAddKpiType.field === 'Sample 1' || selectedAddKpiType.field === 'Sample 2' || selectedAddKpiType.field === 'Sample 3'|| selectedAddKpiType.field === 'Sample 4'))">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-6 col-md-6 col-sm-6 col-lg-6 col-xs-6 col-xl-6 pl-0 pr-0">
+                                        <mat-checkbox (mouseout)="onKpiNameUpdate();" label class=" mat-custom-checkbox d-inline-block "
+                                            [disabled]="isBoldKPI === true ? 'disabled' : null" name="IsHeader" [(ngModel)]="isHeader"
+                                            #IsHeader="ngModel">
+                                        </mat-checkbox>
+                                        <div class="d-inline-block pl-2 info" [ngClass]="isBoldKPI === true?'checkbox-diasbledcolor':''">
+                                            <span>KPI Header</span>
+                                        </div>
+                                        <div class="d-inline-block pl-1 info"> <img class="pe-none" triggers="mouseenter:mouseleave"
+                                                placement="right" [pTooltip]="'This will enable the KPI as an Header on the table'"
+                                                tooltipStyleClass="bg-grey-tooltip-color" [src]="'assets/dist/images/InfoGrey.svg'" alt=""></div>
+                                    </div>
+                                    <div class="col-6 col-md-6 col-sm-6 col-lg-6 col-xs-6 col-xl-6 pl-0 pr-0 text-right">
+                                        <mat-checkbox (mouseout)="onKpiNameUpdate();" label class="d-inline-block mat-custom-checkbox "
+                                            name="boldKPI" [(ngModel)]="isBoldKPI" #boldKPI="ngModel"
+                                            [disabled]="isHeader === true ? 'disabled' : null">
+                                        </mat-checkbox>
+                                        <div class="d-inline-block pl-2 info" [ngClass]="isHeader === true?'checkbox-diasbledcolor':''">
+                                            <span> Bold KPI </span>
+                                        </div>
+                                        <div class="d-inline-block pl-1 info">
+                                            <img class="pe-none" triggers="click" pTooltip="This will Bold the KPI on the table"
+                                                tooltipStyleClass="bg-grey-tooltip-color" [src]="'assets/dist/images/InfoGrey.svg'" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xs-12 pl-0 pr-0">
+                                <div class="popupcommon-labelpadding">Description</div>
+                                <div class="custom-nep-input kpi-modal-textarea">
+                                    <label class="nep-input nep-input-textarea kpitext-label">
+                                        <textarea rows="4" placeholder="input something" spellcheck="false"
+                                            data-ms-editor="true" placeholder="Enter Description"
+                                          class="list-kpi-h-o" [(ngModel)]="addKpiDesc"
+                                            (mouseout)="onDescChange()" class="pl-0" (change)="onDescChange()"></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <div class="nep-card-footer nep-card-right nep-modal-footer add-or-update-modal-footer">
+                <div *ngIf="!IsInfoPopup">
+                  <nep-button *ngIf="!UpdateKpi" [disabled]="disableAdd" Type="Secondary" (click)="reset()" >
+                    Reset
+                  </nep-button>
+                  <nep-button *ngIf="UpdateKpi" [disabled]="disableAdd" Type="Secondary" (click)="updateReset()" >
+                    Reset
+                  </nep-button>
+                  <nep-button Type="Primary" [disabled]="disableAdd" (click)="AddOrUpdateKpi()" class="kpinep-butn-pl">
+                    {{primaryButtonName}}
+                  </nep-button>
+                </div>
+                <div *ngIf="IsInfoPopup">
+                  <nep-button Type="Primary" [disabled]="disableAdd" (click)="AddOrUpdateKpi()" class="kpinep-butn-pl">
+                    {{primaryButtonName}}
+                  </nep-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div *ngIf="deletePopUp">
+        <confirm-modal [primaryButtonName]="primaryDeleteButtonName" [secondaryButtonName]="secondaryDeleteButtonName" [modalTitle]="deleteModalTitle" (primaryButtonEvent)="performDelete()" (secondaryButtonEvent)="performCancel()">
+            <div class="modalBodyTextStyle">
+                <div>
+                    {{deleteModalBody1}}
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+</div>
+<app-kpi-formula-builder [kpiModel]="selectedFormulaKPI" *ngIf="isOpenPopUp" (OnClose)="closeFormulaPopUp($event)" [formulaKPITypes]="groupModel" [selectedFormulaKPIType]="selectedKpiType" [companyId]="0"></app-kpi-formula-builder>
+<app-loader-component [ngStyle]="blockedTable?{'display':'block'}:{'display':'none'}" *ngIf="blockedTable">
+</app-loader-component> 

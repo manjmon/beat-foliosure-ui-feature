@@ -1,0 +1,292 @@
+@import "../../../variables.scss";
+.kpi-list-section {
+    margin-top: -19px !important;
+    margin-left: -19px !important;
+    margin-right: -19px !important;
+    .main-row {
+        padding: 20px !important;
+    }
+    .popupcommon-labelpadding {
+        padding-left: 0.75rem !important;
+    }
+    .kpis-custom-select {
+        .custom-select {
+            .nep-select-inner {
+                .nep-select-result {
+                    padding-left: 0.75rem !important;
+                }
+            }
+        }
+    }
+    .kpi-padding-top {
+        padding-top: 1.25rem !important;
+    }
+    
+    .isbold-div {
+        padding-top: 0.75rem !important;
+    }
+    
+    .kpi-addorupdate-errorcolor {
+        color: $nep-error !important;
+    }
+    
+    .kpitext-label {
+        padding-top: 0.25rem !important;
+    }
+    .AddOrUpdateKpi>.nep-modal>.nep-card {
+        width: 400px !important;
+    }
+    .info {
+        padding-top: 2px !important;
+        padding-bottom: 1px !important;
+    }
+    .checkbox-diasbledcolor {
+        color: #cacaca !important;
+    }
+    .default-txtcolor {
+        color: #000000 !important;
+    }
+    .performance-section {
+        .outer-section {
+            background: $nep-base-grey 0% 0% no-repeat padding-box;
+            border: 1px solid $nep-divider;
+            border-radius: 4px 4px 4px 4px;
+            opacity: 1;
+            box-shadow: 0px 0px 12px $nep-shadow-color;
+        }
+        .nav-link {
+            background-color: $nep-white !important;
+            letter-spacing: 0px;
+            color: $nep-text-grey;
+            font-size: 0.9rem !important;
+            padding-top: 0px;
+            padding-bottom: 9px;
+            top: 0px !important;
+            border: none !important;
+            border-bottom: none !important;
+            &.active {
+                background-color: #FFFFFF !important;
+                font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+                color: $nep-primary !important;
+                font-size: 0.9rem !important;
+                top: 1px !important;
+                border: none !important;
+                border-bottom: 2px solid #021155 !important;
+            }
+        }
+        .tab-bg {
+            background-color: $nep-white !important;
+        }
+        .content-bg {
+            background-color: $nep-white !important;
+            margin-top: -1px;
+        }
+    }
+
+    tr {
+        text-align: left;
+        font-size: 14px;
+        letter-spacing: 0px;
+        color: $nep-dark-black;
+        opacity: 1;
+        td {
+            padding-bottom: 6px !important;
+        }
+        .company-buttons {
+            display: none;
+            margin-bottom: -5px;
+            margin-top: -4px;
+            cursor: pointer;
+        }
+        .margin12 {
+            margin-right: 0.75rem !important;
+        }
+        .items {
+            padding: 20px 12px;
+            .TextTruncate {
+                overflow: inherit !important;
+            }
+        }
+        .sectorHeadQuarter {
+            background: $nep-white 0% 0% no-repeat padding-box;
+            border: 1px solid $nep-divider;
+            border-radius: 4px;
+            opacity: 1;
+            padding: 4px 12px;
+        }
+        &:hover {
+            background: #F7F8FC 0% 0% no-repeat padding-box !important;
+            border: 1px solid #F7F8FC;
+            .company-buttons {
+                display: block;
+            }
+        }
+    }
+    .kpi-search-icon{
+        top: 15px !important;
+        position: absolute !important;
+        right: 15px !important;
+        font-size: 15px !important;
+        color: #75787B !important;
+        width: 16px !important;
+        height: 16px !important;
+    }
+    .custom-select {
+        border: none !important;
+        background-color: #FAFAFB !important;
+        border-radius: 0px !important;
+    }
+
+    // .nep-select-inner {
+    //     border-bottom: 1px solid #DEDFE0;
+    // }
+
+    .margin-top-header {
+        margin-top: 1px !important;
+        min-height: 52px !important;
+    }
+
+    .custom-right-select {
+        padding-right: 12px !important;
+    }
+
+    .custom-right-header {
+        margin-top: 10px !important;
+    }
+
+    .p-datatable .p-datatable-header {
+        margin-top: 0 !important;
+    }
+
+    .custom-outer-margin {
+        margin-left: 16px !important;
+        margin-bottom: 1px !important;
+        margin-right: 16px !important;
+        margin-top: 20px !important;
+        border: 1px solid #DEDFE0 !important;
+        border-radius: 4px 4px 4px 4px !important;
+        opacity: 1 !important;
+        box-shadow: 0px 0px 12px #00000014;
+    }
+
+    .custom-outer-margin-right {
+           margin-left: 16px !important;
+    margin-right: 16px !important;
+    margin-bottom: 0px !important;
+    margin-top: 20px !important;
+
+    }
+
+    .kpi-list-card {
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 0.25rem;
+    }
+
+    .panel-default>.panel-heading {
+        padding-top: 8px !important;
+        border-bottom: none !important;
+        box-shadow: 0px 3px 6px #00000014 !important;
+    }
+
+    .panel .panel-heading .nav-tabs {
+        border-bottom: none !important;
+    }
+    .show-action-button {
+        width: 75% !important;
+    }
+    .kpi-header {
+        position: absolute;
+    }
+    .kpi-title {
+        max-width: 80%;
+    }
+    .kpi-list-table {
+        margin-top: 0 !important;
+        border: none !important;
+        background-color: #FAFAFB !important;
+        border-radius: 0px !important;
+        .companyListSearchHeight {
+            height: 52px !important;
+            width: 100% !important;
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+            border-left: none;
+        }
+        tr {
+    
+            th:first-child,
+            td:first-child {
+                min-width: 400px !important;
+            }
+            &:hover {
+                cursor: pointer;
+    
+                .formula-image {
+                    display: inline-block !important;
+                }
+            }
+        }
+    }
+    .formula-image {
+        display: none;
+    }
+    .AddOrUpdateKpi {
+        .nep-modal .nep-card {
+            top: 170px !important;
+            width: 700px !important;
+            background: #FFFFFF 0% 0% no-repeat padding-box;
+            opacity: 1;
+        }
+    }
+    .kpi-label-value:nth-child(1) {
+        padding-top: 20px !important;
+        padding-right: 10px !important;
+        padding-bottom: 20px !important;
+    }
+    .kpi-label-value:nth-child(2) {
+        padding-top: 20px !important;
+        padding-left: 10px !important;
+        padding-bottom: 20px !important;
+    }
+    .kpi-label-value:nth-child(3) {
+        padding-top: 0px !important;
+        padding-right: 10px !important;
+        padding-bottom: 20px !important;
+    }
+    .kpi-label-value:nth-child(4) {
+        padding-top: 0px !important;
+        padding-left: 10px !important;
+        padding-bottom: 20px !important;
+    }
+    
+    .add-or-update-modal-footer button {
+        width: 5.125rem !important;
+        height: 2rem !important;
+    }
+    .kpi-mandatory-label:after {
+        content: "*";
+        color: red;
+    }
+    .kpi-padding-bottom {
+        padding-bottom: 20px !important;
+    }
+    .search-box-width{
+        width: 100% !important;
+    }
+    .kpi-list-searchbox-width{
+        width: calc(100% - 316px) !important;
+      }
+      .nav-tabs .nav-item{
+        margin-bottom: 0px !important;
+      }
+    .nav-link {
+        padding: 0 !important;
+        margin-right: 12px;
+        border-left-width: 1rem !important;
+        border-right-width: 0.5rem !important;
+        padding-bottom: 12px !important;
+    }
+    .kpi-modal-textarea .nep-input textarea{
+        color: #000000 !important;
+    }
+}

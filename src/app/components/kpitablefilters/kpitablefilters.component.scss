@@ -1,0 +1,61 @@
+@import "../../../variables.scss";
+.error-msg {
+    padding-left: 16px;
+    padding-top: 8px;
+    text-align: center !important;
+}
+
+.display-inline {
+    display: inline !important;
+}
+
+.display-inline-block {
+    display: inline-block !important;
+    padding-right: 20px !important;
+}
+
+.footersubdiv {
+    padding-right: 16px;
+    padding-bottom: 16px;
+}
+
+.filter-first {
+    background: $nep-white 0% 0% no-repeat padding-box;
+    overflow-y: auto;
+    height: 256px;
+}
+
+.filter-footer {
+    padding-top: 32px;
+    float: right;
+}
+
+.btn-app {
+    color: $nep-white;
+    background-color: $nep-button-primary;
+    border-color: $nep-white !important;
+    border-radius: 4px;
+    width: 76px;
+    height: 24px;
+    text-align: center;
+    font-size: 0.75rem;
+    border: 1px solid #021155;
+    padding-bottom: 0.063rem !important;
+}
+
+.btn-reset {
+    color: $nep-button-primary;
+    background-color: $nep-white;
+    border-color: $nep-button-primary !important;
+    border-radius: 4px;
+    width: 76px;
+    height: 24px;
+    text-align: center;
+    font-size: 0.75rem;
+    border: 1px solid $nep-primary;
+    padding-bottom: 0.063rem !important;
+}
+
+.label-align {
+    padding-left: 32px;
+}

@@ -1,0 +1,96 @@
+<div class="nep-modal nep-modal-show nep-bulk-d-bg">
+    <div class="nep-modal-mask"></div>
+    <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nepwrk-pr-d-t-w">
+        <div class="nep-card-header nep-modal-title p-0">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-12 user-header">
+                    <div class="float-left">Download excel template and bulk upload data</div>
+                    <div class="float-right close-icon" (click)="onClose()">
+                        <i class="pi pi-times"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-body">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-12 user-body user-upload">
+                    <div class="add-user-component">
+                        <div class="card card-main">
+                            <div class="card-body mb-0">
+                                <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 user-upload pr-0 pl-0">
+                                    <div class="row mr-0 ml-0 pb-3">
+                                        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 pr-0 pl-0">
+                                            <span class="upload-desc">Download excel template and bulk upload {{kpiType}}.</span>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 pr-0 pl-0">
+                                            <span class="upload-desc">To download template, </span>
+                                            <span><a class="click-here" (click)="downloadTemplate()">Click here</a></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc desc-header">
+                                            Note:-
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc">
+                                            1. Template includes sample data. Replace the same with relevant data.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc">
+                                            2. Follow the format laid out in the template. Do not modify any headers.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc">
+                                            3. File size limit is 20MB.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc">
+                                            4. For KPI’s, allowed symbols are %, $ for KPI data.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0 mt-4" *ngIf="messages.length>0">
+                                        <div class="col-md-12 pr-0 pl-0">
+                                            <div class="upload-error-section" [ngClass]="messageClass==='errorMessage' ? 'pb20 errorColor' : 'pb20 successColor'">
+                                                <div id="errorSection" *ngFor="let message of messages">
+                                                    <div [innerHtml]="message.safeHtml"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-footer  nep-modal-footer user-upload">
+            <div class="float-right">
+                <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                <div class="upload-sec mr-2 d-inline-block">
+                    <div class="upload-desc">
+                        <div class="uploadButton d-flex" [ngStyle]="{'padding-right': browseicon ? '9px' : '6px' }">
+                            <div class="textEllipsis uploadLogoIcon" (click)="file.click()" title={{uploadFilePlaceholder}}>
+                                <input class="hidefile" #file (click)="file.value = null" value="" accept=".xlsx,.xls" (change)="onSelect($event.target.files)" type="file">
+                                <img *ngIf="browseicon" class="browseIcon" [src]="'assets/dist/images/Iconmaterial-computer.svg'" alt="">
+                                <span class="beatColor browseButton">{{uploadFilePlaceholder}}</span>
+                            </div>
+                            <div *ngIf="!browseicon" class="icon">
+                                <img *ngIf="ProgressCancel" class="pull-right" (click)="deleteIconClick(filename)" [src]="'assets/dist/images/ClearIcon.svg'" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <nep-button Type="Primary" [disabled]="files.length==0" (click)="saveFile()" class-="nep-bulk-btn-pl">
+                    Upload
+                </nep-button>
+            </div>
+
+        </div>
+    </div>
+</div>

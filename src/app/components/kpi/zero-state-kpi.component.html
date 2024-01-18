@@ -1,0 +1,24 @@
+<div class="zeroStateKpi" [ngStyle]="{'height': height}">
+  <div class="zerokpi-mt-ml">
+      <img *ngIf="loading" class="zerkpi-hw-ml-mt" 
+      src="assets/dist/images/loading-small.gif" alt="" />
+    <div *ngIf="!loading" class="zero-kpi-stat--width">
+      <img  src="assets/dist/images/emptyStateKpi.svg" alt="" />
+      <div class="row mr-0 ml-0 zero-kpi-stat-mt"  *ngIf="header!='' && message!=''">
+        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
+          <div class="header-zero-state">
+            {{header}}
+           </div>
+        </div>
+        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
+          <div class="  message-zero-state pt-2">
+            {{message}}
+           </div>
+        </div>
+      </div>
+      <div  *ngIf="header =='' && message ==''">
+        No data available yet
+      </div>
+    </div>
+  </div>
+</div>

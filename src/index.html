@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BEAT FolioSure</title>
+  <base href=".">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="./assets/dist/js/jquery.min.js"></script>
+  <script src="./assets/dist/js/dayjs.min.js"></script>
+  <script src="https://dl.revealbi.io/reveal/libs/1.6.2/infragistics.reveal.js"></script>
+  <meta http-equiv="Content-Security-Policy" value="default-src 'self';img-src data: https:;object-src 'none'; script-src 'self';style-src 'self' 'unsafe-inline'; upgrade-insecure-requests;">
+  <link rel="icon" href="./assets/dist/images/BEAT Favicon.svg">
+  <link type="text/css" rel="stylesheet" href="https://fast.fonts.net/lt/1.css?apiType=css&amp;c=4a98d197-ca32-4925-b17b-27dcad2dbb8d&amp;fontids=5664067,5664070,5664077,5664081,5664085,5664089,5664093,5664098,5664103,5664107,5664111,5664115,5664119,5664121,5664128,5664150">
+ <!-- <script src="./assets/json/tracking.js" type="text/javascript" crossorigin="anonymous"></script> -->
+</head>
+<body>
+  <app></app> 
+  <script type="text/javacript">
+    window.addEventListener('touchstart', function() {
+      console.log('touchstart');
+  }, {passive:false});
+  </script>
+  <script>
+    (function(apiKey){
+        (function(p,e,n,d,o){var v,w,x,y,z;o=p[d]=p[d]||{};o._q=o._q||[];
+        v=['initialize','identify','updateOptions','pageLoad','track'];for(w=0,x=v.length;w<x;++w)(function(m){
+            o[m]=o[m]||function(){o._q[m===v[0]?'unshift':'push']([m].concat([].slice.call(arguments,0)));};})(v[w]);
+            y=e.createElement(n);y.async=!0;y.src='https://cdn.eu.pendo.io/agent/static/'+apiKey+'/pendo.js';
+            z=e.getElementsByTagName(n)[0];z.parentNode.insertBefore(y,z);})(window,document,'script','pendo');
+    })('161b7e09-3725-425f-50d7-312aef0405e4');
+    </script>
+    
+    
+</body>
+</html>

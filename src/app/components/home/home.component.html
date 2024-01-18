@@ -1,0 +1,470 @@
+<app-loader-component *ngIf="isLoader"></app-loader-component>
+<div class="row tab-shadow-home">
+    <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0 pl-0">
+        <div class="float-left">
+            <nep-tab id="neptab" class="custom-pipeline-tab custom-ds-tab" [tabList]=tabList (OnSelectTab)="onTabClick($event,overlayPanel);isNewDashboard = false">
+            </nep-tab>
+        </div>
+        <div class="float-right data-filter-icons">
+            <div class="filter-icons pt-1" *ngIf="tabName == CommonTabName || tabName == MyDashboardTabName">
+                <span title="New Dashboard" *ngIf="enabledAddButton"  class="" (click)="isNewDashboard = true">
+                    <img class="uploadFileIcon" src="assets/dist/images/MdAddCircle.svg" alt="" />
+                </span>
+                <a class="vl" *ngIf="enabledAddButton"></a>
+                <span class="" *ngIf="enabledUploadButton" title="Upload File" (click)="OpenUploadModal($event,overlayPanel)">
+                    <img class="uploadFileIcon" src="assets/dist/images/MdUploadFile.svg" alt="" />
+                </span>
+                <a class="vl" *ngIf="enabledUploadButton"></a>
+                <span *ngIf="enabledAddButton" class="pb-2 pt-3 filter-collapse-text-bi" (click)="overlayPanel.toggle($event);onResized($event);">All
+                    Filters <button id="toggle" type="button" role="button"
+                        class="pl-1 header-pi-icon p-ripple p-element p-panel-header-icon p-panel-toggler p-link">
+                        <span><i [ngClass]="isOpened?'pi-chevron-down':'pi-chevron-up'" class="pi"></i></span></button></span>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-container *ngIf="tabName == GeneralTabName">
+    <div class="dashboard-head"  (resized)="onResized($event)">
+        <div class="row mr-0 ml-0 bgColor">
+            <div class="col-12 col-md-12 col-lg-12 col-xs-12 col-sm-12 pl-0 pr-0">
+                <div class="row mr-0 ml-0">
+                    <div class="investor-dashboard-container ml-0 mr-1">
+                        <div class="countercls headerborder">
+                            <div class="dynamicDisplayNameCss CurrencyandUnitcustom pb-1 TextTruncate">
+                                Invested Capital
+                            </div>
+                            <div class="UnitValueCss pb-1 TextTruncate"
+                                title="{{totalInvestedCapital|number : NumberDecimalConst.currencyDecimal}}">
+                                {{totalInvestedCapital == undefined ? 'NA' :totalInvestedCapital|number :
+                                NumberDecimalConst.currencyDecimal}} {{totalInvestedCapital == undefined ? '' : 'M'}}
+                            </div>
+                            <div class="CurrencyCss CurrencyandUnitcustom TextTruncate" title="{{Currency}}">
+                                {{Currency}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="investor-dashboard-container ml-1 mr-1">
+                        <div class="countercls headerborder">
+                            <div class="padding-top-pannel">
+                                <div class="dynamicDisplayNameCss CurrencyandUnitcustom  pb-1 TextTruncate">
+                                    Total Value
+                                </div>
+                                <div class="UnitValueCss pb-1 TextTruncate"
+                                    title="{{totalValue|number : NumberDecimalConst.currencyDecimal}}">
+                                    {{totalValue == undefined ? 'NA' : totalValue|number :
+                                    NumberDecimalConst.currencyDecimal}} {{totalValue == undefined ? '' : 'M'}}
+                                </div>
+                                <div class="CurrencyCss CurrencyandUnitcustom TextTruncate" title="{{Currency}}">
+                                    {{Currency}}
+                                </div>
+                            </div>
+                            <hr class="investor-card-divider">
+                            <div [ngClass]="'padding-bottom-pannel'">
+                                <div class="dynamicDisplayNameCss CurrencyandUnitcustom  pb-1 TextTruncate">
+                                    TVPI
+                                </div>
+                                <div class="UnitValueCss pb-1 TextTruncate"
+                                    title="{{(TVPI=='NA'?'NA':TVPI|number : NumberDecimalConst.currencyDecimal)}}">
+                                    {{(TVPI=='NA'?'NA':TVPI |number : NumberDecimalConst.currencyDecimal)}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="investor-dashboard-container ml-1 mr-1">
+                        <div class="countercls headerborder">
+                            <div class="padding-top-pannel">
+                                <div class="dynamicDisplayNameCss CurrencyandUnitcustom pb-1 TextTruncate">
+                                    Realized Value
+                                </div>
+                                <div class="UnitValueCss pb-1 TextTruncate"
+                                    title="{{totalRealizedValue|number : NumberDecimalConst.currencyDecimal}}">
+                                    {{totalRealizedValue == undefined ? 'NA' : totalRealizedValue|number :
+                                    NumberDecimalConst.currencyDecimal}} {{totalRealizedValue == undefined ? '' : 'M'}}
+                                </div>
+                                <div class="CurrencyCss CurrencyandUnitcustom TextTruncate" title="{{Currency}}">
+                                    {{Currency}}
+                                </div>
+                            </div>
+                            <hr class="investor-card-divider">
+                            <div [ngClass]="'padding-bottom-pannel'">
+                                <div class="dynamicDisplayNameCss CurrencyandUnitcustom pb-1 TextTruncate">
+                                    DPI
+                                </div>
+                                <div class="UnitValueCss pb-1 TextTruncate"
+                                    title="{{(DPI=='NA'?'NA':DPI | number : NumberDecimalConst.currencyDecimal)}}">
+                                    {{(DPI=='NA'?'NA':DPI | number : NumberDecimalConst.currencyDecimal)}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="investor-dashboard-container ml-1 mr-1">
+                        <div class="countercls headerborder">
+                            <div class="padding-top-pannel">
+                                <div class="dynamicDisplayNameCss CurrencyandUnitcustom pb-1 TextTruncate">
+                                    Unrealized Value
+                                </div>
+                                <div class="UnitValueCss pb-1 TextTruncate"
+                                    title="{{totalUnrealizedValue|number : NumberDecimalConst.currencyDecimal}}">
+                                    {{totalUnrealizedValue == undefined ? 'NA' : totalUnrealizedValue|number :
+                                    NumberDecimalConst.currencyDecimal}} {{totalUnrealizedValue == undefined ? '' :
+                                    'M'}}
+                                </div>
+                                <div class="CurrencyCss CurrencyandUnitcustom TextTruncate" title="{{Currency}}">
+                                    {{Currency}}
+                                </div>
+                            </div>
+                            <hr class="investor-card-divider">
+                            <div [ngClass]="'padding-bottom-pannel'">
+                                <div class="dynamicDisplayNameCss CurrencyandUnitcustom  pb-1 TextTruncate">
+                                    RVPI
+                                </div>
+                                <div class="UnitValueCss  pb-1 TextTruncate"
+                                    title="{{(RVPI=='NA'?'NA':RVPI |number : NumberDecimalConst.currencyDecimal)}}">
+                                    {{(RVPI=='NA'?'NA':RVPI |number : NumberDecimalConst.currencyDecimal)}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="investor-dashboard-container ml-1 mr-0">
+                        <div class="countercls headerborder">
+                            <div class="top-pannel custom-total-fund" [ngClass]=" 'padding-bottom-pannel'">
+                                <div class="dynamicDisplayNameCss CurrencyandUnitcustom  pb-1 TextTruncate">
+                                    Total Funds
+                                </div>
+                                <div class="UnitValueCss pb-1 TextTruncate" title="{{totalFunds|number}}">
+                                    {{totalFunds|number}}
+                                </div>
+                            </div>
+                            <hr class="investor-card-divider">
+                            <div [ngClass]="'padding-bottom-pannel'">
+                                <div class="dynamicDisplayNameCss CurrencyandUnitcustom pb-1 TextTruncate">
+                                    Portfolio Companies
+                                </div>
+                                <div class="UnitValueCss pb-1 TextTruncate" title="{{totalPortfolioCompanies|number}}">
+                                    {{totalPortfolioCompanies|number}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  pl-0 pr-0"  (resized)="onResized($event)" *ngIf="dataLoaded">
+                <ng-container *ngFor="let config of configuration">
+                    <container-element [ngSwitch]="config['name']">
+                        <container *ngSwitchCase="'GeographyAttribution'">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  pl-0 pr-0">
+                                <h5 class="pl-0 TextTruncate" title="Geography Attribution">
+                                    {{config?.displayName}} <span
+                                        *ngIf="sectorWiseAttributionData && sectorWiseAttribution_AsOfDate!=undefined">(as
+                                        of
+                                        {{sectorWiseAttribution_AsOfDate|date : "dd MMM, y"}})</span>
+                                </h5>
+                            </div>
+                            <div class=" chart-bg boxBorder col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  pl-0">
+                                <div class="row mr-0 ml-0">
+                                    <div class="pr-0 pl-0 col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="panel panel-default tab-bg tab-home-bg border-top-0">
+                                            <div class="panel-heading pr-0 pl-0 custom-tab-panel-heading pb-0">
+                                                <div class="panel-title custom-tabs custom-mat-tab">
+                                                    <nav mat-tab-nav-bar [backgroundColor]="background"
+                                                        [tabPanel]="tabPanel">
+                                                        <a mat-tab-link [disableRipple]="true"
+                                                            *ngFor="let region of regionList"
+                                                            (click)="onMapRegionChanged(region)"
+                                                            [active]="region.isActive" class="TextTruncate">
+                                                            {{region.region}} </a>
+
+                                                    </nav>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <mat-tab-nav-panel #tabPanel>
+                                    <div class="row mr-0 ml-0">
+                                        <div
+                                            class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0 pt-3">
+                                            <h6 class="text-md-center  Geography Attribution "
+                                                title="{{config?.displayName}} {{selectedRegion}}">
+                                                {{config?.displayName}} of {{selectedRegion}}
+                                            </h6>
+
+                                            <app-lineBar-chart class="" [lineChartType]="''" [barChartType]="''"
+                                                [isDisplay]="width" [NoOfDecimals]="0"
+                                                [data]="sectorWiseAttributionData" [xField]="'Sector'"
+                                                [yBarFields]="['Realized Value','Total Value']" [unit]="'$ in Mn'"
+                                                [yLineFields]="['Capital Invested']"></app-lineBar-chart>
+                                        </div>
+                                    </div>
+                                </mat-tab-nav-panel>
+                            </div>
+                        </container>
+                        <container *ngSwitchCase="'TVPIByVintageYear'">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  pl-0 pr-0">
+                                <h5 class="pl-0 TextTruncate" *ngIf="TVPIByVintageYear" title="{{config?.displayName}}">
+                                    {{config?.displayName}}</h5>
+                            </div>
+                            <div class=" chart-bg boxBorder col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  pl-0"
+                                *ngIf="TVPIByVintageYear">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  pt-3 pr-0 maxWidth">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
+                                                <label for="fundClosingDate defaultFontSize TextTruncate"
+                                                    title="From Year">From Year</label>
+                                            </div>
+                                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 pr-0">
+                                                <div class="input-group">
+                                                    <typeahead-control name="fromtoDate" class="vintageDate"
+                                                        [(ngModel)]="FromDate" [enableVirtualScroll]="false"
+                                                        (selectItem)="getFundWiseGrowthReports(true, $event,'FromDate')"
+                                                        [optionList]="yearOptions" [displayField]="'text'"
+                                                        [resultField]="'value'" #vintageYear="ngModel"
+                                                        [isRequired]="false">
+                                                    </typeahead-control>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2  pt-3 maxWidth toyear-p">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
+                                                <label for="fundClosingDate defaultFontSize TextTruncate"
+                                                    title="To Year">To Year</label>
+                                            </div>
+                                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0">
+                                                <div class="input-group maxWidth">
+                                                    <typeahead-control name="toDate" class="vintageDate"
+                                                        [(ngModel)]="ToDate" [enableVirtualScroll]="false"
+                                                        (selectItem)="getFundWiseGrowthReports(true, $event, 'ToDate')"
+                                                        [optionList]="yearOptions" [displayField]="'text'"
+                                                        [resultField]="'value'" #vintageYear="ngModel"
+                                                        [isRequired]="false">
+                                                    </typeahead-control>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"
+                                    *ngIf="TVPIByVintageYear.length==0">
+                                    <app-empty-state [isGraphImage]="true"></app-empty-state>
+                                </div>
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 line-chart-section bar-chart-padd pb-0"
+                                    *ngIf="TVPIByVintageYear.length>0">
+                                    <app-lineBar-chart [isDisplay]="width" [isTickMin]="true" [data]="TVPIByVintageYear"
+                                        [xField]="'Year'" [yBarFields]="['TVPI']" [yLineFields]="['No Of Funds']">
+                                    </app-lineBar-chart>
+                                </div>
+                            </div>
+                        </container>
+                        <container *ngSwitchCase="'SectorWiseInvestments'">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12  pl-0 pr-0">
+                                <h5 class="pl-0 TextTruncate" title="Sector Wise Investments"
+                                    *ngIf="reportData!=undefined">
+                                    {{config?.displayName}} <span
+                                        *ngIf="sectorData && sectorWiseInvestements_AsOfDate!=undefined">(as
+                                        of {{sectorWiseInvestements_AsOfDate|date : "dd MMM, y"}})</span>
+
+                                </h5>
+                            </div>
+                            <div class=" chart-bg boxBorder col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  pl-0 "
+                                *ngIf="sectorData.length==0">
+                                <app-empty-state [isGraphImage]="true"></app-empty-state>
+                            </div>
+                            <div class="chart-bg boxBorder col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  pl-0 donutHeight"
+                                *ngIf="sectorData.length>0">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3 pt-1 pr-0 pl-0">
+                                        <app-donut-chart [isDynamicHeight]="true" [isDisplay]="width" [unit]="''"
+                                            [NoOfDecimals]="1" [catField]="'Sector'" [valField]="'Total Value'"
+                                            [data]="sectorData" [title]="'Total Value'"></app-donut-chart>
+                                    </div>
+                                    <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-9 line-padding pr-0 pl-0">
+                                        <app-lineBar-chart [lineChartType]="'number'" [customHeight]="true"
+                                            [barChartType]="'currency'" [isDisplay]="width" class="home-line-chart"
+                                            [NoOfDecimals]="0" [data]="sectorData" [xField]="'Sector'"
+                                            [yBarFields]="['Total Value']" [yLineFields]="['# of Investments']"
+                                            [height]="350" [unit]="isPizarro?'ZAR in Mn':'$ in Mn'"></app-lineBar-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </container>
+                        <container *ngSwitchCase="'RegionWiseInvestments'">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  pl-0 pr-0">
+                                <h5 class="pl-0 col-12 TextTruncate" title="Region Wise Investments"
+                                    *ngIf="reportData!=undefined">
+                                    {{config?.displayName}} <span
+                                        *ngIf="regionData && regionWiseInvestements_AsOfDate!=undefined">(as
+                                        of {{regionWiseInvestements_AsOfDate|date : "dd MMM, y"}})</span>
+
+                                </h5>
+                            </div>
+                            <div class=" col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 chart-bg boxBorder pl-0"
+                                *ngIf="reportData!=undefined">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12 col-12 col-xs-12 col-xl-12"
+                                        *ngIf="regionData.length==0">
+                                        <app-empty-state [isGraphImage]="true"></app-empty-state>
+                                    </div>
+                                    <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-3  pt-1 pr-0 pl-0"
+                                        *ngIf="regionData.length>0">
+                                        <app-donut-chart [isDynamicHeight]="true" [isDisplay]="width" [unit]="''"
+                                            [NoOfDecimals]="1" [catField]="'Region'" [valField]="'Total Value'"
+                                            [data]="regionData" [title]="'Total Value'"></app-donut-chart>
+                                    </div>
+                                    <div class="col-8 col-sm-8 col-md-8 col-lg-8 col-xl-9 line-padding pr-0 pl-0"
+                                        *ngIf="regionData.length>0">
+
+                                        <app-lineBar-chart [lineChartType]="''" [customHeight]="true"
+                                            [barChartType]="''" [isDisplay]="width" [data]="regionData"
+                                            [xField]="'Region'" [yBarFields]="['Total Value']"
+                                            [yLineFields]="['# of Investments']" [height]="300"
+                                            [unit]="'$ in Mn'"></app-lineBar-chart>
+                                    </div>
+                                </div>
+                            </div>
+                        </container>
+                        <container *ngSwitchCase="'Top10PortfolioCompaniesByTotalValue'">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  pl-0 pr-0">
+                                <h5 class="pl-0 col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 TextTruncate"
+                                    title="Top 10 Portfolio Companies by Total Value" *ngIf="topCompanyData">
+                                    {{config?.displayName}} <span
+                                        *ngIf="topCompanyData && top10PC_AsOfDate!=undefined">(as of
+                                        {{top10PC_AsOfDate|date : "dd MMM, y"}})</span>
+
+                                </h5>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 chart-bg boxBorder  pl-0">
+                                <div class="line-chart-section pt-4 pb-0">
+                                    <app-empty-state [isGraphImage]="true"
+                                        *ngIf="topCompanyData.length==0"></app-empty-state>
+                                    <app-bar-chart *ngIf="topCompanyData.length>0" [isDisplay]="width"
+                                        [isDecimalDisplay]="true" [NoOfDecimals]="0"
+                                        class="portfolio-companies-line-chart" [data]="topCompanyData"
+                                        [xField]="'Company Name'" [yField]="'Total Value'" [valueSuffix]="'M'"
+                                        [unit]="isPizarro?'ZAR in Mn':'$ in Mn'">
+                                    </app-bar-chart>
+                                </div>
+                            </div>
+                        </container>
+                        <container *ngSwitchCase="'ValueByStrategy'">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  pl-0 pr-0">
+                                <h5 class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pl-0 TextTruncate"
+                                    title="Value by Strategy">
+                                    {{config?.displayName}} <span
+                                        *ngIf="strategyTotalValueData && strategyTotalValueData_AsOfDate!=undefined">(as
+                                        of
+                                        {{strategyTotalValueData_AsOfDate|date : "dd MMM, y"}})</span>
+
+                                </h5>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 chart-bg boxBorder pl-0">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pt-4">
+
+                                        <h6 class="text-md-center TextTruncate" title="Total Value">
+                                            Total Value
+                                        </h6>
+                                        <div class="chart-section">
+                                            <app-empty-state [isGraphImage]="true"
+                                                *ngIf="strategyTotalValueData?.length==0"></app-empty-state>
+                                            <app-donut-chart *ngIf="strategyTotalValueData?.length>0"
+                                                [isDisplay]="width" [height]="'350px'" [unit]="''" [NoOfDecimals]="1"
+                                                [catField]="'Strategy'" [valField]="'TotalValue'"
+                                                [data]="strategyTotalValueData"
+                                                [title]="'Total Value'"></app-donut-chart>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pt-4">
+
+                                        <h6 class="text-md-center TextTruncate" title="Total Unrealized Value">
+                                            Total Unrealized Value
+                                        </h6>
+                                        <div class="chart-section">
+                                            <app-empty-state [isGraphImage]="true"
+                                                *ngIf="strategyUnrealizedValueData?.length==0"></app-empty-state>
+                                            <app-donut-chart *ngIf="strategyUnrealizedValueData?.length>0"
+                                                [isDisplay]="width" [unit]="''" [height]="'350px'" [NoOfDecimals]="1"
+                                                [catField]="'Strategy'" [valField]="'TotalUnrealizedValue'"
+                                                [data]="strategyUnrealizedValueData"
+                                                [title]="'Total Unrealized Value'"></app-donut-chart>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </container>
+                        <container *ngSwitchDefault>
+                        </container>
+                    </container-element>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<ng-container  *ngIf="tabName == CommonTabName || tabName == MyDashboardTabName">
+    <div class="row mr-0 ml-0">
+        <div class="col-12 col-md-12 col-lg-12 col-xs-12 col-sm-12 pl-0 pr-0">
+            <div class="data-analytics" (resized)="onResized($event)">
+                <div class="row mr-0 ml-0 bgColor">
+                    <div class="col-12 col-md-12 col-lg-12 col-xs-12 col-sm-12 pl-0 pr-0">
+                        <app-data-analytics [triggerApplyEvent]="triggerApplyEvent" [tabType]="tabName" [dataAnalyticsUploadModel]="dataAnalyticsUploadModel" [isCreateDashboard]="isNewDashboard"
+                            [dataAnalyticsModel]="dataAnalyticsModel" (onSaveDashboardEvent)="onSaveDashboardEvent($event)"></app-data-analytics>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ng-container>
+
+<p-overlayPanel #overlayPanel styleClass="{{sideNavBaseClass}}" styleClass="data-analytics-panel" [showCloseIcon]="true" [dismissable]="false"
+    [style]="{width: 'calc(100% - 74px) !important',top: '84px',left: '66px',overlayArrowLeft:'1781px'  }">
+    <ng-template pTemplate="content">
+        <app-data-analytics-filter [dataAnalyticsFilterdata]="dataAnalyticsModel" [selectReport]="selectReport" [saveFiltersOptionsList]="saveFiltersOptionsList"
+            (onInputChanges)="ChangeInput($event)"></app-data-analytics-filter>
+        <div class="row mr-0 ml-0 filter-panel-footer">
+            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                <div class=" float-right draft-action">
+                    <nep-button Type="Primary" [disabled]="!enabledApplybtn" 
+                        (click)="Apply();overlayPanel.toggle($event)">Apply</nep-button>
+                </div>
+                <div class=" float-right draft-action d-none">
+                    <nep-button Type="Secondary" class="button-padding-reset" [disabled]="!enabledApplybtn"
+                        (click)="onSavePresetButton()">Save Preset</nep-button>
+                </div>
+                <div class=" float-right draft-action pr-2">
+                    <nep-button Type="Secondary" [disabled]="!enabledResetButton" 
+                        (click)="resetDataAnalyticsModel()">Reset</nep-button>
+                </div>
+
+            </div>
+        </div>
+    </ng-template>
+</p-overlayPanel>
+
+<div *ngIf="isSaveFilterPopup" >
+    <confirm-modal class="data-analytics-filter-model AddOrUpdateKpi" primaryButtonName="Confirm" (secondaryButtonEvent)="onClose()"
+        [disablePrimaryButton]="disableConfirmSave" (primaryButtonEvent)="confirmSave();" id="add_template"
+        secondaryButtonName="Cancel" [modalTitle]="title">
+        <div class="row mr-0 ml-0">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0">
+                <div class="row mr-0 ml-0">
+                    <div class="col-lg-12 col-md-5 col-xs-5 pl-0 pr-0 ">
+                        <div class="mandatory-label">Filter Name
+                        </div>
+                        <nep-input  (onChange)="ontemplateChange($event)" [ngClass]="{'custom-error-kpi-input':isexits}"
+                            [value]="filterName" [placeholder]=placeholderFilterName
+                            class="kpis-custom-select custom-nep-input filter-txt-color lp-nep-input "></nep-input>
+                        <div *ngIf="isexits" class="nep-error">Filter name already exits</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </confirm-modal>
+</div>
+
+<app-data-analytics-upload *ngIf="isOpenUpload" (onInputChanges)="ChangeInputFileUpload($event)" (onClosePopUpClick)="closePopup($event)"></app-data-analytics-upload>

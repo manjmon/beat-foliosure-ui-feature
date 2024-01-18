@@ -1,0 +1,262 @@
+@import "../../../variables";
+.add-firm-section{
+  margin-bottom: 80px !important;
+  label
+  {
+      padding-left: 12px !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+      white-space: nowrap !important;
+      max-width: 100% !important;
+      margin-top: 0px !important;
+      margin-bottom: 0px !important;
+  }
+  .static-card {
+    border-radius: 4px 4px 4px 4px !important;
+    opacity: 1;
+    border: 1px solid #DEDFE0 !important;
+    box-shadow: 0px 0px 12px #00000014;
+    padding-bottom: 16px !important;
+  }
+ .custom-padding-bottom{
+  padding-bottom: 20px !important;
+  }
+  .static-card1 {
+    border-radius: 4px 4px 4px 4px !important;
+    opacity: 1;
+    border: 1px solid #DEDFE0 !important;
+    box-shadow: 0px 0px 12px #00000014;
+    padding-bottom: 0px !important;
+  }
+  .card-border {
+    border: 1px solid #DEDFE0;
+    border-radius: 4px;
+    opacity: 1;
+    overflow-x: hidden;
+  }
+  .text-align-left{
+    text-align: left !important;
+  }
+  .text-align-center{
+    text-align: center !important;
+  }
+  .card-header {
+    background: #FAFAFB 0% 0% no-repeat padding-box !important;
+    border-bottom: 1px solid #DEDFE0;
+}
+
+.card-header-main {
+    font-size: 14px !important;
+}
+
+.card-body {
+    margin-bottom: 0px !important;
+}
+    .form-control{
+        border-bottom: 1px solid #C9C9D4 !important;
+        border-radius: 0rem;
+        font-size: inherit;
+        border-left: none !important;
+        border-top: none !important;
+        border-right: none !important;
+
+      }
+      .custom-textarea{
+        padding: 16px !important;
+        textarea{
+            border-bottom: none !important;
+        }
+      }
+      .fund-header{
+        color: #212121 !important;
+        opacity: 1 !important;
+        
+      }
+      .tab-header{
+        margin-top: 20px !important;
+        padding-top: 0px !important
+      }
+      .panel-heading{
+        background-color: #FAFAFB !important;
+      }
+      .cashflow-tbl .p-datatable-scrollable-body > table > .p-datatable-tbody > tr:first-child > td, .p-datatable .p-datatable-tbody > tr:first-child > td{
+        border-left: 0 !important;
+      }
+      .border-none
+    {
+      border-bottom: none !important;
+    }  
+    .p-datatable .p-datatable-thead > tr > th, .p-datatable .p-datatable-thead > tr > th:hover{
+      border-color: #dee2e6 !important;
+    }
+      .headquarter-row{
+        margin: 20px 0px 20px 0px !important;
+      }
+      .headquarter-row1{
+        margin: 8px 0px 8px 0px !important;
+      }
+      .pc-tabs > .nav-tabs .nav-link.active, .pc-tabs > .nav-tabs .nav-item.show .nav-link {
+        border-bottom: #FFF 4px solid !important;
+    }
+      .custom-form-group{
+        margin: 0 !important;
+      }
+      .p-autocomplete-panel .p-autocomplete-items .p-autocomplete-item{
+        text-align: left !important;
+      }
+      .custom-footer{
+        background: #FAFAFB 0% 0% no-repeat padding-box;
+        box-shadow: 0px 0px 6px #00000014;
+        border: 1px solid #DEDFE0;
+        opacity: 1;
+        margin-top: 20px !important;
+      }
+      .update-row{
+        padding: 2px 20px !important;
+        margin: 0 !important;
+      }
+      .fixed-footer {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        background: #FAFAFB 0% 0% no-repeat padding-box;
+        box-shadow: 0px 0px 6px #00000014;
+        border: 1px solid #DEDFE0;
+        opacity: 1;
+        padding-top: 4px;
+        padding-bottom: 2px;
+    }
+    .btn-warning{
+      background: #FFFFFF 0% 0% no-repeat padding-box !important;
+      border: 1px solid #021155;
+      border-radius: 4px;
+      opacity: 1;
+    }
+    .custom-bgcolor{
+      background-color: #ffffff !important;
+      letter-spacing: 0px;
+      color: #021155 !important;
+      opacity: 1;
+      border: 1px solid #021155;
+      border-radius: 4px;
+    }
+    .custom-firm-padding {
+
+      .firm-custom-padding:first-child{
+        padding-left: 0px !important;
+        padding-right: 40px !important;
+      }
+      .firm-custom-padding:last-child{
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+      }
+      .firm-custom-padding{
+        padding-left: 00px;
+        padding-right: 40px !important;
+      }
+    }
+    .custom-firm-padding .firm-custom-padding:nth-child(4n)
+    {
+        padding-right: 16px !important;
+    }
+    .nav-link {
+      background-color: transparent !important;
+      letter-spacing: 0px;
+      color: $nep-text-grey;
+      font-size: 0.9rem !important;
+      padding-top: 9px;
+      padding-bottom: 9px;
+      &.active {
+          background-color: $nep-white !important;
+          font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+          color: $nep-primary !important;
+          font-size: 0.9rem !important;
+      }
+  }
+  .cashflow-tbl .p-datatable-frozen-view>.p-datatable-scrollable-body>table>.p-datatable-tbody>tr>td:last-child {
+    border-right: none !important;
+    border-left: none !important;
+  }
+  .cashflow-tbl .p-datatable-resizable .p-datatable-tbody>tr>td, .p-datatable-resizable .p-datatable-tfoot>tr>td, .p-datatable-resizable .p-datatable-thead>tr>th{
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+  .cashflow-tbl .p-datatable-frozen-view .p-datatable-scrollable-body {
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+  
+  .custom-tabs>.nav-tabs .nav-link.active,
+  .custom-tabs>.nav-tabs .nav-item.show .nav-link,
+  .nav-tabs .nav-link.active,
+  .nav-tabs .nav-item.show .nav-link {
+      color: $nep-nav-tab;
+      background-color: $nep-white;
+      border-color: $nep-nav-tab-border-color $nep-nav-tab-border-color $nep-white-secondary;
+      border-bottom: none !important;
+      top: 2px !important;
+      position: relative !important;
+  }
+  mat-custom-checkbox span{
+    max-width: 100% !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+  }
+  .mat-custom-checkbox > label {
+    padding-left: 0 !important;
+  }
+  
+  .custom-margin-top .p-autocomplete-dd input, .pi-calendar.pi-calendar-w-btn input {
+    height: 35px !important;
+  }
+  .custom-margin-top .p-autocomplete-dd .p-autocomplete-dropdown {
+    height: 35px;
+  }
+  .add-firm-table table tbody > tr > td:first-child {
+    border-left: none !important;
+  }
+  .add-firm-table table tbody > tr > td {
+    border-bottom: none !important;
+  }
+  .add-firm-table table tbody > tr > td:last-child {
+    border-right: none !important;
+  }
+  .add-firm-geographicLocations-table .p-datatable-frozen-view>.p-datatable-scrollable-body>table>.p-datatable-tbody>tr>td:last-child {
+    border-right: 0 !important;
+    border-left: 0 !important;
+  }
+  .add-firm-geographicLocations-table .p-datatable .p-datatable-thead > tr > th{
+    border-left: 0 !important;
+    //border-bottom: 0 !important;
+  }
+  .add-firm-geographicLocations-table .p-datatable .p-datatable-thead > tr > th:last-child{
+    border-right: 0 !important;
+  }
+  .add-firm-detail-section .firm-geographicLocations-table .p-datatable .p-datatable-thead > tr:first-child > th{
+    border-top: 0 !important;
+  }
+  .add-firm-geographicLocations-table .p-datatable-scrollable-body > table > .p-datatable-tbody > tr:first-child > td, .p-datatable .p-datatable-tbody > tr > td{
+    border-left: 0 !important;
+  }
+  .add-firm-geographicLocations-table .p-datatable-scrollable-body > table > .p-datatable-tbody > tr:last-child > td, .p-datatable .p-datatable-tbody > tr > td:last-child{
+    border-right: 0 !important;
+  }
+  .add-firm-geographicLocations-table .p-datatable-scrollable-body > table > .p-datatable-tbody > tr:last-child > td, .p-datatable .p-datatable-tbody > tr > td{
+    border-bottom: 0 !important;
+  }
+  .add-firm-geographicLocations-table .p-datatable-resizable .p-datatable-tbody>tr>td, .p-datatable-resizable .p-datatable-tfoot>tr>td, .p-datatable-resizable .p-datatable-thead>tr>th{
+    border-left: 0 !important;
+  }
+  
+  .add-firm-geographicLocations-table .p-datatable-frozen-view .p-datatable-scrollable-body {
+    border-left: 0 !important;
+  }
+  .p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody > tr > td{
+    border-width: 1px 1px 1px 1px !important
+  }
+  .p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(.p-datatable-tbody) .p-datatable-tbody > tr > td:last-child{
+    border-width: 1px 1px 1px 1px !important
+  }
+  
+}

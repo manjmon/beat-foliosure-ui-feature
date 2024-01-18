@@ -1,0 +1,24 @@
+<div class="beat-autocomplete" style="margin-top:50px;margin-bottom: 50px;">
+  <div class="ng-autocomplete">
+    <ng-autocomplete 
+      [minQueryLength]="2"
+      [data]="data"
+      [searchKeyword]="keyword"
+      (selected)='selectEvent($event)'
+      (inputChanged)='onChangeSearch($event)'
+      (inputFocused)='onFocused($event)'
+      [itemTemplate]="itemTemplate"
+      [placeholder]="placeholderText"
+      (inputCleared)="clearText()"
+      [notFoundTemplate]="notFoundTemplate">                                 
+    </ng-autocomplete>
+    <span *ngIf="isSearch" class="x search-auto"><i class="fa fa-search"></i></span>
+    <ng-template #itemTemplate let-item>
+    <a [innerHTML]="item.name"></a>
+    </ng-template>
+    
+    <ng-template #notFoundTemplate let-notFound>
+    <div [innerHTML]="notFound"></div>
+    </ng-template>
+    </div>
+</div> 

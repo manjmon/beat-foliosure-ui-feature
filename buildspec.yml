@@ -1,0 +1,46 @@
+version: 0.2
+env:
+  variables:
+    SonarQubeToken: "sqp_42be6b043356728e2ebddb2906bbb37cd7f935fd"
+    CodeScannerEnable: "FALSE"
+phases:
+  pre_build:
+    commands:
+      - |
+          if [ "$CodeScannerEnable" == "TRUE" ] ; then
+              sh install-google-chrome.sh
+              wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
+              unzip ./sonar-scanner-cli-3.3.0.1492-linux.zip
+              export PATH=$PATH:/sonar-scanner-3.3.0.1492-linux/bin/  
+          fi
+      # - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
+      # - unzip ./sonar-scanner-cli-3.3.0.1492-linux.zip
+      # - export PATH=$PATH:/sonar-scanner-3.3.0.1492-linux/bin/                
+      - export NODE_OPTIONS=--openssl-legacy-provider   
+      - export NODE_OPTIONS=--max-old-space-size=8192
+  build:
+    commands:
+      - npm install --force
+      - npm i -g @angular/cli@16.1.2
+      - npm i -g webpack
+      - npm i -g webpack-dev-server
+      - npm i -D webpack-merge --force     
+      #- npm i -g gzipper
+      - echo Build started
+      - echo ${SonarQubeToken}
+      - |
+            if [ "$CodeScannerEnable" == "TRUE" ] ; then
+                npm run coverage 
+                npm run sonar
+
+            fi     
+      - ng build --aot --optimization --configuration=production
+      - cp -R web.config ./dist/FolioSure     
+artifacts:
+  files:
+    - ./dist/**/*
+    - ./appspec.yml
+    # - ./web.config
+    - ./AfterInstall.ps1
+    - ./BeforeInstall.ps1
+    - ./index.html

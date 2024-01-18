@@ -1,0 +1,168 @@
+.deal-track-model {
+    .close-icon {
+        cursor: pointer;
+    }
+    form {
+        padding: 0px !important;
+    }
+    .valuation-date-calendar {
+        position: absolute;
+        float: right;
+        top: 10px;
+        right: 10px;
+    }
+    .nep-card {
+        width: 600px !important;
+        top: 15% !important;
+        .nep-card-header {
+            padding: 0px !important;
+            .user-header {
+                font-size: 14px;
+                letter-spacing: 0.17px;
+                color: #000000;
+                opacity: 1;
+                padding:20px !important;
+                padding-top: 18px !important;
+                padding-bottom: 18px !important;
+                .float-left {
+                    font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif !important;
+                }
+            }
+        }
+        .nep-card-footer {
+            padding: 12px 20px !important;
+        }
+        .nep-card-body {
+            padding: 20px;
+            padding-bottom: 0px !important;
+            max-height: 400px;
+            overflow-y: auto;
+            .user-upload {
+                letter-spacing: 0px;
+                color: #212121;
+                a {
+                    color: #021155 !important;
+                    text-decoration: underline !important;
+                }
+                .desc-header {
+                    font-weight: bold;
+                }
+            }
+        }
+        .right-border {
+            border-right: 1px solid #DEDFE0;
+        }
+        .click-here {
+            font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+        }
+        label {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            letter-spacing: 0px;
+            color: #55565A;
+            padding-left: 12px;
+            max-width: 180px;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            white-space: nowrap !important;
+        }
+        .disabledBtn label{
+            color: #AAAAAC !important;
+        }
+        .disabledBtn .form-control[readonly] {
+            color: #B7B8B9 !important;
+            border-bottom: 1px solid #D9D9DD !important;
+        }
+
+        .detail-sec {
+            color:#212121 !important;
+            padding-left: 12px;
+        }
+        label[readonly] {
+            color: #AAAAAC !important;
+        }
+.form-control[readonly] {
+    color: #CDCDD2 !important;
+    border-bottom: 1px solid #D9D9DD !important;
+}
+        .form-control {
+            letter-spacing: 0px !important;
+            color: #212121 !important;
+            opacity: 1 !important;
+        }
+        .errorColor {
+            color: #c62828 !important;
+        }
+        .successColor {
+            color: #388e3c !important;
+        }
+        .form-control.is-invalid {
+            border-bottom: 1px solid #c62828 !important;
+        }
+        .form-control.is-invalid:focus {
+            box-shadow: none !important;
+        }
+        .upload-error-section {
+            height: 160px;
+            overflow-y: auto;
+        }
+        .form-group.required .control-label:after {
+            content: "*";
+            color: red;
+        }
+    }
+
+    .custom-controls {
+        .col-md-6:nth-of-type(odd) {
+            padding-bottom: 20px;
+            padding-right: 10px !important;
+        }
+
+        .col-md-6:nth-of-type(even) {
+            padding-bottom: 20px;
+            padding-left: 10px !important;
+        }
+    }
+}
+
+.sec-btn {
+    padding-right: 12px;
+}
+
+form {
+    .form-group {
+        margin: 0px !important;
+    }
+}
+.nep-card {
+    width: 600px !important;
+    top: 15% !important;
+}
+
+.custom-controls {
+    .col-md-6:nth-of-type(odd) {
+        padding-bottom: 20px;
+        padding-right: 10px !important;
+    }
+
+    .col-md-6:nth-of-type(even) {
+        padding-bottom: 20px;
+        padding-left: 10px !important;
+    }
+}
+
+.reloadBtn {
+    margin-right: 12px !important;
+    border-radius: 4px !important;
+    border: 1px solid #021155 !important;
+    background-color: #ffffff !important;
+    color: #021155 !important;
+}
+
+.disabledBtn {
+    color: #AAAAAC !important;
+}
+
+.disabledBtnValue {
+    color: #B7B8B9 !important;
+}

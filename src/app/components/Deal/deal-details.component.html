@@ -1,0 +1,488 @@
+﻿<div class="row mr-0 ml-0 deal-detail-section">
+    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 pr-0 pl-0">
+        <div class="row mr-0 ml-0 card card-main static-card pb-4">
+            <div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+                <div class="static-pc-section fund-detail section1-height chart-area row mr-0 ml-0 mb-0">
+                    <div class="col-12 pr-0 pl-0">
+                        <div class="row mr-0 ml-0 pb-1 static-bg deal-detail-header-h" >
+                            <div class="col-12 pr-0 pl-0 chart-title pc-section-header">
+                                <div class="float-right margin-right fund-static-header">
+                                    <a [routerLink]="['/save-deal',id]" title="Edit "
+                                        [hideIfUnauthorized]='{featureId:feature.Deal,action:"edit"}'><img alt=""
+                                            src="assets/dist/images/EditIcon.svg"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0">
+                            <div class="col-sm-12 pr-3 pt-3 pb-2">
+                                <div class="line-wrapper">
+                                    <span>{{pageDetails.displayName}} </span>
+                                    <div class="line ml-2"></div>
+                                </div>
+                            </div>
+                            <div class="pl-3 pr-3 Fund-section col-12">
+                                <div class="row mr-0 ml-0"
+                                    *ngIf="dealData !== undefined && dealData !== null && dealData.length > 0">
+                                    <ng-container *ngFor="let deal of dealData">
+                                        <div class="col-4 pr-0 pt-2 mb-1 custom-deal-label-padding" *ngIf="deal.hasLink">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="pr-0 pl-0 col-5">
+                                                    <div class="truncate-text ">
+                                                        <span title="{{deal.displayName}}">{{deal.displayName}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="pr-0 pl-2 col-7  custom-deal-value-padding">
+                                                    <div class="truncate-value">
+                                                            <a class="deal-link"  *ngIf="model.fundDetails!=null;else empty_Text" title="{{deal.displayName}}" [routerLink]="[deal.link, deal.linkEncryptedId]">{{deal.value}}</a>
+                                                        <ng-template #empty_Text class="detail-sec deal-link">NA
+                                                        </ng-template>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 pt-2 mb-1 pr-0 custom-deal-label-padding" *ngIf="!deal.hasLink">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="pr-0 pl-0 col-5">
+                                                    <div class="truncate-text">
+                                                        <span title="{{deal.displayName}}">{{deal.displayName}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="pr-0 pl-2 col-7 custom-deal-value-padding">
+                                                    <div class="truncate-value">
+                                                            <span title="{{deal.value}}"
+                                                                *ngIf="deal.name == 'EnterpriseValue' && deal.displayName != 'Vintage' && deal.displayName != 'Holding Period (in days)'">
+                                                                <ng-container
+                                                                    *ngIf="deal.value != 'NA' && deal.value != ''">
+                                                                    {{deal.value | number:
+                                                                    NumberDecimalConst.currencyDecimal}}
+                                                                </ng-container>
+                                                                <ng-container
+                                                                    *ngIf="deal.value == 'NA' || deal.value == ''">
+                                                                    NA
+                                                                </ng-container>
+                                                            </span>
+                                                            <span title="{{deal.value}}"
+                                                                *ngIf="deal.name != 'EnterpriseValue' && deal.name != 'InvestmentDate' && deal.displayName != 'Vintage' && deal.displayName != 'Holding Period (in days)'">{{isNumberCheck(deal.value)
+                                                                ? (deal.value | number:
+                                                                NumberDecimalConst.percentDecimal):
+                                                                (deal.value == null || deal.value == "" || deal.value ==
+                                                                "NA" )?'NA'
+                                                                : deal.value}}</span>
+                                                            <span title="{{deal.value}}"
+                                                                *ngIf="deal.value !== 'NA' && (deal.name === 'EntryOwnershipPercent' || deal.name === 'CurrentExitOwnershipPercent')">%</span>
+                                                            <span title="{{deal.value}}"
+                                                                *ngIf="deal.displayName == 'Vintage'">{{deal.value}}</span>
+                                                            <span title="{{deal.value}}"
+                                                                *ngIf="deal.displayName == 'Holding Period (in days)'">{{deal.value}}</span>
+                                                            <span title="{{deal.value}}"
+                                                                *ngIf="deal.name == 'InvestmentDate'">{{(model.investmentDate
+                                                                |
+                                                                date:'MM/dd/yyyy')|| "NA"}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mr-0 ml-0 header-section header-performance">
+            <div class="header-section col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                <div class="fund-header pb-2">
+                    {{headerText}}
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 trackrecord-section">
+                <div class="financial-page">
+                    <div class="panel panel-default border-0 tab-bg">
+                        <div class="panel-heading">
+                            <div class="panel-title custom-tabs">
+                                <ul class="nav nav-tabs ">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link nav-custom active" id="home-tab" data-bs-toggle="tab"
+                                            type="button" role="tab" aria-controls="home" aria-selected="true">
+                                            Fund currency
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="d-inline-block pref-icon float-right">
+                                <a title="Add" (click)="open(fundHoldingModel)">
+                                    <img alt="" tabindex="0" class="tc-add"  title="Add"
+                                        src="assets/dist/images/plus.svg" /></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-bg">
+                        <div>
+                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 fund-performance-content chart-area deal-detail-header-b">
+                                <div class="align-items-start">
+                                    <div class="ui-widget-header">
+                                        <div class="row mr-0 ml-0 deal-detail-header-bg">
+                                            <div
+                                                class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                                                <div class="float-left">
+                                                    <div class="allvalues-kpis">All values in:
+                                                        {{model?.currencyDetail?.currencyCode}}</div>
+                                                </div>
+                                                <div class="float-right margin-right">
+                                                    <div class="d-inline-block search">
+                                                        <span class="fa fa-search fasearchicon"></span>
+
+                                                        <input #tblportfolioCompanyFundHoldingColumns
+                                                            (input)="tblFundHolding.filterGlobal($event.target.value, 'contains')"
+                                                            type="text" pInputText
+                                                            class="search-text-company TextTruncate companyListSearchHeight"
+                                                            placeholder="Search">
+                                                    </div>
+                                                    <div class="d-inline-block pl-2"><a (click)="exportFundHoldingValues()">
+                                                        <img tabindex="0"
+                                                        src="assets/dist/images/Cloud-download.svg"
+                                                        class="cursor-filter" title="Export"
+                                                         alt="" />
+                                                    </a><span
+                                                            class="excel-load deal-detail-header-m" 
+                                                            *ngIf="isExportLoading">
+                                                            <i aria-hidden="true"
+                                                                class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                                        </span></div>
+                                                    <div class="d-inline float-left-right custom-border-right">
+                                                        <span class="col-divider">
+                                                        </span>
+                                                    </div>
+                                                    <div class="d-inline-block  pref-icon">
+                                                        <img id="dropdownMenuButton" #dropdownMenuButton
+                                                            [matMenuTriggerFor]="menu"
+                                                            src="assets/dist/images/ConfigurationWhite.svg"
+                                                            class="cursor-filter" alt=""
+                                                            #tRecordTrigger="matMenuTrigger" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="datatable-container">
+                                            <p-table styleClass="p-datatable-gridlines" [ngClass]="portfolioCompanyFundHolding.length==0?'no-data':'data-view'" class="cashflow-tbl migration-frozen-table"
+                                                #tblFundHolding [columns]="portfolioCompanyFundHoldingColumns"
+                                                [totalRecords]="totalPortfolioCompanyFundHoldingRecords"
+                                                [value]="portfolioCompanyFundHolding" [lazy]="true"
+                                                (onLazyLoad)="loadPortfolioFundHoldingLazy($event)" [scrollable]="true"
+                                                scrollHeight="50vh" scrollWidth="100%" 
+                                                [rowsPerPageOptions]="pagerLength"
+                                                [globalFilter]="tblportfolioCompanyFundHoldingColumns"
+                                                [multiSortMeta]="fundHoldingMultiSortMeta" sortMode="multiple">
+                                                <ng-template pTemplate="header" let-columns>
+                                                    <tr>
+                                                        <ng-container *ngFor="let col of frozenDealTableColumns; index as i">
+                                                            <th  pFrozenColumn  [ngStyle]="{'width':'303px'}">
+                                                                {{col.header}}
+                                                            </th>
+                                                        </ng-container>
+                                                        <ng-container *ngFor="let col of columns;let end = last">
+                                                            <th [ngClass]="(col.header=='Quarter')?'frozen-header-tr-Width':''"
+                                                                *ngIf="col.header=='Quarter'"
+                                                                title="{{col.displayName}}"
+                                                                class="TextTruncate-investor table-data-left"
+                                                                [pSortableColumn]="col.displayName">
+                                                                {{col.field}}
+                                                                <p-sortIcon [field]="col.displayName">
+                                                                </p-sortIcon>
+                                                            </th>
+                                                            <th class="TextTruncate"
+                                                                *ngIf="col.header!='Quarter' && !end"
+                                                                [pSortableColumn]="!col.isCustom?col.name:'Quarter'">
+                                                                {{col.displayName}}
+                                                                <p-sortIcon [field]="!col.isCustom?col.name:'Quarter'">
+                                                                </p-sortIcon>
+                                                            </th>
+                                                            <th *ngIf="col.name=='Action'" class="text-center"> {{col.displayName}}</th>
+                                                        </ng-container>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="body" let-portfolioCompanyFundHolding
+                                                    let-columns="columns">
+                                                    <tr>
+                                                        <ng-container *ngFor="let col of frozenDealTableColumns;">
+                                                            <td [ngStyle]="{'width':'303px'}" pFrozenColumn [ngClass]="(col.header=='Quarter')?'frozen-header-tr-Width border-right-0 border-left-0':''"
+                                                            title=" {{portfolioCompanyFundHolding?.Quarter!=null?portfolioCompanyFundHolding?.Quarter:'NA'}}"
+                                                            *ngIf="col.header=='Quarter'">
+                                                            {{
+                                                            portfolioCompanyFundHolding?.Quarter!=null?portfolioCompanyFundHolding?.Quarter:'NA'
+                                                            }}
+                                                        </td>
+                                                        </ng-container>
+                                                        <ng-container *ngFor="let col of columns;let last = last">
+                                                            
+                                                            <td *ngIf="col.header!='Quarter'&&!last"
+                                                                [ngClass]="(col.name==DealTrackRecordInfo.TotalValue||col.name==DealTrackRecordInfo.Dpi||col.name==DealTrackRecordInfo.Rvpi||col.name==DealTrackRecordInfo.GrossMultiple) ? ' table-data-right higlighted-cell' : 'table-data-right'">
+                                                                {{
+                                                                (col.name==DealTrackRecordInfo.ValuationDate)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":portfolioCompanyFundHolding[col.displayName]):
+                                                                (col.name==DealTrackRecordInfo.InvestmentDate)?(model.investmentDate==null?"NA":model.investmentDate
+                                                                | date:'MM/dd/yyyy'):
+                                                                (col.name==DealTrackRecordInfo.InvestmentCost)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":portfolioCompanyFundHolding[col.displayName]|
+                                                                number : NumberDecimalConst.currencyDecimal):
+                                                                (col.name==DealTrackRecordInfo.RealizedValue)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":portfolioCompanyFundHolding[col.displayName]|
+                                                                number : NumberDecimalConst.currencyDecimal):
+                                                                (col.name==DealTrackRecordInfo.UnrealizedValue)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":portfolioCompanyFundHolding[col.displayName]|
+                                                                number : NumberDecimalConst.currencyDecimal):
+                                                                (col.name==DealTrackRecordInfo.TotalValue)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":portfolioCompanyFundHolding[col.displayName]|
+                                                                number : NumberDecimalConst.currencyDecimal):
+                                                                (col.name==DealTrackRecordInfo.Dpi)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":(portfolioCompanyFundHolding[col.displayName]|
+                                                                number : NumberDecimalConst.multipleDecimal)+"x"):
+                                                                (col.name==DealTrackRecordInfo.Rvpi)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":(portfolioCompanyFundHolding[col.displayName]|
+                                                                number : NumberDecimalConst.multipleDecimal)+"x"):
+                                                                (col.name==DealTrackRecordInfo.GrossMultiple)?((portfolioCompanyFundHolding[col.displayName]=="NA")?"NA":(portfolioCompanyFundHolding[col.displayName]|
+                                                                number:NumberDecimalConst.multipleDecimal)+"x"):
+                                                                (col.name==DealTrackRecordInfo.GrossIRR)?(portfolioCompanyFundHolding[col.displayName]=="NA"?"NA":(portfolioCompanyFundHolding[col.displayName]|
+                                                                number : NumberDecimalConst.percentDecimal)+"%"):
+                                                                col.dataType != 6?(
+                                                                col.dataType==5?(portfolioCompanyFundHolding[col.displayName]!="NA"?(
+                                                                portfolioCompanyFundHolding[col.displayName] |
+                                                                number:NumberDecimalConst.multipleDecimal)+"x":portfolioCompanyFundHolding[col.displayName]):
+                                                                col.dataType==4?(portfolioCompanyFundHolding[col.displayName]!="NA"?(
+                                                                portfolioCompanyFundHolding[col.displayName] |
+                                                                number:NumberDecimalConst.percentDecimal)+"%":portfolioCompanyFundHolding[col.displayName]):
+                                                                col.dataType==3?(portfolioCompanyFundHolding[col.displayName]!="NA"?(
+                                                                portfolioCompanyFundHolding[col.displayName] |
+                                                                number :
+                                                                NumberDecimalConst.currencyDecimal):portfolioCompanyFundHolding[col.displayName]):
+                                                                col.dataType==2?(portfolioCompanyFundHolding[col.displayName]!="NA"?(
+                                                                portfolioCompanyFundHolding[col.displayName] |
+                                                                number : (showHoldingValueDecimals ?
+                                                                NumberDecimalConst.singleDecimal:NumberDecimalConst.noDecimal)):portfolioCompanyFundHolding[col.displayName]):portfolioCompanyFundHolding[col.displayName]
+                                                                ):
+                                                                portfolioCompanyFundHolding[col.displayName]!="NA"?
+                                                                (portfolioCompanyFundHolding[col.displayName]|
+                                                                date:'MM/dd/yyyy' ):
+                                                                portfolioCompanyFundHolding[col.displayName]
+                                                                }}
+                                                            </td>
+                                                            <td *ngIf="col.name=='Action'" class="text-center">
+                                                                <a (click)="open(portfolioCompanyFundHolding)"
+                                                                    class="text-center">
+                                                                    <i class="fa fa-pencil-square-o pr-2" title="Edit"
+                                                                        aria-hidden="true"></i>
+                                                                </a>
+                                                                <a (click)="openConfirmPopUp(portfolioCompanyFundHolding)"
+                                                                    class="text-center track-record-delete-icon">
+                                                                    <img   title="Remove track record" alt="" src="assets/dist/images/Trash-icon.svg">
+                                                                </a>
+                                                            </td>
+                                                        </ng-container>
+                                                    </tr>
+                                                </ng-template>
+                                            </p-table>
+                                            <app-empty-state [isGraphImage]="false"
+                                                *ngIf="portfolioCompanyFundHolding?.length == 0"></app-empty-state>
+
+                                            <div class="col-info p-2" *ngIf="portfolioCompanyFundHolding.length>0">
+                                                <span><i aria-hidden="true" class="fa fa-square calculated-value"
+                                                        aria-hidden="true"></i><i>Calculated Values</i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mr-0 ml-0 custom-bottom header-section header-performance" *ngIf="isProfitability">
+            <div class="row mr-0 ml-0">
+                <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                    <div class="fund-header pb-1">
+                        <div class="row mr-0 ml-0 header-section">
+                            <div class="row col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                <div class="fund-header col-8 pb-2">
+                                    Portfolio Company Profitability Details
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pl-0 pr-0 trackrecord-section boxshodow financial-page filter-bg">
+                    <div class="row mr-0 ml-0 fund-performance-content">
+                        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 ui-widget-header  align-items-start chart-area deal-detail-header-b1"
+                            >
+                            <div class="row mr-0 ml-0 custom-backgroudcolor">
+                                <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                                    <div class="float-left">
+                                    </div>
+                                    <div class="float-right-icon  mr-2 deal-float-r">
+                                        <div class="d-inline-block search">
+                                            <span class="fa fa-search fasearchicon1 p-1"></span>
+                                            <input #gbProfitability type="text"
+                                                (input)="tblProfitability.filterGlobal($event.target.value, 'contains')"
+                                                pInputText placeholder="Search"
+                                                class="form-control search-radius TextTruncate search-text-company companyListSearchHeight">
+                                        </div>
+                                        <div class="d-inline-block pl-2 pref-icon">
+                                            <img id="dropdownMenuButton"  [matMenuTriggerFor]="menu1"
+                                                src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter"
+                                                alt="" #tRecordTrigger="matMenuTrigger" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="datatable-container">
+                                <p-table styleClass="p-datatable-gridlines" [ngClass]="portfolioCompanyProfitability.length==0?'no-data':'data-view'" class="tableheaderColor cashflow-tbl" 
+                                    emptyMessage="{{blockedPortfolioCompanyProfitabilityTable? 'Please Wait...':'No record found'}}"
+                                    #tblProfitability [totalRecords]="totalPortfolioCompanyProfitabilityRecords"
+                                    scrollHeight="50vh" [value]="portfolioCompanyProfitability" [lazy]="true"
+                                    (onLazyLoad)="loadPortfolioProfitabilityLazy($event)" 
+                                    [rowsPerPageOptions]="pagerLength" [globalFilter]="gbProfitability"
+                                    [multiSortMeta]="profitabilityMultiSortMeta" sortMode="multiple">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th pSortableColumn="year-quarter">Quarter
+                                                <p-sortIcon field="year-quarter"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="revenue">Revenue
+                                                <p-sortIcon field="revenue"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="netDebt">Net Debt
+                                                <p-sortIcon field="netDebt"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="ebitda">EBITDA
+                                                <p-sortIcon field="ebitda"></p-sortIcon>
+                                            </th>
+                                            <th pSortableColumn="enterpriseValue">Enterprise Value
+                                                <p-sortIcon field="enterpriseValue"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-portfolioCompanyProfitability>
+                                        <tr>
+                                            <td class="table-data-left">{{
+                                                portfolioCompanyProfitability.quarter +'
+                                                '+portfolioCompanyProfitability.year }}</td>
+                                            <td class="table-data-right">{{
+                                                portfolioCompanyProfitability.revenue |
+                                                number :NumberDecimalConst.currencyDecimal }}</td>
+                                            <td class="table-data-right">{{
+                                                portfolioCompanyProfitability.netDebt |
+                                                number : NumberDecimalConst.currencyDecimal }}</td>
+                                            <td class="table-data-right"> {{
+                                                portfolioCompanyProfitability.ebitda |
+                                                number :NumberDecimalConst.currencyDecimal}}</td>
+                                            <td class="table-data-right">{{
+                                                portfolioCompanyProfitability.enterpriseValue | number :
+                                                NumberDecimalConst.currencyDecimal }}</td>
+                                        </tr>
+                                    </ng-template>
+
+                                </p-table>
+                                <app-empty-state [isGraphImage]="false"
+                                    *ngIf="portfolioCompanyProfitability?.length == 0"></app-empty-state>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-overlayPanel [dismissable]="true" [appendTo]="'body'" [showCloseIcon]="true" #opHoldingValueUnit>
+        <div class="popup-bg p-2">
+            <h6 class="p-1 m-0 popup-title">Select Unit</h6>
+            <div class="ui-g row p-2 width-150">
+                <div class="col-sm-12 p-1">
+                    <p-radioButton name="holdingValueUnitGroup" value="{{financialValueUnits.Absolute}}"
+                        label="Absolute" [(ngModel)]="holdingValueUnit" inputId="holdingValueUnit1"
+                        (onClick)="convertFundHoldingValueUnits()"></p-radioButton>
+                </div>
+                <div class="col-sm-12 p-1">
+                    <p-radioButton name="holdingValueUnitGroup" value="{{financialValueUnits.Thousands}}"
+                        label="Thousands" [(ngModel)]="holdingValueUnit" inputId="holdingValueUnit2"
+                        (onClick)="convertFundHoldingValueUnits()"></p-radioButton>
+                </div>
+                <div class="col-sm-12 p-1">
+                    <p-radioButton name="holdingValueUnitGroup" value="{{financialValueUnits.Millions}}"
+                        label="Millions" [(ngModel)]="holdingValueUnit" inputId="holdingValueUnit3"
+                        (onClick)="convertFundHoldingValueUnits()"></p-radioButton>
+                </div>
+                <div class="col-sm-12 p-1">
+                    <p-radioButton name="holdingValueUnitGroup" value="{{financialValueUnits.Billions}}"
+                        label="Billions" [(ngModel)]="holdingValueUnit" inputId="holdingValueUnit4"
+                        (onClick)="convertFundHoldingValueUnits()"></p-radioButton>
+                </div>
+            </div>
+        </div>
+    </p-overlayPanel>
+    <p-overlayPanel [dismissable]="true" [appendTo]="'body'" [showCloseIcon]="true" #opProfitabilityValueUnit>
+        <div class="popup-bg p-2">
+            <h6 class="p-1 m-0 popup-title">Select Unit</h6>
+            <div class="ui-g row p-2 width-150">
+                <div class="col-sm-12 p-1">
+                    <p-radioButton name="profitabilityValueUnitGroup" value="{{financialValueUnits.Absolute}}"
+                        label="Absolute" [(ngModel)]="profitabilityValueUnit" inputId="profitabilityValueUnit1"
+                        (onClick)="convertProfitabilityValueUnits()"></p-radioButton>
+                </div>
+                <div class="col-sm-12 p-1">
+                    <p-radioButton name="profitabilityValueUnitGroup" value="{{financialValueUnits.Thousands}}"
+                        label="Thousands" [(ngModel)]="profitabilityValueUnit" inputId="profitabilityValueUnit2"
+                        (onClick)="convertProfitabilityValueUnits()"></p-radioButton>
+                </div>
+                <div class="col-sm-12 p-1">
+                    <p-radioButton name="profitabilityValueUnitGroup" value="{{financialValueUnits.Millions}}"
+                        label="Millions" [(ngModel)]="profitabilityValueUnit" inputId="profitabilityValueUnit3"
+                        (onClick)="convertProfitabilityValueUnits()"></p-radioButton>
+                </div>
+                <div class="col-sm-12 p-1">
+                    <p-radioButton name="profitabilityValueUnitGroup" value="{{financialValueUnits.Billions}}"
+                        label="Billions" [(ngModel)]="profitabilityValueUnit" inputId="profitabilityValueUnit4"
+                        (onClick)="convertProfitabilityValueUnits()"></p-radioButton>
+                </div>
+            </div>
+        </div>
+
+    </p-overlayPanel>
+
+
+</div>
+<mat-menu #menu="matMenu" [hasBackdrop]="true" class="fixed-menu">
+    <div class="filter-first" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+        <div class="row m-0 ">
+            <div class="col-12 pb-1 pt-3 label-align">
+                Values in:
+            </div>
+            <div class="pl-3 pr-3 ">
+                <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" name="Unit"
+                    class="tablefilter-dropdrown-width kpi-prefence-filter" [options]="unitTypeList" [(ngModel)]="trackRecordValueUnit"
+                    optionLabel="unitType" [showClear]="false" (onChange)="convertFundHoldingValueUnits()" tabindex="1">
+                </p-dropdown>
+            </div>
+        </div>
+
+    </div>
+</mat-menu>
+<mat-menu #menu1="matMenu" [hasBackdrop]="true" class="fixed-menu">
+    <div class="filter-first" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+        <div class="row m-0 ">
+            <div class="col-12 pb-1 pt-3 label-align">
+                Values in:
+            </div>
+            <div class="pl-3 pr-3 ">
+                <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" name="Unit"
+                    class="tablefilter-dropdrown-width kpi-prefence-filter" [options]="unitTypeList" [(ngModel)]="profitabilityValueUnit1"
+                    optionLabel="unitType" [showClear]="false" (onChange)="convertProfitabilityValueUnits()"
+                    tabindex="1"></p-dropdown>
+            </div>
+        </div>
+
+    </div>
+</mat-menu>
+<div  *ngIf="isConfirmPopUp">
+    <modal customwidth="489px" modalTitle="Confirmation" primaryButtonName="Confirm" secondaryButtonName="Cancel" (primaryButtonEvent)="OnDeleteTrackRecord($event)" (secondaryButtonEvent)="OnCancelDeleteTrackRecord($event)">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12">
+                Are you sure you want to delete this deal track record for Quarter {{selectedFundHolding?.Quarter}}?
+            </div>
+        </div>
+    </modal>
+</div>

@@ -1,0 +1,301 @@
+<div class="row main-row mb-4" (resized)="onResized($event)">
+    <div class="col-md-12 pl-0 pr-0">
+        <div class="card-body">
+            <p-growl [(value)]="msgs" [life]="msgTimeSpan"></p-growl>
+            <form name="form" class="mt-0 pt-0 pb-0 pl-0 pr-0" (ngSubmit)="f.form.valid && save(f);" #f="ngForm"
+                novalidate>
+                <div class="col-lg-12 col-md-12 col-sm-12 ">
+                    <div class="pb-2 TextTruncate" title="{{pageDetails.displayName}}">
+                        <strong>{{pageDetails.displayName}}</strong></div>
+                    <div *ngIf="!loading && dealData !== undefined && dealData !== null && dealData.length > 0"
+                        class="dealsContainer row d-flex dealDataContainer"
+                        [style]="(customFieldsData !== undefined && customFieldsData.length > 12) ? 'overflow-y: auto' :''">
+                        <ng-container *ngFor="let dealDetails of dealData">
+                            <div class="col-sm-6 col-md-3 padding-rem" *ngIf="dealDetailsConstants.FundName == dealDetails.name">
+                                <div class="padding-left-rem mandatory-label TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                            
+                                <p-dropdown [filter]="true" [filterBy]="'fundName'" [virtualScroll]="true" [virtualScrollItemSize]="30"
+                                    class="access-subfeature custom-searchable-dropdown deals-dropdown custom-scroller-height" name="Funds" [options]="fundList"
+                                    [(ngModel)]="selectedFundDetails" placeholder="Select FundName" optionLabel="fundName" [showClear]="false"                                    >
+                                    <ng-template let-fundList pTemplate="item">
+                                        <div title="{{fundList.fundName}}" class="TextTruncate"> {{fundList.fundName}}
+                                        </div>
+                                    </ng-template>
+                                </p-dropdown>
+                                <div *ngIf="f.submitted && !fund.valid" class="text-danger">Fund is required
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3 padding-rem" *ngIf="dealDetailsConstants.CompanyName == dealDetails.name">
+                                <div class="padding-left-rem mandatory-label TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                            
+                            
+                                <p-dropdown [filter]="true" [filterBy]="companyName"  [virtualScroll]="true" [virtualScrollItemSize]="30"
+                                    class="access-subfeature custom-searchable-dropdown deals-dropdown custom-scroller-height" name="portfolioCompany" [options]="portfolioCompanyList"
+                                    [(ngModel)]="selectedPortfolioCompanyDetails" placeholder="Select Company" optionLabel="companyName"
+                                    [showClear]="false">
+                                    <ng-template let-portfolioCompanyList pTemplate="item">
+                                        <div title="{{portfolioCompanyList.companyName}}" class="TextTruncate">
+                                            {{portfolioCompanyList.companyName}} </div>
+                                    </ng-template>
+                                </p-dropdown>
+                            
+                                <div *ngIf="f.submitted && !portfolioCompany.valid" class="text-danger">Portfolio
+                                    company is required
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.Currency == dealDetails.name">
+                                <div class="padding-left-rem mandatory-label TextTruncate"
+                                    title="{{dealDetails.displayName}}">{{dealDetails.displayName}}</div>
+                                <typeahead-control class="header-cntrl typeheader-margin"
+                                    [loadingOptions]="currencyLoading" name="currency"
+                                    [(ngModel)]="model.currencyDetail" [placeholder]="'Select '+dealDetails.displayName"
+                                    [optionList]="masterModel.currencyList" validateRequired [displayField]="'currency'"
+                                    #currency="ngModel" [isRequired]="true"></typeahead-control>
+                                <div *ngIf="currency.invalid && (currency.dirty ||f.submitted)" class="text-danger">
+                                    <div *ngIf="f.submitted && !currency.valid" class="text-danger">Currency is required
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3 padding-rem "
+                                *ngIf="dealDetailsConstants.InvestmentDate == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate save-deals-pb"
+                                    title="{{dealDetails.displayName}}">{{dealDetails.displayName}}</div>
+                                <p-calendar class="formCtrlHeight" [(ngModel)]="model.investmentDate"
+                                    name="investmentDate" #investmentDate appendTo="body" [monthNavigator]="true"
+                                    [yearNavigator]="true" dateFormat="mm/dd/yy" readonlyInput="true"
+                                    [placeholder]="'Select '+dealDetails.displayName"
+                                    (onSelect)="onSelectDealInvestmentDate($event)" [showIcon]="true"
+                                    yearRange={{yearRange}} [maxDate]="today" [required]="false"
+                                    showButtonBar="true"></p-calendar>
+                                <div *ngIf="investmentDate.invalid && (investmentDate.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !investmentDate.valid" class="text-danger">Investment
+                                        Date is required
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.EntryMultiple == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <input autocomplete="off" maxlength="10" type="number"
+                                    class="form-control TextTruncate eachlabel-padding default-txt" name="entryMultiple"
+                                    [(ngModel)]="model.entryMultiple" #entryMultiple="ngModel" validateRequired
+                                    [placeholder]="'Enter '+dealDetails.displayName" />
+                                <div *ngIf="entryMultiple.invalid && (entryMultiple.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !entryMultiple.valid" class="text-danger">Entry Multiple
+                                        is required
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.EntryOwnershipPercent == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <input autocomplete="off" type="number" [placeholder]="'Enter '+dealDetails.displayName"
+                                    class="form-control TextTruncate eachlabel-padding default-txt" maxlength="6"
+                                    name="entryOwnershipPercent" [(ngModel)]="model.entryOwnershipPercent"
+                                    #entryOwnershipPercent="ngModel" validateRequired />
+                                <div *ngIf="entryOwnershipPercent.invalid && (entryOwnershipPercent.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !entryOwnershipPercent.valid" class="text-danger">Entry
+                                        Ownership Percent is required
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.CurrentExitOwnershipPercent == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <input autocomplete="off" type="number" [placeholder]="'Enter '+dealDetails.displayName"
+                                    class="form-control eachlabel-padding default-txt TextTruncate" maxlength="6"
+                                    name="currentExitOwnershipPercent" [(ngModel)]="model.currentExitOwnershipPercent"
+                                    #currentExitOwnershipPercent="ngModel" validateRequired />
+                                <div *ngIf="currentExitOwnershipPercent.invalid && (currentExitOwnershipPercent.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !currentExitOwnershipPercent.valid" class="text-danger">
+                                        Current/Exit Ownership Percent
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.EnterpriseValue == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <input autocomplete="off" maxlength="15" numberOnly type="text"
+                                    class="form-control TextTruncate eachlabel-padding default-txt"
+                                    name="enterpriseValue" [(ngModel)]="model.enterpriseValue"
+                                    #enterpriseValue="ngModel" validateRequired
+                                    [placeholder]="'Enter '+dealDetails.displayName" />
+                                <div *ngIf="enterpriseValue.invalid && (enterpriseValue.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !enterpriseValue.valid" class="text-danger">Enterprise
+                                        Value is required
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.BoardSeat == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <typeahead-control class="header-cntrl typeheader-margin" name="dealBoardSeat"
+                                    [(ngModel)]="model.dealBoardSeatDetail" [loadingOptions]="dealBoardSeatLoading"
+                                    [optionList]="masterModel.dealBoardSeatList" [displayField]="'boardSeat'"
+                                    #dealBoardSeat="ngModel" validateRequired [isRequired]="false"
+                                    [placeholder]="'Select '+dealDetails.displayName"></typeahead-control>
+                                <div *ngIf="dealBoardSeat.invalid && (dealBoardSeat.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !dealBoardSeat.valid" class="text-danger">Board Seat is
+                                        required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.ExitMethod == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <typeahead-control class="header-cntrl typeheader-margin"
+                                    [loadingOptions]="dealExitMethodLoading" name="dealExitMethod"
+                                    [(ngModel)]="model.dealExitMethodDetail"
+                                    [placeholder]="'Select '+dealDetails.displayName"
+                                    [optionList]="masterModel.dealExitMethodList" [isRequired]="false"
+                                    [displayField]="'exitMethod'" #dealExitMethod="ngModel"></typeahead-control>
+                                <div *ngIf="dealExitMethod.invalid && (dealExitMethod.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !dealExitMethod.valid" class="text-danger">Exit Method is
+                                        required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.InvestmentStage == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <typeahead-control class="header-cntrl typeheader-margin"
+                                    [loadingOptions]="dealInvestmentStageLoading" name="dealInvestmentStage"
+                                    [placeholder]="'Select '+dealDetails.displayName"
+                                    [(ngModel)]="model.dealInvestmentStageDetail"
+                                    [optionList]="masterModel.dealInvestmentStageList" [isRequired]="false"
+                                    [displayField]="'investmentStage'"
+                                    #dealInvestmentStage="ngModel"></typeahead-control>
+                                <div *ngIf="dealInvestmentStage.invalid && (dealInvestmentStage.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !dealInvestmentStage.valid" class="text-danger">
+                                        Investment Stage is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.SecurityType == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <typeahead-control class="header-cntrl typeheader-margin"
+                                    [loadingOptions]="dealSecurityTypeLoading" name="dealSecurityType"
+                                    [(ngModel)]="model.dealSecurityTypeDetail"
+                                    [optionList]="masterModel.dealSecurityTypeList" [isRequired]="false"
+                                    [displayField]="'securityType'" #dealSecurityType="ngModel"
+                                    [placeholder]="'Select '+dealDetails.displayName"></typeahead-control>
+                                <div *ngIf="dealSecurityType.invalid && (dealSecurityType.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !dealSecurityType.valid" class="text-danger">Security
+                                        Type is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.DealSourcing == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <typeahead-control class="header-cntrl typeheader-margin"
+                                    [loadingOptions]="dealSourcingLoading" name="dealSourcing"
+                                    [(ngModel)]="model.dealSourcingDetail" [optionList]="masterModel.dealSourcingList"
+                                    [isRequired]="false" [displayField]="'dealSourcing'" #dealSourcing="ngModel"
+                                    [placeholder]="'Select '+dealDetails.displayName"></typeahead-control>
+                                <div *ngIf="dealSourcing.invalid && (dealSourcing.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !dealSourcing.valid" class="text-danger">Deal Sourcing is
+                                        required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.TransactionRole == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <typeahead-control class="header-cntrl typeheader-margin"
+                                    [loadingOptions]="dealTransactionRoleLoading" name="dealTransactionRole"
+                                    [(ngModel)]="model.dealTransactionRoleDetail"
+                                    [optionList]="masterModel.dealTransactionRoleList" [isRequired]="false"
+                                    [displayField]="'transactionRole'" #dealTransactionRole="ngModel"
+                                    [placeholder]="'Select '+dealDetails.displayName"></typeahead-control>
+                                <div *ngIf="dealTransactionRole.invalid && (dealTransactionRole.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !dealTransactionRole.valid" class="text-danger">Currency
+                                        is required
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.ValuationMethodology == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <typeahead-control class="header-cntrl typeheader-margin"
+                                    [loadingOptions]="dealValuationMethodologyLoading" name="dealValuationMethodology"
+                                    [(ngModel)]="model.dealValuationMethodologyDetail"
+                                    [optionList]="masterModel.dealValuationMethodologyList" validateRequired
+                                    [isRequired]="false" [displayField]="'valuationMethodology'"
+                                    #dealValuationMethodology="ngModel"
+                                    [placeholder]="'Select '+dealDetails.displayName"></typeahead-control>
+                                <div *ngIf="dealValuationMethodology.invalid && (dealValuationMethodology.dirty ||f.submitted)"
+                                    class="text-danger">
+                                    <div *ngIf="f.submitted && !dealValuationMethodology.valid" class="text-danger">
+                                        Valuation Methodology is required
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-3 padding-rem"
+                                *ngIf="dealDetailsConstants.Customfield == dealDetails.name">
+                                <div class="padding-left-rem TextTruncate" title="{{dealDetails.displayName}}">
+                                    {{dealDetails.displayName}}</div>
+                                <input *ngIf="isUpdate" autocomplete="off" type="text" class="form-control TextTruncate"
+                                    [value]="dealDetails.value == 'NA' ? '' : dealDetails.value"
+                                    (blur)="AddOrUpdate($event,dealDetails)"
+                                    [placeholder]="'Enter '+dealDetails.displayName" />
+                                <input *ngIf="!isUpdate" autocomplete="off" type="text"
+                                    class="form-control TextTruncate" [value]=""
+                                    (blur)="AddOrUpdate($event,dealDetails)"
+                                    [placeholder]="'Enter '+dealDetails.displayName" />
+                            </div>
+                        </ng-container>
+
+                    </div>
+                    <div class="loading-input-controls-manual dealLoader"
+                        *ngIf="dealData === undefined || dealData === null || dealData.length === 0">
+                        <i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                    </div>
+                </div>
+                <div class="row mr-0 ml-0 fixed-footer" [ngStyle]="{'width': sideNavWidth}">
+                    <div class="col-12 col-lg-12 col-md-12 col-sm-12  pr-0 pl-0">
+                        <div class="pull-right pt-2 pb-2 pr-3">
+                            <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                            <input id="hiddenreloadButton" type="button" value="{{resetText}}" title="{{resetText}}" (click)="formReset(f);" class="nep-button nep-button-secondary reset-update-portfolio-css" />
+                            <button id="hiddenSaveButton" [disabled]="loading || !f.form.valid" class="btn btn-primary reset-update-portfolio-css ml-2" title="{{title}}">{{title}}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

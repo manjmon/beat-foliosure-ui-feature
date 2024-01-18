@@ -1,0 +1,21 @@
+.img-align{ text-align: center !important;}
+.img-foliosure{ padding-top: 20px !important}
+.Unauthcss{padding-top: 20px; font-size: 26px; color: #021155}
+.admintxtcss{ padding-top: 6px; font-size: 16px; color: #ababab}
+.img_sizefoliosure{padding-top: 7% }
+  
+/* 
+  ##Device = Desktops
+  ##Screen = 1281px to higher resolution desktops
+*/
+ 
+@media (min-width: 1824px) {
+    .img_sizefoliosure{
+        width: 650px; 
+   }
+
+   .img_sizelogo{
+       width: 250px; 
+  }
+} 
+  

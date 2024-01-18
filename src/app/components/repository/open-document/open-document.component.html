@@ -1,0 +1,614 @@
+<div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 repository-open-document custom-calendar-width" *ngIf="isEnableView">
+    <div class="row mr-0 ml-0 ">
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+            <div class="row mr-0 ml-0">
+                <div class="add-user-component left-pannel-style">
+                    <div class="card repository-page-height">
+                        <div class="card-header">
+                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                <div class="row mr-0 ml-0 d-block">
+                                    <div class="float-left custom-margin-top">
+                                        <span class="document-details">Document Details</span>
+                                    </div>
+                                    <div class="float-right">
+                                        <p-dropdown [options]="AllStatusTypes" [(ngModel)]="selectDocumentStatus"
+                                            class="drop_down p-doc-dropdown" optionLabel="name"
+                                            (onChange)="OnStatusChange(selectDocumentStatus)">
+                                            <ng-template pTemplate="selectedItem">
+                                                <span class="{{getClass(selectDocumentStatus)}}"></span>
+                                                <span class="drop_down_item_label">{{selectDocumentStatus.name}}</span>
+                                            </ng-template>
+                                            <ng-template let-item pTemplate="item">
+                                                <div class="drop_down_item">
+                                                    <span class="{{item.name.replace(' ','_')}}"></span>
+                                                    <span class="drop_down_item_label">{{item.name}}</span>
+                                                </div>
+                                            </ng-template>
+                                        </p-dropdown>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="card-body padding-style-control edit-repository">
+                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                                <label class="docNameLabel mt-0 fontStyle14 normalStateColor"
+                                                    [ngClass]="hasDocNameUpdated ? ('activeStateColor docNameLabel fontStyle14') : 'normalStateColor docNameLabel fontStyle14'">
+                                                    Document Name
+                                                </label>
+                                                <div>
+                                                    <div class="fontStyle14 mL" *ngIf="!editMode; else DocName">
+                                                        {{selectedDocument?.name}}
+                                                    </div>
+                                                    <ng-template #DocName>
+                                                        <input (input)="hasDocUpdated($event,'name')" type="text"
+                                                            pInputText required [(ngModel)]="selectedDocument.name"
+                                                            (blur)="vaidateDocExists()" class="opn-doc-wid"
+                                                            [ngClass]="hasDocNameUpdated ? ('openDocInputText fontStyle14 activateInputField') : 'openDocInputText fontStyle14'" />
+                                                        <div *ngIf="docNameValidation != ''"
+                                                            class="nep-error positionabsolute od_ValidationFull">
+                                                            {{docNameValidation}}
+                                                        </div>
+                                                        <div *ngIf="documentError.ShowDocumentNameError"
+                                                            class="nep-error">Please enter document name</div>
+                                                    </ng-template>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                                <div class="row mr-0 ml-0">
+                                                    <div class="col-6 pl-0 pr-12">
+                                                        <div class="document-date">
+                                                            <label class="docNameLabel fontStyle14 normalStateColor">
+                                                                Document Date
+                                                            </label>
+                                                            <div
+                                                                [ngClass]="!editMode ? 'textColor  fontStyle14 w100' : 'textColor  fontStyle14 w100'">
+                                                                <span *ngIf="!editMode; else enable">
+                                                                    <span class="mL"
+                                                                        *ngIf="selectedDocument!== null && selectedDocument.dateOfDocument !== null;">
+                                                                        {{selectedDocument?.dateOfDocument |
+                                                                        date:'dd-MMM-yyyy'}}
+                                                                    </span>
+                                                                    <span class="mL"
+                                                                        *ngIf="selectedDocument!== null && selectedDocument.dateOfDocument === null;">
+                                                                        -
+                                                                    </span>
+                                                                </span>
+                                                                <ng-template #enable>
+                                                                    <p-calendar class="repository-calendar document-calendar" name="docDate" showButtonBar="true"
+                                                                        (onClearClick)="hasDocUpdated(selectedDocument.dateOfDocument,'dateOfDocument')"
+                                                                        [(ngModel)]="selectedDocument.dateOfDocument"
+                                                                        [monthNavigator]="true" [yearNavigator]="true"
+                                                                        [readonlyInput]="true"
+                                                                        inputStyleClass="date-picker-input"
+                                                                        dateFormat="dd-M-yy" [showIcon]="true"
+                                                                        yearRange="1947:2050"
+                                                                        (ngModelChange)="hasDocUpdated(selectedDocument.dateOfDocument,'dateOfDocument')"
+                                                                        [inputStyle]="{'padding': '0.5vw'}"
+                                                                        placeholder="dd-mmm-yyyy"></p-calendar>
+                                                                </ng-template>
+                                                                <div *ngIf="editMode && documentError.showDocumentDateError"
+                                                                    class="nep-error positionabsolute od_Validation">
+                                                                    Please select date
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="document-type">
+                                                            <label class="docNameLabel fontStyle14 normalStateColor">
+                                                                Type
+                                                            </label>
+                                                            <div [ngClass]="!editMode ? 'textColor ' : 'textColor '">
+                                                                <div class="fontStyle14 mL"
+                                                                    *ngIf="!editMode; else DocType">
+                                                                    {{selectedDocument?.documentTypeName}}
+                                                                </div>
+                                                                <ng-template #DocType>
+                                                                    <typeahead-control #types="ngModel"
+                                                                        [optionList]="documentTypes"
+                                                                        [displayField]="'name'" [resultField]="'id'"
+                                                                        name="DocumentType"
+                                                                        [placeholder]="selectedDocument.documentTypeName !== '-' ? selectedDocument.documentTypeName : 'Select type'"
+                                                                        [(ngModel)]="selectedDocumentType"
+                                                                        (selectItem)="onDocumentTypeChanged()" [fieldName]="'name'"
+                                                                        [sectionName]="'Repository'">
+                                                                    </typeahead-control>
+                                                                    <div *ngIf="documentError.ShowDocTypeError"
+                                                                        class="nep-error positionabsolute od_Validation">
+                                                                        Please choose type</div>
+                                                                </ng-template>
+                                                            </div>
+                                                        </div>
+                                                        <div class="document-sub-type">
+                                                            <label class="docNameLabel fontStyle14 normalStateColor">
+                                                                Sub Type
+                                                            </label>
+                                                            <div [ngClass]="!editMode ? 'textColor ' : 'textColor '">
+                                                                <div class="fontStyle14 mL"
+                                                                    *ngIf="!editMode; else DocSubType">
+                                                                    {{selectedDocument?.documentSubTypeName}}
+                                                                </div>
+                                                                <ng-template #DocSubType>
+                                                                    <typeahead-control #subtypes="ngModel"
+                                                                        name="SubDocumentType"
+                                                                        [disabled]="selectedDocumentType==null || selectedDocumentType==undefined || selectedDocumentType=='-'"
+                                                                        [optionList]="documentSubTypes"
+                                                                        [displayField]="'name'" [resultField]="'id'"
+                                                                        [(ngModel)]="selectedSubDocumentType"
+                                                                        [placeholder]="selectedDocument.documentSubTypeName !== '-' ? selectedDocument.documentSubTypeName : 'Select sub type'"
+                                                                        (selectItem)="onDocumentSubTypeChanged()" [fieldName]="'name'"
+                                                                        [sectionName]="'Repository'">
+                                                                    </typeahead-control>
+                                                                    <div *ngIf="documentError.ShowSubTypeError"
+                                                                        class="nep-error positionabsolute od_Validation">
+                                                                        Please choose sub-type
+                                                                    </div>
+                                                                </ng-template>
+                                                            </div>
+                                                        </div>
+                                                        <div class="current-folder">
+                                                            <label class="docNameLabel fontStyle14 normalStateColor">
+                                                                Current Folder
+                                                            </label>
+                                                            <div class="fontStyle14">
+                                                                <div class="ml-20" [ngClass]="editMode ? 'folderType' : ''"
+                                                                    *ngIf="!editMode; else AvailableFolders">
+                                                                    <img class="folderIcon"
+                                                                        src="assets/dist/images/Folder.svg" alt="" />
+                                                                    <span
+                                                                        class="textColor fontStyle14">{{selectedDocument?.folderName}}</span>
+                                                                </div>
+                                                                <ng-template #AvailableFolders>
+                                                                    <div>
+                                                                        <p-autoComplete name="folders"
+                                                                            [style]="{'width':'40px !important'}"
+                                                                            [(ngModel)]="selectedDocument.folderName"
+                                                                            [suggestions]="folders"
+                                                                            placeholder="Search or select folders"
+                                                                            (onBlur)="OnFolderKeyUp()"
+                                                                            (onSelect)="OnFoldersSelected()"
+                                                                            (completeMethod)="onFoldersChanged($event)"
+                                                                            [dropdown]="true" [readonly]="true">
+                                                                            <ng-template let-name pTemplate="item">
+                                                                                <img class="folderIcon"
+                                                                                    src="assets/dist/images/Folder.svg"
+                                                                                    alt="" />
+                                                                                <span>{{name}}</span>
+                                                                            </ng-template>
+                                                                        </p-autoComplete>
+                                                                    </div>
+                                                                </ng-template>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-6 pr-0  pl-12">
+                                                        <div class="firm-name">
+                                                            <label class="docNameLabel fontStyle14 normalStateColor"
+                                                                [ngClass]="hasFirmNameUpdated ? 'activeStateColor docNameLabel fontStyle14' : 'normalStateColor docNameLabel fontStyle14'">
+                                                                Firm Name
+                                                            </label>
+                                                            <div [ngClass]="!editMode ? 'textColor ' : 'textColor '">
+                                                                <div class="fontStyle14 mL"
+                                                                    *ngIf="!editMode; else firmType">
+                                                                    {{selectedDocument?.firmName}}
+                                                                </div>
+                                                                <ng-template #firmType>
+                                                                    <typeahead-control name="firm" id="firmname"
+                                                                        [optionList]="firms" [displayField]="'firmName'"
+                                                                        (selectItem)="hasDocUpdated(selectedDocument.firmId,'firmName')"
+                                                                        [resultField]="'firmID'"
+                                                                        [(ngModel)]="selectedDocument.firmId"
+                                                                        (input)="hasDocUpdated(selectedDocument.firmId,'firmName')"
+                                                                        [placeholder]="selectedDocument.firmName !== '-' ? selectedDocument.firmName : 'Search or select firm'" [sectionName]="'Repository'">
+                                                                    </typeahead-control>
+                                                                    <div *ngIf="documentError.ShowOtherError"
+                                                                        class="od_Validation1 nep-error positionabsolute">
+                                                                    </div>
+                                                                </ng-template>
+                                                            </div>
+                                                        </div>
+                                                        <div class="fund-name">
+                                                            <label class="docNameLabel fontStyle14 normalStateColor"
+                                                                [ngClass]="hasFundNameUpdated ? 'activeStateColor docNameLabel fontStyle14' : 'normalStateColor docNameLabel fontStyle14'">
+                                                                Fund Name
+                                                            </label>
+                                                            <div [ngClass]="!editMode ? 'textColor ' : 'textColor '">
+                                                                <div class="fontStyle14 mL"
+                                                                    *ngIf="!editMode; else fundName">
+                                                                    {{selectedDocument?.fundName}}
+                                                                </div>
+                                                                <ng-template #fundName>
+                                                                    <typeahead-control name="fund" id="fundname"
+                                                                        [optionList]="funds" [displayField]="'fundName'"
+                                                                        (selectItem)="hasDocUpdated(selectedDocument.fundId,'fundName')"
+                                                                        [resultField]="'fundID'"
+                                                                        [(ngModel)]="selectedDocument.fundId"
+                                                                        (input)="hasDocUpdated(selectedDocument.fundId,'fundName')"
+                                                                        [placeholder]="selectedDocument.fundName !== '-' ? selectedDocument.fundName : 'Search or select fund'" [sectionName]="'Repository'">
+                                                                    </typeahead-control>
+                                                                    <div *ngIf="documentError.ShowOtherError"
+                                                                        class="od_Validation1 nep-error positionabsolute">
+                                                                    </div>
+                                                                </ng-template>
+                                                            </div>
+                                                        </div>
+                                                        <div class="portfolio-company-name">
+                                                            <label class="docNameLabel fontStyle14 normalStateColor"
+                                                                [ngClass]="hasPortfolioCompanyNameUpdated ? 'activeStateColor docNameLabel fontStyle14' : 'normalStateColor docNameLabel fontStyle14'">
+                                                                Portfolio Company Name
+                                                            </label>
+                                                            <div [ngClass]="!editMode ? 'textColor ' : 'textColor '">
+                                                                <div class="fontStyle14 mL"
+                                                                    *ngIf="!editMode; else portfolioCompanyName">
+                                                                    {{selectedDocument?.portfolioCompanyName}}
+                                                                </div>
+                                                                <ng-template #portfolioCompanyName>
+                                                                    <typeahead-control name="portfoliocompany"
+                                                                        id="portfoliocompany"
+                                                                        [optionList]="porfoliocompanies"
+                                                                        [displayField]="'companyName'"
+                                                                        [resultField]="'portfolioCompanyID'"
+                                                                        (selectItem)="hasDocUpdated(selectedDocument.portfolioCompanyId,'portfolioCompanyName')"
+                                                                        [(ngModel)]="selectedDocument.portfolioCompanyId"
+                                                                        (input)="hasDocUpdated(selectedDocument.portfolioCompanyId,'portfolioCompanyName')"
+                                                                        [placeholder]="selectedDocument.portfolioCompanyName !== '-' ? selectedDocument.portfolioCompanyName : 'Search or select company'" [sectionName]="'Repository'">
+                                                                    </typeahead-control>
+                                                                    <div *ngIf="documentError.ShowOtherError"
+                                                                        class="od_Validation1 nep-error positionabsolute">
+                                                                    </div>
+                                                                </ng-template>
+                                                            </div>
+                                                        </div>
+                                                        <div class="deal-id">
+                                                            <label class="docNameLabel fontStyle14 normalStateColor"
+                                                                [ngClass]="hasDealNameUpdated ? 'activeStateColor docNameLabel fontStyle14' : 'normalStateColor docNameLabel fontStyle14'">
+                                                                Deal ID
+                                                            </label>
+                                                            <div class="textColor  fontStyle14">
+                                                                <div class="fontStyle14 mL"
+                                                                    *ngIf="!editMode; else dealId">
+                                                                    {{selectedDocument?.dealName}}
+                                                                </div>
+                                                                <ng-template #dealId>
+                                                                    <typeahead-control name="dealid" id="dealid"
+                                                                        [optionList]="deals"
+                                                                        [displayField]="'dealCustomID'"
+                                                                        (selectItem)="hasDocUpdated(selectedDocument.dealId,'dealName')"
+                                                                        [resultField]="'dealID'"
+                                                                        [(ngModel)]="selectedDocument.dealId"
+                                                                        (input)="hasDocUpdated(selectedDocument.dealId,'dealName')"
+                                                                        [placeholder]="selectedDocument.dealName !== '-' ? selectedDocument.dealName : 'Search deal ID'" [sectionName]="'Repository'">
+                                                                    </typeahead-control>
+                                                                    <div *ngIf="documentError.ShowOtherError"
+                                                                        class="od_Validation1 nep-error positionabsolute">
+                                                                    </div>
+                                                                </ng-template>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row mr-0 ml-0">
+                                                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 assigned-to">
+                                                        <label class="docNameLabel fontStyle14 normalStateColor">
+                                                            Assigned to
+                                                        </label>
+                                                        <div *ngIf="!editMode && selectedAssignedTo.length === 0"
+                                                            class="textColor fontStyle14">
+                                                            -
+                                                        </div>
+                                                        <div class="textColor fontStyle14 chipsDiv"
+                                                            *ngIf="!editMode && selectedAssignedTo.length > 0">
+                                                            <div class="container" [class.show]="showassign">
+                                                                <span *ngIf="selectedAssignedTo.length<3">
+                                                                    <chip [isReadonly]=true
+                                                                        [chipitems]="selectedAssignedTo"
+                                                                        inputClass="openDocInputText"
+                                                                        customclass="mat-chip mat-primary mat-standard-chip circularOutlined textColor fontStyle14">
+                                                                    </chip>
+                                                                </span>
+                                                                <span
+                                                                    *ngIf="selectedAssignedTo.length>2 && !showassign">
+                                                                    <chip [isReadonly]=true
+                                                                        [chipitems]="selectedAssignedTo.slice(0, 2)"
+                                                                        inputClass="openDocInputText"
+                                                                        customclass="mat-chip mat-primary mat-standard-chip circularOutlined textColor fontStyle14">
+                                                                    </chip>
+                                                                </span>
+                                                                <span *ngIf="selectedAssignedTo.length>2 && showassign">
+                                                                    <chip [isReadonly]=true
+                                                                        [chipitems]="selectedAssignedTo"
+                                                                        inputClass="openDocInputText"
+                                                                        customclass="mat-chip mat-primary mat-standard-chip circularOutlined textColor fontStyle14">
+                                                                    </chip>
+                                                                </span>
+                                                            </div>
+                                                            <span *ngIf="selectedAssignedTo.length>2"
+                                                                class="showHandIcon moreless"
+                                                                (click)="showassign = !showassign">{{showassign ?
+                                                                'Less': '+'+selectedAssignedTo.length-2+'
+                                                                More'
+                                                                }}</span>
+                                                        </div>
+                                                        <div *ngIf="editMode" class="textColor fontStyle14 opn-doc-mar-tp">
+                                                            <chip maxlen="50" [isReadonly]=false
+                                                                (removeItem)="removeAssignedToItem($event)"
+                                                                [chipitems]="selectedAssignedTo"
+                                                                inputClass="openDocInputText"
+                                                                customclass="mat-chip mat-primary mat-standard-chip circularOutlined textColor fontStyle14"
+                                                                [allItems]="allUsers"
+                                                                (addSelectedItem)="getAssignees($event)"></chip>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                                    <div class="row mr-0 ml-0">
+                                                        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 tag-control">
+                                                            <label class="docNameLabel fontStyle14 normalStateColor">
+                                                                Tags
+                                                            </label>
+                                                            <div *ngIf="!editMode && selectedDocument?.tags === ''"
+                                                                class="textColor fontStyle14">
+                                                                -
+                                                            </div>
+                                                            <div class="chipsDiv"
+                                                                *ngIf="!editMode && selectedDocument?.tags !== ''">
+                                                                <div class="container" [class.show]="showatags">
+                                                                    <span
+                                                                        *ngIf="selectedDocument?.tags?.split(',').length<3">
+                                                                        <chip
+                                                                            [chipitems]="selectedDocument?.tags?.split(',')"
+                                                                            customclass="mat-chip mat-primary mat-standard-chip circularOutlined fontStyle14 mL">
+                                                                        </chip>
+                                                                    </span>
+                                                                    <span
+                                                                        *ngIf="selectedDocument?.tags?.split(',').length>2 && !showatags">
+                                                                        <chip
+                                                                            [chipitems]="selectedDocument?.tags?.split(',').slice(0, 2)"
+                                                                            customclass="mat-chip mat-primary mat-standard-chip circularOutlined fontStyle14 mL">
+                                                                        </chip>
+                                                                    </span>
+                                                                    <span
+                                                                        *ngIf="selectedDocument?.tags?.split(',').length>2 && showatags">
+                                                                        <chip
+                                                                            [chipitems]="selectedDocument?.tags?.split(',')"
+                                                                            customclass="mat-chip mat-primary mat-standard-chip circularOutlined fontStyle14 mL">
+                                                                        </chip>
+                                                                    </span>
+                                                                </div>
+                                                                <span
+                                                                    *ngIf="selectedDocument?.tags?.split(',').length>2"
+                                                                    class="showHandIcon moreless"
+                                                                    (click)="showatags = !showatags">{{ showatags ?
+                                                                    'Less':
+                                                                    "+"+selectedDocument?.tags?.split(',').length-2+'
+                                                                    More' }}</span>
+                                                            </div>
+                                                            <div *ngIf="editMode" id="tagChips"
+                                                               class="opn-doc-mar-tp">
+                                                                <chip maxlen="50" [isReadonly]=false
+                                                                    (removeItem)="removeTagItem($event)"
+                                                                    (addItem)="addTagItem($event)"
+                                                                    [chipitems]="documentTags"
+                                                                    inputClass="openDocInputText"
+                                                                    customclass="mat-chip mat-primary mat-standard-chip circularOutlined textColor fontStyle14">
+                                                                </chip>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                                    <div class="row mr-0 ml-0">
+                                                        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                                            <label class="docNameLabel fontStyle14 normalStateColor">
+                                                                Comments
+                                                            </label>
+                                                            <div class="textColor fontStyle14">
+                                                                <textarea
+                                                                    class="openDoctextarea fontStyle14 comment-textarea"
+                                                                    placeholder="Enter comments here…" autocomplete="off" rows="2"
+                                                                    cols="50" name="comment"
+                                                                    (input)="hasDocUpdated($event,'comment')"
+                                                                    [(ngModel)]="selectedDocument.comment"
+                                                                    maxlength="500"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 footerStyle d-block">
+                                <div class="footerCol1">
+                                    <span class="lastModifiedStyle">
+                                        Last modified on {{selectedDocument?.modifiedOn | date:'dd-MMM-yyyy'}}
+                                    </span>
+                                </div>
+                                <div class="footerCol2">
+                                    <button class="nep-button nep-button-secondary cancelCol" (click)="closeDoc()"
+                                        *ngIf="!editMode; else cancelButton">Close</button>
+                                    <ng-template #cancelButton>
+                                        <button class="nep-button mr-0 nep-button-secondary cancelCol"
+                                            (click)="showCancelModal()">
+                                            Cancel
+                                        </button>
+                                    </ng-template>
+                                    <button id="editDoc" class=" nep-button nep-button-primary"
+                                        *ngIf="!editMode; else saveButton" (click)="onEditDocument()">Edit
+                                    </button>
+                                    <ng-template #saveButton>
+                                        <button id="editDoc" class="nep-button nep-button-primary"
+                                            (click)="onConfirmSave()" [disabled]="!isDocUpdated">Save
+                                        </button>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-user-component right-pannel-style">
+                    <div class="card card-main">
+
+                        <div class="card-body ">
+                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                        <div class="row mr-0 ml-0 repository-right-pannel-height">
+                                            <div id="rightContainerHeader" class="w100 rBorder right-header-style">
+                                                    <div class="pl-12 float-left search-pannel-style search-parent-div">
+                                                        <input type="text"
+                                                        class="searchBox fontStyle14 search-style-btn"
+                                                        placeholder="Search within file contents" />
+                                                    <img class="searchIcon" src="assets/dist/images/Search.svg"
+                                                        alt="" />
+                                                      
+                                                    </div>
+                                                    <div class="w100 float-right right-pannel-icon-style">
+
+                                                        <div class="download-icon-top-padding">
+                                                            <img class="showHandIcon opn-doc-mar-tp"
+                                                                src="assets/dist/images/Cloud-download.svg" alt=""
+                                                                (click)="DownloadFile()"  />
+                                                                <i aria-hidden="true" *ngIf="isDownload" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                                        </div>
+                                                        <div class="d-inline cloud-icon pl-2 divider-custom-style">
+                                                        </div>
+
+                                                        <div>
+                                                            <img class="rHeaderDelIcons showHandIcon"
+                                                                src="assets/dist/images/delete.svg" alt=""
+                                                                (click)="showCancelDeleteModal()" />
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            <div id="rightContainerBody" class="w100 doc-w100-flxwrp">
+                                                <div *ngIf="loading; then Loader; else Viewer"></div>
+                                                <ng-template #Loader>
+                                                    <img class="loaderpreview"
+                                                        src="assets/dist/images/loading-small.gif" alt="" />
+                                                </ng-template>
+                                                <ng-template #Viewer>
+                                                    <span *ngIf="selectedDocument?.extension=='.pdf' && !isPreviewMode">
+                                                        <nep-pdfviewer [pdfsource]="pdfblobvalue.body"></nep-pdfviewer>
+                                                    </span>
+                                                    <div *ngIf="selectedDocument?.extension!='.pdf' || isPreviewMode"
+                                                        class="fontStyle14 preview row mr-0 ml-0 d-flex justify-content-center align-items-center">
+                                                        <div
+                                                            class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                                            <div class="row mr-0 ml-0">
+                                                                <div
+                                                                    class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                                                    <div
+                                                                        class="download-icon-top-padding d-flex flex-column align-items-center">
+                                                                        <img class="showHandIcon opn-doc-mar-tp"
+                                                                            src="assets/dist/images/Empty-state (illustrations)-repository.svg" />
+                                                                        <span class="no-data-preview">Uh-oh! No preview is available for this
+                                                                            file</span>
+                                                                        <span>
+                                                                            <button id="editDoc"
+                                                                            class="nep-button nep-button-primary showHandIcon"
+                                                                            (click)="DownloadFile(true)"
+                                                                            *ngIf="selectedDocument?.extension != '.pdf'">Download
+                                                                            File
+                                                                        </button>
+                                                                        <i aria-hidden="true" *ngIf="isPreviewDownload"
+                                                                            class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                                                        </span>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div *ngIf="cancelEditing">
+        <confirm-modal [primaryButtonName]="primaryButtonName" [secondaryButtonName]="secondaryButtonName"
+            [modalTitle]="modalTitle" (primaryButtonEvent)="onCancelEditing()"
+            (secondaryButtonEvent)="closeCancelModal()">
+            <div class="modalBodyTextStyle">
+                <div>
+                    {{modalBody1}}
+                </div>
+                <div>
+                    {{modalBody2}}
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+
+    <div *ngIf="cancelDeleteDoc">
+        <confirm-modal [primaryButtonName]="primaryButtonName" [secondaryButtonName]="secondaryButtonName"
+            [modalTitle]="deleteModalTitle" (primaryButtonEvent)="onYesDeleteModal()"
+            (secondaryButtonEvent)="onNoDeleteModal()">
+            <div class="modalBodyTextStyle">
+                <div>
+                    {{deleteModalBody1}}
+                </div>
+                <div>
+                    {{deleteModalBody2}}
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+
+    <div *ngIf="confirmSave">
+        <confirm-modal [primaryButtonName]="savePrimaryButtonName" [secondaryButtonName]="saveSecondaryButtonName"
+            [modalTitle]="saveModalTitle" (primaryButtonEvent)="onUpdateDocument()"
+            (secondaryButtonEvent)="onCancelSave()">
+            <div class="modalBodyTextStyle">
+                <div>
+                    {{saveModalBody1}}
+                </div>
+                <div>
+                    {{saveModalBody2}}
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+    <div *ngIf="confirmChangeFolder">
+        <confirm-modal modalTitle="Change Folder" primaryButtonName="Yes" secondaryButtonName="No"
+            (primaryButtonEvent)="onChangeFolderApproved($event)"
+            (secondaryButtonEvent)="OnChangeFolderCancelled($event)">
+            <div class="modalBodyTextStyle">
+                <div *ngIf="!ShowValidation || selectedDocument.folderName === 'Uploaded'">
+                    You are changing the document location from {{PreviousFolder}} to {{selectedDocument.folderName}}
+                    Files.
+                    Are you sure you want to continue?
+                </div>
+                <div *ngIf="ShowValidation && selectedDocument.folderName === 'Final'">
+                    To continue, please enter Document Name, Type, Sub Type, Document Date and any one from Firm Name,
+                    Fund
+                    Name, Portfolio Company Name OR Deal ID.
+                    <p>Are you sure you want to continue?</p>
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+</div>
+
+<app-loader-component *ngIf="loading"></app-loader-component>

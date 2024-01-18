@@ -1,0 +1,57 @@
+@import "../../../variables";
+.page-configuration {
+    .card {
+        background: $nep-white 0% 0% no-repeat padding-box;
+        box-shadow: 0px 3px 6px $nep-shadow-color;
+        border: 1px solid $nep-divider;
+        border-radius: 4px;
+        opacity: 1;
+        width: 330px;
+        display: inline-block;
+        padding: 1.25rem;
+        margin-right: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+    .card-title {
+        text-align: left;
+        font-size: 14px;
+        letter-spacing: 0px;
+        color: $nep-dark-black;
+        font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+    }
+    .card-text {
+        text-align: left;
+        font-size: 14px;
+        font-weight: normal;
+        letter-spacing: 0px;
+        color: $nep-text-grey;
+        opacity: 1;
+        line-height: 20px;
+        min-height: 40px;
+    }
+    button {
+        background: $nep-white 0% 0% no-repeat padding-box;
+        border: 1px solid $nep-button-primary !important;
+        border-radius: 4px;
+        &:hover {
+            color: $nep-button-icon-primary !important;
+            border: 1px solid $nep-button-icon-primary !important;
+        }
+    }
+    .config-footer {
+        padding-top: 2rem;
+    }
+    img {
+        height: 122px;
+    }
+    h4 {
+        margin-top: 20px;
+        margin-bottom: 8px;
+    }
+    button[disabled] {
+        position: relative !important;
+        box-shadow: none !important;
+        cursor: not-allowed !important;
+        opacity: 0.65 !important;
+    }
+}

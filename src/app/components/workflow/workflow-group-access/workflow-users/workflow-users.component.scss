@@ -1,0 +1,90 @@
+@import "../../../../../variables";
+.right-section {
+    .tabs-shadow {
+        box-shadow: 0px 4px 6px $nep-shadow-color !important;
+    }
+    .tabradius {
+        border-radius: 4px;
+        margin: -1px;
+        border-right: none !important;
+        border-left: 1px solid $nep-nav-tab-border-color;
+    }
+    .border {
+        border: 1px solid $nep-nav-tab-border-color;
+        border-right: none !important;
+    }
+    .group-search {
+        margin-top: 0px;
+    }
+    .content-section {
+        background: $nep-white 0% 0% no-repeat padding-box;
+    }
+    .group-right-sec {
+        padding: 12px 16px;
+        background: $nep-base-grey 0% 0% no-repeat padding-box;
+        border-top: 1px solid $nep-divider;
+        border-bottom: none;
+        border-left: none;
+        border-radius: 0px 0px 0px 4px;
+        opacity: 1;
+    }
+}
+
+button[disabled] {
+    position: relative !important;
+    box-shadow: none !important;
+    cursor: not-allowed !important;
+}
+
+.btn-nep-primary {
+    background: $nep-primary 0% 0% no-repeat padding-box;
+    text-align: left;
+    letter-spacing: 0px;
+    color: $nep-white !important;
+    &:focus,
+    &:hover {
+        border-color: $nep-primary !important;
+    }
+}
+
+button {
+    border: 1px solid $nep-primary;
+    border-radius: 4px;
+    font-family: "Helvetica Neue LT W05_55 Roman",Arial, Verdana, Tahoma,sans-serif !important;
+}
+
+.bgColorFAFAFB {
+    background: #fafafb;
+}
+
+.checkbox {
+    width: 60px !important;
+}
+
+.fullName {
+    width: 230px !important;
+}
+
+.status {
+    width: 100px !important;
+}
+
+.action {
+    width: 100px !important;
+}
+
+.countryName {
+    width: 150px !important;
+}
+
+.phoneNumber {
+    width: 140px !important;
+}
+
+.emailID {
+    width: 230px !important;
+}
+
+.organization {
+    width: 200px !important;
+}

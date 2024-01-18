@@ -1,0 +1,117 @@
+﻿<div class="row">
+    <div class="col-lg-12">
+        <div class="add-user-component">
+            <div class="card card-main">
+                <div class="card-header card-header-main p-0 border-bottom-0">
+                    <div class="row mr-0 ml-0 fundlist-header" [ngClass]="deals ?.length == 0 ?'border-bottom':''">
+                        <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                            <div class="float-right">
+                                <div class="d-inline-block search">
+                                    <span class="fa fa-search  fasearchicon p-1"></span>
+                                    <input #gb type="text" (input)="searchLoadPCLazy()"
+                                        pInputText
+                                        placeholder="Search" class="search-text-company companyListSearchHeight TextTruncate"
+                                        [(ngModel)]="globalFilter">
+                                </div>
+                                <div id = "downlaodDeals" class="d-inline-block" [ngClass]="{disabledNoOfCasesDiv: isdownloadfilter}" 
+                                [hideIfUnauthorized]='{featureId:feature.Deal,action:"export"}'>
+                                        <img class="p-action-padding download-excel cursor-filter" title="Export Deal (Excel file)"
+                                        id="dropdownMenuButton" #dropdownMenuButton [matMenuTriggerFor]="menu" alt=""
+                                         src="assets/dist/images/Cloud-download.svg"  #iMenuTrigger="matMenuTrigger"/>
+                                </div>
+                                <popover predecessorId="downlaodDeals" [show]="isExportLoading" marginLeft="-260px" marginTop="35px">
+                                    ff
+                                </popover>
+                                <div class="fund-splitButton d-inline-block">
+                                    <a class="loading-input-controls2" *ngIf="isExportLoading">
+                                        <i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                    </a>
+                                    <mat-menu #menu="matMenu">
+                                        <a (click)="exportDealList()">
+                                            <div class="download-dropdown-content TextTruncate" title="Deal List">
+                                                Deal List
+                                            </div>
+                                        </a>
+                                        <a (click)="openQuarterYearSelectionPopup()">
+                                            <div class="download-dropdown-content TextTruncate" title="New Investments" >
+                                                New Investments
+                                            </div>
+                                        </a>
+
+                                    </mat-menu>
+                                </div> 
+
+
+                                <div class="d-inline" [hideIfUnauthorized]='{featureId:feature.Deal,action:"export"}'>
+                                    <span class="col-divider">
+                                    </span>
+                                </div>
+                                <div class="d-inline-block" 
+                                [hideIfUnauthorized]='{featureId:feature.Deal,action:"add"}'>
+                                <div class="add-icon p-add-padding">
+                                <a [routerLink]="['/save-deal']" title="Add Deal">
+                                    <img class="" title="Add Deal" src="assets/dist/images/plus.svg" /></a>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body" >
+                    <p-table styleClass="p-datatable-gridlines" class="cashflow-tbl text-left custom-kpi-table borderless company-financial-border custom-table-paginator" [scrollHeight]="'calc(100vh - 188px)'" #tblDeal emptyMessage="{{blockedTable? 'Please Wait...':'No record found'}}" 
+                    [totalRecords]="totalRecords"  [value]="deals" [lazy]="true" (onLazyLoad)="loadDealsLazy($event)" scrollable="true"  [rows]="20"  [globalFilter]="gb" sortMode="multiple">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <ng-container *ngFor="let dealDetails of dealData">
+                                    <th pSortableColumn="dealCustomID" title="{{dealDetails.displayName}}" *ngIf="dealDetails.name == dealDetailsConstants.DealCustomID">{{dealDetails.displayName}}
+                                        <p-sortIcon field="dealCustomID"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="fundName" title="{{dealDetails.displayName}}" *ngIf="dealDetails.name == dealDetailsConstants.FundName">{{dealDetails.displayName}}
+                                        <p-sortIcon field="fundName"></p-sortIcon>
+                                    </th>
+                                    <th pSortableColumn="companyName" title="{{dealDetails.displayName}}" *ngIf="dealDetails.name == dealDetailsConstants.CompanyName">{{dealDetails.displayName}}
+                                        <p-sortIcon field="companyName"></p-sortIcon>
+                                    </th>
+                                </ng-container>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-deal>
+                            <tr>
+                                <td><a class="click-view company-name" (click)="setHeaderName(deal.dealCustomID)" href="javascript:void(0);" [routerLink]="['/deal-details', deal.encryptedDealID]" title="View Details" [hideIfUnauthorized]='{featureId:feature.Deal,action:"view"}'>{{deal.dealCustomID}}</a></td>
+                                <td title="{{deal.fundName}}">{{deal.fundName}}</td>
+                                <td title="{{deal.companyName}}">{{deal.companyName}}</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <paginator-control class="custom-table-paginator" *ngIf="deals?.length >0" [rowsPerPage]="deals?.length" [totalRecords]="totalRecords" [totalPage]="totalPage" [inputSearch] = "globalFilter"  (loadPortfolioLazy)="loadDealsLazy($event)"></paginator-control>
+                    <app-empty-state [isGraphImage] ="false" *ngIf="deals?.length == 0"></app-empty-state>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="show">
+    <confirm-modal class="downloadNewDealInvestments" primaryButtonName="Confirm" secondaryButtonName="Cancel"  hasHeaderStyle = "true"
+    modalTitle="Download New Transactions" (secondaryButtonEvent)="closeQuarterYearSelectionPopup()" (primaryButtonEvent)="downloadNewInvestment()" 
+        [disablePrimaryButton]="disableConfirm" popupToasterStyle="custom-toast-confirmModel">
+        <div class="row mr-0 ml-0 main-row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0">
+                <div class="row mr-0 ml-0">
+                    <div class="pb-2 TextTruncate" title="Quarter & Year">
+                        Quarter & Year
+                    </div>
+                    <div>
+                        <quarter-year-control [ControlName]="'pcYear'" 
+                        [QuarterYear]="YearQuarter"  width = "257.6"
+                        (onCalendarYearPicked)="QuarterYear($event)">
+                    </quarter-year-control>  
+                    </div>
+                    <div *ngIf="newInvestmentsNotFound" class="errorcolor TextTruncate" title="No Investments found for the selected quarter and year">
+                        No Investments found for the selected quarter and year
+                    </div>
+                </div>
+            </div>
+        </div>
+    </confirm-modal>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

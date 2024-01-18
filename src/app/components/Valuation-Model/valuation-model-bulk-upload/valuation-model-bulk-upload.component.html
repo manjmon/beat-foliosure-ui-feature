@@ -1,0 +1,141 @@
+<div class="nep-modal nep-modal-show nep-bulk-d-bg">
+    <div class="nep-modal-mask"></div>
+    <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nepwrk-pr-d-t-w">
+        <div class="nep-card-header nep-modal-title p-0">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-12 user-header">
+                    <div class="float-left">Download excel template and bulk upload data</div>
+                    <a (click)="onClose()">
+                        <div class="float-right close-icon" >
+                            <i class="pi pi-times"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-body">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-12 user-body user-upload">
+                    <div class="add-user-component">
+                        <div class="card card-main">
+                            <div class="card-body mb-0">
+                                <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 user-upload pr-0 pl-0">
+                                    <div class="row mr-0 ml-0 pb-3">
+                                        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 pr-0 pl-0">
+                                            <span class="upload-desc">Download excel template and bulk upload valuation
+                                                model</span>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 pr-0 pl-0">
+                                            <span class="upload-desc">To download template, </span>
+                                            <span><a class="click-here" (click)="getSampleTemplate()">Click
+                                                    here</a></span>
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc desc-header">
+                                            Note:-
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc">
+                                            1. Template includes sample data. Replace the same with relevant data.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc">
+                                            2. Follow the format laid out in the template. Do not modify any headers.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc">
+                                            3. File size limit is 20MB.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0 mt-4" *ngIf="messages.length>0">
+                                        <div class="col-md-12 pr-0 pl-0 table-responsive card-border">
+                                            <p-table styleClass="p-datatable-gridlines" #dt [value]="messages" [scrollHeight]="180 +'px'"
+                                                [scrollable]="true">
+                                                <ng-template pTemplate="header">
+                                                    <tr>
+                                                        <th>
+                                                            <span class="errorColor pr-2">
+                                                                <img class="error-info-icon"
+                                                                    [src]="'assets/dist/images/red_info_icon.svg'"
+                                                                    alt="">
+                                                            </span><span
+                                                                class="error-title errorColor pl-1">Errors</span>
+                                                        </th>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="body" let-message>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="row">
+                                                                <div
+                                                                    class="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2 pl-3 pr-2">
+                                                                    <span
+                                                                        class="errorColor ">{{message.safeHtml.split('|')[0]}}</span>
+                                                                </div>
+                                                                <div
+                                                                    class="col-md-10 col-sm-10 col-lg-10 col-xs-10 col-xl-10 pl-1 word-wrap">
+                                                                    <span
+                                                                        class="">{{message.safeHtml.split('|')[1]}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+                                                    </tr>
+                                                </ng-template>
+                                            </p-table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-footer  nep-modal-footer user-upload">
+            <div class="float-right">
+                <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true"
+                        class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                <div class="upload-sec mr-2 d-inline-block">
+                    <div class="upload-desc">
+                        <div class="uploadButton d-flex">
+                            <a (click)="file.click()">
+                                <div class="textEllipsis uploadLogoIcon" 
+                                title={{uploadFilePlaceholder}}>
+                                <a (click)="file.value = null">
+                                    <input class="hidefile" #file  value="" accept=".xlsx,.xls"
+                                    (change)="onSelect($event.target.files)" type="file">
+                                </a>
+
+                                <img *ngIf="browseicon" class="browseIcon"
+                                    [src]="'assets/dist/images/Iconmaterial-computer.svg'" alt="">
+                                <span class="beatColor browseButton">{{uploadFilePlaceholder}}</span>
+                            </div>
+                            </a>
+                            <div *ngIf="!browseicon" class="icon">
+                                <a (click)="deleteIconClick(filename)">
+                                    <img *ngIf="ProgressCancel" class="pull-right" 
+                                    [src]="'assets/dist/images/ClearIcon.svg'" alt="">
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <a (click)="saveFile()">
+                    <nep-button Type="Primary" [disabled]="files.length==0"  class-="nep-bulk-btn-pl">
+                        Upload
+                    </nep-button>
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>

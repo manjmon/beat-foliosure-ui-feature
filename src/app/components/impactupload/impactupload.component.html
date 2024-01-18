@@ -1,0 +1,32 @@
+<div *ngIf="ispopup==true" class="container-fluid">
+
+    <div class="row border-1 rowimp-h">
+        <div class="col-4 border-right text-center " style="text-align:center !important">
+            <div class="container p-4 " appDnd (fileDropped)="onFileDropped($event)">
+                <input type="file" (click)="fileDropRef.value = null" value="" #fileDropRef id="fileDropRef" multiple (change)="fileBrowseHandler($event.target.files)" class="impac-cp"  />
+                <p></p>
+                <p>Drop your files here<br>or</p>
+                <button for="fileDropRef" class="nep-button nep-button-primary">Upload</button>
+            </div>
+        </div>
+        <div class="col-8 ">
+            <div class="row">
+                <div class="list">
+                    <div class="card-group cards card-db">
+                        <div class="img-card border-1 p-2 mr-2 box " *ngFor="let file of uploadedfiles; let i = index">
+                            <span class="pull-right crossicon"><img (click)="openDelete(file.key)" [src]="'assets/dist/images/noun_Close.svg'"
+               class="impupload-w" />
+              </span>
+                            <img class="contain" [src]="file?.value" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<confirm-modal *ngIf="confirmDelete" primaryButtonName="Yes" secondaryButtonName="No" (primaryButtonEvent)="OnDeleteUploadedFile()" modalTitle="Confirm" (secondaryButtonEvent)="NoOnCancel()">
+    <div>
+        Are you sure you want to delete the uploaded logo?</div>
+</confirm-modal>

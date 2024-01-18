@@ -1,0 +1,478 @@
+﻿<div class="nep-modal nep-modal-show fund-tr-model deal-track-model fundholding-d-bg">
+	<div class="nep-modal-mask"></div>
+	<div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default fundholding-p-d">
+		<div class="nep-card-header nep-modal-title p-0">
+			<div class="row mr-0 ml-0 ">
+				<div class="col-md-12 col-lg-12 col-12 col-xl-12 col-sm-12 pr-0 pl-0 user-header">
+					<div class="float-left TextTruncate" title="{{this.headerText}}">{{this.headerText}}</div>
+					<a (click)="activeModal.dismiss('Cross click')">
+						<div class="float-right close-icon">
+							<i class="pi pi-times"></i>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="nep-card-body" [ngStyle]="customFieldsData.length>0?{'overflow-y':'auto','height':450+'px'}:{}">
+			<div class="row mr-0 ml-0">
+				<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+					<div class="add-user-component">
+						<div class="card card-main">
+							<div class="card-body mb-0">
+
+								<div class="row mr-0 ml-0">
+									<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+										<div class="row mr-0 ml-0">
+											<div *ngIf="model==undefined">
+												<img alt="" src="assets/dist/images/loading.gif" class="loading-img" />
+											</div>
+											<form name="form" (ngSubmit)="f.form.valid && save(f)" #f="ngForm"
+												novalidate *ngIf="model!=undefined">
+												<p-messages [(value)]="msgs"></p-messages>
+												<div class="row mr-0 ml-0 custom-controls">
+													<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+														<div class="row mr-0 ml-0 ">
+															<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0" [ngClass]="saveText == 'Update' ? 'disabledBtn' : ''">
+																<div class="form-group"
+																	[ngClass]="{ 'has-error': f.submitted && !year.valid }">
+																	<div class="row mr-0 ml-0">
+																		<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																			<label for="year" class="TextTruncate" title="Year">Year</label>
+																		</div>
+																		<div
+																			class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																			<typeahead-control name="year"
+																				[(ngModel)]="customModel.year"
+																				[optionList]="yearOptions"
+																				validateRequired [displayField]="'text'"
+																				[resultField]="'value'" #year="ngModel"
+																				(selectItem)="calculateValuationDate()"
+																				[isRequired]="true"
+																				[isAscendingOptions]="false"
+																				[disabled]="saveText == 'Update'">
+																			</typeahead-control>
+																			<div *ngIf="f.submitted && !year.valid && saveText != 'Update'"
+																				class="text-danger">Year is required
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<ng-container *ngFor="let staticData of statictrackData">
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0" [ngClass]="saveText == 'Update' ? 'disabledBtn' : ''"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.Quarter">
+																	<div class="form-group"
+																		[ngClass]="{ 'has-error': f.submitted && !quarter.valid }">
+																		<div class="row mr-0 ml-0">
+																			<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<label
+																					for="quarter" class="TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																			</div>
+																			<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+																				<typeahead-control name="quarter"
+																					[(ngModel)]="customModel.quarter"
+																					[optionList]="quarterOptions"
+																					validateRequired
+																					[displayField]="'text'"
+																					[resultField]="'value'"
+																					#quarter="ngModel"
+																					(selectItem)="calculateValuationDate()"
+																					[isRequired]="true"
+																					[disabled]="saveText == 'Update'">
+																				</typeahead-control>
+																				<div *ngIf="f.submitted && !quarter.valid && saveText != 'Update'"
+																					class="text-danger">Quarter is
+																					required
+																				</div>
+
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.ValuationDate">
+																	<div class="form-group">
+																		<div class="row mr-0 ml-0 disabledBtn">
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<label title="{{staticData.displayName}}" class="TextTruncate"
+																					for="valuationDate">{{staticData.displayName}}</label>
+																			</div>
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<input autocomplete="off" 
+																				type="text" min="0" readonly="true" disabled="true"
+																				class="form-control TextTruncate"
+																				name="valuationDate"
+																				[(ngModel)]="customModel.valuationDate"
+																				#valuationDate="ngModel" value="{{valuationDate}}"
+																				 />
+																				<span class="valuation-date-calendar pi pi-calendar"></span>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.InvestmentCost">
+																	<div class="form-group"
+																		[ngClass]="{ 'has-error': f.submitted && !investmentCost.valid }">
+																		<div class="row  mr-0 ml-0">
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<label title="{{staticData.displayName}}" class="TextTruncate"
+																					for="investmentCost">{{staticData.displayName}}</label>
+																			</div>
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<input autocomplete="off" type="number"
+																					min="0" class="form-control TextTruncate"
+																					name="investmentCost"
+																					[(ngModel)]="customModel.investmentCost"
+																					(keyup)="onInvestmentCostChange()"
+																					#investmentCost="ngModel"
+																					validateRequired />
+																				<div *ngIf="f.submitted && !investmentCost.valid"
+																					class="text-danger">
+																					Investment cost is required
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.RealizedValue">
+																	<div class="form-group"
+																		[ngClass]="{ 'has-error': f.submitted && !realizedValue.valid }">
+																		<div class="row  mr-0 ml-0">
+
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<label title="{{staticData.displayName}}" class="TextTruncate"
+																					for="realizedValue">{{staticData.displayName}}</label>
+																			</div>
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<input autocomplete="off" type="number"
+																					min="0" class="form-control TextTruncate"
+																					name="realizedValue"
+																					[(ngModel)]="customModel.realizedValue"
+																					(keyup)="onRealizedValueChange()"
+																					#realizedValue="ngModel"
+																					validateRequired />
+																				<div *ngIf="f.submitted && !realizedValue.valid"
+																					class="text-danger">
+																					Realized value is required</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.UnrealizedValue">
+																	<div class="form-group"
+																		[ngClass]="{ 'has-error': f.submitted && !unrealizedValue.valid }">
+																		<div class="row  mr-0 ml-0">
+
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<label title="{{staticData.displayName}}" class="TextTruncate"
+																					for="unrealizedValue">{{staticData.displayName}}</label>
+																			</div>
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<input autocomplete="off"
+																					type="number" min="0"
+																					class="form-control TextTruncate"
+																					name="unrealizedValue"
+																					[(ngModel)]="customModel.unrealizedValue"
+																					(keyup)="onUnRealizedValueChange()"
+																					#unrealizedValue="ngModel"
+																					validateRequired />
+																				<div *ngIf="f.submitted && !unrealizedValue.valid"
+																					class="text-danger">
+																					Unrealized value is required
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.TotalValue">
+																	<div class="form-group">
+																		<div class="row  mr-0 ml-0 disabledBtn">
+
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0 ">
+																				<label title="{{staticData.displayName}}" class="TextTruncate"
+																					for="totalValue">{{staticData.displayName}}</label>
+																			</div>
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<input type="text" disabled="true" readonly="true"
+																		value="{{customModel.totalValue==null?'NA':customModel.totalValue|number
+																	: NumberDecimalConst.currencyDecimal}}" class="form-control TextTruncate" />
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.Dpi">
+																	<div class="form-group">
+																		<div class="row  mr-0 ml-0 disabledBtn">
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<label title="{{staticData.displayName}}" class="TextTruncate"
+																					for="grossIRR">{{staticData.displayName}}</label>
+																			</div>
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<input type="text" disabled="true" readonly="true"
+																		value="{{customModel.dpi==null?'NA':customModel.dpi|number :NumberDecimalConst.multipleDecimal}}"
+																		class="form-control TextTruncate" />
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.Rvpi">
+																	<div class="form-group">
+																		<div class="row  mr-0 ml-0 disabledBtn">
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<label title="{{staticData.displayName}}" class="TextTruncate"
+																					for="grossIRR">{{staticData.displayName}}</label>
+																			</div>
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<input type="text" disabled="true" readonly="true"
+																		value="{{customModel.rvpi==null?'NA':customModel.rvpi|number : NumberDecimalConst.multipleDecimal}}"
+																		class="form-control TextTruncate" />
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.GrossMultiple">
+																	<div class="form-group disabledBtn">
+																		<div class="row  mr-0 ml-0">
+
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<label title="{{staticData.displayName}}" class="TextTruncate"
+																					for="grossMultiple">{{staticData.displayName}}</label>
+																			</div>
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<input type="text" disabled="true" readonly="true"
+																		value="{{customModel.grossMultiple==null?'NA':customModel.grossMultiple|number: NumberDecimalConst.multipleDecimal}}"
+																		class="form-control TextTruncate" />
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.GrossIRR">
+																	<div class="form-group"
+																		[ngClass]="{ 'has-error': f.submitted && !grossIRR.valid }">
+																		<div class="row  mr-0 ml-0">
+
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<label title="{{staticData.displayName}}" class="TextTruncate"
+																					for="grossIRR">{{staticData.displayName}}</label>
+																			</div>
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<input autocomplete="off" type="number"
+																					class="form-control TextTruncate" name="grossIRR"
+																					[(ngModel)]="customModel.grossIRR"
+																					#grossIRR="ngModel"
+																					validateRequired />
+																				<div *ngIf="f.submitted && !grossIRR.valid"
+																					class="text-danger">Gross IRR is
+																					required</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.Status">
+																	<div class="form-group"
+																		[ngClass]="{ 'has-error': f.submitted && !fundHoldingStatus.valid }">
+																		<div class="row  mr-0 ml-0">
+
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<label for="fundHoldingStatus" title="{{staticData.displayName}}" class="TextTruncate">
+																					{{staticData.displayName}}</label>
+																			</div>
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<typeahead-control
+																					name="fundHoldingStatus"
+																					[(ngModel)]="customModel.fundHoldingStatus"
+																					[optionList]="masterModel"
+																					[isRequired]="true"
+																					[displayField]="'status'"
+																					#fundHoldingStatus="ngModel">
+																				</typeahead-control>
+
+																				<div *ngIf="f.submitted && !fundHoldingStatus.valid"
+																					class="text-danger">
+																					Status is required</div>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+																	*ngIf="staticData.name==DealTrackRecordStaticinfo.Customfield">
+																	<div class="form-group">
+																		<div class="row  mr-0 ml-0">
+																			<div
+																				class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																				<label for="fundHoldingStatus" title="{{staticData.displayName}}" class="TextTruncate">
+																					{{staticData.displayName}}</label>
+																			</div>
+																			<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																				*ngIf="!isupdate">
+																				<input
+																					*ngIf="(staticData.dataType==2)&&(staticData.dataType!=1)"
+																					autocomplete="off" type="text"
+																					class="form-control TextTruncate"
+																					[(ngModel)]="staticData.value"
+																					id="{{staticData.displayName}}"
+																					name="{{staticData.displayName}}"
+																					(input)="numbersOnlyValidator($event)" />
+
+																				<input
+																					*ngIf="(staticData.dataType==3||staticData.dataType==4||staticData.dataType==5)&&(staticData.dataType!=1)"
+																					autocomplete="off" type="text"
+																					class="form-control TextTruncate"
+																					[(ngModel)]="staticData.value"
+																					id="{{staticData.displayName}}"
+																					name="{{staticData.displayName}}"
+																					appTwoDigitDecimaNumber
+																					(input)="decimalnumbersOnlyValidator($event)" />
+
+																				<input *ngIf="staticData.dataType==1"
+																					autocomplete="off" type="text"
+																					class="form-control TextTruncate"
+																					[(ngModel)]="staticData.value"
+																					id="{{staticData.displayName}}"
+																					name="{{staticData.displayName}}" />
+																				<p-calendar
+																					*ngIf="staticData.dataType==6&&(staticData.dataType!=1)"
+																					class="formCtrlHeight"
+																					id="{{staticData.displayName}}"
+																					name="{{staticData.displayName}}"
+																					[(ngModel)]="staticData.value"
+																					#{{staticData.name}}
+																					[monthNavigator]="true"
+																					[yearNavigator]="true"
+																					dateFormat="mm/dd/yy"
+																					readonlyInput="true"
+																					[showIcon]="true"
+																					yearRange={{yearRange}}
+																					[maxDate]="today"
+																					[required]="false">
+																				</p-calendar>
+																			</div>
+																			<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																				*ngIf="isupdate">
+
+																				<input
+																					*ngIf="(staticData.dataType==2)&&(staticData.dataType!=1)"
+																					autocomplete="off" type="text"
+																					class="form-control TextTruncate"
+																					[(ngModel)]="staticData.value"
+																					id="{{staticData.displayName}}"
+																					name="{{staticData.displayName}}"
+																					(input)="numbersOnlyValidator($event)" />
+
+																				<input
+																					*ngIf="(staticData.dataType==3||staticData.dataType==4||staticData.dataType==5)&&(staticData.dataType!=1)"
+																					autocomplete="off" type="text"
+																					class="form-control TextTruncate"
+																					[(ngModel)]="staticData.value"
+																					id="{{staticData.displayName}}"
+																					name="{{staticData.displayName}}"
+																					(input)="decimalnumbersOnlyValidator($event)"
+																					appTwoDigitDecimaNumber />
+
+																				<input *ngIf="staticData.dataType==1"
+																					autocomplete="off" type="text"
+																					class="form-control TextTruncate"
+																					[(ngModel)]="staticData.value"
+																					id="{{staticData.displayName}}"
+																					name="{{staticData.displayName}}" />
+																				<p-calendar 
+																				
+																					*ngIf="staticData.dataType==6&&(staticData.dataType!=1)"
+																					class="formCtrlHeight"
+																					id="{{staticData.displayName}}"
+																					name="{{staticData.displayName}}"
+																					[(ngModel)]="staticData.value"
+																					#{{staticData.name}}
+																					[monthNavigator]="true"
+																					[yearNavigator]="true"
+																					dateFormat="mm/dd/yy"
+																					readonlyInput="true"
+																					[showIcon]="true"
+																					yearRange={{yearRange}}
+																					[maxDate]="today"
+																					[required]="false">
+																				</p-calendar>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</ng-container>
+															<div class="col-sm-12 d-none">
+																<div class="form-group text-right nep-card-right">
+																	<div class="loading-input-controls-manual"
+																		*ngIf="loading"><i aria-hidden="true"
+																			class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+																	</div>
+
+																	<button id="hiddenSaveButton" [disabled]="loading"
+																		class="btn btn-primary TextTruncate"
+																		title="{{saveText}}">{{saveText}}</button>
+																		<a (click)="formReset(f)">
+																			<input id="hiddenreloadButton" type="reset"
+																			value="{{resetText}}" title="{{resetText}}"
+																			class="btn btn-warning TextTruncate" />
+																		</a>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</form>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="nep-card-footer  nep-modal-footer fundholding-bg">
+			<div class="text-right nep-card-right">
+				<div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true"
+						class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+						<a id="hiddenreloadButton" onclick="document.getElementById('hiddenreloadButton').click()">
+							<input type="reset" value="{{resetText}}" title="{{resetText}}"
+							 class="btn btn-warning reloadBtn" />
+						</a>
+
+				<button onclick="document.getElementById('hiddenSaveButton').click()" id="hiddenSaveButton"
+					[disabled]="loading" class="btn btn-primary TextTruncate" title="{{saveText}}">{{saveText}}</button>
+				
+
+			</div>
+
+		</div>
+	</div>
+
+</div>

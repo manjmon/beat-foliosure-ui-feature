@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="Group_9069" data-name="Group 9069" transform="translate(-627 -512)">
+    <g id="Group_9329" data-name="Group 9329">
+      <g id="Path_603" data-name="Path 603" transform="translate(633 519.5)" fill="none">
+        <path d="M0,0H12l-.565,10.5a2,2,0,0,1-2,2H2.542a2,2,0,0,1-2-2Z" stroke="none"/>
+        <path d="M 1.579496383666992 1.5 L 2.04248046875 10.5 C 2.04248046875 10.77569961547852 2.266780853271484 11 2.54248046875 11 L 9.435060501098633 11 C 9.710760116577148 11 9.935060501098633 10.77569961547852 9.935060501098633 10.5 L 9.937231063842773 10.41940975189209 L 10.41712856292725 1.5 L 1.579496383666992 1.5 M 9.5367431640625e-07 0 L 12 0 L 11.43506050109863 10.5 C 11.43506050109863 11.60457038879395 10.53963088989258 12.5 9.435060501098633 12.5 L 2.54248046875 12.5 C 1.437910079956055 12.5 0.54248046875 11.60457038879395 0.54248046875 10.5 L 9.5367431640625e-07 0 Z" stroke="none" fill="#021155"/>
+      </g>
+      <g id="Rectangle_864" data-name="Rectangle 864" transform="translate(635 516)" fill="none" stroke="#021155" stroke-width="1.5">
+        <path d="M2,0H6A2,2,0,0,1,8,2V5A0,0,0,0,1,8,5H0A0,0,0,0,1,0,5V2A2,2,0,0,1,2,0Z" stroke="none"/>
+        <path d="M2,.75H6A1.25,1.25,0,0,1,7.25,2V4.25a0,0,0,0,1,0,0H.75a0,0,0,0,1,0,0V2A1.25,1.25,0,0,1,2,.75Z" fill="none"/>
+      </g>
+      <g id="Rectangle_861" data-name="Rectangle 861" transform="translate(632 519.5)" fill="#707070" stroke="#021155" stroke-width="1">
+        <rect width="14" height="1.5" rx="0.75" stroke="none"/>
+        <rect x="0.5" y="0.5" width="13" height="0.5" rx="0.25" fill="none"/>
+      </g>
+      <g id="Rectangle_862" data-name="Rectangle 862" transform="translate(637 523.5)" fill="#021155" stroke="#021155" stroke-width="1">
+        <rect width="1" height="5" rx="0.5" stroke="none"/>
+        <rect x="0.5" y="0.5" height="4" fill="none"/>
+      </g>
+      <g id="Rectangle_863" data-name="Rectangle 863" transform="translate(640 523.5)" fill="#021155" stroke="#021155" stroke-width="1">
+        <rect width="1" height="5" rx="0.5" stroke="none"/>
+        <rect x="0.5" y="0.5" height="4" fill="none"/>
+      </g>
+      <rect id="Rectangle_871" data-name="Rectangle 871" width="24" height="24" transform="translate(627 512)" fill="none"/>
+    </g>
+  </g>
+</svg>

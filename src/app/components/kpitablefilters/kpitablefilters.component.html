@@ -1,0 +1,111 @@
+<form name="form" #form="ngForm" (ngSubmit)="form.form.valid && onSubmit($event)" (click)="$event.stopPropagation()">
+    <div class="filter-first">
+        <div class="row m-0 ">
+            <div class="col-12 pb-1 pt-3 label-align">
+                Values in:
+            </div>
+            <div class="col-12 pl-3 pr-3">
+                <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" name="Unit" 
+                class="tablefilter-dropdrown-width kpi-prefence-filter" [options]="unitTypeList" [(ngModel)]="investmentKpiValueUnit" 
+                optionLabel="unitType" [showClear]="false" (onChange)="convertUnitType()" tabindex="1"></p-dropdown>
+            </div>
+        </div>
+        <div class="row m-0 ">
+            <div class="col-12 pb-1 pt-3 label-align">
+                Period
+            </div>
+            <div class="col-12 pl-3 pr-3">
+                <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" name="periodType" placeholder="Select Date Range" [options]="periodTypes" [(ngModel)]="model.periodType" (onChange)="onPeriodChange($event)" optionLabel="type" #periodType="ngModel" class="tablefilter-dropdrown-width kpi-prefence-filter">
+                </p-dropdown>
+                <div *ngIf="form.submitted && periodType.invalid" class="invalid-feedback">
+                    <div *ngIf="periodType.errors.required">Date Range required</div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row m-0" *ngIf="model.periodType?.type=='Date Range'">
+            <div class="col-12 pb-1 pt-3 label-align">
+                Date Range
+            </div>
+            <div class="col-12 pl-3 pr-3">
+                <p-calendar appendTo="body"  #myCalendar [style]="{'position': 'fixed', 'overflow': 'visible', 'z-index': '999','left':'auto','width':'260px','border-radius':'4px 0px 0px 4px'}" [styleClass]="'custom-kpi-calendar'" class="tablefilter-dropdrown-width kpi-prefence-filter" [readonlyInput]="true"
+                    inputStyleClass="p-custom-calendar date-picker-input" name="startPeriod" #startPeriod [(ngModel)]="dateRange" (onSelect)="onDateSelect($event)" dateFormat="mm/yy" [showIcon]="true" yearRange={{yearRange}} [yearNavigator]="true" view="month"
+                    placeholder="Select Date" selectionMode="range">
+                </p-calendar>
+            </div>
+        </div>
+        <div class="row m-0" *ngIf="model.periodType?.type=='Custom'">
+            <div class="col-12 pb-1 pt-3 label-align">
+                From Quarter
+            </div>
+            <div class="col-12 pl-3 pr-3">
+                <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" name="fromQuarter" [options]="quarterOptions" [(ngModel)]="model.fromQuarter" placeholder="From Quarter" (onChange)="fromQuaterevent($event)" optionLabel="text" #fromQuarter="ngModel" class="tablefilter-dropdrown-width kpi-prefence-filter"
+                    required="{{iscustom}}">
+                </p-dropdown>
+                <div *ngIf="fromQuarter.invalid && ( form.submitted)" class="text-danger">
+                    <div *ngIf="form.submitted && !fromQuarter.valid" class="text-danger">
+                        Select from quarter
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-0" *ngIf="model.periodType?.type=='Custom'">
+            <div class="col-12 pb-1 pt-3 label-align">
+                From Year
+            </div>
+            <div class="col-12 pl-3 pr-3">
+                <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" name="fromYear" (onChange)="fromYearevent($event)" [options]="yearOptions" [(ngModel)]="model.fromYear" class="tablefilter-dropdrown-width" placeholder="From Year" required="{{iscustom}}"
+                    optionLabel="text" #fromYear="ngModel">
+                </p-dropdown>
+                <div *ngIf="fromYear.invalid && (form.submitted)" class="text-danger">
+                    <div *ngIf="form.submitted && !fromYear.valid" class="text-danger">
+                        Select from year
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-0" *ngIf="model.periodType?.type=='Custom'">
+            <div class="col-12 pb-1 pt-3 label-align">
+                To Quarter
+            </div>
+            <div class="col-12 pl-3 pr-3">
+                <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" name="toQuarter" class="tablefilter-dropdrown-width" (onChange)="toQuaterevent($event)" [options]="quarterOptions" [(ngModel)]="model.toQuarter" placeholder="To Quarter" required="{{iscustom}}"
+                    optionLabel="text" #toQuarter="ngModel"></p-dropdown>
+                <div *ngIf="toQuarter.invalid && (form.submitted)" class="text-danger">
+                    <div *ngIf="form.submitted && !toQuarter.valid" class="text-danger">
+                        Select to quarter
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pb-2 m-0" *ngIf="model.periodType?.type=='Custom'">
+            <div class="col-12 pb-1 pt-3 label-align">
+                To Year
+            </div>
+            <div class="col-12 pl-3 pr-3">
+                <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" name="toYear" class="tablefilter-dropdrown-width" (onChange)="toYearevent($event)" [options]="yearOptions" [(ngModel)]="model.toYear" placeholder="To Year" required="{{iscustom}}" optionLabel="text"
+                    #toYear="ngModel">
+                </p-dropdown>
+                <div *ngIf="toYear.invalid && ( form.submitted)" class="text-danger">
+                    <div *ngIf="form.submitted && !toYear.valid" class="text-danger">
+                        Select to year
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mr-0 ml-0">
+            <div class="col-12 pl-2 pr-2">
+                <div *ngIf="periodErrorMessage!=''" class="display-inline-block text-danger error-msg">{{periodErrorMessage}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="filter-footer pr-3 pb-3 mr-2">
+        <div class="d-inline ">
+            <button type="submit" name="Reset" class="btn btn-reset ">Reset</button>
+        </div>
+        <div class="d-inline ">
+            <button type="submit" name="Save" [disabled]="!form.valid||periodErrorMessage!=''" class="btn btn-light btn-app  pt-0 pb-0">Apply</button>
+        </div>
+    </div>
+
+</form>

@@ -1,0 +1,130 @@
+.table-row {
+  height: 57px;
+  //background-color: #0c7cec !important;
+}
+// ::ng-deep .p-treetable .p-treetable-tbody > tr{
+//     background-color: #0c7cec;
+// }
+.custom-background {
+  background-color: #0c7cec !important;
+}
+.custom-background-white {
+  background-color: white !important;
+}
+// .market-data-row:hover {
+//     background: #EFF0F9 0% 0% no-repeat padding-box !important;
+//     cursor: pointer !important;
+// }
+.row-expanded {
+  background-color: #f7f8fc !important;
+}
+.row-collapsed {
+  background-color: #ffffff !important;
+}
+.row-no-border {
+  border-right: none !important;
+}
+.bg-tooltip-valuation {
+  background-color: black;
+}
+.top-padding-marketData {
+  padding-top: 15px;
+}
+
+.custom-border-valuation {
+  border-right: 1px solid #dedfe0 !important;
+  .p-treetable-frozen-view {
+    width: 400px;
+    .p-treetable-scrollable-header {
+      border-right: 1px solid #dedfe0 !important;
+    }
+  }
+}
+.peer-padding {
+  padding-left: 28px !important;
+}
+.p-treetable
+  .p-treetable-thead
+  > tr
+  > th[styleclass="ValuationHeader"]:first-child {
+  padding-left: 28px !important;
+}
+.no-sorticon {
+  display: none;
+}
+tr.over-all .p-element.tree-structure,
+tr.over-all-mean .p-element.no-tree-structure,
+tr.over-all-median .p-element.no-tree-structure {
+  display: none;
+}
+tr.over-all,
+tr.over-all td,
+tr.over-all-mean,
+tr.over-all-median {
+  background-color: white !important;
+}
+td.over-all-mean,
+td.over-all-median,
+tr.sector-mean td,
+tr.sector-median td {
+  background-color: #e8eaf7 !important;
+  border-right: none !important;
+}
+span.over-all.ng-star-inserted {
+  display: none;
+}
+td.over-all.row-no-border,
+td.over-all-mean.custom-border-valuation,
+td.over-all-median.custom-border-valuation {
+  color: #071257 !important;
+  font-weight: bold !important;
+}
+.top-padding-marketData tr.over-all td,
+.top-padding-marketData tr.over-all-mean td,
+.top-padding-marketData tr.over-all-median td {
+  border-left: none !important;
+  border-right: none !important;
+}
+span.over-all-mean.ng-star-inserted,
+span.over-all-median.ng-star-inserted,
+span.sector-mean.ng-star-inserted,
+span.sector-median.ng-star-inserted {
+  color: #55565a;
+}
+.tree-checkbox{
+  display: inline-block;
+  padding: 0px 8px 6px 6px !important;
+}
+
+.tree-checkbox-without-sector{
+  display: inline-block;
+  padding-bottom: 6px;
+  margin-left: -4px !important;
+}
+
+.peersNameCol{
+  padding-left: 6px !important;
+}
+
+.TextTruncate.over-all,
+.TextTruncate.over-all-mean,
+.TextTruncate.over-all-median {
+  color: #071257 !important;
+}
+td.p-element.peer-padding.over-all-mean.p-frozen-column.ng-star-inserted span.ng-star-inserted,
+td.p-element.peer-padding.over-all-median.p-frozen-column.ng-star-inserted span.ng-star-inserted {
+    margin-left: -5px !important;
+}
+td.sector-mean.custom-border-valuation span.TextTruncate,
+td.sector-median.custom-border-valuation span.TextTruncate,
+td.over-all-mean.custom-border-valuation span.TextTruncate,
+td.over-all-median.custom-border-valuation span.TextTruncate {
+  margin-left: 10px !important;
+}
+tr.over-all.table-row.market-data-row.row-expanded.ng-star-inserted td.over-all.row-no-border span.TextTruncate {
+    margin-left: 10px !important;
+}
+::ng-deep .p-treetable-scrollable-body{
+  height: 400px;
+  background-color: white;
+}

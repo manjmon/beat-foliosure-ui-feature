@@ -1,0 +1,99 @@
+.attribution-report-header {
+    height: 40px !important;
+    margin-top: 0px !important;
+    border-bottom: 1px solid  #E7E9ED !important;
+    .nep-button-link {
+        text-align: left !important;
+        font: normal normal medium 14px/17px "Helvetica Neue LT W05_55 Roman",Arial, Verdana, Tahoma,sans-serif;
+        letter-spacing: 0px !important;
+        color: #55565A !important;
+        opacity: 1 !important;
+    }
+
+    .horizontal-parent {
+        max-width: 100% !important;
+    }
+
+    .horizontal-child1 {
+        width: 44px !important;
+        height: 39px !important;
+        text-align: center;
+        background: #FFFFFF 0% 0% no-repeat padding-box !important;
+        border-right: 1px solid #E7E9ED !important;
+        opacity: 1 !important;
+        margin-top: 1px !important;
+        border-bottom: 1px solid  #E7E9ED !important;
+        z-index: 999;
+    }
+
+    .horizontal-child1 a {
+        padding-top: 6px !important;
+    }
+
+    .horizontal-child2 a {
+        padding-top: 6px !important;
+    }
+
+    .horizontal-child2 {
+        width: 44px !important;
+        height: 39px !important;
+        text-align: center;
+        background: #FFFFFF 0% 0% no-repeat padding-box !important;
+        border-left: 1px solid #E7E9ED !important;
+        opacity: 1 !important;
+        margin-top: 1px !important;
+        border-bottom: 1px solid  #E7E9ED !important;
+    }
+
+    .horizontal-menu {
+        overflow-x: hidden !important;
+        white-space: nowrap;
+        max-width: 100%;
+        height: 40px !important;
+    }
+    .default-style {
+        color: #021155 !important;
+        font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+        padding-bottom: 5px !important;
+        border-bottom: 1px solid #021155 !important;
+    }
+
+    .p-selectbutton .p-button.p-highlight button {
+        color: #021155 !important;
+        font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+        // padding-bottom: 5px !important;
+        // border-bottom: 1px solid #021155 !important;
+    }
+
+    .p-selectbutton .p-button.p-highlight {
+        background: none;
+
+    }
+
+    .p-buttonset .p-button {
+        padding-top: 8px !important;
+    }
+
+    .header-right-arrow {
+        // box-shadow: -1px 2px 4px -1px !important;
+        a {
+            color: #021155 !important;
+        }
+    }
+
+    .header-left-arrow {
+        // box-shadow: -1px 4px 8px -1px !important;
+
+        a {
+            color: #021155 !important;
+        }
+    }
+
+    .arrow-style {
+        font-size: 14px !important;
+    }
+}
+.menu-box-shadow{
+    box-shadow: 0px 3px 6px #00000014 !important;
+opacity: 1;
+}

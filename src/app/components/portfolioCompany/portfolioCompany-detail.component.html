@@ -1,0 +1,465 @@
+﻿<div class="row portfolio-company-detail-section">
+    <div class="col-lg-12">
+        <div class="detail-portfolio-component">
+            <div class="card-body portafolio-table" *ngIf="!loading">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="portfolio-detail-component">
+                            <div class="card card-main static-card">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-sm-12 pr-0 pl-0">                     
+                                        <div class="static-pc-section fund-detail section1-height chart-area row mr-0 ml-0 mb-0">
+                                            <div class="col-12 col-md-12 col-lg-12 col-xl-12 col-sm-12 pr-0 pl-0">
+                                                <div class="row mr-0 ml-0 pb-1 static-bg">
+                                                    <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 pr-0 pl-0 chart-title pc-section-header">
+                                                        <div class="float-right"
+                                                        [hideIfUserUnAuthorized]='{subFeatureId:subFeature.Company,action:actions[actions.canExport],id:id}'>
+                                                        <div class="loading-input-controls-manual"
+                                                            [ngClass]="pdfevent.exportLoading?'':'d-none'">
+                                                            <i aria-hidden="true"
+                                                                class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                                        </div>
+                                                        <img class="pr-3 float-right showHandIcon mt-0"
+                                                            src="assets/dist/images/Cloud-download.svg"
+                                                            (click)="pdfevent.LPReport()" alt="" />
+                                                    </div>
+                                                     </div>
+                                                <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 pr-3 pl-3 pt-3 pb-2">
+                                                    <div class="line-wrapper">
+                                                        <span class="mr-2 TextTruncate" title="{{subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.CompanyInformation}}">{{subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.CompanyInformation}}</span>
+                                                        <div class="line"></div>
+                                                      </div>
+                                                </div>
+                                                <div class="col-12 col-md-12 col-lg-12 col-xl-12 col-sm-12 pr-3 Fund-section row mr-0 ml-0" [ngClass]="companyLogoModel.IsActive && !['NA', 'NA'].includes(companyLogoModel.Value) ? 'pl-3':''"
+                                                [hideIfUserUnAuthorized]='{subFeatureId:subFeature.StaticDataBusinessDesciptionInvestmentProfessional,action:actions[actions.canView],id:id}'>
+                                                <div class="col-md-3 col-lg-3 col-xl-3 col-sm-3 col-3 pl-0 pr-3" *ngIf="companyLogoModel.IsActive && !['NA', 'NA'].includes(companyLogoModel.Value)"
+                                                   >
+                                                    <img class="companyLogoStyle" src={{companyLogoModel.Value}}
+                                                        alt="" />
+                                                </div>
+                                                <div class="pl-0 pr-0" [ngClass]="[companyLogoModel.IsActive && !['NA', 'NA'].includes(companyLogoModel.Value) ? 'static-section-pl col-md-9 col-lg-9 col-xl-9 col-sm-9 col-9':'col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12']">
+                                                    <div class="row mr-0 ml-0">
+                                                        <ng-container  *ngFor="let field of fieldValueList">
+                                                        <div class="col-6 pl-0 pr-0 pt-2 mb-1 custom-static-label-padding"  *ngIf="field.isActive">
+                                                            <div class="row mr-0 ml-0">
+                                                                <div class="pr-0 pl-0 col-4">
+                                                                    <div class="TextTruncate field-w" title="{{field.displayName}}"><span class="hColor static-label">
+                                                                        {{field.displayName}}</span></div>
+                                                                </div>
+                                                                <div class="pr-0 pl-0 col-8 custom-static-value-padding">
+                                                                    <div class="TextTruncate field-w">
+                                                                        <span  title="{{field?.value}}" class="" *ngIf="field.name == companyInformationConstants.Website">
+                                                                            <a id="{{field.fieldID}}" *ngIf="field?.value!=''" class="linkStyle" href="//{{field.value}}" target="_blank">{{field.value||
+                                                                                "NA"}}</a>
+                                                                            <span id="{{field.fieldID}}" *ngIf="field?.value==''">NA</span>
+                                                                        </span>
+                                                                        <span title="{{fundDetail?.fundName}}" class="" *ngIf="field.name == companyInformationConstants.FundId">
+                                                                            <a id="{{field.fieldID}}" class="linkStyle" *ngIf="fundDetail!=null"
+                                                                                [routerLink]="['/fund-details', fundDetail?.encryptedFundId]">{{fundDetail?.fundName}}</a>
+                                                                            <span id="{{field.fieldID}}" title="NA" *ngIf="fundDetail==null" class="vColor static-field-value">
+                                                                                NA
+                                                                            </span>
+                                                                        </span>
+                                                                        <span title="{{dealDetail?.dealCustomID}}" class="" *ngIf="field.name == companyInformationConstants.DealId">
+                                                                            <a id="{{field.fieldID}}" class="linkStyle" *ngIf="dealDetail!=null"
+                                                                                [routerLink]="['/deal-details', dealDetail?.encryptedDealID]">{{dealDetail?.dealCustomID}}</a>
+                                                                            <span id="{{field.fieldID}}" title="NA" *ngIf="dealDetail==null" class="vColor static-field-value">
+                                                                                NA
+                                                                            </span>
+                                                                        </span>
+                                                                        <span id="{{field.fieldID}}" title="{{transform(field.value)||'NA'}}" class="vColor static-field-value"
+                                                                            *ngIf="field.name == companyInformationConstants.CompanyStatus;else other_content; ">{{transform(field.value)||
+                                                                            "NA"}}
+                                                                        </span>
+                                                                        <ng-template #other_content>
+                                                                            <span *ngIf="field.dataTypeId!=mDataTypes.List">
+                                                                                <span id="{{field.fieldID}}" title="{{field.value|| 'NA'}}" class="vColor static-field-value"  *ngIf="field.name !== companyInformationConstants.Website && field.name !== companyInformationConstants.DealId && field.name !== companyInformationConstants.FundId && (field.dataTypeId==mDataTypes.FreeText||field.dataTypeId==0||field.dataTypeId==mDataTypes.Date)">
+                                                                                    {{field.value||"NA"}}
+                                                                                </span>
+                                                                                <span id="{{field.fieldID}}" *ngIf="field.dataTypeId==mDataTypes.CurrencyValue"
+                                                                                    [innerHtml]="isNumberCheck(field.value) ? (field.value | number: NumberDecimalConst.currencyDecimal | minusSignToBrackets: '') : field.value||'NA'">
+                                                                                </span>
+                                                                                <span id="{{field.fieldID}}" *ngIf="field.dataTypeId==mDataTypes.Number">
+                                                                                    {{isNumberCheck(field.value) ? (field.value | number:'1.0-0') : field.value||"NA"}}
+                                                                                </span>
+                                                                                <span id="{{field.fieldID}}" *ngIf="field.dataTypeId==mDataTypes.Multiple">
+                                                                                    {{isNumberCheck(field.value) ? (field.value | number: NumberDecimalConst.multipleDecimal)+'x' : field.value||"NA"}}
+                                                                                </span>
+                                                                                <span id="{{field.fieldID}}" *ngIf="field.dataTypeId==mDataTypes.Percentage"
+                                                                                    [innerHtml]="isNumberCheck(field.value) ? (field.value | number: NumberDecimalConst.percentDecimal | minusToBracketsWithPercentage: '%') : field.value||'NA'">
+                                                                                </span>
+                                                                            </span>
+                                                                            <span *ngIf="field.dataTypeId===mDataTypes.List"> 
+                                                                                <div id="{{field.fieldID}}" *ngIf="(customPortfolioGroupList|pcArrayFilter:field).length==0">NA</div>
+                                                                                <div  id="{{field.fieldID}}" *ngIf="(customPortfolioGroupList|pcArrayFilter:field).length>0">
+                                                                                    <li class="TextTruncate list-padding" title="{{custom.groupName|| 'NA'}}"
+                                                                                        *ngFor="let custom of customPortfolioGroupList|pcArrayFilter:field">
+                                                                                        {{custom.groupName||"NA"}}
+                                                                                    </li>
+                                                                                </div>
+                                                                            </span>
+                                                                        </ng-template>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </ng-container>
+                                                    </div>
+                                                </div>
+                                            </div>                                        
+                                                </div>
+                                                <div class="row mr-0 ml-0 pt-3 pb-1" *ngIf="businessModel.IsActive">
+                                                    <div class="col-sm-12 pr-3 pl-3">
+                                                        <div class="line-wrapper">
+                                                            <span class="mr-2 TextTruncate" title="{{businessModel.DisplayName}}">{{businessModel.DisplayName}}</span>
+                                                            <div class="line"></div>
+                                                          </div>
+                                                        <div class="chart-content">                                                       
+                                                            <div id="businessDescId"  [hideIfUserUnAuthorized]='{subFeatureId:subFeature.StaticDataBusinessDesciptionInvestmentProfessional,action:actions[actions.canView],id:id}'
+                                                                class=" statit-desc pr-0 pl-0 pt-3 TextTruncate" title="{{businessModel.Value || 'NA'}}">{{businessModel.Value || "NA"}}</div>
+                                                            <div class="row view-auth" *ngIf="!isCompanyInfo">
+                                                                <div class="col-12 text-center mt-5">
+                                                                    <app-unauthorizedacces class="mt-2" [isHideAuthImage]=false>
+                                                                    </app-unauthorizedacces>
+                                                                </div>
+                                                            </div>
+            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mr-0 ml-0 pt-3 pb-2" *ngIf="subPageList | arrayFilter: isFieldActive :companyPageSectionConstants.Locations">
+                                                    <div class="col-sm-12 pr-3 pl-3">
+                                                        <div class="line-wrapper" >
+                                                            <span class="mr-2 TextTruncate" title="{{subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.Locations}}">{{subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.Locations}}</span>
+                                                            <div class="line"></div>
+                                                          </div>
+                                                    </div>
+                                                </div>
+                                            <div class="pt-2" [ngClass]="investmentProfessionFieldList?.length ==0 ?'pb-3':'pb-1'" *ngIf="subPageList | arrayFilter: isFieldActive :companyPageSectionConstants.Locations"
+                                                            [hideIfUserUnAuthorized]='{subFeatureId:subFeature.StaticDataBusinessDesciptionInvestmentProfessional,action:actions[actions.canView],id:id}'>
+                                                            <div class="card">
+                                                                <div class="card-body mb-0">
+                                                                    <div class="table-responsive card-border static-table-border">
+                                                                        <table class='table mb-0 static-info-table'>
+                                                                            <thead>
+                                                                                <tr> 
+                                                                                    <ng-container *ngFor="let geo of geographicLocationFieldList">
+                                                                                        <th scope="col" class="text-align-left TextTruncate" title="{{geo.displayName}}" *ngIf="geo.isActive">{{geo.displayName}}</th>
+                                                                                    </ng-container>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                <tr *ngFor="let location of model.geographicLocations">
+                                                                                    <ng-container *ngFor="let geo of geographicLocationFieldList">
+                                                                                        <td class="text-align-left" *ngIf="geo.isActive">
+                                                                                            <span class="loc{{geo.fieldID}}" *ngIf="geo.name ==companyInformationConstants.Region" title="{{ location?.region!=null
+                                                                                                ?location?.region?.region:'NA' }}">{{ location?.region!=null
+                                                                                                ?location?.region?.region:"NA" }}</span>
+                                                                                            <span class="loc{{geo.fieldID}}" *ngIf="geo.name ==companyInformationConstants.Country" title="{{
+                                                                                                location?.country?.country!=null?location?.country?.country:'NA'
+                                                                                                }}">{{
+                                                                                                location?.country?.country!=null?location?.country?.country:"NA"
+                                                                                                }}</span>
+                                                                                            <span class="loc{{geo.fieldID}}" *ngIf="geo.name ==companyInformationConstants.State" title="{{
+                                                                                                location?.state?.state!=null?location?.state?.state:'NA' }}">{{
+                                                                                                location?.state?.state!=null?location?.state?.state:"NA" }}</span>
+                                                                                            <span class="loc{{geo.fieldID}}" *ngIf="geo.name ==companyInformationConstants.City" title="{{
+                                                                                                location?.city?.city!=null?location?.city?.city:'NA' }}"> {{
+                                                                                                location?.city?.city!=null?location?.city?.city:"NA" }} </span>
+                                                                                        </td>
+                                                                                    </ng-container>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                        <app-empty-state [isGraphImage] ="false" *ngIf="model.geographicLocations==null || model.geographicLocations?.length==0"></app-empty-state>  
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row mr-0 ml-0 pt-3 pb-2" *ngIf="subPageList | arrayFilter: isFieldActive :companyPageSectionConstants.InvestmentProfessionals">
+                                                            <div class="col-sm-12 pr-3 pl-3">
+                                                                <div class="line-wrapper">
+                                                                    <span class="mr-2 TextTruncate" title="{{subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.InvestmentProfessionals}}"> {{subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.InvestmentProfessionals}}</span>
+                                                                    <div class="line"></div>
+                                                                  </div>
+                                                            </div>
+                                                        </div>
+                                                <div class="invest-section-pb pt-2 pb-1" *ngIf="subPageList | arrayFilter: isFieldActive :companyPageSectionConstants.InvestmentProfessionals"
+                                                    [hideIfUserUnAuthorized]='{subFeatureId:subFeature.StaticDataBusinessDesciptionInvestmentProfessional,action:actions[actions.canView],id:id}'>
+                                                    <div class="card">
+                                                        <div class="card-body mb-0">
+                                                            <div class="table-responsive card-border static-table-border">
+                                                                <table class='table mb-0 static-info-table' >
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <ng-container *ngFor="let investpro of investmentProfessionFieldList">
+                                                                                <th scope="col" class="text-align-left " *ngIf="investpro.isActive" title="{{investpro.displayName}}">{{investpro.displayName}}</th>
+                                                                            </ng-container>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let employee of model.pcEmployees">
+                                                                            <ng-container *ngFor="let investpro of investmentProfessionFieldList">
+                                                                                <td class="text-align-left" *ngIf="investpro.isActive">
+                                                                                    
+                                                                                    <span class="inv{{investpro?.fieldID}}" *ngIf="investpro.name ==companyInformationConstants.EmployeeName" title="{{ employee?.employeeName || 'NA'  }}"> {{ employee?.employeeName || "NA"  }}</span>
+                                                                                    <span class="inv{{investpro?.fieldID}}" *ngIf="investpro.name ==companyInformationConstants.Designation" title="{{ employee?.designation?.designation || 'NA' }}">{{ employee?.designation?.designation || "NA" }} </span>
+                                                                                    <span class="inv{{investpro?.fieldID}}" *ngIf="investpro.name ==companyInformationConstants.Email" title="{{ employee?.emailId || 'NA' }}"> {{ employee?.emailId || "NA" }}</span>
+                                                                                    <span class="inv{{investpro?.fieldID}}" *ngIf="investpro.name ==companyInformationConstants.Education" title="{{ employee?.education || 'NA' }}"> {{ employee?.education || "NA" }} </span>
+                                                                                    <span class="inv{{investpro?.fieldID}}" *ngIf="investpro.name ==companyInformationConstants.PastExperience" title="{{ employee?.pastExperience || 'NA'  }}"> {{ employee?.pastExperience || "NA"  }} </span>
+                                                                                </td>
+                                                                            </ng-container>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                <app-empty-state [isGraphImage] ="false" *ngIf="model?.pcEmployees==null || model.pcEmployees?.length==0"></app-empty-state>  
+                                                            </div>
+                                                           
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>                                      
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>           
+                <div class="row performance-section pt-3 mr-0 ml-0" *ngIf="tabList.length>0" [ngClass]="isCommentarySection?'':'pb-4'">
+                    <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pl-0">
+                        <div class="performance-header pt-1 pb-2 TextTruncate" title="{{subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.KPI}}">{{subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.KPI}}</div>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 outer-section pl-0 pr-0">
+                        <div class="panel panel-default pt-2 tab-bg">
+                            <div class="panel-heading">
+                                <div class="panel-title custom-tabs">
+                                    <ul class="nav nav-tabs ">
+                                        <li class="nav-item" role="presentation" *ngFor="let tab of tabList;"
+                                            (click)="selectTab(tab)">
+                                            <button class="nav-link nav-custom settingMoreThan25Chars" [ngClass]="tab.active?'active':''"
+                                                id="home-tab" data-bs-toggle="tab" type="button" role="tab"
+                                                aria-controls="home" aria-selected="true" title="{{tab?.tabAliasName}}">
+                                                {{ tab?.tabAliasName}}
+                                            </button>
+
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-bg">
+                            <div *ngIf="tabName=='Operational'">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <app-operational-kpi-graph *ngIf="isOperationalKPI" [operationalModel]=model
+                                            [operationalddlmodel]=ddlModel></app-operational-kpi-graph>
+                                    </div>
+                                </div>
+                                <portfolio-operational-kpi *ngIf="isOperationalKPI" [model]=model
+                                    [events]="eventsSubject.asObservable()">
+                                </portfolio-operational-kpi>
+                                <div class="row view-auth" *ngIf="!isOperationalKPI">
+                                    <div class="col-12 text-center mt-5">
+                                        <app-unauthorizedacces class="mt-2" [isHideAuthImage]=false>
+                                        </app-unauthorizedacces>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="(tabName=='Operational KPI Beta')">
+                                <app-operational-kpi-beta *ngIf="isOperationalKPI"
+                                    [modelList]="model" [pageConfigData]="subSectionFields" ></app-operational-kpi-beta>
+                                <div class="row view-auth" *ngIf="!isOperationalKPI">
+                                    <div class="col-12 text-center mt-5">
+                                        <app-unauthorizedacces class="mt-2" [isHideAuthImage]=false>
+                                        </app-unauthorizedacces>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="tabName=='Investment'">
+
+                                <portfolio-investment-kpi *ngIf="isInvestmentKPI" [model]="model">
+                                </portfolio-investment-kpi>
+                                <div class="row view-auth" *ngIf="!isInvestmentKPI">
+                                    <div class="col-12 text-center mt-5">
+                                        <app-unauthorizedacces class="mt-2" [isHideAuthImage]=false>
+                                        </app-unauthorizedacces>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="tabName=='Company'">
+                                <portfolio-company-kpi *ngIf="isCompanyKPI" [events]="eventsSubject.asObservable()" [model]=model [pageConfigData]="subSectionFields" >
+                                </portfolio-company-kpi>
+                                <div class="row view-auth" *ngIf="!isCompanyKPI">
+                                    <div class="col-12 text-center mt-5">
+                                        <app-unauthorizedacces class="mt-2" [isHideAuthImage]=false>
+                                        </app-unauthorizedacces>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="tabName=='Impact'">
+                                <portfolio-impact-kpi *ngIf="isImpactKPI" [events]="eventsSubject.asObservable()">
+                                </portfolio-impact-kpi>
+                                <div class="row view-auth" *ngIf="!isImpactKPI">
+                                    <div class="col-12 text-center mt-5">
+                                        <app-unauthorizedacces class="mt-2" [isHideAuthImage]=false>
+                                        </app-unauthorizedacces>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="tabName=='Trading Records' && !isEnableTradingBeta">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <app-master-kpi-graph *ngIf="isTradingRecord" [modelList]="model">
+                                        </app-master-kpi-graph>
+                                    </div>
+                                </div>
+                                <app-master-kpi [kpiName]="'TradingRecords'" *ngIf="isTradingRecord"
+                                    [modelList]="model" [events]="eventsSubject.asObservable()"></app-master-kpi>
+                                <div class="row view-auth" *ngIf="!isTradingRecord">
+                                    <div class="col-12 text-center mt-5">
+                                        <app-unauthorizedacces class="mt-2" [isHideAuthImage]=false>
+                                        </app-unauthorizedacces>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="(tabName=='Trading Records' && isEnableTradingBeta || tabName=='Trading Records Beta')">
+                                <app-master-kpi-beta [kpiName]="'TradingRecords'" *ngIf="isTradingRecord"
+                                    [modelList]="model" [pageConfigData]="subSectionFields" ></app-master-kpi-beta>
+                                <div class="row view-auth" *ngIf="!isTradingRecord">
+                                    <div class="col-12 text-center mt-5">
+                                        <app-unauthorizedacces class="mt-2" [isHideAuthImage]=false>
+                                        </app-unauthorizedacces>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="tabName=='Credit'">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <app-master-kpi-graph *ngIf="isCreditKPI" [modelList]="model">
+                                        </app-master-kpi-graph>
+                                    </div>
+                                </div>
+                                <app-master-kpi [kpiName]="'CreditKpi'" *ngIf="isCreditKPI" [modelList]="model">
+                                </app-master-kpi>
+                                <div class="row view-auth" *ngIf="!isCreditKPI">
+                                    <div class="col-12 text-center mt-5">
+                                        <app-unauthorizedacces class="mt-2" [isHideAuthImage]=false>
+                                        </app-unauthorizedacces>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                      <!-- <financials *ngIf="isFinancials"  [pcCompanyId]="portfolioInfoSectionModel.portfolioCompanyID"
+                        [companyName]="model.companyName" [subHeaderName]="subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.Financials"
+                        [reportingCurrencyCode]="model.reportingCurrencyDetail.currencyCode"></financials> -->
+                        
+                        <app-financials-beta *ngIf="isFinancials"  [pcCompanyId]="portfolioInfoSectionModel.portfolioCompanyID"
+                        [companyName]="model.companyName" [subHeaderName]="subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.Financials"
+                        [reportingCurrencyCode]="model.reportingCurrencyDetail.currencyCode"></app-financials-beta>
+                </div>
+                <div class="row" *ngIf="false">
+                    <div class="col-12">
+                        <div class="form-group text-center">
+                            <a class="btn btn-primary TextTruncate" [routerLink]="['/add-portfolio-company']"
+                                [hideIfUnauthorized]='{featureId:feature.PortfolioCompany,action:"add"}' title="Add
+                                Portfolio
+                                Company">Add
+                                Portfolio
+                                Company</a>
+                        </div>
+                    </div>
+                </div>
+                <!----Comment Section start-->
+                <div *ngIf="isCommentarySection"
+                    [hideIfUserUnAuthorized]='{subFeatureId:subFeature.Commentary,action:actions[actions.canView],id:id}'>
+                    <div class="row mt-4">
+                        <div class="col-sm-12">
+                            <div class="shadow-sm border-1 border-radius-2 mar-bottom-15 chart-area ">
+                                <div id="Commentary-section" class="chart-title p-2">
+                                    <div class="row rowpadding">
+                                    <span class="qsearchbar">
+                                        <div class="col-12 mr-auto">
+                                            <h4><i aria-hidden="true" class="TextTruncate" title="{{subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.Commentary}}" aria-hidden="true"></i>
+                                                {{subPageList | arrayFilter: getStaticFieldDisplayName :companyPageSectionConstants.Commentary}}
+                                            </h4>
+                                        </div>
+                                           <quarter-year-control [ControlName]="'pcYear'" 
+                                            [QuarterYear]="YearQuarter" class="searchbarmargin"
+                                            (onCalendarYearPicked)="QuarterYear($event)">
+                                           </quarter-year-control>  
+                                        </span>
+                                    </div>
+                                 <div class="toggle-section">
+                                    <p-accordion [multiple]="true" (onClose)="onCloseAccordion($event)" (onOpen)="onOpenAccordion($event)">
+                                        <ng-container  *ngFor="let commentField of commentFieldList; let i = index;">
+                                        <p-accordionTab [selected]="commentField.activeAccordion" [ngClass]="previewEditorWrapper" >
+                                            <p-header style="width: 100%;">
+                                                <div class="row mr-0 ml-0" [hideIfUserUnAuthorized]='{subFeatureId:subFeature.Commentary,action:actions[actions.canEdit],id:id}'>
+                                                    <div class="col-12 pr-0 pl-0">
+                                                        <div class="float-right margin-right">
+                                                            <a title="Cancel" *ngIf="commentField.isEdit" (click)="cancelCommentry($event,i)"><img  alt="" src="assets/dist/images/red-tick.svg">
+                                                            </a>
+                                                            
+                                                            <a title="Save" *ngIf="commentField.isEdit" (click)="saveCommentry($event,i)"><img alt="" src="assets/dist/images/green-tick.svg"></a>
+                                                            <a title="Edit" *ngIf="!commentField.isEdit" (click)="editCommentry($event,i)"><img alt="" src="assets/dist/images/EditIcon.svg"></a>
+                                                           
+                                                        </div>
+                                                        <div class="margin-right">
+                                                            <span>{{commentField.displayName}}</span>
+                                                        </div>  
+                                                    </div>
+                                                </div>
+                                            </p-header>
+                                                
+                                                <p [ngClass]="'previewEditorWrapper ql-editor pl-0'"  [innerHTML]="(commentField.value || 'NA')" *ngIf="!commentField.isEdit"></p>
+                                            
+                                            <div *ngIf="commentField.isEdit" style="margin: -20px -20px -20px -20px;">
+                                                <app-custom-quill-editor [editorPlaceholder]="editorPlaceholder" [(ngModel)]="commentField.value"></app-custom-quill-editor>
+                                            </div>
+                                        </p-accordionTab>
+                                    </ng-container>
+                                    </p-accordion>
+                                    <confirm-modal *ngIf="showConfirModel" primaryButtonName="Yes" secondaryButtonName="No" modalTitle="Confirm" (primaryButtonEvent)="YesOn($event)" (secondaryButtonEvent)="NoOnCancel($event)">Are you sure, do you want to cancel?</confirm-modal>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <!----Comment section end-->
+            </div>
+        </div>
+    </div>
+    <p-menu #menuexport [model]="items" [popup]="true"></p-menu>
+</div>
+
+<ng-template #KPIHeader let-context>
+    <div class="row">
+        <div class="col-auto mr-auto">
+            <h4><i aria-hidden="true" aria-hidden="true" class="fa fa-table"></i> {{context}}
+
+            </h4>
+        </div>
+        <div class="col-auto">
+            <span
+                [hideIfUserUnAuthorized]='{subFeatureId:subFeature.TradingRecords,action:actions[actions.canEdit],id:id}'>
+                <span title="Switch to view cell based audit trails">
+                    <p-inputSwitch></p-inputSwitch>
+                </span>
+            </span>
+            <span class="float-right gbp-info"><i aria-hidden="true" class="fa fa-info-circle icon"></i>
+                All values in <span>{{model.reportingCurrencyDetail.currencyCode}}</span>
+            </span>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</ng-template>
+<div class="detail-w-p-v">
+    <app-htmltopdf #pdfevent [model]="model"></app-htmltopdf>
+</div>

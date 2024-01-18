@@ -1,0 +1,387 @@
+<div class="row mr-0 ml-0"
+    [style]="IsValidUser ? {'padding-top': '32px'} : {'padding-top': '0px','margin-top': '0px!important'}"
+    *ngIf="!isLoader">
+    <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 company-inform edit-section-header"
+        [ngClass]="isExists(subFeature.StaticDataBusinessDesciptionInvestmentProfessional) ? 'd-block' : 'd-none'"
+        [style]="!IsValidUser ? {'margin-top': '0px!important'} : {}">
+        <div class="workflow-draft">
+            <div class="float-left companypl d-inline-block">
+                <span> {{subPageList | arrayFilter: getFieldDisplayName
+                    :companyPageSectionConstants.CompanyInformation}}</span>                
+            </div>  
+            <div *ngIf="workflowDetails.isStart && sectionData.isActionButtons"
+                class="float-right  companyaction  d-inline-block first-action">
+                <span class="pr-2"><button (click)="setWorkflowRequest()" class="btn btn-nep-default history-pl-pr"
+                        [routerLink]="['/add-portfolio-company',model.encryptedPortfolioCompanyId]">
+                        <img alt="" src="assets/dist/images/EditGrey.svg" class="loading-img" />
+                    </button></span>
+                <span><button
+                        [disabled]="!sectionData.isEdited || sectionData.statusId == -1 || sectionData.isMarkedForReview "
+                        class="btn btn-nep-primary" (click)="showAddCommentPopup = true;">Mark for
+                        Review</button></span>
+
+            </div> 
+            <div *ngIf="!workflowDetails.isStart && !workflowDetails.isEnd && sectionData.isActionButtons"
+                class="float-right  companyaction  d-inline-block workflow-toggle">
+                <span class="pr-2"><button (click)="setWorkflowRequest()" class="btn btn-nep-default history-pl-pr"
+                        [routerLink]="['/add-portfolio-company',model.encryptedPortfolioCompanyId]">
+                        <img alt="" src="assets/dist/images/EditGrey.svg" class="loading-img" />
+                    </button></span>
+                <mat-button-toggle-group [(ngModel)]="toggleStatus">
+                    <mat-button-toggle [disabled]="sectionData.isRework"
+                        (click)="showCommentPopup(sectionData.isRework)" value="Rework">Rework</mat-button-toggle>
+                    <mat-button-toggle [disabled]="sectionData.isApprove" value="Approve"
+                        (click)="showCommentPopup(sectionData.isApprove)">Approve</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+            <div *ngIf="workflowDetails.isEnd && sectionData.isActionButtons"
+                class="float-right  companyaction  d-inline-block workflow-toggle">
+                <span class="pr-2"><button (click)="setWorkflowRequest()" class="btn btn-nep-default history-pl-pr"
+                        [routerLink]="['/add-portfolio-company',model.encryptedPortfolioCompanyId]">
+                        <img alt="" src="assets/dist/images/EditGrey.svg" class="loading-img" />
+                    </button></span>
+                <mat-button-toggle-group [(ngModel)]="toggleStatus">
+                    <mat-button-toggle [disabled]="sectionData.isRework"
+                        (click)="showCommentPopup(sectionData.isRework)" value="Reject">Rework</mat-button-toggle>
+                    <mat-button-toggle [disabled]="sectionData.isApprove"
+                        (click)="showCommentPopup(sectionData.isApprove)" value="Publish">Approve</mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+        </div>
+    </div> 
+    <div class="col-md-12 col-lg-12 col-xs-12 pl-0 pr-0 staticInfoDraft">
+        <div class="col-12 col-md-12 col-lg-12 col-xl-12 col-sm-12 pr-3 row mr-0 ml-0" [ngClass]="companyLogoModel.IsActive && !['NA', 'NA'].includes(companyLogoModel.Value) ? 'pl-3':''">
+            <div class="col-2" *ngIf="companyLogoModel.IsActive && companyLogoModel.Value !== 'NA'">
+                <img class="companyLogoStyle" src={{model.companylogo}} alt="" />
+            </div>
+
+            <div class="col-md-9 col-lg-9 col-xl-9 col-sm-9 col-9 pl-0 pr-0" 
+            [ngClass]="companyLogoModel.IsActive && !['NA', 'NA'].includes(companyLogoModel.Value) ? 'static-section-pl':''">
+                <div class="row mr-0 ml-0">
+
+                    <ng-container *ngFor="let field of fieldValueList">
+                        <div class="col-6 pt-2 mb-1 staticFields" *ngIf="field.isActive">
+                            <div class="row mr-0 ml-0">
+                                <div class="pr-3 pl-0 col-4">
+                                    <div class="TextTruncate field-w"
+                                        title="{{field.displayName}}"><span
+                                            class="hColor static-label">
+                                            {{field.displayName}}</span>
+                                    </div>
+                                </div>
+                                <div class="pr-0 pl-0 col-8">
+                                    <div class="TextTruncate field-w">
+                                        <span title="{{field?.value}}"
+                                            class=""
+                                            *ngIf="field.name == companyInformationConstants.Website">
+                                            <a *ngIf="field?.value!=''"
+                                                class="linkStyle"
+                                                href="//{{field.value}}"
+                                                target="_blank">{{field.value||
+                                                "NA"}}</a>
+                                            <span
+                                                *ngIf="field?.value==''">NA</span>
+                                        </span>
+                                        <span
+                                            title="{{fundDetail?.fundName}}"
+                                            class=""
+                                            *ngIf="field.name == companyInformationConstants.FundId">
+                                            <a class="linkStyle"
+                                                *ngIf="fundDetail!=null"
+                                                [routerLink]="['/fund-details', fundDetail?.encryptedFundId]">{{fundDetail?.fundName}}</a>
+                                            <span title="NA"
+                                                *ngIf="fundDetail==null"
+                                                class="vColor static-field-value">
+                                                NA
+                                            </span>
+                                        </span>
+                                        <span
+                                            title="{{dealDetail?.dealCustomID}}"
+                                            class=""
+                                            *ngIf="field.name == companyInformationConstants.DealId">
+                                            <a class="linkStyle"
+                                                *ngIf="dealDetail!=null"
+                                                [routerLink]="['/deal-details', dealDetail?.encryptedDealID]">{{dealDetail?.dealCustomID}}</a>
+                                            <span title="NA"
+                                                *ngIf="dealDetail==null"
+                                                class="vColor static-field-value">
+                                                NA
+                                            </span>
+                                        </span>
+                                        <span title="{{transform(field.value)||'NA'}}" class="vColor static-field-value" *ngIf="field.name == companyInformationConstants.CompanyStatus;else other_content; ">{{transform(field.value)||
+                                            "NA"}} 
+                                        </span>
+                                        <ng-template #other_content> 
+                                             <span title="{{field.value|| 'NA'}}" class="vColor static-field-value" *ngIf="field.name !== companyInformationConstants.Website && field.name !== companyInformationConstants.DealId && field.name !== companyInformationConstants.FundId">{{field.value||
+                                            "NA"}}
+                                        </span></ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <!-- <ng-container *ngFor="let field of fieldValueList">
+                        <div class="col-6 pt-2 mb-1" *ngIf="field.isActive">
+                            <div class="row mr-0 ml-0">
+                                <div class="pr-0 pl-0 col-6">
+                                    <div class="pr-2 pl-2"><span class="hColor ">
+                                            {{field.displayName}}</span></div>
+                                </div>
+                                <div class="pr-0 pl-0 col-6">
+                                    <div class="pr-2 pl-2">
+                                        <span class="vColor "
+                                            *ngIf="field.name !== companyInformationConstants.Website">{{field.value||
+                                            "N/A"}}
+                                        </span>
+                                        <span class="" *ngIf="field.name == companyInformationConstants.Website">
+                                            <a class="linkStyle" href="//{{field.value}}"
+                                                target="_blank">{{field.value}}</a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container> -->
+                </div>
+            </div>
+        </div>
+        <div class="row mr-0 ml-0 pt-3 pb-3 pl-2 staticInfoDraftSection" *ngIf="businessModel.IsActive">
+            <div class="col-sm-12 pr-3 pl-3">
+                <div class="line-wrapper">
+                    <span class="mr-2">{{businessModel.DisplayName}}</span>
+                    <div class="line"></div>
+                </div>
+                <div>
+                    <div class=" statit-desc pr-0 pl-0 pt-3">{{businessModel.Value || "N/A"}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mr-0 ml-0 pt-3 pb-3 pl-2 staticInfoDraftSection"
+            *ngIf="subPageList | arrayFilter: isFieldActive :companyPageSectionConstants.Locations">
+            <div class="col-sm-12 pr-3 pl-3">
+                <div class="line-wrapper">
+                    <span class="mr-2">{{subPageList | arrayFilter : getFieldDisplayName :
+                        companyPageSectionConstants.Locations}}</span>
+                    <div class="line"></div>
+                </div>
+                <div class="col-12  pl-0 pr-0 pt-3">
+                    <div class="wrapper Investment-border table-responsive">
+                        <table class='table  mb-0 static-info-table'>
+                            <thead>
+                                <tr>
+                                    <ng-container *ngFor="let geo of geographicLocationFieldList">
+                                        <th scope="col" class="text-align-left " *ngIf="geo.isActive">
+                                            {{geo.displayName}}
+                                        </th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let location of model.geographicLocations">
+                                    <ng-container *ngFor="let geo of geographicLocationFieldList">
+                                        <td class="text-align-left" *ngIf="geo.isActive">
+                                            <span *ngIf="geo.name ==companyInformationConstants.Region">{{
+                                                location?.region!=null
+                                                ?location?.region?.region:"N/A" }}</span>
+                                            <span *ngIf="geo.name ==companyInformationConstants.Country">{{
+                                                location?.country?.country!=null?location?.country?.country:"N/A"
+                                                }}</span>
+                                            <span *ngIf="geo.name ==companyInformationConstants.State">{{
+                                                location?.state?.state!=null?location?.state?.state:"N/A" }}</span>
+                                            <span *ngIf="geo.name ==companyInformationConstants.City"> {{
+                                                location?.city?.city!=null?location?.city?.city:"N/A" }} </span>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <app-empty-state [isGraphImage]="false"
+                            *ngIf="model.geographicLocations==null || model.geographicLocations?.length==0">
+                        </app-empty-state>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mr-0 ml-0 pt-3 pb-3 pl-2 staticInfoDraftSection"
+            *ngIf="subPageList | arrayFilter: isFieldActive :companyPageSectionConstants.InvestmentProfessionals">
+            <div class="col-sm-12 pr-3 pl-3">
+                <div class="line-wrapper">
+                    <span class="mr-2">{{subPageList | arrayFilter : getFieldDisplayName :
+                        companyPageSectionConstants.InvestmentProfessionals}}</span>
+                    <div class="line"></div>
+                </div>
+                <div class="col-12  pl-0 pr-0 pt-3">
+                    <div class="wrapper Investment-border table-responsive">
+                        <table class='table mb-0 static-info-table'>
+                            <thead>
+                                <tr>
+                                    <ng-container *ngFor="let investpro of investmentProfessionFieldList">
+                                        <th scope="col" class="text-align-left " *ngIf="investpro.isActive">
+                                            {{investpro.displayName}}</th>
+                                    </ng-container>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let employee of model.pcEmployees">
+                                    <ng-container *ngFor="let investpro of investmentProfessionFieldList">
+                                        <td class="text-align-left" *ngIf="investpro.isActive">
+
+                                            <span *ngIf="investpro.name ==companyInformationConstants.EmployeeName"> {{
+                                                employee?.employeeName || "N/A" }}</span>
+                                            <span *ngIf="investpro.name ==companyInformationConstants.Designation">{{
+                                                employee?.designation?.designation || "N/A" }} </span>
+                                            <span *ngIf="investpro.name ==companyInformationConstants.Email"> {{
+                                                employee?.emailId || "N/A" }}</span>
+                                            <span *ngIf="investpro.name ==companyInformationConstants.Education"> {{
+                                                employee?.education || "N/A" }} </span>
+                                            <span *ngIf="investpro.name ==companyInformationConstants.PastExperience">
+                                                {{
+                                                employee?.pastExperience || "N/A" }} </span>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <app-empty-state [isGraphImage]="false"
+                            *ngIf="model?.pcEmployees==null || model.pcEmployees?.length==0"></app-empty-state>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mr-0 ml-0 company-history">
+            <div class="col-lg-12 edit-section-header  workflow-section-footer pl-0 pr-0 company-inform">
+                <div class="workflow-draft text-center">
+                    <div class="float-left">
+                        <div class="historycomments-p">
+                            <button class="btn btn-nep-default history-pl-pr">
+                                <img alt="" src="assets/dist/images/Icon-material-history.svg" class="loading-img" />
+                            </button>
+                        </div>
+                    </div>
+                    <div class="d-inline-block  text-cente pt-3">
+                        <div class="text-center status-color">
+                            <span class="round-dot-default"
+                                *ngIf="sectionData == null || (sectionData!=null && !sectionData.isMarkedForReview && !sectionData.isApprove && !sectionData.isRework && !sectionData.isEdited)">
+                            </span>
+                            <span class="round-dot-default round-dot-blue"
+                                *ngIf="(sectionData!=null && sectionData.isMarkedForReview) || (sectionData.isEdited && !sectionData.isApprove && !sectionData.isRework)">
+                            </span>
+                            <span class="round-dot-default round-dot-green"
+                                *ngIf="sectionData!=null && sectionData.isApprove">
+                            </span>
+                            <span class="round-dot-default round-dot-red"
+                                *ngIf="sectionData!=null && sectionData.isRework">
+                            </span>
+                            <ng-container *ngIf="sectionData.isRework; then then_LabelContent  else else_labelContent  ">
+
+                            </ng-container>
+                            
+                        </div>
+                    </div>
+                    <div class="float-right">
+                        <div class="historycomments-p">
+                            <button class="btn btn-nep-default history-pl-pr" (click)="openCommentsPopUp()">
+                                <img alt="" src="assets/dist/images/Comment.svg" class="loading-img" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <confirm-modal *ngIf="showAddCommentPopup" primaryButtonName="Done" secondaryButtonName="Cancel"
+        modalTitle="Add Comment" (primaryButtonEvent)="SaveComment()" [disablePrimaryButton]="disableAddCommentDoneBtn"
+        (secondaryButtonEvent)="resetAddCommentPopup()" customTop="18%" customwidth="500px">
+        <div class="addCommentPopup">
+            <textarea autocomplete="off" class="form-control comment-textarea addCommentTextArea" [(ngModel)]="comment"
+                (input)="OnInputAddComment($event.target.value)"
+                placeholder="Click to enter any comments regarding changes done"></textarea>
+        </div>
+    </confirm-modal>
+    <div *ngIf="isOpenCommentsPopup">
+        <div class="nep-modal nep-modal-show custom-modal custm-mdl-db-bg">
+            <div class="nep-modal-mask"></div>
+            <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nep-wrkflw-pr-disply">
+                <div class="nep-card-header nep-modal-title">
+                    <span>Comments</span>
+                    <span class="float-right close-icon" (click)="closeCommentPopup()">
+                        <i class="pi pi-times"></i>
+                    </span>
+                </div>
+                <div class="nep-card-body">
+
+                    <div class="image-container" *ngIf="commentsList.length === 0">
+                        <img class="EmptyStateImgStyle" src="assets/dist/images/empty-message.svg" alt="" /><br /><br />
+                        <span class="font-weight-bold">No comments yet!</span><br />
+                        <span class="workflowZeroStateFontStyle">Please edit data and add comments to mark the section
+                            for review</span>
+
+                    </div>
+                    <div *ngIf="commentsList.length != 0">
+                        <div class="row pb-2" *ngFor="let comment of commentsList">
+                            <div class="col-12">
+                                <div class="circle-user d-inline-block">{{comment.shortUserName}}</div>
+                                <span class="user d-inline">{{comment.userName}} ({{comment.userRole}})</span><span
+                                    class="comment-info">{{comment.commentedDateTime}}</span>
+                            </div>
+                            <div class="col-12 comment-desc">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-12 pr-0 pl-0" *ngIf="!comment.isEditable">
+                                        <span class="comments pr-3">
+                                            {{comment.comments}}
+                                        </span>
+
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-xs-12 pl-0 pr-0" *ngIf="comment.isEditable">
+                                        <div class="custom-nep-input">
+                                            <textarea [(ngModel)]="commentDesc" [value]="comment.comments"
+                                                (input)="onInputUpdateComment(comment ,$event)"
+                                                class="group-text p-2" rows="2" spellcheck="false" data-ms-editor="true"
+                                                placeholder="Enter Comments">
+                                                    </textarea>
+
+                                        </div>
+                                        <div class="float-right pt-1 pb-1 comment-button">
+                                            <span class="pr-2">
+                                                <button class="btn btn-nep-default" (click)="closeComment(comment)">
+                                                    <i class="fa fa-close"></i>
+                                                </button>
+                                            </span>
+                                            <span>
+                                                <button [disabled]="disableUpdateButton" class="btn btn-nep-default"
+                                                    (click)="updateComment(comment)">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 pr-0 pl-0 pt-1" *ngIf="!comment.isEditable">
+                                        <span class="edit-icon edt-icon-wrk-cur-notallw">
+                                            Edit
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>
+
+<ng-template #then_LabelContent>
+    {{
+        workflowDetails.isStart && sectionData.isEdited ? 'Edited' : 'Marked for Rework'
+    }}
+</ng-template>
+<ng-template #else_labelContent><span class="pl-2 status-positon">
+    {{sectionData.isMarkedForReview ?'Marked for Review':sectionData.isApprove?'Marked as Approved':sectionData.isEdited?'Edited':workflowDetails.statusName}}
+</span></ng-template>

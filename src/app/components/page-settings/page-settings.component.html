@@ -1,0 +1,256 @@
+<div class="row bborder header-box_shadow p-3 header-page pt-0">
+    <div class="col-12 col-md-12 col-lg-12 col-xl-12 col-sm-12 col-xs-12 pr-0 pl-0">
+        <div class="float-left">
+            <p-dropdown (onChange)="onPageDdSelectionChange($event);" placeholder="Select an option"
+                class="custom-p-dropdown icon-dropdown page-custom-dropdown " [options]="pageDropdownOptions"
+                [(ngModel)]="selectedPageItem" name="displayName" optionLabel="displayName" appendTo="body">
+            </p-dropdown>
+        </div>
+        <div class="float-right">
+            <button type="reset" title="Clear" class="width-120 nep-button nep-button-secondary" (click)="reset()"
+                [disabled]="!f.form.valid || isDisabledBtn">Reset</button>
+            <button type="submit" title="Save" class=" width-120 nep-button nep-button-primary width-135"
+                [disabled]="!f.form.valid|| isDisabledBtn" (click)="loadpopup()">Save changes
+            </button>
+        </div>
+    </div>
+</div>
+<form name="form" (ngSubmit)="f.form.valid && loadpopup()" [mustMatch]="existingTags" #f="ngForm">
+    <div class="section-container page-section row mr-0 ml-0 mt-3" *ngFor="let page of subPageList;index as i;">
+        <div class="col-12 pr-0 pl-0">
+            <div class="row page-section p-2 mr-0 ml-0 section-header">
+                <div class="col-10 pr-0 pl-0">
+                    <div class="row mr-0 ml-0">
+                        <div class="subpage-name-col col-4 pt-2 pr-0 pl-0 pb-0">
+                            <div class="dot-img">
+                                <img src="assets/dist/images/6dots.svg" alt="">
+                            </div>
+                            <div class="displayName-topCard">
+                                {{page.name}}
+                            </div>
+                        </div>
+                        <div class="col-5 pt-0 pb-0">
+                            <input type="text" class="form-control field-text eachlabel-padding default-txt"
+                                name="{{page.displayName}}{{i}}" value="{{page.displayName}}"
+                                #{{page.displayName}}="ngModel" [(ngModel)]="page.displayName" required
+                                (keyup)="checkAnyDataChange()" autocomplete="off" maxlength="100"
+                                placeholder="Click here to enter field name" />
+                        </div>
+                        <div [ngClass]="page.isDynamicFieldSupported ?'col-3 pt-1' : 'col-0 pt-2'">
+                            <nep-button Type="Secondary" (click)="addCustomField(page);"
+                                *ngIf="page.isDynamicFieldSupported" class="field-nep-button mr-2">
+                                <img src="assets/dist/images/Plus-icon.svg" class="cursor-filter" alt="" class="plus" />
+                                {{page.isDataType!=0?'Column':'Field'}}
+                            </nep-button>
+                            <span
+                                [ngClass]="page.isDynamicFieldSupported ? 'gbp-info col-sm-2 p-0  inline-block' :'gbp-info p-0 col-sm-1 inline-block' "
+                                tooltipPosition="top"
+                                [pTooltip]="page.name == 'Company Performance' ? 'You can hide & change order of default fields.' : (page.isDynamicFieldSupported ? 'You can hide & edit names of default fields. Custom fields can also be deleted' : 'You can hide & edit names of default fields.')"
+                                tooltipStyleClass="bg-grey-color"><img class="FCinfoIconImg-24 cursor-filter"
+                                    [src]="'assets/dist/images/InfoGrey.svg'" alt="" />
+                            </span>
+
+                        </div>
+
+                    </div>
+                </div>
+                
+                <div class="col-2 pt-2 pb-2 pr-0">
+                   
+                    <div class="float-right">
+                        <span class="pr-2"  *ngIf="page.parentId==pageConfigurationPageDetails.ESG"> Hide
+                        <p-inputSwitch class="field-hide-toggle" name="{{page.name}}+1" [(ngModel)]="!page.isActive"
+                            (onChange)="onMainCardToggleChange($event.checked,page.isTabExpanded,i)">
+                        </p-inputSwitch>
+                       </span>
+
+                        <span class="pr-2 d-none" *ngIf="page.name=='Static Information'">
+                            <img src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter" alt="" />
+                        </span>
+                        <span class="pl-2">
+                            <span class="expand-doc cursor-filter" (click)="onTabToggle(page);"><span class="pr-2 ">
+                                    <i [ngClass]="page.isTabExpanded?'pi pi-chevron-up':'pi pi-chevron-down'"
+                                        aria-hidden="true"></i>
+                                </span></span>
+                        </span>
+                        <div>
+                           
+                    </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="section-content" *ngIf="page.isTabExpanded&&page?.subPageFieldList?.length">
+                <div *ngIf="page?.subPageFieldList.length>0" cdkDropList #toWatch="cdkDropList"
+                    [cdkDropListData]="page?.subPageFieldList" (cdkDropListDropped)="page.isDragDrop?drop($event):null">
+                    <div class="row page-section p-2 m-3" #sectioncontent
+                        *ngFor="let field of page?.subPageFieldList | pageSettingIsDelete:filterDelete;index as j"
+                        cdkDrag #elem="cdkDrag">
+                        <div class="col-12 pr-0 pl-0">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-8 pr-0 pl-0">
+                                    <div class="row mr-0 ml-0">
+                                        <div class=" col-3 pt-2 pb-2 pr-0 pl-0 pb-0"
+                                            [ngClass]="page.isDragDrop?'':'pl-isdropdown-false'">
+                                            <span class="pr-2" [ngStyle]="{'cursor': 'pointer' }"
+                                                *ngIf="page.isDragDrop">
+                                                <img class="dot-img-SubCard" src="assets/dist/images/6dots.svg" alt="">
+                                            </span>
+                                            <span class="pt-1">
+                                                <label title="{{field.name}}" class="pt-0 mb-0 displayName">
+                                                    {{field.name}}
+                                                </label>
+                                            </span>
+
+                                        </div>
+                                        <div class="field-name-col col-4 pt-0 pb-0">
+                                            <input title="{{field.displayName}}" type="text"
+                                                class="form-control field-text eachlabel-padding default-txt p-0"
+                                                required="true" [tagValidator]="page.isTabExpanded?existingTags:[]"
+                                                [(ngModel)]="field.displayName" value="{{field.displayName}}"
+                                                name="itemInput--{{field.id}}{{j}}" #itemInput="ngModel"
+                                                autocomplete="off" placeholder="Click here to enter field name"
+                                                maxlength="100" (keyup)="onKeyup(page);checkAnyDataChange();"
+                                                (mousedown)="$event.stopPropagation()" [disabled]="!page.isActive" />
+                                        </div>
+                                        <div class="col-0 pt-2"
+                                            *ngIf="(field.displayName==null||field.displayName=='') || (itemInput.errors!=null && itemInput?.errors?.mustMatch)">
+                                            <span tooltipPosition="top" [pTooltip]="'Unique field name required'"
+                                                tooltipStyleClass="bg-grey-color"><img
+                                                    class="FCinfoIconImg-24 cursor-filter"
+                                                    [src]="'assets/dist/images/PageInfo.svg'" alt="" />
+                                            </span>
+                                        </div>
+                                        <div class="col-3 pt-0 pb-0" *ngIf="page.isDataType&&field.dataTypeId!=0">
+                                            <typeahead-control class="datatype-cntrl header-cntrl typeheader-margin"
+                                                name="dataType-{{j}}" [(ngModel)]="field.dataTypeId"
+                                                [optionList]="(field.subPageID==1||field.parentId==1)?pcDataTypes:trackrecordDataTypes"
+                                                [displayField]="'dataType'" [resultField]="'trackRecordId'"
+                                                #dataType="ngModel" [isRequired]="true"
+                                                [disabled]="page.isDataType&&(pageConfigurationsDatalist|arrayFilterTrueOrFalse:field)">
+                                            </typeahead-control>
+                                        </div>
+                                        <div class="col-0 pt-2"
+                                            *ngIf="page.isDataType&&(pageConfigurationsDatalist|arrayFilterTrueOrFalse:field)">
+                                            <span tooltipPosition="top"
+                                                [pTooltip]="'Data type cannot be changed after uploading data for this custom field. You can delete this custom field and create a new one. Note: Deleting custom field will also delete the uploaded data for it.'"
+                                                tooltipStyleClass="bg-grey-color"><img
+                                                    class="FCinfoIconImg-24 cursor-filter"
+                                                    [src]="'assets/dist/images/InfoGrey.svg'" alt="" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-4 pt-0 pb-2">
+                                    <div class="float-right pt-1 float-rght-width"
+                                        *ngIf="!field.isCustom && !field.isMandatory">
+                                        <span class="pr-2"> Hide
+                                        </span>
+                                        <p-inputSwitch class="field-hide-toggle" name="{{field.name}}+1"
+                                            [(ngModel)]="!field.isActive" [disabled]="page.parentId==pageConfigurationPageDetails.ESG ?!page.isActive:null"
+                                            (onChange)="onToggleChange($event.checked,j,i,page.isTabExpanded)">
+                                        </p-inputSwitch>
+                                    </div>
+                                    <div class="float-right pt-1 float-rght-width"
+                                        *ngIf="field.isCustom && page.parentId==pageConfigurationPageDetails.ESG && !field.isMandatory">
+                                        <span class="pr-2"> Hide
+                                        </span>
+                                        <p-inputSwitch class="field-hide-toggle" name="{{field.name}}+1"
+                                            [(ngModel)]="!field.isActive" [disabled]="!page.isActive"
+                                            (onChange)="onToggleChange($event.checked,j,i,page.isTabExpanded)">
+                                        </p-inputSwitch>
+                                    </div>
+                                    <div class="float-right mandatory pr-2" *ngIf="field.isMandatory">
+                                        (Mandatory)
+                                    </div>
+
+                                    <div class="float-right float-rght-width"
+                                        [ngClass]="page.parentId==pageConfigurationPageDetails.ESG ? 'pr-4' : ''"
+                                        *ngIf="field.isCustom">
+                                        <a class="btn icon-24 p-0 butn-fr" title="Delete"
+                                            (click)="removeCustomField(page, field)">
+                                            <img src="assets/dist/images/Trash-icon.svg" class="cursor-filter" alt="" />
+                                        </a>
+                                    </div>
+
+                                    <div class="float-right pt-1 pr-4"
+                                        *ngIf="field.name !='FundName' && field.showOnList">
+                                        <span class="pr-2"> List page
+                                        </span>
+                                        <p-inputSwitch [ngClass]="disablePageList && !field.isListData ? 'disable' : ''"
+                                            class="field-hide-toggle" name={{field.id}}
+                                            [disabled]="disablePageList && !field.isListData"
+                                            [(ngModel)]="field.isListData"
+                                            (onChange)="onListToggleChange($event.checked,j,i,page.isTabExpanded)">
+                                        </p-inputSwitch>
+                                    </div>
+                                    <div class="float-right pt-1 pr-4"
+                                        *ngIf="field.subPageID==kpiSubPageId||field.subPageID==financial">
+                                        <span class="pr-2"> Chart
+                                        </span>
+                                        <p-inputSwitch class="field-hide-toggle" name="Chart{{j}}"
+                                            [(ngModel)]="!field.isChart"
+                                            (onChange)="onToggleChartChange($event.checked,j,i,page.isTabExpanded)">
+                                        </p-inputSwitch>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 pr-0 pl-0" *ngIf="field?.mSubFields?.length>0">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-12 pr-0 pl-0 pt-4 pb-2">
+                                    <ng-container *ngFor="let subField of field?.mSubFields; let subIndex = index">
+                                        <div class="value-type-section d-inline-block">
+                                            <div class="label-ctrl">
+                                                <span class="TextTruncate">
+                                                    {{subField.aliasName}}
+                                                </span>
+                                            </div>
+                                            <div class="eachlabel-padding default-txt">
+                                                <p-multiSelect class="pageConfig-multiSelect"
+                                                    name="{{field.name}}{{subIndex}}" [showHeader]="false"
+                                                    [options]="subField.options" [(ngModel)]="subField.chartValue"
+                                                    placeholder="Select" [defaultLabel]="someText" optionLabel="name"
+                                                    (onChange)="onChangeSubPageFields($event.checked,j,i,page.isTabExpanded)"
+                                                    [selectedItemsLabel]="'{0} items selected'" [display]="comma">>
+                                                    <ng-template let-value pTemplate="selectedItems">
+                                                        <ng-template [ngIf]="value?.length ?? 0 > 0"
+                                                            [ngIfElse]="defaultTemplate">
+                                                            <div class="settingMoreThan15Chars">{{value}}</div>
+                                                        </ng-template>
+                                                        <ng-template #defaultTemplate>Select</ng-template>
+                                                    </ng-template>
+                                                    <ng-template let-options pTemplate="item">
+                                                        <div>
+                                                            <div>{{ options }}</div>
+                                                        </div>
+                                                    </ng-template>
+                                                </p-multiSelect>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div *ngIf="isPopup">
+    <modal customwidth="489px" [modalTitle]="modalTitle" primaryButtonName="Confirm" secondaryButtonName="Cancel"
+        (primaryButtonEvent)="OnConfig($event)" (secondaryButtonEvent)="OnCancel($event)"
+        [disablePrimaryButton]="disableRenameConfirm">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12">
+                This will implement changes to the system. Are you confirm?
+            </div>
+        </div>
+    </modal>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="400">
+</p-confirmDialog>

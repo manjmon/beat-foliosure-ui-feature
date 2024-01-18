@@ -1,0 +1,67 @@
+.table-row{
+    height: 57px;
+    //background-color: #0c7cec !important;
+}
+// ::ng-deep .p-treetable .p-treetable-tbody > tr{
+//     background-color: #0c7cec;
+// }
+.custom-background{
+    background-color: #0c7cec !important;
+}
+.custom-background-white{
+    background-color: white !important;
+}
+// .market-data-row:hover {
+//     background: #EFF0F9 0% 0% no-repeat padding-box !important;
+//     cursor: pointer !important;
+// }
+.row-expanded {
+    background-color: #F7F8FC !important;
+}
+.row-collapsed {
+    background-color: #FFFFFF !important;
+}
+.row-no-border{
+    border-right: none !important;
+}
+.bg-tooltip-valuation{
+    background-color: black;
+}
+.top-padding-marketData{
+    padding-top: 15px;
+}
+
+.custom-border-valuation
+{
+    border-right: 1px solid #DEDFE0 !important;
+    .p-treetable-frozen-view
+    {
+        width:400px;
+        .p-treetable-scrollable-header
+        {
+            border-right: 1px solid #DEDFE0 !important;
+
+            table .p-treetable-scrollable-header-table{
+                thead tr td:first-child{
+                    padding-left: 28px !important;
+                }
+            }
+        }
+    }
+}
+.no-sorticon{
+    display:none;
+}
+.p-treetable .p-treetable-thead > tr > th[styleclass=ValuationHeader]:first-child{
+    padding-left: 28px !important;
+}
+.peer-padding:first-child{
+    padding-left: 28px !important;
+}
+.peer-padding :not(:first-child) {
+    padding-left: 16px !important;
+  }
+  ::ng-deep .p-treetable-scrollable-body{
+    height: 400px;
+    background-color: white;
+  }

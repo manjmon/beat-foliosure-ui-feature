@@ -1,0 +1,328 @@
+<div class="row ml-0 mr-0 portfolio-company-mapping" *ngIf="isEnableView" (resized)="onResized($event)" aria-autocomplete="none">
+    <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pl-0 pr-0">
+        <div class="row ml-0 mr-0">
+            <div class="col-5 col-sm-5 col-md-5 col-xl-5 col-lg-5 pl-0 pr-0">
+                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pr-0 pl-0">
+                    <div class="card">
+                        <div class="card-header kpi-card-header">
+                            <span class="custom-kpi-header-style pl-3 float-left">List of KPIs</span>
+                                <p-dropdown id="kpi-select-dropdown" [virtualScrollItemSize]="30" class="kpi-list-new-group custom-searchable-dropdown float-right kpi-mapping-select kpi-new-group" name="module" [options]="kpiTypes"
+                                    [(ngModel)]="selectedKpiType" optionLabel="pageConfigAliasName" [showClear]="false"  [group]="true" [filter]="true"
+                                    (ngModelChange)="GetSelectedKpiData($event)">
+                                    <ng-template let-group pTemplate="group">
+                                        <span id="kpi-type-name" class="TextTruncate" title="{{group.name}}">
+                                            {{group.name}}
+                                        </span>
+                                    </ng-template>
+                                    <ng-template let-options pTemplate="item">
+                                        <span id="kpi-type-name" class="TextTruncate" title="{{options.pageConfigAliasName}}">
+                                            {{options.pageConfigAliasName}}
+                                        </span>
+                                    </ng-template>
+                                </p-dropdown>
+                        </div>
+                        <div class="card-body mb-0">
+                            <div
+                                class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pl-0 pr-0 mapping-sec-search">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pr-0 pl-0">
+                                        <span class="fa fa-search fasearchicon p-1 kpi-mapping-cursor-pointer"
+                                            (click)="onSelectAllListkpi()"></span>
+                                        <div class="combobox">
+                                            <input id="kpi-search"  #searchKpiButton type="search" autocomplete="off"
+                                                (click)="onSelectAllListkpi()" [(ngModel)]="kpiAllListItem"
+                                                (ngModelChange)="getFilteredAllKpiList()" class="combobox-input"
+                                                (keyup)="onKeyPress($event)" placeholder="Search KPI"
+                                                [ngClass]="{'error': showError}">
+                                            <span id="invalid-selection" *ngIf="showError" class="error-text"><i>Invalid Selection.</i></span>
+                                            <div #searchKpiModal class="combobox-options searchKpiModal"
+                                                *ngIf="!allListHidden">
+                                                <list-item id="kpi-list" *ngFor="let item of filteredAllKpiList;let i = index"
+                                                    class="search-unmapped-kpi-list"
+                                                    [ngClass]="(item.isBoldKPI || item.isHeader) ? 'kpi-node-text':''">
+                                                    <span id="kpi-name" title="{{item.name}}" class="TextTruncate">{{item.name}}
+                                                        <span id="header-kpi-icon" *ngIf="item.isHeader" class="pl-3 pr-3"
+                                                            [pTooltip]="'Header KPI'" tooltipPosition="top"
+                                                            tooltipStyleClass="bg-grey-tooltip-color">
+                                                            <img src="assets/dist/images/kpi-header.svg"
+                                                                alt="kpi-header.svg" />
+                                                        </span>
+                                                    </span>
+
+                                                    <span id="add-to-mapped-kpis" class="float-right kpi-mapping-cursor-pointer pl-3"> <img
+                                                            alt="" (click)="addToMappedKPI(item,index,'Add')"
+                                                            [src]="'assets/dist/images/Add Grey.svg'" /></span>
+                                                </list-item>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row  mr-0 ml-0">
+                                <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pl-0 pr-0">
+                                    <div class="row ml-0 mr-0 pl-0 protofilo-cmpny-o"
+                                        [ngClass]="listKPIList.length>0?'unkpi-card-body-height':''"
+                                        *ngIf="listKPIList.length > 0 && isEnableView">
+                                        <div
+                                            class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12  pr-0 pl-0 mat-custom-nodes">
+                                            <ul>
+                                                <li *ngFor="let data of listKPIList;let index = index"
+                                                    title="{{data.name}}" class="custom-table-style">
+                                                    <span class="float-left d-flex TextTruncate">
+                                                        <!-- {{data.name}} -->
+                                                        <span class="custom-node-class TextTruncate"
+                                                            [ngClass]="(data.isBoldKPI || data.isHeader) ? 'kpi-node-text':''">
+                                                            {{data.name}}</span>
+                                                        <span *ngIf="data.isHeader" class="pl-3 pr-3"
+                                                            [pTooltip]="'Header KPI'" tooltipPosition="top"
+                                                            tooltipStyleClass="bg-grey-tooltip-color">
+                                                            <img src="assets/dist/images/kpi-header.svg"
+                                                                alt="kpi-header.svg" />
+                                                        </span>
+                                                        <span class="formula-image formula-image-cursor-pointer"
+                                                            [ngClass]="[data.formula!=null && data.formula!='' && data!=undefined ?'d-block':'d-none',!data.isHeader?'pl-3':'']">
+                                                            <img *ngIf="!data?.isHeader && data?.kpiInfo !='Text'" (click)="openFormulaPopup(data)"
+                                                                src="{{'assets/dist/images/formula.svg'}}"
+                                                                alt="formula.svg" />
+                                                        </span>
+
+                                                    </span>
+                                                    <span
+                                                        class="float-right kpi-mapping-cursor-pointer padding-right-add">
+                                                        <img alt="" (click)="addToMappedKPI(data,index,'Add')"
+                                                            [src]="'assets/dist/images/Add Grey.svg'" /></span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="row ml-0 mr-0 procmpny-of"
+                                        [ngClass]="listKPIList.length == 0?'unkpi-card-body-height':''"
+                                        *ngIf="listKPIList.length==0">
+                                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pl-0 pr-0">
+                                            <zero-state-kpi [header]="'No KPIs to Select'"
+                                                [message]="'Select a company to start KPI mapping'"
+                                                id="mapping-notfound" [height]="kpilistheight"></zero-state-kpi>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-12 pl-0 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0">
+                                    <div class="float-left">
+                                        <button class="nep-button nep-button-secondary"
+                                            [disabled]="listKPIList.length==0" type="button"
+                                            (click)="getSelectAllListofkpi()">Select all</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-7 col-sm-7 col-md-7 col-xl-7 col-lg-7 pl-0 pr-0 custom-space-table">
+                <div class="card mappedkpi-card-body-height">
+                    <div class="card-header card-header-main kpi-card-header   ">
+                        <span class="custom-kpi-header-style pl-3 float-left">Selected KPIs</span>
+
+                        <p-dropdown [filter]="true" [filterBy]="'companyName'" [virtualScroll]="true" [virtualScrollItemSize]="36"
+                            class="custom-p-dropdown icon-dropdown fund-custom-dropdown custom-searchable-dropdown internal-select"
+                            [options]="companyList" (onChange)="onSelectCompany($event)" [(ngModel)]="selectedCompany">
+                            <ng-template let-item pTemplate="selectedItem">
+
+                                <div title="{{item.companyName}}" class="d-inline-block custom-label">
+                                    {{item.companyName}}</div>
+                            </ng-template>
+                            <ng-template let-object pTemplate="item">
+                                <div
+                                    class="custom-ui-label custom-delete-hover custom-zindex-parent cus-ui-topinvs-dele-z-d-mw">
+                                    <span title="{{object.companyName}}" class="img-pad TextTruncate">
+                                        {{object.companyName}}
+
+                                    </span>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                    <div class="card-body mb-0">
+                        <div class="row mr-0 ml-0">
+                            <div
+                                class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12   pr-0 pl-0 kpi-custom-border">
+                                <span class="fa fa-search fasearchicon p-1"></span>
+                                <input value="" [(ngModel)]="kpiName" (input)="FilterKPI(kpiName)" type="search" autocomplete="off"
+                                    class="search-text-company kpi-Search-Height" placeholder="Search KPI" />
+                            </div>
+                        </div>
+                        <div class="row  mr-0 ml-0">
+                            <div class="col-12  pl-0 pr-0 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
+                                <div class="row  ml-0 mr-0 pl-0 protofilo-cmpny-o"
+                                    *ngIf="kpiTreeList.length > 0&& Emptyischeck==true">
+                                    <div
+                                        class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12  pr-0 pl-0 mat-custom-nodes">
+                                        <mat-tree class="unkpi-card-body-height" [dataSource]="dataSource" [treeControl]="treeControl">
+                                            <mat-tree-node
+                                                [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+                                                'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
+                                                'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
+                                                draggable="true" (dragstart)="handleDragStart($event, node);"
+                                                (dragover)="handleDragOver($event, node);"
+                                                (drop)="handleDrop($event, node);" (dragend)="handleDragEnd($event);"
+                                                *matTreeNodeDef="let node" matTreeNodeToggle
+                                                class="mat-custom-treenode matcustomtreenode-padding">
+                                                <button class="d-none" mat-icon-button disabled></button>
+                                                <span class="pl-3 pr-3 drag-icon"><img
+                                                        src="assets/dist/images/6dots.svg" alt=""></span>
+                                                <mat-checkbox matTreeNodePadding matTreeNodePaddingIndent="24"
+                                                    [ngClass]="(node.isBoldKPI || node.isHeader) ? 'kpi-node-text':''"
+                                                    class="checklist-leaf-node mat-custom-checkbox"
+                                                    [checked]="checklistSelection.isSelected(node)"
+                                                    (change)="checklistSelection.toggle(node);IsCheckParent($event,node)">
+                                                    {{node.name}}
+                                                    <span *ngIf="node.isHeader" class="pl-3 pr-3"
+                                                        [pTooltip]="'Header KPI'" tooltipPosition="top"
+                                                        tooltipStyleClass="bg-grey-tooltip-color">
+                                                        <img src="assets/dist/images/kpi-header.svg"
+                                                            alt="kpi-header.svg" />
+                                                    </span>
+                                                </mat-checkbox>
+                                                <span class="formula-image"
+                                                    [ngClass]="[node.formula!=null && node.formula!='' && node!=undefined ?'d-block':'d-none',!node.isHeader?'pl-3':'',node.oldIsMapped ?'formula-image-cursor-pointer':'formula-image-cursor-none']">
+                                                    <img *ngIf="!node.isHeader && node?.kpiInfo !='Text'"  (click)="node.oldIsMapped ? openFormulaPopup(node):''"
+                                                        src="{{node.oldIsMapped ? 'assets/dist/images/formula.svg':'assets/dist/images/Edit-formula-Grey.svg'}}"
+                                                        alt="formula.svg" />
+                                                </span>
+                                                <span (click)="createDuplicate(node)"
+                                                    class="float-right duplicate-kpi pl-3" [pTooltip]="'Duplicate'"
+                                                    tooltipPosition="top" tooltipStyleClass="bg-grey-tooltip-color">
+                                                    <img src="assets/dist/images/duplicate-kpi.svg"
+                                                        alt="kpi-header.svg" />
+                                                </span>
+                                                <span (click)="addToMappedKPI(node,0,'Remove')"
+                                                    class="float-right kpi-mapping-cursor-pointer remove-kpi">
+                                                    <img alt="" [src]="'assets/dist/images/Remove-KPI.svg'" /></span>
+                                            </mat-tree-node>
+                                            <mat-tree-node
+                                                [ngClass]="{'drop-above': dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
+                                                'drop-below': dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
+                                                'drop-center': dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node}"
+                                                draggable="true" (dragend)="handleDragEnd($event);"
+                                                (dragstart)="handleDragStart($event, node);"
+                                                (dragover)="handleDragOver($event, node);"
+                                                (drop)="handleDrop($event, node);"
+                                                *matTreeNodeDef="let node; when: hasChild"
+                                                class="mat-custom-treenode-child">
+                                                <span class="pl-3 pr-3 drag-icon"><img
+                                                        src="assets/dist/images/6dots.svg" alt=""></span>
+                                                <button class="d-none" mat-icon-button matTreeNodeToggle
+                                                    [attr.aria-label]="'toggle ' + node.name">
+                                                    <mat-icon class="mat-icon-rtl-mirror">
+                                                        {{treeControl.isExpanded(node) ? 'expand_more' :
+                                                        'chevron_right'}}
+                                                    </mat-icon>
+                                                </button>
+                                                <mat-checkbox matTreeNodePaddingIndent="24"
+                                                    [ngClass]="(node.isBoldKPI || node.isHeader) ? 'kpi-node-text':''"
+                                                    matTreeNodePadding class="mat-custom-checkbox"
+                                                    [checked]="descendantsAllSelected(node)"
+                                                    [indeterminate]="descendantsPartiallySelected(node)"
+                                                    (change)="todoItemSelectionToggle(node);IsCheckChild($event,node)">
+                                                    {{node.name}}
+                                                    <span *ngIf="node.isHeader" class="pl-3 pr-3"
+                                                        [pTooltip]="'Header KPI'" tooltipPosition="top"
+                                                        tooltipStyleClass="bg-grey-tooltip-color">
+                                                        <img src="assets/dist/images/kpi-header.svg"
+                                                            alt="kpi-header.svg" />
+                                                    </span>
+                                                </mat-checkbox>
+                                                <span class="formula-image"
+                                                    [ngClass]="[node.formula!=null && node.formula!='' && node!=undefined ?'d-block':'d-none',!node.isHeader?'pl-3':'',node.oldIsMapped ?'formula-image-cursor-pointer':'formula-image-cursor-none']">
+                                                    <img  *ngIf="!node?.isHeader && node?.kpiInfo !='Text'"   (click)="node.oldIsMapped ? openFormulaPopup(node):''"
+                                                        src="{{node.oldIsMapped ? 'assets/dist/images/formula.svg':'assets/dist/images/Edit-formula-Grey.svg'}}"
+                                                        alt="formula.svg" />
+                                                </span>
+                                                <span (click)="createDuplicate(node)"
+                                                    class="float-right duplicate-kpi pl-3 " [pTooltip]="'Duplicate'"
+                                                    tooltipPosition="top" tooltipStyleClass="bg-grey-tooltip-color">
+                                                    <img src="assets/dist/images/duplicate-kpi.svg"
+                                                        alt="kpi-header.svg" />
+                                                </span>
+                                                <span (click)="addToMappedKPI(node,0,'Remove')"
+                                                    class="float-right kpi-mapping-cursor-pointer remove-kpi"> <img alt=""
+                                                        [src]="'assets/dist/images/Remove-KPI.svg'" /></span>
+                                            </mat-tree-node>
+                                        </mat-tree>
+                                        <span #emptyItem></span>
+                                    </div>
+                                </div>
+                                <div class="row ml-0 mr-0 procmpny-of" [ngClass]="kpiTreeList.length == 0?'unkpi-card-body-height':''"
+                                    *ngIf="kpiTreeList.length==0">
+                                    <div class="col-12 pl-0 pr-0 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12">
+                                        <zero-state-kpi [header]="'No KPIs Selected'"
+                                            [message]="'Select a company to start KPI mapping'" id="mapping-notfound"
+                                            [ngClass]="kpiTreeList.length !=0 ? 'unkpi-card-body-height':'kpi-list-zero-state'" [height]="kpilistheight"></zero-state-kpi>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-12 pl-0 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0">
+                                <div class="float-left kpi-footer-copy-all">
+                                    <p-multiSelect [disabled]="disableCopyTo" [virtualScroll]="true" [virtualScrollItemSize]="36"(onChange)="onCopytoCompanyFunction($event)"
+                                        [(ngModel)]="selectedCopyToCompanyList"
+                                        class="lp-report-Kpilineitems multi-select-custom custom-searchable-multiselect"
+                                        name="copyToFeature" [resetFilterOnHide]=true [options]="portfolioCompanyList"
+                                        defaultLabel="Copy mapping to" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" optionLabel="companyName">
+                                        <ng-template let-company pTemplate="item">
+                                            <span title="{{company.companyName}}">{{company.companyName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                    <button class="nep-button margin-copyall-btn nep-button-secondary" disabled="true" type="button"
+                                        (click)="getCopytoAllCompanies()">Copy to all</button>
+                                </div>
+                                <div class="float-right">
+                                    <div class="float-right pl-3 pr-0">
+                                        <button class="nep-button nep-button-secondary" [disabled]="isDisabledCancelBtn"
+                                            type="button" (click)="isCancelPopup=true">Reset</button>
+                                        <button class="nep-button nep-button-primary" [disabled]="isDisabledSaveBtn"
+                                            type="button" (click)="isSavePopup=true">Map KPIs</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <confirm-modal *ngIf="isCancelPopup" customwidth="480px" modalTitle="Cancel Editing" primaryButtonName="Yes"
+        secondaryButtonName="No" (primaryButtonEvent)="OnYes($event)" (secondaryButtonEvent)="OnNo($event)">
+        <div class="row ml-0 mr-0">
+            <div class="col-12 pl-0 pr-0 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 p-3 custom-modal-message">All your
+                changes will be lost. Are you sure you want to proceed?
+            </div>
+        </div>
+    </confirm-modal>
+    <confirm-modal *ngIf="isSavePopup" customwidth="480px" modalTitle="Save Changes" primaryButtonName="Confirm"
+        secondaryButtonName="Cancel" (primaryButtonEvent)=" SaveMapping($event)"
+        (secondaryButtonEvent)="OnCancelSavePopup($event)">
+        <div class="row ml-0 mr-0">
+            <div class="col-12 pl-0 pr-0 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 p-3 custom-modal-message">
+                <div>Please confirm you want to map the selected KPIs</div>
+                <div class="pt-2">Note: Any unmapped KPIs will loose their parent-child relationship & Reordering</div>
+            </div>
+        </div>
+    </confirm-modal>
+</div>
+<app-loader-component [ngStyle]="isLoader?{'display':'block'}:{'display':'none'}" *ngIf="isLoader">
+</app-loader-component>
+<app-kpi-formula-builder [isMapping]="true" [kpiModel]="selectedFormulaKPI" *ngIf="isOpenPopUp"
+    (OnClose)="closeFormulaPopUp($event)" [formulaKPITypes]="kpiTypes"
+    [selectedFormulaKPIType]="selectedKpiType" [companyId]="companyId"></app-kpi-formula-builder>

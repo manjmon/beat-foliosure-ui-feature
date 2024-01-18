@@ -1,0 +1,28 @@
+version: 0.0
+os: windows
+files:
+  - source: \
+    destination: E:\inetpub\wwwroot\foliosure\FoliosureUITemp
+  # source: \index.html
+  #  destination: E:\inetpub\wwwroot\foliosure\prod\demo
+  # - source: \index.html
+  #   destination: E:\inetpub\wwwroot\foliosure\prod\enshi
+  # source: \index.html
+  #  destination: E:\inetpub\wwwroot\foliosure\prod\taabo-ch
+  # source: \index.html
+  # destination: E:\inetpub\wwwroot\foliosure\prod\trial
+  # - source: \index.html
+  #   destination: E:\inetpub\wwwroot\foliosure\prod\larissa
+  # - source: \index.html
+  #   destination: E:\inetpub\wwwroot\foliosure\prod\monmouth
+  # - source: \index.html
+  #   destination: E:\inetpub\wwwroot\foliosure\prod\exeter
+  # - source: \index.html
+  #   destination: E:\inetpub\wwwroot\foliosure\prod\pizarro  
+file_exists_behavior: OVERWRITE
+
+hooks:
+  BeforeInstall:
+    - location: .\BeforeInstall.ps1
+  AfterInstall:
+    - location: .\AfterInstall.ps1

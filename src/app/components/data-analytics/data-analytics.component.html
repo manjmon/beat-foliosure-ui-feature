@@ -1,0 +1,111 @@
+<div class="row mr-0 ml-0 tab-shadow-home-bi data-analytics-header">
+    <div
+        class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 horizontal-parent boxBorder-dashboard">
+        <div class= "panel d-flex panel-default tab-bg tab-home-bg border-0">
+            <div class="data-analytics-header-left  panel-heading pr-0 pl-0 custom-tab-panel-heading pb-0 border-bottom-0 panel-title custom-tabs custom-mat-tab">
+                <nav mat-tab-nav-bar [tabPanel]="tabPanel" *ngIf="filterAnalyticsList?.length > 0 && enabledtab">
+
+                    <a mat-tab-link [disableRipple]="true" *ngFor="let dashboard of filterAnalyticsList"
+                        (click)="changeTabType(dashboard);isCreateDashboard = false;" [active]="dashboard.isActive"
+                        class="TextTruncate">
+                        {{dashboard.dataSetName}} </a>
+
+                </nav>
+            </div>
+            <div class="data-analytics-header-right data-analytics-tab-button data-analytics-dots" *ngIf="filterAnalyticsList?.length > 0">
+                <div class="d-inline-block search-icon">
+                    <span class="fa fa-search fasearchicon p-1"></span>
+                </div>
+                <div class="d-inline-block data-analytics-col-divider" *ngIf="deleteButtonEnabled">
+                    <span class="col-divider">
+                    </span>
+                </div>
+                <div title="Delete Dashboard" *ngIf="deleteButtonEnabled" class="d-inline-block float-right delete-icon">
+                    <span (click)="deletePopupFunction()"> <img alt="" src='assets/dist/images/delete.svg' /></span>
+                </div>
+            </div>
+           
+        </div>
+        <mat-tab-nav-panel #tabPanel>
+            <div class="col-12 pl-3 pr-3" (resized)="onResized($event)">
+                <div #revealView class="reveal-bi-component-view"></div>
+            </div>
+        </mat-tab-nav-panel>
+    </div>
+    <div *ngIf="deletePopub">
+        <confirm-modal [primaryButtonName]="primaryDeleteButtonName" [secondaryButtonName]="secondaryDeleteButtonName"
+            [modalTitle]="deleteModalTitle" (primaryButtonEvent)="tabDelete()" (secondaryButtonEvent)="tabCancel()">
+            <div class="modalBodyTextStyle">
+                <div>
+                    {{deleteModalBody}}
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+</div>
+<p-confirmDialog class="data-analytics-confirm" [baseZIndex]="10000" #cd>
+    <p-footer>
+        <button type="button" pButton class="cancel-btn" label="Cancel" (click)="cd.reject()"></button>
+        <button type="button" pButton class="confirm-btn" label="Confirm" (click)="cd.accept()"></button>
+    </p-footer>
+</p-confirmDialog>
+<p-dialog [(visible)]="displayModal" [draggable]="false" class="data-analytics-confirm data-analytics-dialog"
+    [baseZIndex]="10000">
+    <p-header>
+        <div class="row mr-0 ml-0">
+            <div class="col-12 pr-0 pl-0">
+                <div class="dialog-header">
+                    Dashboard Details
+                </div>
+            </div>
+        </div>
+    </p-header>
+    <ng-template pTemplate="content">
+        <form #analyticsForm="ngForm">
+            <div class="row mr-0 ml-0">
+                <div class="col-12 pr-0 pl-0">
+                    <div class="col-12 pr-0 pl-0">
+                        <label class="pt-1 mandatory-label">
+                            Dashboard Name
+                        </label>
+                    </div>
+                    <div class="col-12 pr-0 pl-0">
+                        <input type="text" required [(ngModel)]="analyticsName" #analytics="ngModel" autocomplete="off"
+                            name="analytics" class="form-control data-input-css pl-0" placeholder="Enter dashboard name"
+                            maxlength="100" />
+                        <div class="pt-2" *ngIf="analytics.invalid && (analytics.dirty || analytics.touched)">
+                            <div class="text-danger" *ngIf="analytics.errors?.required">
+                                Enter the dashboard name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pr-0 pl-0 personal-dash-label">
+                        <div class="float-left ">
+                            Personal Dashboard
+                        </div>
+                        <div class="float-right">
+                            <p-inputSwitch [(ngModel)]="isPersonal" name="switch" #switch="ngModel"></p-inputSwitch>
+                        </div>
+                    </div>
+                    <div class="col-12 pr-0 pl-0 pt-2 pb-3">
+                        <div class="popupcommon-labelpadding pb-2">Description</div>
+                        <div class="custom-nep-input">
+                            <div class="nep-input nep-input-textarea kpitext-label workflow-add-group pl-0">
+                                <textarea class="group-text pl-0 pb-2" rows="1" spellcheck="false" name="desc"
+                                    #desc="ngModel" placeholder="Enter Description"
+                                    [(ngModel)]="description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button type="button" [disabled]="analyticsName==null" pButton class="cancel-btn" label="Reset"
+            (click)="reset()"></button>
+        <button type="button" [disabled]="analyticsName==null" pButton class="confirm-btn" label="Confirm"
+            (click)="save()"></button>
+    </ng-template>
+</p-dialog>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

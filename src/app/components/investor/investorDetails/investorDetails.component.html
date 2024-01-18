@@ -1,0 +1,987 @@
+<div class="row tab-shadow">
+    <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0 pl-0">
+        <nep-tab id="neptab" class="custom-pipeline-tab" [tabList]=tabList (OnSelectTab)="onTabClick($event)">
+        </nep-tab>
+    </div>
+</div>
+<div *ngIf="tabName=='Details'" class="row mr-0 ml-0 fund-detail-section" [ngClass]="loading?'d-none':'d-block'"
+    (resized)="onResized($event)">
+    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+        <div class="row mr-0 ml-0 header-section pb-2">
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                <div class="float-right">
+                    <div class="fund-splitButton">
+                        <a class="loading-input-controls2" *ngIf="exportLoading">
+                            <i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                        </a>
+                        <div class="download-investor-excel"><img alt="" src="assets/dist/images/FileDownloadWhite.svg"
+                                class="showHandIcon pr-1 mt-0 TextTruncate" title="Performance Report"> Performance Report </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mr-0 ml-0 card card-main static-card pb-4">
+            <div class="col-12 col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                <div class="static-pc-section fund-detail section1-height chart-area row mr-0 ml-0 mb-0">
+                    <div class="col-12  pr-0 pl-0">
+                        <div class="row mr-0 ml-0 pb-1 static-bg">
+                            <div class="col-12 pr-0 pl-0 chart-title pc-section-header">
+                                <div class="float-right pr-2 fund-static-header">
+                                    <a title="Edit"
+                                        [routerLink]="['/addinvestor', investorDetails?.encryptedInvestorId]"><img
+                                            alt="" src="assets/dist/images/EditIcon.svg"></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0">
+                            <div class="col-sm-12 pr-3 pl-3 pt-3 pb-2">
+                                <div class="line-wrapper">
+                                    <span class="mr-2 TextTruncate" title="{{staticDetailsTitle.displayName}}"> {{staticDetailsTitle.displayName}}</span>
+                                    <div class="line"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0">
+                            <div class="pl-3 pr-3 Fund-section col-12">
+                                <div class="row mr-0 ml-0">
+                                    <ng-container *ngFor="let item of staticDataConfiguration">
+                                        <div class="col-4 pr-0 pl-0 pt-2 mb-1 custom-investor-padding" *ngIf="item.name=='Website'">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="pr-0 pl-0 col-4">
+                                                    <div  class="TextTruncate"><span
+                                                            class="hColor static-label TextTruncate" title="{{item.displayName}}">
+                                                            {{item.displayName}}</span></div>
+                                                </div>
+                                                <div class="pr-0 pl-0 col-8 pl-3 custom-investor-value-padding">
+                                                    <div class="TextTruncate">
+                                                        <a title="{{item.value}}" class="linkStyle" class="click-view"
+                                                            href="{{item.value}}">{{item.value}}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 pt-2 mb-1 pr-0 pl-0 custom-investor-padding"
+                                            *ngIf="item.name!='Website' && item.name!='BusinessDescription' && item.name != 'TotalCommitment'">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="pr-0 pl-0 col-4">
+                                                    <div title="{{item.displayName}}" class="TextTruncate"><span class="hColor TextTruncate static-label">
+                                                            {{item.displayName}}</span></div>
+                                                </div>
+                                                <div class="pr-0 pl-0 col-8 pl-3 custom-investor-value-padding">
+                                                    <div class="TextTruncate">
+                                                        <span title="{{item.value}}"
+                                                            class="vColor static-field-value TextTruncate">{{item.value}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 pt-2 mb-1 pr-0 pl-3 custom-investor-padding" *ngIf="item.name == 'TotalCommitment'">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="pr-0 pl-0 col-4">
+                                                    <div title="{{item.displayName}}" class="TextTruncate"><span
+                                                            class="hColor TextTruncate static-label">
+                                                            {{item.displayName}}</span></div>
+                                                </div>
+                                                <div class="pr-0 pl-0 col-8 custom-investor-value-padding" *ngIf="item.name == 'TotalCommitment'">
+                                                    <div title="{{(item.value |number : NumberDecimalConst.currencyDecimal)|| 'NA'}}"
+                                                        class="TextTruncate">
+                                                        <span title="{{item.value}}" class="vColor static-field-value TextTruncate">{{(item.value=='NA'?'NA':item.value |number :
+                                                            NumberDecimalConst.currencyDecimal)|| "NA"}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0" *ngIf="businessDesc != undefined">
+                            <div class="col-sm-12 pr-3 pl-3 pt-3 pb-2">
+                                <div class="line-wrapper">
+                                    <span class="mr-2 TextTruncate" title="{{businessDesc.displayName}}">{{businessDesc.displayName}}</span>
+                                    <div class="line"></div>
+                                </div>
+                                <div class="chart-content ">
+                                    <div class=" statit-desc pr-0 pl-0 pt-3 TextTruncate" title="{{businessDesc.value}}">{{businessDesc.value}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mr-0 ml-0" *ngIf="geographicalLocationsDataConfiguration.length > 0">
+                            <div class="col-sm-12 pr-3 pl-3 pt-3 pb-2">
+                                <div class="line-wrapper">
+                                    <span class="mr-2 TextTruncate" title="{{investorGeographicalLocationsTitle.displayName}}">{{investorGeographicalLocationsTitle.displayName}}</span>
+                                    <div class="line"></div>
+                                </div>
+                            </div>
+                            <div class="col-12 pr-0 pl-0 pt-2">
+                                <div class="card">
+                                    <div class="card-body mb-0">
+                                        <div class="table-responsive card-border">
+                                            <table class='table mb-0 static-info-table custom-investor-table'>
+                                                <thead>
+                                                    <tr>
+                                                        <ng-container
+                                                            *ngFor="let geo of geographicalLocationsDataConfiguration">
+                                                            <th scope="col" class="text-align-left" title="{{geo.displayName}}">{{geo.displayName}}
+                                                            </th>
+                                                        </ng-container>
+                                                    </tr>
+                                                </thead>
+                                                <tbody *ngIf="investorDetails.investorLocationData.length > 0">
+                                                    <tr *ngFor="let loc of investorDetails.investorLocationData">
+                                                        <td class="text-align-left" *ngIf="hasRegion">
+                                                            <span title="{{loc?.regionName || 'NA'}}">{{loc?.regionName || "NA"}}</span>
+                                                        </td>
+                                                        <td class="text-align-left" *ngIf="hasCountry">
+                                                            <span title="{{loc?.countryName || 'NA'}}">{{loc?.countryName || "NA"}}</span>
+                                                        </td>
+                                                        <td class="text-align-left" *ngIf="hasState">
+                                                            <span title="{{loc?.stateName || 'NA'}}">{{loc?.stateName || "NA"}}</span>
+                                                        </td>
+                                                        <td class="text-align-left" *ngIf="hasCity">
+                                                            <span title="{{loc?.cityName || 'NA'}}"> {{loc?.cityName || "NA"}} </span>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <app-empty-state [isGraphImage]="false"
+                                                *ngIf="investorDetails?.investorLocationData?.length == 0">
+                                            </app-empty-state>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mr-0 ml-0 investor-fund-table mt-3">
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                <div class="float-left fund-header pb-2 TextTruncate" title="{{investorFundHeader}}">
+                    {{investorFundHeader}}
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 trackrecord-section mb-3">
+                <div class="financial-page">
+                    <div class="filter-bg">
+                        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                            <div class="align-items-start">
+                                <div class="ui-widget-header ui-wid-bb">
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                                            <div class="float-left">
+                                                <div class="allvalues-kpis TextTruncate" title="All Values in: Millions">All Values in: Millions</div>
+                                            </div>
+                                            <div class="float-right">
+                                                <div class="d-inline-block search">
+                                                    <span class="fa fa-search fasearchicon p-1"></span>
+                                                    <input #gbInvestorTable
+                                                        (input)="tblfundInvestor.filterGlobal($event.target.value, 'contains')"
+                                                        [(ngModel)]="globalFilter" type="text" pInputText
+                                                        class="search-text-company companyListSearchHeight TextTruncate"
+                                                        placeholder="Search">
+                                                </div>
+                                                <div class="d-inline-block">
+                                                    <img class="p-action-padding download-excel" alt=""
+                                                        title="Export  (Excel file)"
+                                                        src="assets/dist/images/Cloud-download.svg" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="datatable-container">
+                                    <p-table
+                                        class="Track-Records cashflow-tbl text-left investor-tr-table custom-kpi-table borderless invested-table"
+                                        [columns]="investorTableColumnsList" [resizableColumns]="true" #tblfundInvestor
+                                        [value]="investorFundData" [lazy]="true"
+                                        (onLazyLoad)="loadFundInvestorLazy($event)" 
+                                        [scrollable]="true" scrollHeight="40vh" [globalFilter]="gbInvestorTable"
+                                        sortMode="multiple">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <ng-container *ngFor="let columns of frozenInvestorTableColumns;">
+                                                    <th  pFrozenColumn [ngStyle]="{'width':'300px'}" [ngClass]="(columns.header=='FundId' || columns?.header=='FirmName')?'frozen-headerWidth':''"
+                                                        *ngIf="columns.header=='FundId' || columns?.header=='FirmName'"
+                                                        title="{{columns.displayName}}" id="{{columns.subPageID}}"
+                                                        class="TextTruncate-investor table-data-left"
+                                                        pSortableColumn="{{columns.header=='FundId'?'FundName':'FirmName'}}">
+                                                        {{columns.field}}
+                                                        <p-sortIcon
+                                                            field="{{columns.header=='FundId'?'FundName':'FirmName'}}">
+                                                        </p-sortIcon>
+                                                    </th>
+                                                </ng-container>       
+                                                <ng-container *ngFor="let columns of columns;">
+                                                    <th [ngClass]="(columns.header=='FundId' || columns?.header=='FirmName')?'frozen-headerWidth':''"
+                                                        *ngIf="columns.header=='FundId' || columns?.header=='FirmName'"
+                                                        title="{{columns.displayName}}" id="{{columns.subPageID}}"
+                                                        class="TextTruncate-investor table-data-left"
+                                                        pSortableColumn="{{columns.header=='FundId'?'FundName':'FirmName'}}">
+                                                        {{columns.field}}
+                                                        <p-sortIcon
+                                                            field="{{columns.header=='FundId'?'FundName':'FirmName'}}">
+                                                        </p-sortIcon>
+                                                    </th>
+                                                    <th *ngIf="columns.header!='FundId' && columns?.header!='FirmName'"
+                                                        title="{{columns.name =='InvestorStake' ? investorStakeTitle: columns.displayName}}" id="{{columns.subPageID}}"
+                                                        class="TextTruncate-investor table-data-left"
+                                                        pSortableColumn="{{isCustom?columns.displayName:columns.name}}">
+                                                        {{columns.displayName}}
+                                                        <p-sortIcon *ngIf="!columns.isCustom"
+                                                            field="{{isCustom?columns.displayName:columns.name}}">
+                                                        </p-sortIcon>
+                                                    </th>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-investor let-columns="columns">
+                                            <tr>
+                                                <ng-container *ngFor="let columns of frozenInvestorTableColumns;">
+                                                    <td pFrozenColumn [ngStyle]="{'width':'300px'}" pFrozenColumn [ngClass]="(columns?.header=='FirmName')?'frozen-headerWidth':''"
+                                                    title="{{investor?.FirmName?.firmName}}"
+                                                    *ngIf="columns.header=='FirmName'">
+                                                    <a *ngIf="investor?.FirmName?.firmName!=null && investor?.FirmName?.firmName!=''"
+                                                        class="click-view TextTruncate" href="javascript:void(0);"
+                                                        [routerLink]="['/firm-details',investor?.FirmName.encryptedFirmId]">{{investor?.FirmName?.firmName}}</a>
+                                                    <span
+                                                        *ngIf="investor?.FirmName?.firmName==null || investor?.FirmName?.firmName==''">
+                                                        NA
+                                                    </span>
+                                                </td>
+                                                <td [ngStyle]="{'width':'300px'}" pFrozenColumn [ngClass]="(columns.header=='FundId')?'frozen-headerWidth':''"
+                                                    title=" {{investor?.FundId?.fundName}}"
+                                                    *ngIf="columns.header=='FundId'">
+                                                    <a *ngIf="investor?.FundId?.fundName!=null && investor?.FundId?.fundName!=''"
+                                                        class="click-view TextTruncate" href="javascript:void(0);"
+                                                        [routerLink]="['/fund-details',investor?.FundId.encryptedFundId]">{{investor?.FundId?.fundName}}</a>
+                                                    <span
+                                                        *ngIf="investor?.FundId?.fundName==null || investor?.FundId?.fundName==''">
+                                                        NA
+                                                    </span>
+                                                </td>
+                                                </ng-container>
+                                                <ng-container *ngFor="let col of columns">
+                                                    <td [ngClass]="(col.header!='FirmName' && col.header!='FundId' && col.name!=FundInvestorConstants.CommitmentDate) ? 'table-data-right' : 'table-data-left'"
+                                                    [ngClass]="(col.header!='FirmName' && col.header!='FundId' && col.name!=FundInvestorConstants.CommitmentDate) ? 'table-data-right' : 'table-data-left'"
+                                                        *ngIf="col.header!='FirmName' && col.header!='FundId'">
+                                                        <container-element>
+                                                            <container-element [ngSwitch]="col.name">
+                                                                <container *ngSwitchCase="'Ownership'">
+                                                                    <span [title]="investor[col.name]" *ngIf="investor[col.name] != undefined && [col.name] != '' && investor[col.name]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.name]) ? (investor[col.name] | number: NumberDecimalConst.percentDecimal | minusToBracketsWithPercentage: '%'): investor[col.name]">
+                                                                </span>
+                                                                </container>
+                                                                <container *ngSwitchCase="'InvestorStake'">
+                                                                    <span  [title]="investor[col.name]" *ngIf="investor[col.name] != undefined && [col.name] != '' && investor[col.name]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.name]) ? (investor[col.name] | number: NumberDecimalConst.percentDecimal | minusToBracketsWithPercentage: '%'): investor[col.name]">
+                                                                </span>
+                                                                </container>
+                                                                <container *ngSwitchCase="'CommitmentDate'">
+                                                                    <span [title]="investor[col.name]" *ngIf="investor[col.name] != undefined && [col.name] != '' && investor[col.name]!=null;else empty_Value"
+                                                                    [innerHtml]="investor[col.name]| date:'MM/dd/yyyy'"></span>
+                                                                </container>
+                                                                <container *ngSwitchCase="'Commitment'">
+                                                                    <span [title]="investor[col.name]" *ngIf="investor[col.name] != undefined && [col.name] != '' && investor[col.name]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.name]) ? (investor[col.name] | number: NumberDecimalConst.currencyDecimal | minusSignToBrackets: '') : investor[col.name]">
+                                                                </span>
+                                                                </container>
+                                                                <container *ngSwitchCase="'NetDrawn'">
+                                                                    <span [title]="investor[col.name]" *ngIf="investor[col.name] != undefined && [col.name] != '' && investor[col.name]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.name]) ? (investor[col.name] | number: NumberDecimalConst.currencyDecimal | minusSignToBrackets: '') : investor[col.name]">
+                                                                </span>
+                                                                </container>
+                                                                <container *ngSwitchCase="'Recallable'">
+                                                                    <span [title]="investor[col.name]" *ngIf="investor[col.name] != undefined && [col.name] != '' && investor[col.name]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.name]) ? (investor[col.name] | number: NumberDecimalConst.currencyDecimal | minusSignToBrackets: '') : investor[col.name]">
+                                                                </span>
+                                                                </container>
+                                                                <container *ngSwitchCase="'UndrawnCommitment'">
+                                                                    <span [title]="investor[col.name]" *ngIf="investor[col.name] != undefined && [col.name] != '' && investor[col.name]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.name]) ? (investor[col.name] | number: NumberDecimalConst.currencyDecimal | minusSignToBrackets: '') : investor[col.name]">
+                                                                </span>
+                                                                </container>
+                                                                <container *ngSwitchCase="'AstreaTransfer'">
+                                                                    <span [title]="investor[col.name]" *ngIf="investor[col.name] != undefined && [col.name] != '' && investor[col.name]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.name]) ? (investor[col.name] | number: NumberDecimalConst.currencyDecimal | minusSignToBrackets: '') : investor[col.name]">
+                                                                </span>
+                                                                </container>
+                                                                <container *ngSwitchCase="'CommitmentAfterAstreaTransfer'">
+                                                                    <span [title]="investor[col.name]" *ngIf="investor[col.name] != undefined && [col.name] != '' && investor[col.name]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.name]) ? (investor[col.name] | number: NumberDecimalConst.currencyDecimal | minusSignToBrackets: '') : investor[col.name]">
+                                                                </span>
+                                                                </container>
+                                                                <container *ngSwitchDefault></container>
+                                                            </container-element>
+                                                        </container-element>
+                                                        <container-element>
+                                                            <container-element [ngSwitch]="col.dataType">
+                                                                <container *ngSwitchCase="mDataTypes.Percentage">
+                                                                    <span [title]="investor[col.displayName]" *ngIf="investor[col.displayName] != undefined && [col.displayName] != '' && investor[col.displayName]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.displayName]) ? (investor[col.displayName] | number: NumberDecimalConst.percentDecimal | minusToBracketsWithPercentage: '%'): investor[col.displayName]"></span>
+                                                                </container>
+                                                                <container *ngSwitchCase="mDataTypes.CurrencyValue">
+                                                                    <span [title]="investor[col.displayName]" *ngIf="investor[col.displayName] != undefined && [col.displayName] != '' && investor[col.displayName]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.displayName]) ? (investor[col.displayName] | number: NumberDecimalConst.currencyDecimal | minusSignToBrackets: ''): investor[col.displayName]"></span>
+                                                                </container>
+                                                                <container *ngSwitchCase="mDataTypes.Number">
+                                                                    <span [title]="investor[col.displayName]" *ngIf="investor[col.displayName] != undefined && [col.displayName] != '' && investor[col.displayName]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.displayName]) ? (investor[col.displayName] | number:'1.0-0' | minusSignToBrackets) : investor[col.displayName]"></span>
+                                                                </container>
+                                                                <container *ngSwitchCase="mDataTypes.Multiple">
+                                                                    <span [title]="investor[col.displayName]" *ngIf="investor[col.displayName] != undefined && [col.displayName] != '' && investor[col.displayName]!=null;else empty_Value"
+                                                                    [innerHtml]="isNumberCheck(investor[col.displayName]) ? (investor[col.displayName] | number: NumberDecimalConst.multipleDecimal)+'x': investor[col.displayName]"></span>
+                                                                </container>
+                                                                <container *ngSwitchCase="mDataTypes.Date">
+                                                                    <span [title]="investor[col.displayName]" *ngIf="investor[col.displayName] != undefined && [col.displayName] != '' && investor[col.displayName]!=null;else empty_Value"
+                                                                    [innerHtml]="investor[col.displayName]| date:'MM/dd/yyyy'"></span>
+                                                                </container>
+                                                                <container *ngSwitchCase="mDataTypes.FreeText">
+                                                                    <span [title]="investor[col.displayName]" *ngIf="investor[col.displayName] != undefined && [col.displayName] != '' && investor[col.displayName]!=null;else empty_Value"
+                                                                    [innerHtml]="investor[col.displayName]"></span>
+                                                                </container>
+                                                                <container *ngSwitchDefault></container>
+                                                            </container-element>
+                                                        </container-element>
+                                                        <ng-template #empty_Value class="detail-sec deal-link">
+                                                            NA
+                                                        </ng-template>
+                                                    </td>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                    <app-empty-state [isGraphImage]="false" *ngIf="investorFundData?.length == 0">
+                                    </app-empty-state>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mr-0 ml-0 investor-fund-table  mb-4">
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+                <div class="float-left fund-header pb-2 TextTruncate" title="Investor Track Record">
+                    Investor Track Record
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0 tc-box">
+                <div class="row mr-0 ml-0">
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 p-3">
+                        <div class="sub-feature-section">
+                            <div class="pb-2 TextTruncate" title="Fund Name">
+                                Fund Name
+                            </div>
+                            <div>
+                                <p-dropdown [filter]="true" [filterBy]="'fundName'" [virtualScroll]="true" [virtualScrollItemSize]="30" class="access-subfeature custom-searchable-dropdown" name="module"
+                                    [options]="fundList" [(ngModel)]="selectedFund" placeholder="Select Fund"
+                                    optionLabel="fundName" [showClear]="false" (ngModelChange)="getTRByFund()">
+                                    <ng-template let-fund pTemplate="item">
+                                        <span title="{{fund.fundName}}">
+                                            {{fund.fundName}}
+                                        </span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <div class="sub-feature-section">
+                            <div class="pb-2 TextTruncate" title="Quarter">
+                                Quarter
+                            </div>
+                            <div>
+                                <p-dropdown [virtualScroll]="true" [virtualScrollItemSize]="30" [disabled]="selectedFund==null"
+                                    class="access-subfeature" name="module" [options]="quarterOptions" optionLabel="text"
+                                    [(ngModel)]="selectedQuarter" placeholder="Select Quarter" 
+                                    [showClear]="false" (ngModelChange)="getTRByQuarterAndYear()">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <div class="sub-feature-section">
+                            <div class="pb-2 TextTruncate" title="Year">
+                                Year
+                            </div>
+                            <div>
+                                <p-dropdown [virtualScroll]="true" [virtualScrollItemSize]="30" [disabled]="selectedQuarter==null"
+                                    class="access-subfeature" name="module" [options]="yearOptions" optionLabel="text"
+                                    [(ngModel)]="selectedYear" placeholder="Select Year" 
+                                    [showClear]="false" (ngModelChange)="getTRByQuarterAndYear()"></p-dropdown>
+                            </div>
+                        </div>
+                        <div class="sub-feature-section">
+                            <div class="pb-2 TextTruncate" title="Values in">
+                                Values in:
+                            </div>
+                            <div>
+                                <p-dropdown [virtualScroll]="true" [virtualScrollItemSize]="30" [disabled]="selectedYear==null"
+                                    class="access-subfeature" name="module" [options]="valueOptions"
+                                    [(ngModel)]="selectedValueUnitType" placeholder="Select" optionLabel="unitType"
+                                    [showClear]="false" (ngModelChange)="convertTrackRecordValueUnits();convertToMillions();"></p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0 pr-3 pl-3 pt-1">
+                        <div class="float-left fund-header pb-2 TextTruncate" title="Fund Details">
+                            Fund Details
+                        </div>
+                    </div>
+                    <div [ngClass]="fundTrackRecordData?.length >0 ?'border-tr':''"
+                        class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+                        <div class="datatable-container">
+                            <p-table
+                                class="Track-Records cashflow-tbl text-left investor-tr-table custom-kpi-table borderless invested-table"
+                                [columns]="fundTrackRecordColumns" [resizableColumns]="true" #tblfundInvestorTrack
+                                [value]="fundTrackRecordData"  [scrollable]="true"
+                                scrollHeight="100vh" sortMode="multiple">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <ng-container *ngFor="let columns of frozenInvestorTrackRecordTableColumns;">
+                                            <th pFrozenColumn [ngStyle]="{'width':'303px'}" [ngClass]="(columns.header=='FundName')?'frozen-header-tr-Width':''"
+                                                *ngIf="columns.header=='FundName'" title="{{columns.displayName}}"
+                                                id="{{columns.subPageID}}"
+                                                class="TextTruncate-investor table-data-left">
+                                                {{columns.field}}
+                                            </th>
+                                        </ng-container>        
+                                        <ng-container *ngFor="let columns of columns;">
+                                            <th [ngClass]="(columns.header=='FundName')?'frozen-header-tr-Width':''"
+                                                *ngIf="columns.header=='FundName'" title="{{columns.displayName}}"
+                                                id="{{columns.subPageID}}"
+                                                class="TextTruncate-investor table-data-left">
+                                                {{columns.field}}
+                                            </th>
+                                            <th *ngIf="columns.header!='FundName'" title="{{columns.displayName}}"
+                                                id="{{columns.subPageID}}"
+                                                class="TextTruncate-investor table-data-left">
+                                                {{columns.displayName}}
+                                            </th>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-fundTrackRecord let-columns="columns">
+                                    <tr>
+                                        <ng-container *ngFor="let columns of frozenInvestorTrackRecordTableColumns;">
+                                            <td pFrozenColumn pFrozenColumn [ngStyle]="{'width':'303px'}" [ngClass]="(columns.header=='FundName')?'frozen-header-tr-Width':''"
+                                                title=" {{fundTrackRecord?.FundName!=null?fundTrackRecord?.FundName:'NA'}}"
+                                                *ngIf="columns.header=='FundName'">
+                                                <span>
+                                                    {{fundTrackRecord?.FundName!=null?fundTrackRecord?.FundName:'NA'}}
+                                                </span>
+                                            </td>
+                                        </ng-container>
+                                        <ng-container *ngFor="let col of columns">
+                                            <td [ngClass]="(col.header!='FundName') ? 'table-data-right' : 'table-data-left'"
+                                                *ngIf="col.header!='FundName'">
+                                                {{
+                                                col.name==FundTrackRecordStatic.TotalNumberOfInvestments?(fundTrackRecord[col.name]!=null?(fundTrackRecord[col.name]|number
+                                                : NumberDecimalConst.noDecimal):'NA'):
+                                                col.name==FundTrackRecordStatic.RealizedInvestments?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.noDecimal):'NA'):
+                                                col.name==FundTrackRecordStatic.UnRealizedInvestments?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.noDecimal):'NA'):
+                                                col.name==FundTrackRecordStatic.TotalInvestedCost?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.currencyDecimal):'NA'):
+                                                col.name==FundTrackRecordStatic.TotalRealizedValue?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.currencyDecimal):'NA'):
+                                                col.name==FundTrackRecordStatic.TotalUnRealizedValue?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.currencyDecimal ):'NA'):
+                                                col.name==FundTrackRecordStatic.TotalValue?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.currencyDecimal):'NA'):
+                                                col.name==FundTrackRecordStatic.Dpi?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.multipleDecimal )+"x":'NA'):
+                                                col.name==FundTrackRecordStatic.Rvpi?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.multipleDecimal )+"x":'NA'):
+                                                col.name==FundTrackRecordStatic.GrossMultiple?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.multipleDecimal)+"x":'NA'):
+                                                col.name==FundTrackRecordStatic.NetMultiple?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.multipleDecimal)+"x":'NA'):
+                                                col.name==FundTrackRecordStatic.GrossIRR?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.percentDecimal)+"%":'NA'):
+                                                col.name==FundTrackRecordStatic.NetIRR?(fundTrackRecord[col.name]
+                                                !=null?(fundTrackRecord[col.name]|number :
+                                                NumberDecimalConst.percentDecimal)+"%":'NA'):
+                                                col.dataType != mDataTypes.Date?(
+                                                col.dataType==mDataTypes.Multiple?(fundTrackRecord[col.displayName]!=null?(
+                                                fundTrackRecord[col.displayName] | number :
+                                                NumberDecimalConst.multipleDecimal)+"x":'NA'):
+                                                col.dataType==mDataTypes.Percentage?(fundTrackRecord[col.displayName]!=null?(
+                                                fundTrackRecord[col.displayName] | number :
+                                                NumberDecimalConst.percentDecimal)+"%":'NA'):
+                                                col.dataType==mDataTypes.CurrencyValue?(fundTrackRecord[col.displayName]!=null?(
+                                                fundTrackRecord[col.displayName] | number :
+                                                NumberDecimalConst.currencyDecimal):'NA'):
+                                                col.dataType==mDataTypes.Number?(fundTrackRecord[col.displayName]!=null?(
+                                                fundTrackRecord[col.displayName] | number :
+                                                NumberDecimalConst.noDecimal):'NA'):fundTrackRecord[col.displayName] == null ?'NA':fundTrackRecord[col.displayName]
+                                                ):
+                                                fundTrackRecord[col.displayName]!=null?
+                                                (fundTrackRecord[col.displayName]| date:'MM/dd/yyyy' ):
+                                                'NA'
+                                                }}
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <app-empty-state [isGraphImage]="false" *ngIf="fundTrackRecordData?.length == 0">
+                            </app-empty-state>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mr-0 ml-0">
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+                        <div class="pb-1 pl-3 pr-3 pb-2 company-details-padding fund-header TextTruncate" title="Company's Details">
+                            Company's Details
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 trackrecord-section">
+                        <div class="company-investor-border">
+                            <div class="panel panel-default border-0 pt-2 tab-bg">
+                                <div class="panel-heading">
+                                    <div class="panel-title custom-tabs">
+                                        <ul class="nav nav-tabs ">
+                                            <li class="nav-item" role="presentation">
+                                                <button class="nav-link nav-custom active TextTruncate" id="home-tab"
+                                                    data-bs-toggle="tab" type="button" role="tab" aria-controls="home"
+                                                    aria-selected="true" title="Fund currency">
+                                                    Fund currency
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter-bg">
+                                <div class="align-items-start">
+                                    <div class="ui-widget-header ui-wid-bb">
+                                        <div class="float-right plus-btn">
+                                            <a title="Add">
+                                                <img class="tc-add" title="Add" alt=""
+                                                    src="assets/dist/images/plus.svg" /></a>
+                                        </div>
+                                        <div class="row mr-0 ml-0">
+                                            <div
+                                                class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                                                <div class="float-left">
+                                                    <div class="allvalues-kpis TextTruncate" title="All Values in: {{company_table_fundCurrency}} ({{selectedValueUnitType?.unitType}})">All Values in: {{company_table_fundCurrency}} ({{selectedValueUnitType?.unitType}})</div>
+                                                </div>
+                                                <div class="float-right">
+                                                    <div class="d-inline-block search">
+                                                        <span class="fa fa-search fasearchicon p-1"></span>
+                                                        <input  [(ngModel)]="CompanyGlobalFilter" (keyup)="fetchItemDetailsSearch($event.target.value)" type="text" pInputText
+                                                        class="search-text-company companyListSearchHeight TextTruncate"
+                                                        placeholder="Search">
+                                                    </div>
+                                                    <div class="d-inline-block">
+                                                        <img class="p-action-padding download-excel"
+                                                            title="Export  (Excel file)"
+                                                            src="assets/dist/images/Cloud-download.svg" alt="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="datatable-container">
+                                        <p-table
+                                        #company_fundInvestor
+                                            class="Track-Records cashflow-tbl text-left investor-tr-table custom-kpi-table borderless invested-table"
+                                            [columns]="company_cols" [value]="company_results"
+                                             [scrollable]="true"
+                                            scrollHeight="100vh"  sortMode="multiple"
+                                             [scrollable]="true" 
+                                            [scrollHeight]="'calc(80vh - 256px)'"
+                                            >
+                                            <ng-template pTemplate="header" let-columns>
+                                                <tr>
+                                                    <ng-container *ngFor="let col of frozenInvestorCompanyTableColumns">
+                                                        <th pFrozenColumn [ngStyle]="{'width':'303px'}" [ngClass]="(col.name=='PortfolioCompanyName')?'frozen-header-tr-Width':''"
+                                                            *ngIf="col.name=='PortfolioCompanyName'"
+                                                            title="{{col.displayName}}"
+                                                            class="TextTruncate-investor table-data-left"
+                                                            [pSortableColumn]="col.name">
+                                                            {{col.displayName}}
+                                                            <p-sortIcon [field]="col.name">
+                                                            </p-sortIcon>
+                                                        </th>
+                                                    </ng-container>
+                                                    <ng-container *ngFor="let col of columns">
+                                                        <th *ngIf="col.name!='PortfolioCompanyName'"
+                                                            title="{{columns.displayName}}"
+                                                            class="TextTruncate-investor table-data-left"
+                                                            [pSortableColumn]="!col.isCustom?col.name:col.displayName">
+                                                            {{col.displayName}}
+                                                            <p-sortIcon [field]="!col.isCustom?col.name:col.displayName">
+                                                            </p-sortIcon>
+                                                        </th>
+                                                    </ng-container>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-portfolioCompanyFundHolding
+                                                let-columns="columns">
+                                                <tr>
+                                                    <ng-container *ngFor="let col of frozenInvestorCompanyTableColumns">
+                                                        <td pFrozenColumn [ngClass]="(col.name=='PortfolioCompanyName')?'frozen-header-tr-Width':''"
+                                                        title=" {{portfolioCompanyFundHolding?.PortfolioCompanyName!=null?portfolioCompanyFundHolding?.PortfolioCompanyName:'NA'}}"
+                                                        *ngIf="col.name=='PortfolioCompanyName'">
+                                                        <span>
+                                                            {{portfolioCompanyFundHolding?.PortfolioCompanyName!=null?portfolioCompanyFundHolding?.PortfolioCompanyName:'NA'}}
+                                                        </span>
+                                                    </td>
+                                                    </ng-container>
+                                                    <ng-container *ngFor="let col of columns">                                                 
+                                                        <td *ngIf="col.name!='PortfolioCompanyName'"
+                                                            [ngClass]="(col.name!='PortfolioCompanyName') ?  'table-data-right':'table-data-left'"
+                                                            [ngClass]="(col.name=='Quarter') ?  'table-data-left':'table-data-right'">
+                                                            {{
+                                                            (col.name==DealTrackRecordInfo.Quarter)?(portfolioCompanyFundHolding[col.name]==null?"NA":portfolioCompanyFundHolding[col.name]+' '+portfolioCompanyFundHolding['Year']):
+                                                            (col.name==DealTrackRecordInfo.Status)?(portfolioCompanyFundHolding[col.name]==null?"NA":portfolioCompanyFundHolding[col.name]):
+                                                            (col.name==DealTrackRecordInfo.ValuationDate)?(portfolioCompanyFundHolding[col.name]==null?"NA":portfolioCompanyFundHolding[col.name]):
+                                                            (col.name==DealTrackRecordInfo.InvestmentDate)?(portfolioCompanyFundHolding[col.name]==null?"NA":portfolioCompanyFundHolding[col.name]):
+                                                            (col.name==DealTrackRecordInfo.InvestmentCost)?(portfolioCompanyFundHolding[col.name]==null?"NA":portfolioCompanyFundHolding[col.name]|
+                                                            number : NumberDecimalConst.currencyDecimal):
+                                                            (col.name==DealTrackRecordInfo.RealizedValue)?(portfolioCompanyFundHolding[col.name]==null?"NA":portfolioCompanyFundHolding[col.name]|
+                                                            number : NumberDecimalConst.currencyDecimal):
+                                                            (col.name==DealTrackRecordInfo.UnrealizedValue)?(portfolioCompanyFundHolding[col.name]==null?"NA":portfolioCompanyFundHolding[col.name]|
+                                                            number : NumberDecimalConst.currencyDecimal):
+                                                            (col.name==DealTrackRecordInfo.TotalValue)?(portfolioCompanyFundHolding[col.name]==null?"NA":portfolioCompanyFundHolding[col.name]|
+                                                            number : NumberDecimalConst.currencyDecimal):
+                                                            (col.name==DealTrackRecordInfo.Dpi)?(portfolioCompanyFundHolding[col.name]==null?"NA":(portfolioCompanyFundHolding[col.name]|
+                                                            number : NumberDecimalConst.multipleDecimal)+"x"):
+                                                            (col.name==DealTrackRecordInfo.Rvpi)?(portfolioCompanyFundHolding[col.name]==null?"NA":(portfolioCompanyFundHolding[col.name]|
+                                                            number : NumberDecimalConst.multipleDecimal)+"x"):
+                                                            (col.name==DealTrackRecordInfo.GrossMultiple)?((portfolioCompanyFundHolding[col.name]==null)?"NA":(portfolioCompanyFundHolding[col.name]|
+                                                            number:NumberDecimalConst.multipleDecimal)+"x"):
+                                                            (col.name==DealTrackRecordInfo.GrossIRR)?(portfolioCompanyFundHolding[col.name]==null?"NA":(portfolioCompanyFundHolding[col.name]|
+                                                            number : NumberDecimalConst.percentDecimal)+"%"):
+                                                            col.dataType != mDataTypes.Date?(
+                                                                col.dataType==mDataTypes.Multiple?((portfolioCompanyFundHolding[col.displayName]!=null&&portfolioCompanyFundHolding[col.displayName]!='')?( portfolioCompanyFundHolding[col.displayName] | number:NumberDecimalConst.multipleDecimal)+"x":"NA"):
+                                                                col.dataType==mDataTypes.Percentage?((portfolioCompanyFundHolding[col.displayName]!=null&&portfolioCompanyFundHolding[col.displayName]!='')?( portfolioCompanyFundHolding[col.displayName] | number:NumberDecimalConst.percentDecimal)+"%":"NA"):
+                                                                col.dataType==mDataTypes.CurrencyValue?((portfolioCompanyFundHolding[col.displayName]!=null&&portfolioCompanyFundHolding[col.displayName]!='')?( portfolioCompanyFundHolding[col.displayName] | number : NumberDecimalConst.currencyDecimal):"NA"):
+                                                                col.dataType==mDataTypes.Number?((portfolioCompanyFundHolding[col.displayName]!=null&&portfolioCompanyFundHolding[col.displayName]!='')?( portfolioCompanyFundHolding[col.displayName] | number : NumberDecimalConst.noDecimal):"NA"):
+                                                                col.dataType==mDataTypes.FreeText?(portfolioCompanyFundHolding[col.displayName]!=null?( portfolioCompanyFundHolding[col.displayName]):"NA"):
+                                                                portfolioCompanyFundHolding[col.displayName]
+                                                            ):
+                                                            portfolioCompanyFundHolding[col.displayName]!=null?
+                                                            (portfolioCompanyFundHolding[col.displayName]| date:'MM/dd/yyyy' ):
+                                                            "NA"
+                                                            }}
+                                                        </td>
+                                                    </ng-container>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                        <app-empty-state [isGraphImage]="false" *ngIf="company_results?.length == 0">
+                                        </app-empty-state>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- start here -->
+        <div class="row mr-0 ml-0 investor-fund-table  mb-4">
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+                <div class="float-left fund-header pb-2 TextTruncate" title="{{companyPerformanceHeaderText}}">
+                    {{companyPerformanceHeaderText}}
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0 tc-box">
+                <div class="row mr-0 ml-0 ">
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 p-3">
+                        <div class="sub-feature-section">
+                            <div class="pb-2 TextTruncate" title="Company Name">
+                                Company Name
+                            </div>
+                            <div>
+                                <p-dropdown  [filter]="true" filterBy="'masterCompanyName'" [virtualScroll]="true" [virtualScrollItemSize]="30"  class="access-subfeature custom-searchable-dropdown" name="masterCompanyName" [options]="masterCompanyList" [(ngModel)]="selectedMasterCompany"
+                                placeholder="Select master company" optionLabel="masterCompanyName" [showClear]="false" (ngModelChange)="getCompanyPerformance()">
+                                <ng-template let-company pTemplate="item">
+                                    <span class="TextTruncate" title="{{company.masterCompanyName}}">
+                                        {{company.masterCompanyName}}
+                                    </span>
+                                </ng-template>
+                            </p-dropdown>
+                            </div>
+                        </div>
+                        <div class="sub-feature-section ">
+                            <div class="pb-2 TextTruncate" title="Quarter & Year">
+                                Quarter & Year
+                            </div>
+                            <div>
+                                <quarter-year-control class="investor-quarter" [ControlName]="'pcYear'" [QuarterYear]="companyPerformanceYearQuarter"  (onCalendarYearPicked)="performanceFromQuarterYear($event)"></quarter-year-control>  
+                            </div>
+                        </div>
+                    </div>                   
+                    <div [ngClass]="fundTrackRecordData?.length >0 ?'border-tr':''" 
+                        class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+                        <div class="ui-widget-header border-bottom-company">
+                            <div class="row mr-0 ml-0">
+                                <div
+                                    class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0 allvalues-kpis-company-performance">
+                                    <div class="float-left">
+                                        <div class="allvalues-kpis TextTruncate" title="All Values in: {{dealCurrencyCode}} ({{performanceTableUnit?.unitType}})">All Values in: {{dealCurrencyCode}} ({{performanceTableUnit?.unitType}})</div>
+                                    </div>
+                                    <div class="float-right">
+                                        <div class="d-inline-block search">
+                                            <span class="fa fa-search fasearchicon p-1"></span>
+                                            <input  [(ngModel)]="companyPerformanceSearchKeyWord" (keyup)="fetchPerformanceItemDetailsSearch($event.target.value)" type="text" pInputText
+                                            class="search-text-company companyListSearchHeight TextTruncate"
+                                            placeholder="Search">
+                                        </div>
+                                        <div class="d-inline-block">
+                                            <img class="p-action-padding download-excel"
+                                                title="Export  (Excel file)"
+                                                src="assets/dist/images/Cloud-download.svg" alt="" />
+                                        </div>
+                                        <div class="d-inline">
+                                            <span class="col-divider">
+                                            </span>
+                                        </div>
+                                        <div class="d-inline-block pl-2 pref-icon"><img id="dropdownMenuButton" [matMenuTriggerFor]="menu"  src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter" alt="" #tRecordTrigger="matMenuTrigger" (click)="isCommonUnitClick='Performance'"  /> </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="datatable-container">
+                            <p-table
+                                class="fixed-calculation-table Track-Records cashflow-tbl text-left investor-tr-table custom-kpi-table borderless invested-table"
+                                [columns]="compPerformanceColumns" [resizableColumns]="true"
+                                [value]="compPerformanceData" 
+                             
+                                [scrollable]="true" scrollHeight="40vh"
+                                sortMode="multiple">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <ng-container *ngFor="let columns of frozenInvestorTrackRecordTableColumns;">
+                                            <th pFrozenColumn [ngStyle]="{'width':'303px'}"  [ngClass]="(columns.header=='FundName')?'frozen-header-tr-Width':''" *ngIf="columns.header=='FundName'"
+                                                title="{{columns.displayName}}" id="{{columns.subPageID}}" class="TextTruncate-investor table-data-left">
+                                                {{columns.field}}
+                                            </th>
+                                        </ng-container>
+                                        <ng-container *ngFor="let columns of columns;">
+                                            <th [ngClass]="(columns.header=='FundName')?'frozen-header-tr-Width':''" *ngIf="columns.header=='FundName'"
+                                                title="{{columns.displayName}}" id="{{columns.subPageID}}" class="TextTruncate-investor table-data-left">
+                                                {{columns.field}}
+                                            </th>
+                                            <th *ngIf="columns.header!='FundName'" title="{{columns.displayName}}" id="{{columns.subPageID}}"
+                                                class="TextTruncate-investor table-data-left">
+                                                {{columns.displayName}}
+                                            </th>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-fundTrackRecord let-columns="columns">
+                                    <tr>
+                                        <ng-container *ngFor="let columns of frozenInvestorTrackRecordTableColumns;">
+                                            <td pFrozenColumn [ngClass]="(columns.header=='FundName')?'frozen-header-tr-Width':''"
+                                            title=" {{fundTrackRecord?.FundName!=null?fundTrackRecord?.FundName:'NA'}}"
+                                            *ngIf="columns.header=='FundName'"
+                                            [class.font-weight-bold]="fundTrackRecord['FundName']=='Total'"
+                                            >
+                                            <span title="{{fundTrackRecord?.FundName!=null?fundTrackRecord?.FundName:'NA'}}">
+                                                {{fundTrackRecord?.FundName!=null?fundTrackRecord?.FundName:'NA'}}
+                                            </span>
+                                        </td>
+                                        </ng-container>
+                                        <ng-container *ngFor="let col of columns">                                          
+                                            <td  [class.font-weight-bold]="fundTrackRecord['FundName']=='Total'" [ngClass]="(col.header!='FundName') ? 'table-data-right' : 'table-data-left'"
+                                                *ngIf="col.header!='FundName'">
+                                                {{ 
+                                                    (col.name==investorCompaniesPerformance.InvestorStake)?(fundTrackRecord['FundName']=='Total'?'-':(fundTrackRecord[col.name]==null?"NA":(fundTrackRecord[col.name]| number : NumberDecimalConst.currencyDecimal)+'%')):
+                                                    (col.name==investorCompaniesPerformance.CurrentExitOwnershipPercent)?(fundTrackRecord['FundName']=='Total'?'-':(fundTrackRecord[col.name]==null?"NA":(fundTrackRecord[col.name]| number : NumberDecimalConst.currencyDecimal)+'%')):
+                                                    (col.name==investorCompaniesPerformance.CommitmentAfterAstreaTransfer)?(fundTrackRecord[col.name]==null?"NA":fundTrackRecord[col.name] | number : NumberDecimalConst.currencyDecimal):
+                                                    (col.name==investorCompaniesPerformance.InvestorStake)?(fundTrackRecord[col.name]==null?"NA":(fundTrackRecord[col.name]| number : NumberDecimalConst.currencyDecimal)+'%'):
+                                                    (col.name==investorCompaniesPerformance.InvestmentDate)?(fundTrackRecord['FundName']=='Total'?'-':(fundTrackRecord[col.name]==null?"NA":fundTrackRecord[col.name])):
+                                                    (col.name==investorCompaniesPerformance.Status)?(fundTrackRecord['FundName']=='Total'?'-':(fundTrackRecord[col.name]==null?"NA":fundTrackRecord[col.name])):
+                                                    (col.name==investorCompaniesPerformance.Dpi||col.name==investorCompaniesPerformance.Rvpi||col.name==investorCompaniesPerformance.GrossMultiple)?(fundTrackRecord[col.name]==null?"NA":(fundTrackRecord[col.name] | number : NumberDecimalConst.currencyDecimal)+'x'):
+                                                    (col.name==investorCompaniesPerformance.GrossIRR)?(fundTrackRecord['FundName']=='Total'?'-':(fundTrackRecord[col.name]==null?"NA":(fundTrackRecord[col.name] | number : NumberDecimalConst.currencyDecimal)+'%')):
+                                                    (fundTrackRecord[col.name]==null?"NA":fundTrackRecord[col.name]| number : NumberDecimalConst.currencyDecimal)
+                                                }}
+                                            </td>
+                                        </ng-container>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            <app-empty-state [isGraphImage]="false" *ngIf="compPerformanceData?.length == 0">
+                            </app-empty-state>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end here -->
+        <div class="row mr-0 ml-0 investor-fund-table  mb-4" *ngIf="!isTaabo">
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+                <div class="float-left fund-header pb-2 TextTruncate" title="Valuation Data">
+                    Valuation Data
+                </div>
+            </div>
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0 tc-box">
+                <div class="row mr-0 ml-0 ">
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 p-3">
+                        <div class="sub-feature-section">
+                            <div class="pb-2 TextTruncate" title="Fund Name">
+                                Fund Name
+                            </div>
+                            <div>
+                                <p-dropdown [virtualScroll]="true" [filter]="true" [filterBy]="'fundName'"  [virtualScrollItemSize]="30" class="access-subfeature custom-searchable-dropdown" name="module"
+                                    [options]="valuationSelection" placeholder="Select Fund" [(ngModel)]="valuationFundId"
+                                    optionLabel="fundName" optionValue="fundId" [showClear]="false" (ngModelChange)="getValuationSelectionChange()">
+                                    <ng-template let-fund pTemplate="item">
+                                        <span title="{{fund.fundName}}">
+                                            {{fund.fundName}}
+                                        </span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <div class="sub-feature-section">
+                            <div class="pb-2 TextTruncate" title="Quarter & Year">
+                                Quarter & Year
+                            </div>
+                            <div>
+                                <quarter-year-control class="investor-quarter" [ControlName]="'valuationYear'" [QuarterYear]="valuationQuarter"  (onCalendarYearPicked)="fromQuarterYear($event)"></quarter-year-control>                              
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 trackrecord-section">
+                        <div class="company-investor-border">
+                            <div class="filter-bg">
+                                <div class="align-items-start">
+                                    <div class="ui-widget-header border-bottom-0" >
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">        
+                                                <div class="float-left">
+                                                    <div class="allvalues-kpis TextTruncate" title="All Values in: {{valuation_fundCurrency}} ({{valueUnit?.unitType}})">All Values in: {{valuation_fundCurrency}} ({{valueUnit?.unitType}})</div>
+                                                </div>
+                                                <div class="float-right">
+                                                    <div class="d-inline-block search">
+                                                        <span class="fa fa-search fasearchicon p-1"></span>
+                                                        <input  [(ngModel)]="valuationGlobalFilter" (keyup)="fetchValuationDetailsSearch($event.target.value)" type="text" pInputText
+                                                        class="search-text-company companyListSearchHeight TextTruncate"
+                                                        placeholder="Search">
+                                                    </div>
+                                                    <div class="d-inline-block">
+                                                        <img class="p-action-padding download-excel"
+                                                            title="Export  (Excel file)"
+                                                            src="assets/dist/images/Cloud-download.svg" alt="" />
+                                                    </div>
+                                                    <div class="d-inline">
+                                                        <span class="col-divider">
+                                                        </span>
+                                                    </div>
+                                                    <div class="d-inline-block pl-2 pref-icon"><img id="dropdownMenuButton" [matMenuTriggerFor]="menu"  src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter" alt="" #tRecordTrigger="matMenuTrigger" (click)="isCommonUnitClick='Valuation'"  /> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="datatable-container">
+                                        <p-table styleClass="p-datatable-gridlines" #valuationFundInvestor
+                                            class="Track-Records cashflow-tbl text-left investor-tr-table custom-kpi-table borderless invested-table"
+                                            [columns]="valuationColumns" [value]="valuationTable"
+                                             [scrollable]="true"
+                                            scrollHeight="100vh"  sortMode="multiple"
+                                         [scrollable]="true" 
+                                            [scrollHeight]="'calc(80vh - 256px)'"
+                                            >
+                                            <ng-template pTemplate="header" let-columns>
+                                                <tr>
+                                                    <ng-container *ngFor="let col of frozenInvestorValuationTableColumns">
+                                                        <th pFrozenColumn  [ngStyle]="{'width':'303px'}" [ngClass]="(col.name=='Quarter/Month')?'frozen-header-tr-Width':''"
+                                                        *ngIf="col.name=='Quarter/Month'"
+                                                        title="{{col.displayName}}"
+                                                        class="TextTruncate-investor table-data-left"
+                                                        [pSortableColumn]="col.name">
+                                                        {{col.displayName}}
+                                                        <p-sortIcon [field]="col.name">
+                                                        </p-sortIcon>
+                                                    </th>
+                                                    </ng-container>
+                                                    <ng-container *ngFor="let col of columns">                                                    
+                                                        <th *ngIf="col.name!='Quarter/Month'"
+                                                            title="{{columns.displayName}}"
+                                                            class="TextTruncate-investor table-data-left"
+                                                            [pSortableColumn]="!col.isCustom?col.name:col.displayName">
+                                                            {{col.displayName}}
+                                                            <p-sortIcon [field]="!col.isCustom?col.name:col.displayName">
+                                                            </p-sortIcon>
+                                                        </th>
+                                                    </ng-container>
+                                                </tr>
+                                            </ng-template>                                          
+                                            <ng-template pTemplate="body" let-valuation let-columns="columns">
+                                                <tr>
+                                                    <ng-container *ngFor="let col of frozenInvestorValuationTableColumns"> 
+                                                        <td pFrozenColumn  title="{{ valuation[col.name]==null?'NA':valuation[col.name]}}"
+                                                        [ngClass]="(col.name=='Quarter/Month')?'frozen-header-tr-Width':''" *ngIf="col.name=='Quarter/Month'">
+                                                            <span>
+                                                            {{ valuation[col.name]==null?"NA":valuation[col.name]}}
+                                                            </span>
+                                                        </td> 
+                                                    </ng-container>
+                                                    <ng-container *ngFor="let col of columns">                                         
+                                                        <td [ngClass]="(col.name=='Quarter/Month')?'':'table-data-right'" *ngIf="col.name!='Quarter/Month'">
+                                                            <span  [innerHtml]='(col.name==valuationDefaultValues.CapitalCall)?(valuation[col.name]==null?"NA":valuation[col.name]| number : NumberDecimalConst.currencyDecimal | minusSignToBrackets):
+                                                            (col.name==valuationDefaultValues.CapitalDistribution)?(valuation[col.name]==null?"NA":valuation[col.name]| number : NumberDecimalConst.currencyDecimal | minusSignToBrackets):
+                                                            (col.name==valuationDefaultValues.FeesAndExpenses)?(valuation[col.name]==null?"NA":valuation[col.name]| number : NumberDecimalConst.currencyDecimal | minusSignToBrackets):
+                                                            (col.name==valuationDefaultValues.UnrealizedGainOrLoss)?(valuation[col.name]==null?"NA":valuation[col.name]| number : NumberDecimalConst.currencyDecimal | minusSignToBrackets):
+                                                            (col.name==valuationDefaultValues.ClosingNAV)?(valuation[col.name]==null?"NA":valuation[col.name]| number : NumberDecimalConst.currencyDecimal | minusSignToBrackets):
+                                                            (valuation[col.displayName]==null?"NA":valuation[col.displayName]| number : NumberDecimalConst.currencyDecimal | minusSignToBrackets)'></span> 
+                                                        </td>
+                                                    </ng-container>
+                                                </tr>
+                                            </ng-template>
+                                        </p-table>
+                                        <app-empty-state [isGraphImage]="false" *ngIf="valuationTable?.length == 0">
+                                        </app-empty-state>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div *ngIf="tabName=='Dashboard'">
+    <investor-dashboard></investor-dashboard>
+</div>
+<app-loader-component *ngIf="loading"></app-loader-component>
+<mat-menu #menu="matMenu" [hasBackdrop]="true" class="fixed-menu">
+    <div class="filter-first"  (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+        <div class="row m-0 ">
+            <div class="col-12 pb-1 pt-3 label-align TextTruncate" title="Values in" >
+                Values in:
+            </div>
+            <div class="col-12 pl-3 pr-3" *ngIf="isCommonUnitClick=='Valuation'">
+                <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" name="Unit" 
+                class="tablefilter-dropdrown-width" [options]="unitTypeList" [(ngModel)]="valueUnit" 
+                optionLabel="unitType" [showClear]="false" (onChange)="valuationTableConvertToMillions()" tabindex="1"></p-dropdown>
+            </div>
+            <div class="col-12 pl-3 pr-3" *ngIf="isCommonUnitClick=='Performance'">
+                <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" name="Unit" 
+                class="tablefilter-dropdrown-width" [options]="unitTypeList" [(ngModel)]="performanceTableUnit" 
+                optionLabel="unitType" [showClear]="false" (onChange)="convertCompPerfToMillions()" tabindex="1"></p-dropdown>
+            </div>
+        </div>      
+    </div>
+</mat-menu>

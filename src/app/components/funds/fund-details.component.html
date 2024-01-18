@@ -1,0 +1,882 @@
+﻿
+<div class="row mr-0 ml-0 fund-detail-section pb-1" [ngClass]="loading?'d-none':'d-block'" (resized)="onResized($event)">
+    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+    <div class="row mr-0 ml-0 header-section pb-2">
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+            <div class="float-left fund-header fund-static-title TextTruncate custom-fund-left-width" title="{{model.fundName}}">
+                {{model.fundName}}
+            </div>   
+            <div class="float-right custom-fund-right-width"> 
+                <div class="float-right">
+                <div class="pr-2 d-inline-block"   [ngClass]="{disabledNoOfCasesDiv: isdownloadfilter}" >
+                    <img id="dropdownMenuButton" #dropdownMenuButton [matMenuTriggerFor]="menu" src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter" alt="" #iMenuTrigger="matMenuTrigger" /> </div>      
+                <div class="fund-splitButton d-inline-block">
+                    <a class="loading-input-controls2" *ngIf="exportLoading">
+                        <i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                    </a>
+                    <p-splitButton class="custom-btn-split fund-detail-button" label="Download Report" styleClass="p-button-primary" [model]="exportItems" title="Export Files"
+                        tabindex="1">
+                    </p-splitButton>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mr-0 ml-0 card card-main static-card pb-4">
+        <div class="col-12 col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+            <div class="static-pc-section fund-detail section1-height chart-area row mr-0 ml-0 mb-0">
+                <div class="col-12  pr-0 pl-0">
+                    <div class="row mr-0 ml-0 pb-1 static-bg">
+                        <div class="col-12 pr-0 pl-0 chart-title pc-section-header">
+                            <div class="float-right pr-2 fund-static-header">
+                                <a [routerLink]="['/create-fund',model.encryptedFundId]" [hideIfUnauthorized]='{featureId:feature.Fund,action:"edit"}'  title="Edit"><img alt="" src="assets/dist/images/EditIcon.svg"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mr-0 ml-0" *ngIf="fundStaticConfiguartionData?.length>0">
+                        <div class="col-sm-12 pr-3 pl-3 pt-3 pb-2">
+                            <div class="line-wrapper">
+                                <span class="mr-2 TextTruncate" title="{{fundStaticDataTitle?.displayName}}">{{fundStaticDataTitle?.displayName}}</span>
+                                <div class="line"></div>
+                              </div>
+                        </div>
+                        <div class="pl-3 pr-3 Fund-section col-12">
+                                <div class="row mr-0 ml-0">
+                                    <ng-container  *ngFor="let fund of fundStaticConfiguartionData">
+                                        <div class="col-4 pr-0 pl-0 pt-2 mb-1 custom-fund-label-padding" *ngIf="fund.hasLink  && fund.name !== 'StrategyDescription' && fund.name !== 'FundSize' && fund.name != 'Investors'">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="pr-0 pl-0 col-4">
+                                                    <div title="{{fund.displayName}}" ><span class="hColor static-label TextTruncate d-block">
+                                                        {{fund.displayName}}</span></div>
+                                                </div>
+                                                <div class="pr-0 pl-3 col-8 custom-fund-value-padding ">
+                                                    <div class="TextTruncate">
+                                                        
+                                                        <a title="{{fund.value}}" class="linkStyle" [routerLink]="['/firm-details', model?.firmDetail?.encryptedFirmID]"
+                                                        class="click-view"
+                                                        href="javascript:void(0);">{{fund.value}}</a>                                                 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 pt-2 mb-1 pr-0 pl-0 custom-fund-label-padding" *ngIf="!fund.hasLink  && fund.name !== 'StrategyDescription' && fund.name !== 'FundSize' && fund.name != 'Investors'">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="pr-0 pl-0 col-4">
+                                                    <div title="{{fund.displayName}}" class=""><span class="hColor static-label TextTruncate  d-block">
+                                                        {{fund.displayName}}</span></div>
+                                                </div>
+                                                <div class="pr-0 col-8 pl-3 custom-fund-value-padding">
+                                                    <div class="TextTruncate">                                             
+                                                        <span title="{{fund.value}}" class="vColor static-field-value">{{fund.value || "NA"}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 pt-2 mb-1 pr-0 pl-0 custom-fund-label-padding" *ngIf="fund.name == 'FundSize'">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="pr-0 pl-0 col-4">
+                                                    <div title="{{fund.displayName}}" class="TextTruncate"><span class="hColor TextTruncate static-label  d-block">
+                                                        {{fund.displayName}}</span></div>
+                                                </div>
+                                                <div class="pr-0 pl-0 col-8 pl-3 TextTruncate custom-fund-value-padding" *ngIf="fund.name == 'FundSize'">
+                                                    <div title="{{(fund.value |number : NumberDecimalConst.currencyDecimal)|| 'NA'}}" class="TextTruncate">                                               
+                                                        <span class="vColor static-field-value TextTruncate">{{fund.value!='NA'?(fund.value |number : NumberDecimalConst.currencyDecimal)|| "NA":"NA"}}</span>                                               
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4 pt-2 mb-1 pr-0 pl-0 custom-fund-label-padding" *ngIf="fund.name == 'Investors'">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="pr-0 pl-0 col-4">
+                                                    <div title="{{fund.displayName}}" class="TextTruncate"><span class="hColor static-label TextTruncate d-block">
+                                                        {{fund.displayName}}</span></div>
+                                                </div>
+                                                <div class="pr-0 pl-0 col-8 pl-3 custom-fund-value-padding">
+                                                    <div title="investors" class="TextTruncate">                                               
+                                                       <div *ngIf="investorList.length > 1" class="investor-link TextTruncate" [matMenuTriggerFor]="menuInvestor" title=">{{investorList[0]?.investorName}} + {{investorList.length -1}}" >{{investorList[0]?.investorName}} + {{investorList.length -1}} </div>   
+                                                       <div *ngIf="investorList.length == 0" class="investor-link invest-NA TextTruncate" >NA</div>
+                                                       <div *ngIf="investorList.length == 1" class="investor-link TextTruncate" (click)="redirectToInvestor(investorList[0])" title="{{investorList[0]?.investorName}} ">{{investorList[0]?.investorName}} </div>                                      
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </ng-container>
+                                </div>
+                        </div>
+                    </div> 
+                    <div class="row mr-0 ml-0" *ngIf="stratedyDesc?.displayName!=undefined">
+                        <div class="col-sm-12 pr-3 pl-3 pt-3 pb-2">
+                            <div class="line-wrapper">
+                                <span class="mr-2 TextTruncate" title="{{stratedyDesc?.displayName}}">{{stratedyDesc?.displayName}}</span>
+                                <div class="line"></div>
+                              </div>
+                              <div class="chart-content">
+                                <div  class=" statit-desc pr-0 pl-0 pt-3 TextTruncate" title="{{model?.strategyDescription|| 'NA'}}">{{model?.strategyDescription|| "NA"}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mr-0 ml-0" *ngIf="fundTermsConfiguartionData?.length>0">
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pl-3 pt-3 pb-2">
+                            <div class="line-wrapper">
+                                <span class="mr-2 TextTruncate" title="{{fundTermsTitle?.displayName}}">{{fundTermsTitle?.displayName}}</span>
+                                <div class="line"></div>
+                              </div>
+                        </div>
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pl-3 pb-2">
+                            <div class="row mr-0 ml-0">
+                                <ng-container  *ngFor="let fundTerm of fundTermsConfiguartionData ">
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding"  *ngIf="fundTerm.name=='TargetCommitment'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 col-6 custom-fund-value-padding">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate" title="{{(model.targetCommitment|number : NumberDecimalConst.currencyDecimal)||'NA'}}">
+                                                        {{(model.targetCommitment|number : NumberDecimalConst.currencyDecimal)||"NA"}}
+                                                    </span>                                                                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='MaximumCommitment'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 col-6 custom-fund-value-padding">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate" title="{{(model.maximumCommitment|number : NumberDecimalConst.currencyDecimal)||'NA'}}">{{(model.maximumCommitment|number : NumberDecimalConst.currencyDecimal)||"NA"}}
+                                                    </span>                                                                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='GPCommitment'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate" title=" {{(model.gpCommitment|number : NumberDecimalConst.percentDecimal)||
+                                                        'NA'}}">{{(model.gpCommitment|number : NumberDecimalConst.percentDecimal)||
+                                                        "NA"}}
+                                                    </span><span *ngIf="model.gpCommitment"> %</span>                                                                                              
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='PreferredReturnPercent'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate" title="{{(model.preferredReturnPercent|number : NumberDecimalConst.percentDecimal)||
+                                                        'NA'}}">{{(model.preferredReturnPercent|number : NumberDecimalConst.percentDecimal)||
+                                                        "NA"}}</span><span *ngIf="model.preferredReturnPercent">
+                                                        %
+                                                    </span>                                                                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='CarriedInterestPercent'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate" title="{{(model.carriedInterestPercent|number : NumberDecimalConst.percentDecimal)||
+                                                        'NA'}">{{(model.carriedInterestPercent|number : NumberDecimalConst.percentDecimal)||
+                                                        "NA"}}</span><span *ngIf="model.carriedInterestPercent">
+                                                        %
+                                                    </span>                                                                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='GPCatchupPercent'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate" title="{{(model.gpCatchupPercent|number : NumberDecimalConst.percentDecimal)||
+                                                        'NA'}}">{{(model.gpCatchupPercent|number : NumberDecimalConst.percentDecimal)||
+                                                        "NA"}}</span><span *ngIf="model.gpCatchupPercent">%
+                                                    </span>                                                                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='ManagementFee'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor TextTruncate static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate" title="{{(model.managementFee|number : NumberDecimalConst.percentDecimal)||
+                                                        'NA'}}">{{(model.managementFee|number : NumberDecimalConst.percentDecimal)||
+                                                        "NA"}}
+                                                    </span> <span *ngIf="model.managementFee"> %</span>                                                                                               
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='ManagementFeeOffset'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label ">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate">{{(model.managementFeeOffset|number : NumberDecimalConst.currencyDecimal)||
+                                                        "NA"}}
+                                                    </span>                                                                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='FundTerm'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="vColor static-field-value TextTruncate">
+                                                    <span class="TextTruncate" title="{{(model.fundTerm|number : NumberDecimalConst.singleDecimal)||
+                                                        'NA'}}">{{(model.fundTerm|number : NumberDecimalConst.singleDecimal)||
+                                                        "NA"}}</span><span *ngIf="model.fundTerm">
+                                                        year(s)</span>                                                                                              
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='MaximumExtensionToFundTerm'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="vColor static-field-value TextTruncate">
+                                                    <span class="TextTruncate" title="{{(model.maximumExtensionToFundTerm|number : NumberDecimalConst.singleDecimal)|| 'NA'}}">{{(model.maximumExtensionToFundTerm|number : NumberDecimalConst.singleDecimal)|| "NA"}}</span><span
+                                                    *ngIf="model.maximumExtensionToFundTerm"> year(s)</span>                                                                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='FundClosingDate'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor TextTruncate static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate">{{(model.fundClosingDate | date:'MM/dd/yyyy')||
+                                                        "NA"}}
+                                                    </span>                                                                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='OrgExpenses'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate" title="{{(model.orgExpenses|number : NumberDecimalConst.currencyDecimal)|| 'NA'}}">{{(model.orgExpenses|number : NumberDecimalConst.currencyDecimal)|| "NA"}}
+                                                    </span>                                                                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='Clawback'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate" title="{{model.clawback|| 'NA'}}">{{model.clawback|| "NA"}}
+                                                    </span>                                                                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 pt-2 mb-1 pr-0 custom-fund-label-padding" *ngIf="fundTerm.name=='Customfield'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="pr-0 pl-0 col-6">
+                                                <div title="{{fundTerm.displayName}}" class="TextTruncate"><span class="hColor static-label TextTruncate">
+                                                    {{fundTerm.displayName}}</span></div>
+                                            </div>
+                                            <div class="pr-0 custom-fund-value-padding col-6">
+                                                <div class="TextTruncate">
+                                                    <span class="vColor static-field-value TextTruncate" title="{{fundTerm.value || 'NA'}}">{{fundTerm.value || "NA"}}
+                                                    </span>                                                                                                
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mr-0 ml-0" *ngIf="fundLocationConfiguartionData?.length>0">
+                        <div class="col-sm-12 pr-3 pl-3 pt-3 pb-2">
+                            <div class="line-wrapper">
+                                <span class="mr-2 TextTruncate" title="{{fundLocationDataTitle?.displayName}}">{{fundLocationDataTitle?.displayName}}</span>
+                                <div class="line"></div>
+                              </div>
+                              </div>
+                        <div class="col-12 pr-0 pl-0 pt-2">
+                            <div class="card">
+                                <div class="card-body mb-0">
+                                    <div class="table-responsive card-border">
+                                        <table class='table mb-0 static-info-table'>
+                                            <thead>
+                                                <tr> 
+                                                    <ng-container *ngFor="let geo of fundLocationConfiguartionData">
+                                                        <th scope="col" class="text-align-left" title="{{geo.displayName}}">{{geo.displayName}}</th>
+                                                    </ng-container>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <ng-container *ngFor="let loc of fundLocationConfiguartionData">
+                                                        <td class="text-align-left">
+                                                            <span *ngIf="loc.name ==companyInformationConstants.Region" title="{{model.geographyDetail?.region?.region || 'NA'}}">{{model.geographyDetail?.region?.region || "NA"}}</span>
+                                                            <span *ngIf="loc.name ==companyInformationConstants.Country" title="{{model.geographyDetail?.country?.country || 'NA'}}">{{model.geographyDetail?.country?.country || "NA"}}</span>
+                                                            <span *ngIf="loc.name ==companyInformationConstants.State" title="{{model.geographyDetail?.state?.state || 'NA'}}">{{model.geographyDetail?.state?.state || "NA"}}</span>
+                                                            <span *ngIf="loc.name ==companyInformationConstants.City" title="{{model.geographyDetail?.city?.city || 'NA'}}"> {{model.geographyDetail?.city?.city || "NA"}} </span>
+                                                        </td>
+                                                    </ng-container>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <app-empty-state [isGraphImage] ="false" *ngIf="fundLocationConfiguartionData?.length==0"></app-empty-state>  
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mr-0 ml-0 header-section header-performance">
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+            <div class="float-left fund-header pb-1">
+                <div class="row mr-0 ml-0 header-section">
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                        <div class="float-left fund-header pb-2 TextTruncate" title="Fund Performance">
+                            Fund Performance
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 fund-performance-content chart-area">
+                <div class="chart-content pt-3">
+                    <app-multiline-point-chart *ngIf="fundPerformanceData!=undefined"
+                        [isDisplay]="width"
+                        [yFontSize]="'14px'"
+                        [xFontSize]="'14px'"
+                        [markerFontSize]="'12px'"
+                        [height]="340"
+                        [data]="fundPerformanceData" [xColumn]="'ValuationDate'"
+                        [yObjects]="{'Gross TVPI':{column:'Gross TVPI'},'Gross IRR':{column:'Gross IRR'},'Net TVPI':{column:'Net TVPI'},'Net IRR':{column:'Net IRR'}}"
+                        [axisLabels]="{ xAxis: 'Quarters', yAxis: 'IRR', yAxisRight: 'TVPI' }">
+                    </app-multiline-point-chart>
+                </div>
+        </div>
+    </div>
+    <div class="row mr-0 ml-0 header-performance">
+        <div class="col-6 col-md-6 col-sm-6 col-lg-6 col-xl-6 pr-0 pl-0">
+            <div class="row ml-0">
+                <div class="col-12 pr-0 pl-0">
+                    <div class="float-left fund-header pb-2 TextTruncate" title="Sector Wise Total Value">
+                        Sector Wise Total Value
+                    </div>
+                </div>
+            </div>
+            <div class="row section-chart ml-0 border-1">
+                <div class="col-12  chart-area">
+                    <div class="chart-content col-sm-8 m-sm-auto" *ngIf="sectorwiseHoldingValues">
+                        <app-donut-chart [isDisplay]="width"[height]="400" [unit]="''" [catField]="'Sector'" [valField]="'Total Value'"
+                            [data]="sectorwiseHoldingValues" [title]="'Total Value'"></app-donut-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-6 col-sm-6 col-lg-6 col-xl-6 pr-0 pl-0">
+            <div class="row  mr-0 ml-0">
+                <div class="col-12 pr-0 pl-0">
+                    <div class="float-left fund-header pb-2 TextTruncate" title="Sector Wise Investment Cost">
+                        Sector Wise Investment Cost
+                    </div>
+                </div>
+            </div>
+            <div class="row section-chart mr-0 ml-0 border-1">
+                <div class="col-12 chart-area ">
+                    <div class="chart-content col-sm-8 m-sm-auto" *ngIf="sectorwiseHoldingValues">
+                        <app-donut-chart [height]="400" [isDisplay]="width" [unit]="''" [catField]="'Sector'" [valField]="'Investment Cost'"
+                            [data]="sectorwiseHoldingValues" [title]="'Investment Cost'"></app-donut-chart>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mr-0 ml-0 header-performance">
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+            <div class="float-left fund-header pb-2 TextTruncate" title="Deals">
+                Deals
+            </div>
+        </div>
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+            <div class="row mr-0 ml-0 deal-section">
+                <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                    <div class="add-user-component">
+                        <div class="card card-main">
+                            <div class="card-header card-header-main p-0">
+                                <div class="row mr-0 ml-0 fundlist-header">
+                                    <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                                        <div class="float-right">
+                                            <div class="d-inline-block search">
+                                                <span class="fa fa-search fasearchicon p-1"></span>
+                                                <input  class="search-text-company companyListSearchHeight TextTruncate" placeholder="Search" #gbDeal (input)="tblDeal.filterGlobal($event.target.value, 'contains')" type="text" [(ngModel)]="globalFilter"
+                                                pInputText/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <p-table styleClass="p-datatable-gridlines" #tblDeal class="pipeline-table fund-list-table"
+                                                    emptyMessage="{{blockedDealsTable? 'Please Wait...':'No record found'}}"
+                                                    [totalRecords]="totalDealRecords" [value]="deals" [lazy]="true"
+                                                    (onLazyLoad)="loadDealsLazy($event)"  [paginator]="false"
+                                                     
+                                                    [globalFilter]="gbDeal"
+                                                    [multiSortMeta]="[{field:'companyName',order:1}]" sortMode="multiple"
+                                                    [scrollable]="true" scrollHeight="318px" [virtualScroll]="false">
+                                                    <ng-template pTemplate="header">
+                                                        <tr>
+                                                            <th pSortableColumn="companyName" title="Company Name">
+                                                                Company Name
+                                                                <p-sortIcon field="companyName">
+                                                                </p-sortIcon>
+                                                            </th>
+                                                            <th pSortableColumn="dealCustomID" title="Deal">Deal
+                                                                <p-sortIcon field="dealCustomID"></p-sortIcon>
+                                                            </th>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="body" let-deal>
+                                                        <tr>
+                                                            <td><a class="click-view" href="javascript:void(0);"
+                                                                    [routerLink]="['/portfolio-company-detail', deal.portfolioCompanyDetails.encryptedPortfolioCompanyId]"
+                                                                    title="View Details">{{
+                                                                    deal.portfolioCompanyDetails.companyName }}</a></td>
+                                                            <td> <div class="float-left"><a class="click-view" href="javascript:void(0);"
+                                                                [routerLink]="['/deal-details', deal.encryptedDealID]"
+                                                                title="View Details">{{deal.dealCustomID}}</a></div>
+                                                                    <div class="float-right">
+                                                                        <a class="deal-edit"
+                                                                            [routerLink]="['/save-deal', deal.encryptedDealID]">
+                                                                            <img alt="" src="assets/dist/images/EditIcon.svg"/>
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+                                                            
+                                                        </tr>
+                                                    </ng-template>
+
+                                                </p-table>   
+                                                <app-empty-state [isGraphImage] ="false" *ngIf="deals?.length == 0"></app-empty-state>                             
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mr-0 ml-0 header-performance mb-4">
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+            <div class="float-left fund-header pb-2 TextTruncate" title="{{headerText}}  ">
+                {{headerText}}  
+            </div>
+        </div>
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 trackrecord-section">
+            <div class="financial-page">
+                    <div class="panel panel-default border-0 pt-2 tab-bg">
+                        <div class="panel-heading">
+                            <div class="panel-title custom-tabs">
+                                <ul class="nav nav-tabs ">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link nav-custom active TextTruncate" title="Fund currency"  id="home-tab" data-bs-toggle="tab" type="button" role="tab" aria-controls="home" aria-selected="true">
+                                            Fund currency
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-bg">                  
+                    <div>
+                        <app-trackrecords  (onClosePopUpClick)="closeSavePopup($event)"  (onPickedHeaderText)="getTrackRecordText($event)"></app-trackrecords>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+
+    <div (resized)="onResized($event)">
+        <div style="width: 1280px;position: fixed; visibility: hidden;" >
+            <div *ngFor="let data of reportGraphData;let i=index"
+                id="{{data.featureName}}///{{data.featureid}}//{{data.order}}" #button style="position: relative;">
+                <div style="width:100%;display:inline-block;" *ngIf="(data.featureName=='Fund Performance Chart')">
+                    <app-multiline-point-chart [width]="1280" *ngIf="data?.data[0].Results.length>0;else templateName"
+                        [data]="data?.data[0].Results" [xColumn]="'ValuationDate'"
+                        [yObjects]="{'Gross TVPI':{column:'Gross TVPI'},'Gross IRR':{column:'Gross IRR'},'Net TVPI':{column:'Net TVPI'},'Net IRR':{column:'Net IRR'}}"
+                        [axisLabels]="{ xAxis: 'Quarters', yAxis: 'IRR', yAxisRight: 'TVPI' }">
+                    </app-multiline-point-chart>
+                    <ng-template #templateName>
+                        <div style="text-align: center;" class="text-info mt-3">
+                            No record found
+                        </div>
+                    </ng-template>
+                </div>
+                <div *ngIf="(data.featureName!='Fund Performance Chart')">
+                    <div>
+                        <h4 class="pdf-h4 TextTruncate" title="Attribution
+                    {{data?.data[0]?.ReportType!=null?data?.data[0]?.ReportType:data?.ReportType}}">Attribution
+                            {{data?.data[0]?.ReportType!=null?data?.data[0]?.ReportType:data?.ReportType}}</h4>
+                        <div class="pdf-border-orange" style="border-bottom: 3px solid #f26524;"></div>
+                        <div
+                            [ngStyle]="(data?.data[0]?.strategies!=''||data?.data[0]?.regions!=''||data?.data[0]?.countries!=''||data?.data[0]?.evaluationDate!='') ? { 'padding': '20px 20px 20px 0px' }: { 'padding': '0px 0px 0px 0px' }">
+                            <div *ngIf="data?.data[0]?.strategies!=''"><span
+                                    style="font-weight: bold;color: #212121;">Strategies:</span> <span
+                                    style="font-weight:normal;color: #212121;"> {{data?.data[0]?.strategies}}</span></div>
+                            <div *ngIf="data?.data[0]?.regions!=''"><span
+                                    style="font-weight: bold;color: #212121;">Regions:</span>
+                                <span style="font-weight:normal;color: #212121;"> {{data?.data[0]?.regions}}</span>
+                            </div>
+                            <div *ngIf="data?.data[0]?.countries!=''"><span
+                                    style="font-weight: bold;color: #212121;">Countries:</span><span
+                                    style="font-weight:normal;color: #212121;"> {{data?.data[0]?.countries}}</span> </div>
+                            <div *ngIf="data?.data[0]?.evaluationDate!=''"><span
+                                    style="font-weight: bold;color: #212121;">Evaluation
+                                    Date:</span>
+                                <span style="font-weight:normal;color: #212121;"> {{data?.data[0]?.evaluationDate |date:
+                                    'dd/MM/yyyy'}}</span>
+                            </div>
+                        </div>
+                        <div style="display: inline-block; width: 100%;">
+                            <div class="rounded-corner-div" style=" display: inline-block;"
+                                *ngFor="let graphValue of data?.data[0]?.graphOrder|slice:0:1;" [ngStyle]="{'width': data?.data[0]?.Results.length>0 ? 'none' : '45%' }">
+                                <div class="nobreak">
+                                    <div class="graphsTittle" style="padding: 16px 0 20px 16px;font-size: 24px;">{{
+                                        (graphValue === 'TVPI' ? "Total value Paid in (TVPI)" :
+                                        graphValue === '# of Investments' ? "Number of Investments" : graphValue )}}</div>
+                                    <div class=""
+                                        *ngIf="(graphValue.indexOf('Capital Invested')>=0||(graphValue.indexOf('Unrealized Value')>=0)||(graphValue.indexOf('Realized Value')>=0)||(graphValue.indexOf('Total Value')>=0))">
+                                        <app-donut-chart-report [showLegends]=true
+                                            *ngIf="data?.data[0]?.Results.length>0;else templateName1" [unit]="'M'"
+                                            [catField]="data?.data[0]?.Columns[0]" [valField]="graphValue"
+                                            [data]="data?.data[0]?.Results" [title]="graphValue"></app-donut-chart-report>
+                                        <ng-template #templateName1>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div class=""
+                                        *ngIf="(graphValue.indexOf('TVPI')>=0||graphValue.indexOf('# of Investments')>=0)">
+                                        <app-bar-chart-report *ngIf="data?.data[0]?.Results.length>0;else TVPIvalue"
+                                            [data]="data?.data[0]?.Results" [xField]="data?.data[0]?.Columns[0]"
+                                            [yField]="graphValue"
+                                            [valueSuffix]="graphValue.indexOf('TVPI')>=0?'x':''"></app-bar-chart-report>
+                                        <ng-template #TVPIvalue>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="another-side-rounded-corner-div" style=" display: inline-block; "
+                                *ngFor="let graphValue1 of data?.data[0]?.graphOrder | slice:1:2;" [ngStyle]="{'width': data?.data[0]?.Results.length>0 ? 'none' : '45%' }">
+                                <div class="nobreak">
+                                    <div class="graphsTittle" style="padding: 16px 0 16px 16px;font-size: 24px;">{{
+                                        (graphValue1 === 'TVPI' ? "Total value Paid in (TVPI)" :
+                                        graphValue1 === '# of Investments' ? "Number of Investments" : graphValue1 )
+                                        }}</div>
+                                    <div class=""
+                                        *ngIf="(graphValue1.indexOf('Capital Invested')>=0||(graphValue1.indexOf('Unrealized Value')>=0)||(graphValue1.indexOf('Realized Value')>=0)||(graphValue1.indexOf('Total Value')>=0))">
+                                        <app-donut-chart-report [showLegends]=true
+                                            *ngIf="data?.data[0]?.Results.length>0;else templateName1" [unit]="'M'"
+                                            [catField]="data?.data[0]?.Columns[0]" [valField]="graphValue1"
+                                            [data]="data?.data[0]?.Results" [title]="graphValue1"></app-donut-chart-report>
+                                        <ng-template #templateName1>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div class=""
+                                        *ngIf="(graphValue1.indexOf('TVPI')>=0||graphValue1.indexOf('# of Investments')>=0)">
+                                        <app-bar-chart-report *ngIf="data?.data[0]?.Results.length>0;else TVPIvalue"
+                                            [data]="data?.data[0]?.Results" [xField]="data?.data[0]?.Columns[0]"
+                                            [yField]="graphValue1"
+                                            [valueSuffix]="graphValue1.indexOf('TVPI')>=0?'x':''"></app-bar-chart-report>
+                                        <ng-template #TVPIvalue>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: inline-block; width: 100%;">
+                            <div class="rounded-corner-div" style=" display: inline-block; "
+                                *ngFor="let graphValue of data?.data[0]?.graphOrder | slice:2:3;" [ngStyle]="{'width': data?.data[0]?.Results.length>0 ? 'none' : '45%' }">
+                                <div class="nobreak">
+                                    <div class="graphsTittle" style="padding: 16px 0 16px 16px;font-size: 24px;">
+                                        {{(graphValue === 'TVPI' ? "Total value Paid in (TVPI)" :
+                                        graphValue === '# of Investments' ? "Number of Investments" : graphValue )}}</div>
+                                    <div class=""
+                                        *ngIf="(graphValue.indexOf('Capital Invested')>=0||(graphValue.indexOf('Unrealized Value')>=0)||(graphValue.indexOf('Realized Value')>=0)||(graphValue.indexOf('Total Value')>=0))">
+                                        <app-donut-chart-report [showLegends]=true
+                                            *ngIf="data?.data[0]?.Results.length>0;else templateName1" [unit]="'M'"
+                                            [catField]="data?.data[0]?.Columns[0]" [valField]="graphValue"
+                                            [data]="data?.data[0]?.Results" [title]="graphValue"></app-donut-chart-report>
+                                        <ng-template #templateName1>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div class=""
+                                        *ngIf="(graphValue.indexOf('TVPI')>=0||graphValue.indexOf('# of Investments')>=0)">
+                                        <app-bar-chart-report *ngIf="data?.data[0]?.Results.length>0;else TVPIvalue"
+                                            [data]="data?.data[0]?.Results" [xField]="data?.data[0]?.Columns[0]"
+                                            [yField]="graphValue"
+                                            [valueSuffix]="graphValue.indexOf('TVPI')>=0?'x':''"></app-bar-chart-report>
+                                        <ng-template #TVPIvalue>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="another-side-rounded-corner-div" style=" display: inline-block;"
+                                *ngFor="let graphValue1 of data?.data[0]?.graphOrder | slice:3:4;" [ngStyle]="{'width': data?.data[0]?.Results.length>0 ? 'none' : '45%' }">
+                                <div class="nobreak">
+                                    <div class="graphsTittle" style="padding: 16px 0 16px 16px;font-size: 24px;">{{
+                                        (graphValue1 === 'TVPI' ? "Total value Paid in (TVPI)" :
+                                        graphValue1 === '# of Investments' ? "Number of Investments" : graphValue1 )}}</div>
+                                    <div class=""
+                                        *ngIf="(graphValue1.indexOf('Capital Invested')>=0||(graphValue1.indexOf('Unrealized Value')>=0)||(graphValue1.indexOf('Realized Value')>=0)||(graphValue1.indexOf('Total Value')>=0))">
+                                        <app-donut-chart-report [showLegends]=true
+                                            *ngIf="data?.data[0]?.Results.length>0;else templateName1" [unit]="'M'"
+                                            [catField]="data?.data[0]?.Columns[0]" [valField]="graphValue1"
+                                            [data]="data?.data[0]?.Results" [title]="graphValue1"></app-donut-chart-report>
+                                        <ng-template #templateName1>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div class=""
+                                        *ngIf="(graphValue1.indexOf('TVPI')>=0||graphValue1.indexOf('# of Investments')>=0)">
+                                        <app-bar-chart-report *ngIf="data?.data[0]?.Results.length>0;else TVPIvalue"
+                                            [data]="data?.data[0]?.Results" [xField]="data?.data[0]?.Columns[0]"
+                                            [yField]="graphValue1"
+                                            [valueSuffix]="graphValue1.indexOf('TVPI')>=0?'x':''"></app-bar-chart-report>
+                                        <ng-template #TVPIvalue>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="display: inline-block; width: 100%;">
+                            <div class="rounded-corner-div" style=" display: inline-block; "
+                                *ngFor="let graphValue of data?.data[0]?.graphOrder | slice:4:5;" [ngStyle]="{'width': data?.data[0]?.Results.length>0 ? 'none' : '45%' }">
+                                <div class="nobreak">
+                                    <div class="graphsTittle" style="padding: 16px 0 16px 16px;font-size: 24px;">{{
+                                        (graphValue === 'TVPI' ? "Total value Paid in (TVPI)" :
+                                        graphValue === '# of Investments' ? "Number of Investments" : graphValue )}}</div>
+                                    <div class=""
+                                        *ngIf="(graphValue.indexOf('Capital Invested')>=0||(graphValue.indexOf('Unrealized Value')>=0)||(graphValue.indexOf('Realized Value')>=0)||(graphValue.indexOf('Total Value')>=0))">
+                                        <app-donut-chart-report [showLegends]=true
+                                            *ngIf="data?.data[0]?.Results.length>0;else templateName1" [unit]="'M'"
+                                            [catField]="data?.data[0]?.Columns[0]" [valField]="graphValue"
+                                            [data]="data?.data[0]?.Results" [title]="graphValue"></app-donut-chart-report>
+                                        <ng-template #templateName1>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div class=""
+                                        *ngIf="(graphValue.indexOf('TVPI')>=0||graphValue.indexOf('# of Investments')>=0)">
+                                        <app-bar-chart-report *ngIf="data?.data[0]?.Results.length>0;else TVPIvalue"
+                                            [data]="data?.data[0]?.Results" [xField]="data?.data[0]?.Columns[0]"
+                                            [yField]="graphValue"
+                                            [valueSuffix]="graphValue.indexOf('TVPI')>=0?'x':''"></app-bar-chart-report>
+                                        <ng-template #TVPIvalue>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="another-side-rounded-corner-div" style=" display: inline-block; "
+                                *ngFor="let graphValue1 of data?.data[0]?.graphOrder | slice:5:6;" [ngStyle]="{'width': data?.data[0]?.Results.length>0 ? 'none' : '45%' }">
+                                <div class="nobreak">
+                                    <div class="graphsTittle" style="padding: 16px 0 16px 16px;font-size: 24px;">{{
+                                        (graphValue1 === 'TVPI' ? "Total value Paid in (TVPI)" :
+                                        graphValue1 === '# of Investments' ? "Number of Investments" : graphValue1 )}}</div>
+                                    <div class=""
+                                        *ngIf="(graphValue1.indexOf('Capital Invested')>=0||(graphValue1.indexOf('Unrealized Value')>=0)||(graphValue1.indexOf('Realized Value')>=0)||(graphValue1.indexOf('Total Value')>=0))">
+                                        <app-donut-chart-report [showLegends]=true
+                                            *ngIf="data?.data[0]?.Results.length>0;else templateName1" [unit]="'M'"
+                                            [catField]="data?.data[0]?.Columns[0]" [valField]="graphValue1"
+                                            [data]="data?.data[0]?.Results" [title]="graphValue1"></app-donut-chart-report>
+                                        <ng-template #templateName1>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                    <div class=""
+                                        *ngIf="(graphValue1.indexOf('TVPI')>=0||graphValue1.indexOf('# of Investments')>=0)">
+                                        <app-bar-chart-report *ngIf="data?.data[0]?.Results.length>0;else TVPIvalue"
+                                            [data]="data?.data[0]?.Results" [xField]="data?.data[0]?.Columns[0]"
+                                            [yField]="graphValue1"
+                                            [valueSuffix]="graphValue1.indexOf('TVPI')>=0?'x':''"></app-bar-chart-report>
+                                        <ng-template #TVPIvalue>
+                                            <div style="text-align: center;" class="text-info mt-3">
+                                                No record found
+                                            </div>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<mat-menu #menu="matMenu" [hasBackdrop]="true" class="fixed-menu">
+    <form name="form" #form="ngForm" (ngSubmit)="form.form.valid &&onFundExcelSubmit()">
+        <div class="filter-first">
+            <div class="row m-0">
+                <div class="col-12 pb-1 pt-3 label-align TextTruncate" title="From Year">
+                    From Year
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" (onChange)="checkvalidation_Qauter_Year($event)" panelStyleClass="mat-menu-dropdown" name="fromYear"
+                        [options]="yearOptions" [(ngModel)]="cmodel.FYear" class="tablefilter-dropdrown-width"
+                        placeholder="From Year" optionLabel="text" #fromYear="ngModel" required="true">
+                    </p-dropdown>
+                    
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="col-12 pb-1 pt-3 label-align TextTruncate" title="From Quarter">
+                    From Quarter
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" (onChange)="checkvalidation_Qauter_Year($event)" panelStyleClass="mat-menu-dropdown" name="fromQuarter"
+                        [options]="quarterOptions" [(ngModel)]="cmodel.FQuarter" placeholder="From Quarter"
+                        optionLabel="text" #fromQuarter="ngModel" required="true" class="tablefilter-dropdrown-width">
+                    </p-dropdown>
+                   
+                </div>
+            </div>
+            <div class="row pb-2 m-0">
+                <div class="col-12 pb-1 pt-3 label-align TextTruncate" title="To Year">
+                    To Year
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" (onChange)="checkvalidation_Qauter_Year($event)" panelStyleClass="mat-menu-dropdown" name="toYear"
+                        class="tablefilter-dropdrown-width" [options]="yearOptions" [(ngModel)]="cmodel.TYear"
+                        placeholder="To Year" optionLabel="text" #toYear="ngModel" required="true">
+                    </p-dropdown>                   
+                </div>
+            </div>        
+            <div class="row m-0">
+                <div class="col-12 pb-1 pt-3 label-align TextTruncate" title="To Quarter">
+                    To Quarter
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" (onChange)="checkvalidation_Qauter_Year($event)" panelStyleClass="mat-menu-dropdown" name="toQuarter"
+                        class="tablefilter-dropdrown-width" [options]="quarterOptions" [(ngModel)]="cmodel.TQuarter"
+                        placeholder="To Quarter" optionLabel="text" #toQuarter="ngModel" required="true"></p-dropdown>
+        
+                </div>
+            </div>        
+        </div>
+        <div class="filter-footer pr-3 pb-3 mr-2">
+            <div class="d-inline ">
+                <button type="reset" (click)="form.resetForm()" class="btn btn-reset TextTruncate" title="Reset">Reset</button>
+            </div>
+            <div class="d-inline ">
+                <button type="submit" [disabled]="!form.valid||error!=''" class="btn btn-light btn-app  pt-0 pb-0 TextTruncate" title="Download">Download</button>
+            </div>
+        </div>
+
+    </form>
+</mat-menu>
+
+<mat-menu #menuInvestor="matMenu"  backdropClass="investor-menu">
+    <div class="custom-investor-menu">
+        <div class="investor-menu-header">
+            <div class="float-left invest-header TextTruncate" title="Investors">
+                Investors
+            </div>
+            <div class="float-right">
+                <img class="close-img" (click)="toggleMenu(menuInvestor)"  src="assets/dist/images/Clear Grey.svg"  />
+            </div>
+        </div>
+        <div class="investor-list">
+            <button mat-menu-item class="custom-invest-btn" *ngFor="let investor of investorList">
+                <span title="{{investor?.investorName}}" class="invest-link TextTruncate" (click)="redirectToInvestor(investor)"> 
+                    {{investor?.investorName}}</span>
+            </button>
+        </div>
+    </div>
+</mat-menu>

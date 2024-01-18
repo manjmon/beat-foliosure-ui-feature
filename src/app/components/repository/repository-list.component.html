@@ -1,0 +1,280 @@
+<div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+    <div class="row mr-0 ml-0 repository-section">
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0" *ngIf="!IsOpenDocument">
+            <div class="row mr-0 ml-0 header-performance">
+                <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                    <div class="row mr-0 ml-0 deal-section">
+                        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                            <div class="add-user-component">
+                                <div class="card card-main">
+
+                                    <div class="card-body pb-1">
+                                        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                                    <div class="row mr-0 ml-0">
+                                                        <div
+                                                            class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                                            <div class="top-left-box float-left">
+                                                                <div class="repository-search-box">
+                                                                    <p-autoComplete
+                                                                        class="repository-autocomplete TextTruncate"
+                                                                        [style]="{'width':'100%'}"
+                                                                        [inputStyle]="{'width':'100%','border':'1px #cac9c7 solid',height:'32px',borderRadius:'4px',paddingLeft:'16px !important'}"
+                                                                        [(ngModel)]="searchWord" [suggestions]="output"
+                                                                        (completeMethod)="search($event)"
+                                                                        placeholder="Search" [autoHighlight]="'true'"
+                                                                        [forceSelection]="false"
+                                                                        (onKeyUp)="ResetDocuments($event);OnSearchItemSelected($event)"
+                                                                        (onBlur)="OnSearchItemSelected($event)"
+                                                                        [dropdown]="false"
+                                                                        placeholder="Enter text to search"
+                                                                        (onSelect)="SelectedSearchItem($event)">
+                                                                        <ng-template let-name pTemplate="item">
+                                                                            <div>
+                                                                                <div class="rep-list-h-pt-fs-pb">
+                                                                                    {{name}}
+                                                                                </div>
+                                                                            </div>
+                                                                        </ng-template>
+                                                                    </p-autoComplete>
+                                                                </div>
+                                                                <div class="repository-recent-tag">
+                                                                    <div class="row ml-0 mr-0">
+                                                                        <popular-tags [foldername]="folderType"
+                                                                            [updatePopularTags]="updatePopularTags"
+                                                                            (resetUpdatePopularTags)="resetUpdatePopularTags()">
+                                                                        </popular-tags>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="top-right-box float-right">
+                                                                <div class="repository-upload-icon text-center">
+                                                                    <span><img src="assets/dist/images/Group 9314.svg"
+                                                                            alt="" /></span>
+                                                                </div>
+                                                                <div class="repository-upload-btn text-center">
+                                                                    <button
+                                                                        class="nep-button nep-button-primary TextTruncate"
+                                                                        title="Upload File" (click)="openUpload()">
+                                                                        <img class="uploadFileIcon"
+                                                                            src="assets/dist/images/uploadFileIcon.svg"
+                                                                            alt="" />
+                                                                        Upload File
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                        <div class="row mr-0 ml-0 deal-section">
+                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                        <div class="add-user-component">
+                                            <div class="card card-main">
+                                                <div class="card-body">
+                                                    <div
+                                                        class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 trackrecord-section">
+                                                        <div class="row mr-0 ml-0">
+                                                            <div
+                                                                class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                                                <div class="financial-page">
+                                                                    <div
+                                                                        class="panel panel-default border-0 pt-2 tab-bg">
+                                                                        <div class="panel-heading">
+                                                                            <div class="panel-title custom-tabs">
+
+                                                                                <div class="panel-title custom-tabs">
+                                                                                    <ul class="nav nav-tabs ">
+                                                                                        <li class="nav-item"
+                                                                                            *ngFor="let item of tabList"
+                                                                                            (click)="onTabClick(item)"
+                                                                                            role="presentation">
+                                                                                            <button
+                                                                                                class="nav-link nav-custom TextTruncate"
+                                                                                                [ngClass]="item.active? 'active' : 'non-active'"
+                                                                                                title="{{item.name}}"
+                                                                                                id="home-tab"
+                                                                                                data-bs-toggle="tab"
+                                                                                                type="button" role="tab"
+                                                                                                aria-controls="home"
+                                                                                                aria-selected="true">
+                                                                                                {{item.name}}
+                                                                                            </button>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="filter-bg">
+                                                                        <div class="row mr-0 ml-0 tab-shadow"
+                                                                            *ngIf="tabName == 'Shared Folder'">
+                                                                            <div
+                                                                                class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0 pl-0">
+                                                                                <div
+                                                                                    class="row mr-0 ml-3 tab-shadow repository-subtab-style">
+                                                                                    <div class="repository-left-subtab">
+                                                                                        <nep-tab class="repo-v1" id="neptab"
+                                                                                            (OnSelectTab)="onSubTabClick($event)"
+                                                                                            [tabList]=subTabList>
+                                                                                        </nep-tab>
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="repository-right-subtab">
+                                                                                        <div class="d-inline-block"
+                                                                                            [hideIfUnauthorized]='{featureId:feature.Fund,action:"export"}'>
+                                                                                            <img class="p-action-padding download-excel"
+                                                                                                title="Export Fund (Excel file)"
+                                                                                                alt=""
+                                                                                                src="assets/dist/images/Cloud-download.svg" />
+                                                                                        </div>
+                                                                                        <div
+                                                                                            class="d-inline cloud-icon pl-2">
+                                                                                        </div>
+                                                                                        <div class="repository-prefrence-icon d-inline-block"
+                                                                                            (click)="openFiltersPopover()">
+                                                                                            <img id="dropdownMenuButton"
+                                                                                                [matMenuTriggerFor]="menu1"
+                                                                                                src="assets/dist/images/ConfigurationWhite.svg"
+                                                                                                class="cursor-filter"
+                                                                                                alt=""
+                                                                                                #tRecordTrigger="matMenuTrigger" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row mr-0 ml-0"
+                                                                                    *ngIf="subTabName=='Uploaded Files'">
+                                                                                    <div class="col-lg-12 pr-0 pl-0">
+                                                                                        <nep-table class="repo-table"
+                                                                                            [headers]="docTableHeaders"
+                                                                                            [rowValues]="documents"
+                                                                                            (openDocument)="openDocument($event)"
+                                                                                            (downloadDocument)="onDocumentInfoEvent($event)"
+                                                                                            ImageBeforeData="name"
+                                                                                            (onChange)="handleDocumentSelection(documents)"
+                                                                                            [checkAll]="checkAll"
+                                                                                            [scrollheight]="'calc(83vh - 220px)'"
+                                                                                            [hasBorder]="true">
+                                                                                        </nep-table>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row mr-0 ml-0"
+                                                                                    *ngIf="subTabName=='Final Files'">
+                                                                                    <div class="col-lg-12 pr-0 pl-0">
+                                                                                        <nep-table class="repo-table"
+                                                                                            [headers]="docTableHeaders"
+                                                                                            [rowValues]="documents"
+                                                                                            (openDocument)="openDocument($event)"
+                                                                                            (downloadDocument)="onDocumentInfoEvent($event)"
+                                                                                            ImageBeforeData="name"
+                                                                                            (onChange)="handleDocumentSelection(documents)"
+                                                                                            [checkAll]="checkAll"
+                                                                                            [scrollheight]="'calc(83vh - 220px)'"
+                                                                                            [hasBorder]="true">
+                                                                                        </nep-table>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row mr-0 ml-0 tab-shadow"
+                                                                            *ngIf="tabName=='Recycle Bin'">
+                                                                            <div
+                                                                                class="col-12 pl-0 pr-0 repository-subtab-style">
+                                                                                <div class="repository-recycle-subtab">
+                                                                                    <div class="d-inline-block">
+                                                                                        <img class="p-action-padding"
+                                                                                            title="Restore file"
+                                                                                            alt=""
+                                                                                            [ngClass]="isRestoreDisableEnable?'download-excel':''"                                                                                            
+                                                                                            src="assets/dist/images/{{isRestoreDisableEnable ?'restore.svg': 'disableRestore.svg'}}" (click)="isRestoreDisableEnable?RestoreSelectedDocuments():null"  />
+                                                                                    </div>
+                                                                                    <div
+                                                                                        class="d-inline cloud-icon pl-2">
+                                                                                    </div>
+                                                                                    <div class="repository-prefrence-icon d-inline-block"
+                                                                                        [ngClass]="{disabledNoOfCasesDiv: isdownloadfilter}">
+                                                                                        <img id="dropdownMenuButton"
+                                                                                            [matMenuTriggerFor]="menu1"
+                                                                                            src="assets/dist/images/ConfigurationWhite.svg"
+                                                                                            class="cursor-filter" alt=""
+                                                                                            #tRecordTrigger="matMenuTrigger" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0 pl-0">
+                                                                                <nep-table class="repo-table" [headers]="docTableHeaders"
+                                                                                    [rowValues]="documents"
+                                                                                    ImageBeforeData="name"
+                                                                                    colWithClickEvent="action"
+                                                                                    (onChange)="handleDocumentSelection(documents)"
+                                                                                    [checkAll]="checkAll"
+                                                                                    [scrollheight]="'calc(83vh - 220px)'"
+                                                                                    [hasBorder]="true">
+                                                                                </nep-table>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <p-dialog class="document" [closable]="false" [resizable]="false" [closeOnEscape]="false"
+            [dismissableMask]="false" #pDialog [(visible)]="displayUploadDocument" [modal]="true" 
+            [style]="{width: '80vw',height: '90%'}" [minWidth]="1200" [minY]="70" [maximizable]="false">
+            <div class="repstry-list-padding">
+                <add-repository (onCancel)="onCancel($event)" (onSave)="onSave($event)"></add-repository>
+            </div>
+        </p-dialog>
+        <div *ngIf="IsOpenDocument">
+            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                <open-document [id]="documentId" (closeDocument)="closeDocument()" (deleteDocument)="onDelete($event)">
+                </open-document>
+            </div>
+        </div>
+        <mat-menu #menu1="matMenu" [hasBackdrop]="true" class="fixed-menu fixed-menu-repository">
+            <div class="filter-first" (click)="$event.stopPropagation();">
+                <div class="row m-0 ">
+                    <advance-filters [ResetAdvFilters]="ResetAdvFilters"
+                        (GetDocumentsByFilter)="GetDocumentsByFilter($event)"
+                        (closeFiltersPopover)="closeFiltersPopover($event);menuTrigger.closeMenu()"
+                        [fileFormats]="filteredFileFormats" [docTypes]="filteredDocTypes"
+                        [subDocTypes]="filteredSubDocTypes" [fromDate]="filteredfromDate" [toDate]="filteredtoDate"
+                        [selectedFirms]="filteredFirms" [selectedFunds]="filteredFunds"
+                        [selectedPortfolioComapanies]="filteredPortfolioComapanies" [selectedDeals]="filteredDeals"
+                        (clearAllFilters)="clearAllFilters()"
+                        (resetEnableAdvancedFilters)="resetEnableAdvancedFilters()" [appliedFilters]="advancedFilters">
+                    </advance-filters>
+                </div>
+
+            </div>
+        </mat-menu>
+    </div>
+    </div>
+</div>
+<app-loader-component *ngIf="loading"></app-loader-component>

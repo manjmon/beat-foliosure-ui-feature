@@ -1,0 +1,300 @@
+.querter-year-button-style {
+    .drop-toggle {
+        background-color: #fff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: left;
+    }
+
+    .drop-toggle i {
+        float: right;
+    }
+
+    .drop-show {
+        padding: 8px;
+        position: absolute;
+        z-index: 100;
+        -webkit-box-shadow: 0 6px 10px rgba(0, 0, 0, .15);
+        -moz-box-shadow: 0 6px 10px rgba(0, 0, 0, .15);
+        padding-bottom: 11px !important;
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        box-shadow: 0px 3px 6px #00000015;
+        border: 1px solid #DEDFE0;
+        border-radius: 4px;
+        opacity: 1;
+    }
+
+    .drop-show label {
+        display: block;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .drop-show label input {
+        vertical-align: top;
+    }
+
+    .drop-show label span {
+        display: inline-block;
+    }
+
+    .paddingNone {
+        margin: 0;
+        padding: 0;
+
+
+    }
+
+    .cursorNone {
+        cursor: not-allowed;
+    }
+
+    .selectedQuarter {
+        display: inline-block;
+        text-align: center;
+        padding-top: 8px !important;
+        color: #ffffff;
+        width: 36px;
+        height: 36px;
+        padding: 7px;
+        position: relative;
+        bottom: 7px;
+        cursor: pointer;
+        letter-spacing: 0px;
+        color: #2B2B33;
+        font-size: 12px;
+    }
+
+    .selectedQuarter span {
+        display: inline-block;
+        background: #021155 0% 0% no-repeat padding-box;
+        width: 36px;
+        height: 36px;
+        padding-top: 9px !important;
+        padding-left: 9px !important;
+        border-radius: 180px;
+        padding: 10px;
+        position: relative;
+        bottom: 7px;
+        cursor: pointer;
+        letter-spacing: 0px;
+        color: #ffffff;
+        font-size: 12px;
+    }
+
+    .unselectedQuarter {
+        display: inline-block;
+        text-align: center;
+        padding-top: 8px !important;
+        width: 36px;
+        height: 36px;
+        padding: 7px;
+        position: relative;
+        bottom: 7px;
+        cursor: pointer;
+        letter-spacing: 0px;
+        color: #2B2B33;
+        font-size: 12px;
+    }
+
+    .unselectedQuarter:hover span {
+        display: inline-block;
+        background: #F7F8FC 0% 0% no-repeat padding-box;
+        width: 36px;
+        height: 36px;
+        border-radius: 180px;
+        padding: 7px;
+        position: relative;
+        bottom: 7px;
+        cursor: pointer;
+    }
+
+    .selectedYear {
+        color: #ffffff;
+        background: #021155 0% 0% no-repeat padding-box;
+        text-align: center;
+        width: 100% !important;
+        height: 30px;
+        border-radius: 20px;
+        //padding: 8px 12px;
+        position: relative;
+        align-items: center;
+        cursor: pointer;
+        letter-spacing: 0px;
+        color: #fff;
+        font-size: 12px;
+    }
+
+    .unSelectedYear {
+        text-align: center;
+        width: 100% !important;
+        height: 30px;
+        border-radius: 20px;
+        position: relative;
+        align-items: center;
+        cursor: pointer;
+        letter-spacing: 0px;
+        color: #2B2B33;
+        font-size: 12px;
+    }
+
+    .unSelectedYear:hover {
+        background: #F7F8FC 0% 0% no-repeat padding-box;
+        text-align: center;
+        width: 50px;
+        height: 30px;
+        border-radius: 20px;
+        //padding: 8px 12px;
+        position: relative;
+        align-items: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .borderStyle {
+        border: 1px solid #021155;
+        border-radius: 2px;
+        opacity: 1;
+    }
+
+    .custbtn1 {
+        text-align: left;
+        letter-spacing: 0px;
+        color: #ABABB8;
+        opacity: 1;
+        height: 32px !important;
+        padding-left: 12px !important;
+        padding-right: 9px !important;
+        border: 1px solid #cac9c7;
+
+        span {
+            display: inline-block;
+            color: #75787b !important;
+        }
+    }
+
+    .cursorBut {
+        cursor: pointer;
+
+    }
+
+    .custbtn2 {
+        text-align: left;
+        letter-spacing: 0px;
+        color: #ABABB8;
+        opacity: 1;
+        height: 32px !important;
+        padding-left: 12px !important;
+        padding-right: 9px !important;
+        border: 1px solid #cac9c7;
+
+        span {
+            display: inline-block;
+            color: #75787b !important;
+        }
+
+    }
+
+    .custbtn3 {
+        text-align: left;
+        letter-spacing: 0px;
+        color: #212121;
+        height: 32px !important;
+        opacity: 1;
+        border: 1px solid #cac9c7;
+
+        span {
+            display: inline-block;
+        }
+    }
+
+    .custBorder {
+        border: 1px solid #021155;
+        border-radius: 2px;
+    }
+
+    .qy-img-css {
+        float: right;
+        margin-top: -3px;
+        height: 24px !important;
+        width: 24px !important;
+    }
+
+    .leftArrowBtn {
+        padding-left: 12px !important;
+        padding-top: 8px !important;
+        padding-bottom: 12px !important;
+    }
+
+    .rightArrowBtn {
+        padding-left: 12px !important;
+        padding-top: 8px !important;
+        padding-bottom: 12px !important;
+    }
+
+    div.textAlign {
+        border-radius: 4px;
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    #cusButton2 {
+        border: none;
+        display: block;
+        width: 100%;
+        padding: 5px 0px;
+        background: #ffffff;
+    }
+
+    #cusButton2:hover {
+        background: #F7F8FC 0% 0% no-repeat padding-box;
+    }
+
+    .quarterButton {
+        padding-bottom: 10px !important;
+        padding-top: 8px !important;
+    }
+
+    .quarteryear {
+        text-align: center;
+        letter-spacing: 0px;
+        opacity: 1;
+        font-size: 14px !important;
+    }
+
+    .custPadding {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
+
+    .topModalShow {
+        bottom: 37px !important;
+    }
+
+    .textAlign {
+        text-align: center;
+    }
+
+    .custom-arrow {
+        cursor: pointer;
+        color: #ABABB8 !important;
+    }
+
+    .row-Padding {
+        margin-top: 4px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .cell-Padding {
+        padding-top: 6px !important;
+        padding-left: 8px !important;
+        padding-right: 8px !important;
+        margin-top: 4px !important;
+        margin-bottom: 4px !important;
+    }
+
+    button span {
+        color: #212529 !important;
+    }
+}

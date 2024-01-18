@@ -1,0 +1,24 @@
+@import "/src/variables";
+.custom-padding-left{
+    padding-bottom: 0px;
+    border-bottom: 0px solid #DEDFE0 !important;
+}
+
+.float-right-padding{
+    padding-top: 5px !important;
+}
+.custom-top{
+    margin-top: -16px;
+}
+
+.nep-tabs-line .nep-tabs-active {
+    color: #021155;
+    color: var(--primary-color, #021155);
+    font-family: "Helvetica Neue LT W05_55 Roman", Arial, Verdana, Tahoma, sans-serif; 
+}
+
+.custom-p-dropdown {
+    .p-dropdown {
+        width: 180px !important;
+    }
+}

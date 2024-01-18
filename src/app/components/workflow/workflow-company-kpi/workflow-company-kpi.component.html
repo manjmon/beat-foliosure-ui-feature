@@ -1,0 +1,161 @@
+<div class="row mr-0 ml-0  company-section" *ngIf="showCompany">
+    <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12  section-header">
+        <div class="float-left">
+            <div class="investment-header">
+                Company KPI
+            </div>
+        </div>
+        <div class="float-right">
+            <div class="float-left upload-investmentKpi" (click)="isOpenUpload=true">
+                <img class="" src="assets/dist/images/upload-popup.svg" alt="" />
+            </div>
+            <div class="float-right review-btn">
+                <button [disabled]="true" class="btn btn-nep-primary" (click)="companySubmitReview()">Mark for Review</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="portfolio-company-table" *ngIf="showCompany">
+    <div class="filter-bg">
+        <div class="row mr-0 ml-0">
+            <div class=" col-lg-12 col-md-12 col-sm-12 pl-0 pr-0">
+                <div class="pull-right headerfontsize">
+                    <div class="d-inline-block search">
+                        <span class="fa fa-search fasearchicon"></span>
+                        <input #gb pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" class="search-text-company" placeholder="Search" [(ngModel)]="globalFilter">
+                    </div>
+                    <div class="d-inline-block cloud_download">
+                        <div class="d-inline-block"><img id="dropdownMenuButton" [matMenuTriggerFor]="menu" src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter" alt="" #companyMenuTrigger="matMenuTrigger" /> </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="align-items-start">
+        <p-table styleClass="p-datatable-gridlines" [resizableColumns]="true" [globalFilter]="gb" #dt [columns]="objCompanyKPIList.cols" [value]="objCompanyKPIList.Results" [scrollable]="true" class="cashflow-tbl text-left custom-kpi-table" [globalFilterFields]="companyKPICols"
+            *ngIf="objCompanyKPIList.Results != null && objCompanyKPIList.Results.length > 0" scrollHeight="350px" scrollDirection="both">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <ng-container *ngFor="let col of frozenCols; index as i">
+                        <th pFrozenColumn [ngStyle]="{'width':'340px'}"  scope="col"   [class.budget-green]="col.header.indexOf('Budget')>-1">
+                            {{ col.header }}
+                        </th>
+                    </ng-container>
+                    <ng-container *ngFor="let col of columns; index as i">
+                        <th scope="col"   [class.budget-green]="col.header.indexOf('Budget')>-1">
+                            {{ col.header }}
+                        </th>
+                    </ng-container>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <ng-container *ngFor="let col of frozenCols; index as i">
+                        <td pFrozenColumn tabindex="0" class="workflw-out kpi-unset-bgcolor">
+                        <span class="content">
+                              <span class="ui-column-title">{{ col.header }}</span>
+                        <span *ngIf="col.header =='KPI'" title={{rowData[col.field]}} class="showToolTip TextTruncate">{{rowData[col.field]}} <span *ngIf="rowData['KpiInfo'] =='#'">{{'('+rowData['KpiInfo'] +')'}}</span> </span>
+                        </span>
+                    </td>
+                    </ng-container>
+                    <ng-container *ngFor="let col of columns; index as i">
+                        <td tabindex="0" class="workflw-out" [class.table-data-right]="col.field !='KPI'" [attr.title]="col.header !=='KPI' && ErrorNotation && printColumn(rowData,col)? 'Click to view this cell logs' : ''"
+                        [ngClass]="(col.header !=='KPI' && ErrorNotation && printColumn(rowData,col))?'kpi-set-bgcolor':'kpi-unset-bgcolor'" [ngClass]="(rowData[col.field + ' editable'] && col.header !=='KPI')?'p-0':''" [ngClass]="printColumn(rowData,col)?'newValueBackground':''">
+
+                        <span class="content">
+                              <span class="ui-column-title">{{ col.header }}</span>
+                        <span *ngIf="col.header !='KPI'">
+                                 <span *ngIf="rowData[col.field]!=null;else empty_Text">
+                                 <span *ngIf="col.header !='KPI' && !rowData[col.field + ' editable'] && rowData['KPIWithInfo'].indexOf('%') == -1 && rowData['KPIWithInfo'].indexOf(model.reportingCurrencyDetail.currencyCode) == -1"
+                                    [innerHtml]="rowData[col.field] | number : (showCompanyKPIValueDecimals?(modelCompanyKpi.decimalPlaces!=null? modelCompanyKpi.decimalPlaces.value:defaultDecimalPlace):defaultDecimalPlace)| minusSignToBrackets">
+                                 </span>
+                        <span *ngIf="col.header !='KPI' && !rowData[col.field + ' editable'] && rowData['KPIWithInfo'].indexOf(model.reportingCurrencyDetail.currencyCode) > -1" [innerHtml]="rowData[col.field] | number : (showCompanyKPIValueDecimals?(modelCompanyKpi.decimalPlaces!=null? modelCompanyKpi.decimalPlaces.value:defaultDecimalPlace):defaultDecimalPlace)| minusSignToBrackets: model.reportingCurrencyDetail.currencyCode"></span>
+                        <span *ngIf="col.header !='KPI' && !rowData[col.field + ' editable'] && rowData['KPIWithInfo'].indexOf('%') > -1" [innerHtml]="rowData[col.field]|percent: (showCompanyKPIValueDecimals?(modelCompanyKpi.decimalPlaces!=null? modelCompanyKpi.decimalPlaces.value:defaultDecimalPlace):defaultDecimalPlace)">
+                                 </span>
+                        </span>
+                        <ng-template #empty_Text class="detail-sec"><span *ngIf="!rowData[col.field + ' editable']">NA</span>
+                        </ng-template>
+                        </span>
+                        </span>
+                    </td>
+                    </ng-container>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div class="not-found" *ngIf="(objCompanyKPIList.Results == null || objCompanyKPIList.Results.length==0) && !isLoader">
+            <div [attr.colspan]="columns!=undefined && columns.length">
+                No record found
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="confirmUpdate">
+        <confirm-modal customwidth="640px" modalTitle="Update Value" primaryButtonName="Update" secondaryButtonName="Cancel" (primaryButtonEvent)="OnKpiUpdate($event)" (secondaryButtonEvent)="OnKpiUpdateCancel($event)">
+            <div>
+                <div class="row">
+                    <div class="col-8 col-wrkflow-fs-lh">Company KPI - {{updateModel.header}}</div>
+                    <div class="col-4 text-right style3 col-sty-wrk-clr-fs"></div>
+                </div>
+                <div class="row row-flow-mt">
+                    <div class="col-6">
+                        <div class="wrkflow-cmpny-clr-fs-lh">{{updateModel.rowName}} ( Current )</div>
+                        <div class="workflw-sty-clr">
+                            <span *ngIf="updateModel.previousVal!=undefined && updateModel.previousVal!='' && updateModel.previousVal!=0">{{updateModel.previousVal}}</span>
+                            <span *ngIf="updateModel.previousVal==undefined || updateModel.previousVal==''">NA</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="wrkflow-cmpny-clr-fs-lh">{{updateModel.rowName}} ( New )</div>
+                        <div class="workflw-sty-clr">
+                            <span *ngIf="updateModel.updatedVal!='' && updateModel.updatedVal!=undefined && updateModel.updatedVal!=0">{{updateModel.updatedVal}}</span>
+                            <span *ngIf="updateModel.updatedVal=='' || updateModel.updatedVal==undefined">NA</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="workkpi-mt-fs-lh">
+                    Are you sure want to replace the current value with the new value?
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+
+    <div *ngIf="infoUpdate">
+        <confirm-modal IsInfoPopup="true" customwidth="400px" modalTitle="Change Values in Selection" primaryButtonName="OK" (primaryButtonEvent)="CloseInfo()">
+            <div>
+                <div class="kpi-flow-lh">
+                    To edit cell data please select numbers in <b><i>'Absolute'</i></b> under <b><i>Values in</i></b> dropdown
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+    <div>
+        <app-loader-component *ngIf="isLoader"></app-loader-component>
+    </div>
+</div>
+<div class="row mr-0 ml-0 company-history" *ngIf="showCompany">
+    <div class="col-lg-12 edit-section-header pl-0 pr-0 company-inform workflow-section-footer">
+        <div class="workflow-draft">
+            <div class="pull-left">
+                <div class="historycomments-p">
+                    <button class="btn btn-nep-default history-pl-pr">
+                        <img alt="" src="assets/dist/images/Icon-material-history.svg" class="loading-img" />
+                    </button>
+                </div>
+            </div>
+
+            <div class="pull-right">
+                <div class="historycomments-p">
+                    <button class="btn btn-nep-default history-pl-pr">
+                        <img alt="" src="assets/dist/images/Comment.svg" class="loading-img" />
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<mat-menu #menu="matMenu" [hasBackdrop]="true" class="fixed-menu">
+    <app-kpitablefilters [tabname]="'Company'" (Valuesfilter)="onConvertValueUnits($event)" (Kpifilter)="kpiTable_GlobalFilter($event)"></app-kpitablefilters>
+</mat-menu>
+<app-workflow-bulk-upload [workflowMappingId]="mappingId" (onClosePopUpClick)="closePopup($event)" [strModuleType]="'CompanyKPI'" [kpiType]="'Company KPIs'" [moduleName]="'company kpi'" *ngIf="isOpenUpload"></app-workflow-bulk-upload>

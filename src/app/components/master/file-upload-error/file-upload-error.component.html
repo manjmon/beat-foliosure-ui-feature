@@ -1,0 +1,432 @@
+<div class="row tab-shadow-home esg-tab">
+    <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pl-0 pr-0">
+        <div class="panel-title custom-tabs file-upload-staus-tabs">
+            <ul class="nav nav-tabs ">
+                <li class="nav-item tab-button-style" *ngFor="let item of tabList" (click)="onTabClick(item)"
+                    role="presentation">
+                    <button class="nav-link nav-custom TextTruncate  " [ngClass]="item.active? 'tab-active' : ''"
+                        title="{{item.name}}" id="home-tab" data-bs-toggle="tab" type="button" role="tab" aria-controls="home"
+                        aria-selected="true">
+                        {{item.name}}
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="row ml-0 mr-0 portfolio-company-mapping" *ngIf="tabName == ConstantsFund">
+    <div class="col-sm-12 col-lg-12 col-xl-12 col-xs-12 col-12 col-md-12  pl-0 pr-0">
+        <div class="row ml-0 mr-0 ">
+            <div class="col-sm-4 col-lg-4 col-xl-4 col-xs-4 col-4 col-md-4 error-list pl-0 pr-0 status-left-border-bottom">
+                    <div class="row ml-0 mr-0 combobox">
+                        <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pr-0 pl-0">
+                            <span class="fa fa-search fasearchicon p-1 kpi-mapping-cursor-pointer"></span>
+                            <div class="combobox1">
+                                <input id="kpi-search" #searchKpiButton type="search" class="search-text"
+                                    autocomplete="off" class="combobox-input" placeholder="Search uploaded files">
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="totalZipFiles?.length>0" class="icon-heading error-msgs-container upload-list">
+                        <div *ngFor="let item of totalZipFiles">
+                            <div>
+                                <div class="ptb12 error-row sheetname"
+                                    [ngClass]="item.isExpanded  && item.SheetName == null? 'expanded-error' : ''"
+                                    (click)="isExpandFOF(item)">
+                                    <div class="d-inline">
+                                        <span class="plr12" *ngIf="item.isExpanded && item.SheetName !=null"><img alt=""
+                                                [src]="'assets/dist/images/Expand-more.svg'" /></span>
+                                        <span class="plr12" *ngIf="!item.isExpanded && item.SheetName !=null"><img alt=""
+                                                [src]="'assets/dist/images/Expand-less.svg'" /></span>
+                                        <span class="empty-space-no-data" *ngIf="item.SheetName ==null"></span>
+                                        <img class="zip-file-icon" alt="" src="assets/dist/images/FaRegFileArchive.svg" />
+                                        <span class="pl-2" title="{{item.fileName}}">{{item.fileName | truncateFile:40}}</span>
+                                    </div>
+                                    <div class="upload-item-status-header">
+                                        <div class="upload-item-status-div">
+                                            <div class="process-icon-div">
+                                                <img alt="" class="process-icon-error"
+                                                    [ngClass]="(item.uploadStatus == fileStatus.Uploaded  || item.uploadStatus == fileStatus.Processing) ? 'img-spinner': ''"
+                                                    src="{{getFileStatusErrorIcon(item.uploadStatus)}}" />
+                                            </div>
+                                            <div class="upload-item-status-text"
+                                                *ngIf="(item.uploadStatus == fileStatus.Uploaded || item.uploadStatus == fileStatus.Processing   || item.uploadStatus ==  fileStatus.Successful)">
+                                                {{getFileStatusText(item.uploadStatus)}}</div>
+
+                                            <div class="upload-item-status-text"
+                                                *ngIf="item.uploadStatus ==fileStatus.Failed && (item.ErrorCount > 0 || item.SheetName ==null )">
+                                                {{item.SheetName ==null? 1 + ' Error ':item.ErrorCount + ' Errors '}} Found</div>
+                                            <div class="upload-item-status-text" *ngIf="item.uploadStatus ==fileStatus.Cancelled">
+                                                <span>Upload Cancelled</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div  *ngIf="item.isExpanded && item.SheetName != null">
+                                <ul class="row mr-0 ml-0 mb-0">
+                                    <li class="col-12 col-sm-12 col-md-12 col-lg-12 pl-0 pr-0 sheetname"
+                                        *ngFor="let uploadedFile of item.fileList; index as fileNumber"
+                                        (click)="showErrorPanelFOF(item.fileList,uploadedFile);">
+                                        <div [ngClass]="uploadedFile.isActive ? 'company-active' :''"
+                                            class="upload-list-item-left list-item-padding-left">
+                                            <div class="upload-list-item-frame">
+                                                <img class="fof-excel-file-icon" alt="" src="assets/dist/images/excel-file-icon.svg" />
+                                                <div class="file-name" title="{{uploadedFile.FileName}}">
+                                                    {{uploadedFile.FileName | truncateFile:40}}
+                                                </div>
+                                            </div>
+                                            <div class="upload-item-status">
+                                                <div class="upload-item-status-div">
+                                                    <div class="process-icon-div">
+                                                        <img alt="" class="process-icon-error"
+                                                            [ngClass]="(item.uploadStatus == fileStatus.Uploaded  || item.uploadStatus == fileStatus.Processing ) ? 'img-spinner': ''"
+                                                            src="{{getFileStatusErrorIcon(item.uploadStatus)}}" />
+                                                    </div>
+                                                    <div class="upload-item-status-text"
+                                                        *ngIf="(item.uploadStatus == fileStatus.Uploaded || item.uploadStatus == fileStatus.Processing  || item.uploadStatus == fileStatus.Successful )">
+                                                        {{getFileStatusText(item.uploadStatus)}}</div>
+    
+                                                    <div class="upload-item-status-text"
+                                                        *ngIf="item.uploadStatus ==fileStatus.Failed && uploadedFile.ErrorCount > 0">
+                                                        {{uploadedFile.ErrorCount == 1 ? uploadedFile.ErrorCount + ' Error ' : uploadedFile.ErrorCount + ' Errors '}} Found</div>
+                                                    <div class="upload-item-status-text"
+                                                        *ngIf="item.uploadStatus ==fileStatus.Cancelled">
+                                                        <span>Upload Cancelled</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="totalZipFiles?.length==0" class="icon-heading error-msgs-container upload-list flex-center">
+                        <div class="file-upload-no-data-found">
+                            <div class="text-center">
+                                <img alt="" src="./assets/dist/images/Empty-State-File-Upload.svg" class="center-image">
+                            </div>
+                            <div class="text-center pt-2">
+                                <span class="header-message-no-record">No Data Found</span>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <!-- Show success tab -->
+            <div class="col-sm-8 col-lg-8 col-xl-8 col-x-8 col-md-8 pl-3 pr-0" *ngIf="errorIdFOF==fileStatus.Successful || errorIdFOF==fileStatus.Cancelled || errorIdFOF==fileStatus.Processing || errorIdFOF==fileStatus.Failed ||totalZipFiles?.length==0">
+                <div class="row ml-0 mr-0">
+                    <div class="col-12 col-sm-12 col-lg-12 col-xl-12 status-right-border-bottom col-x-12 col-md-12 pl-0 pr-0" [ngClass]="totalZipFiles?.length==0? 'no-record-found-height' : ''" >
+                        <div class="header-headding">
+                            <ng-container [ngSwitch]="errorIdFOF">
+                                <img alt="" *ngSwitchCase="fileStatus.Successful" src="./assets/dist/images/Success.svg" class="pr-2 m-top ng-star-inserted">
+                                <span *ngSwitchCase="fileStatus.Successful" class="header-message">Upload Successful</span>
+                                <img alt="" *ngSwitchCase="fileStatus.Cancelled" src="./assets/dist/images/header-cancel.svg" class="pr-2 m-top ng-star-inserted">
+                                <span class="header-cancel" *ngSwitchCase="fileStatus.Cancelled">Upload Cancelled</span>
+                                <img alt="" *ngSwitchCase="fileStatus.Processing" src="./assets/dist/images/header-in-progress.svg" class="pr-2 m-top ng-star-inserted">
+                                <span *ngSwitchCase="fileStatus.Processing" class="header-inprogress">Upload in progress</span>
+                                <img *ngSwitchCase="fileStatus.Failed" alt="" src="./assets/dist/images/error-header.svg" class="pr-2 m-top ng-star-inserted">
+                                <span *ngSwitchCase="fileStatus.Failed" class="error-header">Errors</span>
+                                <span *ngSwitchCase="totalZipFiles?.length==0" class="error-header">Errors</span>
+                            </ng-container>
+                        </div>
+                        <div class="icon-heading-status status-img-center" *ngIf="errorIdFOF != fileStatus.Failed && totalZipFiles?.length>0">
+                            <div class="zerokpi-mt-ml-height">
+                                <img *ngIf="loading" class="zerkpi-hw-ml-mt" src="assets/dist/images/loading-small.gif" alt="" />
+                                <div class="zero-kpi-stat-middle">
+                                    <ng-container [ngSwitch]="errorIdFOF">
+                                        <img *ngSwitchCase="fileStatus.Successful" src="assets/dist/images/success-icon.png" alt="" />
+                                        <img *ngSwitchCase="fileStatus.Cancelled" src="assets/dist/images/file-upload-cancel.png" alt="" />
+                                        <img *ngSwitchCase="fileStatus.Processing" src="assets/dist/images/left-inprogress.svg" alt="" class="inprrogress-img" />
+                                        <img *ngSwitchCase="fileStatus.Processing" src="assets/dist/images/file-in-progress.svg" alt="" class="inprrogress-img" />
+                                        <img *ngSwitchCase="fileStatus.Processing" src="assets/dist/images/rightinprogres.svg" alt="" />
+                                    </ng-container>
+                                    <div>
+                                        <ng-container [ngSwitch]="errorIdFOF">
+                                            <span *ngSwitchCase="fileStatus.Successful" class="success-text-icon"> No Errors Found<br />File Upload Complete</span>
+                                            <span *ngSwitchCase="fileStatus.Cancelled" class="success-text-icon"> Upload is cancelled</span>
+                                            <span *ngSwitchCase="fileStatus.Processing" class="inprogress-text-icon"> Upload is in progress</span>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="icon-heading" *ngIf="errorIdFOF==fileStatus.Failed && totalZipFiles.length>0">
+                            <div class="card-body">
+                                <div class="error-msgs-container upload-list">
+                                    <div *ngFor="let item of errormessagesFOF">
+                                        <div *ngIf="item.sheetname != null && item.sheetname != ''">
+                                            <div class="ptb12 error-row sheetname" [ngClass]="item.isExpanded? 'expanded-error' : ''" (click)="isExpand(item)">
+                                                <div class="d-inline">
+                                                    <span class="plr12" *ngIf="item.isExpanded"><img alt="" [src]="'assets/dist/images/Expand-more.svg'" /></span>
+                                                    <span class="plr12" *ngIf="!item.isExpanded"><img alt="" [src]="'assets/dist/images/Expand-less.svg'" /></span>
+                                                    <span title="">{{item.sheetname}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="item.isExpanded">
+                                            <div *ngFor="let subitem of item.messages" class="error-row-failed">
+                                                <div class="error-col-failed error-col" *ngIf="subitem.cellCode">
+                                                    <span class="TextTruncate d-inline-block" [innerHtml]="subitem.cellCode"></span>
+                                                </div>
+                                                <div class="error-col-failed error-col" *ngIf="!subitem.cellCode">-</div>
+                                                <div *ngIf="subitem.message" class="TextTruncate padding-inner-html d-inline-block" [innerHtml]="subitem.message"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="totalZipFiles?.length==0" class="icon-heading flex-center">
+                            <div class="file-upload-no-data-found">
+                                <div class="text-center">
+                                    <img alt="" src="./assets/dist/images/Empty-State-File-Upload.svg" class="center-image">
+                                </div>
+                                <div class="text-center pt-2">
+                                    <span class="header-message-no-record">No Data Found</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row ml-0 mr-0 portfolio-company-mapping" *ngIf="tabName == ConstantESG">
+    <div class="col-sm-12 col-lg-12 col-xl-12 col-xs-12 col-12 col-md-12  pl-0 pr-0">
+        <div class="row ml-0 mr-0 ">
+            <div class="col-sm-4 col-lg-4 col-xl-4 col-xs-4 col-4 col-md-4 error-list pl-0 pr-0 status-left-border-bottom">
+                <div class="row ml-0 mr-0 combobox">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pr-0 pl-0">
+                        <span class="fa fa-search fasearchicon p-1 kpi-mapping-cursor-pointer"></span>
+                        <div class="combobox1">
+                            <input  [(ngModel)]="filterText" (input)="filterItem()" id="kpi-search" #searchKpiButton type="text" class="search-text" autocomplete="off"
+                            class="combobox-input" placeholder="Search uploaded files">
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="TotalErrors?.length>0" class="icon-heading error-msgs-container upload-list">
+                    <ul #filedivul>
+                        <li class="overlap-group file-li-section"
+                            *ngFor="let uploadedFile of TotalErrors; index as fileNumber" [attr.file-id]="uploadedFile.fileId"
+                            (click)="showErrorPanel(uploadedFile);">
+                            <div [ngClass]="uploadedFile.isActive ? 'company-active' :''" 
+                                class="upload-list-item row-pointer">
+                                <div class="upload-list-item-frame">
+                                    <img class="excel-file-icon" alt="" src="assets/dist/images/excel-file-icon.svg" />
+                                    <div class="file-name" title="{{uploadedFile.fileName}}">
+                                        {{uploadedFile.fileName | truncateFile:36}} </div>
+                                </div>
+                                <div class="upload-item-status">
+                                    <div class="upload-item-status-div">
+                                        <div class="process-icon-div">
+                                            <img alt="" class="process-icon-error"
+                                                [ngClass]="(uploadedFile.uploadStatus == fileStatus.Uploaded || uploadedFile.uploadStatus == fileStatus.Processing) ? 'img-spinner': ''"
+                                                src="{{getFileStatusErrorIcon(uploadedFile.uploadStatus)}}" />
+                                        </div>
+                                        <div class="upload-item-status-text"
+                                            *ngIf="(uploadedFile.uploadStatus == fileStatus.Uploaded || uploadedFile.uploadStatus == fileStatus.Processing  || uploadedFile.uploadStatus == fileStatus.Successful)">
+                                            {{getFileStatusText(uploadedFile.uploadStatus)}}</div>
+
+                                        <div class="upload-item-status-text"
+                                            *ngIf="uploadedFile.uploadStatus ==fileStatus.Failed">
+                                            {{uploadedFile.errorCount}} Errors Found</div>
+                                        <div class="upload-item-status-text"
+                                            *ngIf="uploadedFile.uploadStatus ==fileStatus.Cancelled">
+                                            <span>Upload Cancelled</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div *ngIf="(TotalErrors?.length==0 || TotalErrors==undefined)" class="icon-heading flex-center">
+                    <div class="file-upload-no-data-found">
+                        <div class="text-center">
+                            <img alt="" src="./assets/dist/images/Empty-State-File-Upload.svg" class="center-image">
+                        </div>
+                        <div class="text-center pt-2">
+                            <span class="header-message-no-record">No Data Found</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Show success tab -->
+            <div class="col-sm-8 col-lg-8 col-xl-8 col-x-8 col-md-8 pl-3 pr-0" *ngIf="errorId==fileStatus.Successful && TotalErrors?.length>0">
+                <div class="row ml-0 mr-0">
+                    <div
+                        class="col-12 col-sm-12 col-lg-12 col-xl-12 status-right-border-bottom col-x-12 col-md-12 pl-0 pr-0">
+                        <div class="header-headding ">
+                            <img alt="" src="./assets/dist/images/Success.svg"
+                                class="pr-2 m-top ng-star-inserted">
+                            <span class="header-message">Upload Successful</span>
+                        </div>
+                        <div class="icon-heading-status status-img-center">
+
+                            <div class="zerokpi-mt-ml-height">
+                                <img *ngIf="loading" class="zerkpi-hw-ml-mt" src="assets/dist/images/loading-small.gif"
+                                    alt="" />
+                                <div class="zero-kpi-stat-middle">
+
+                                    <img src="assets/dist/images/success-icon.png" alt="" />
+
+                                    <div>
+
+                                        <span class="success-text-icon"> No Errors Found<br />
+                                            File Upload Complete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Show cancelled tab -->
+            <div class="col-sm-8 col-lg-8 col-xl-8 col-x-8 col-md-8 pl-3 pr-0" *ngIf="errorId==fileStatus.Cancelled && TotalErrors?.length>0">
+                <div class="row ml-0 mr-0">
+                    <div
+                        class="col-12 col-sm-12 col-lg-12 col-xl-12 status-right-border-bottom col-x-12 col-md-12 pl-0 pr-0">
+                        <div class="header-headding ">
+                            <img alt="" src="./assets/dist/images/header-cancel.svg"
+                                class="pr-2 m-top ng-star-inserted"> <span class="header-cancel">Upload
+                                Cancelled</span>
+                        </div>
+                        <div class="icon-heading-status status-img-center">
+
+                            <div class="zerokpi-mt-ml-height">
+                                <img *ngIf="loading" class="zerkpi-hw-ml-mt" src="assets/dist/images/loading-small.gif"
+                                    alt="" />
+                                <div class="zero-kpi-stat-middle">
+
+                                    <img src="assets/dist/images/file-upload-cancel.png" alt="" />
+                                    <div>
+                                        <br />
+                                        <span class="success-text-icon"> Upload is cancelled</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Show in-progress tab -->
+            <div class="col-sm-8 col-lg-8 col-xl-8 col-x-8 col-md-8 pl-3 pr-0" *ngIf="errorId==fileStatus.Processing && TotalErrors?.length>0">
+                <div class="row ml-0 mr-0">
+                    <div
+                        class="col-12 col-sm-12 col-lg-12 col-xl-12 status-right-border-bottom col-x-12 col-md-12 pl-0 pr-0">
+                        <div class="header-headding ">
+                            <img alt="" src="./assets/dist/images/header-in-progress.svg"
+                                class="pr-2 m-top ng-star-inserted"> <span class="header-inprogress">Upload
+                                in
+                                progress</span>
+                        </div>
+                        <div class="icon-heading-status status-img-center">
+
+                            <div class="zerokpi-mt-ml-height">
+                                <img *ngIf="loading" class="zerkpi-hw-ml-mt" src="assets/dist/images/loading-small.gif"
+                                    alt="" />
+                                <div class="zero-kpi-stat-middle">
+                                    <img src="assets/dist/images/left-inprogress.svg" alt="" class="inprrogress-img" />
+                                    <img src="assets/dist/images/file-in-progress.svg" alt="" class="inprrogress-img" />
+                                    <img src="assets/dist/images/rightinprogres.svg" alt="" />
+                                    <div>
+                                        <br />
+                                        <span class="inprogress-text-icon"> Upload is in progress</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- To show multi tab error -->
+
+            <div class="col-sm-8 col-lg-8 col-xl-8 col-x-8 col-md-8 pl-3 pr-0" *ngIf="errorId==fileStatus.Failed && TotalErrors?.length>0">
+                <div class="row ml-0 mr-0">
+                    <div
+                        class="col-12 col-sm-12 col-lg-12 col-xl-12 status-right-border-bottom col-x-12 col-md-12 pl-0 pr-0">
+                        <div class="header-headding ">
+                            <img alt="" src="./assets/dist/images/error-header.svg"
+                                class="pr-2 m-top ng-star-inserted"> <span
+                                class="error-header">Errors</span>
+                        </div>
+                        <div class="icon-heading">
+                            <div class="card-body">
+                                <div class="error-msgs-container upload-list-esg">
+                                    <div *ngFor="let item of errormessages">
+                                        <div *ngIf="item.sheetname != null && item.sheetname != ''">
+                                            <div class="ptb12 error-row sheetname"
+                                                [ngClass]="item.isExpanded? 'expanded-error' : ''"
+                                                (click)="isExpand(item)">
+                                                <div class="d-inline">
+                                                    <span class="plr12" *ngIf="item.isExpanded"><img alt=""
+                                                            [src]="'assets/dist/images/Expand-more.svg'" /></span>
+                                                    <span class="plr12" *ngIf="!item.isExpanded"><img alt=""
+                                                            [src]="'assets/dist/images/Expand-less.svg'" /></span>
+                                                    <span title="">{{item.sheetname}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="item.isExpanded">
+                                            <div class="ptb12 error-row row sheetname mr-0 ml-0"
+                                                *ngFor="let subitem of item.messages"
+                                                [ngClass]="errormessages.length > 1? 'sheets-error-pl' : 'error-pl'">
+                                                <div class="col-12 pr-0 pl-4">
+                                                    <div class="d-inline-block pr-3">
+                                                        <div class="error-col pl-3"
+                                                            *ngIf="subitem.cellCode != undefined && subitem.cellCode != ''"
+                                                            [innerHtml]="subitem.cellCode"></div>
+                                                    </div>
+                                                    <div class="d-inline-block">
+                                                        <div *ngIf="subitem.message != undefined" class=""
+                                                            [innerHtml]="subitem.message">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="col-sm-8 col-lg-8 col-xl-8 col-x-8 col-md-8 pl-3 pr-0" *ngIf="TotalErrors?.length==0 || TotalErrors==undefined">
+                <div class="row ml-0 mr-0">
+                    <div
+                        class="col-12 col-sm-12 col-lg-12 col-xl-12 status-right-border-bottom col-x-12 col-md-12 pl-0 pr-0">
+                        <div class="header-headding ">
+                           
+                        </div>
+                        <div  class="icon-heading flex-center">
+                            <div class="file-upload-no-data-found">
+                                <div class="text-center">
+                                    <img alt="" src="./assets/dist/images/Empty-State-File-Upload.svg"
+                                        class="center-image">
+                                </div>
+                                <div class="text-center pt-2">
+                                    <span class="header-message-no-record">No Data Found</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,151 @@
+.portfolio-company-draft-list {
+    .filter-bg {
+        margin-top: -2px !important;
+    }
+
+    .companyListSearchHeight {
+        height: 42px !important;
+        width: 400px !important;
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+
+    .draft-status {
+        top: 152px;
+        left: 230px;
+        height: 40px;
+        /* UI Properties */
+        background: #FAFAFB 0% 0% no-repeat padding-box;
+        border: 1px solid #DEDFE0;
+        opacity: 1;
+    }
+
+    .draft-header-text {
+        top: 164px;
+        left: 326px;
+        width: 80px;
+        height: 16px;
+        /* UI Properties */
+        text-align: center;
+        letter-spacing: 0px;
+        color: #021155;
+        opacity: 1;
+    }
+
+    .status-list {
+        width: 310px;
+    }
+
+    .wf-card {
+        margin-bottom: 8px;
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        box-shadow: 0px 0px 12px #00000014;
+        border-radius: 4px;
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .wf-card:hover{
+        border: 1px solid #021155 !important;
+    }
+
+    .space-tab {
+        padding-bottom: 16px;
+        background: #ffffff 0% 0% no-repeat padding-box;
+    }
+
+    .status-header {
+        padding: 12px 0px 12px 0px;
+        color: #021155;
+    }
+
+    .wf-company-name {
+        padding: 12px 12px 0px 12px;
+        text-align: left;
+        font-weight: 600;
+        color: #000000;
+        font-size: 14px;
+    }
+
+    .wf-draft-name {
+        padding: 8px 12px 0px 12px;
+        text-align: left;
+    }
+
+    .wf-created-on {
+        padding: 8px 0px 0px 12px;
+        text-align: left;
+    }
+
+    .wf-title {
+        color: #75787B;
+        font-size: 14px;
+    }
+
+    .wf-details {
+        color: #212121;
+        font-size: 14px;
+        padding-left: 12px;
+    }
+
+    .wf-info {
+        padding-right: 8px;
+
+        img {
+            width: 16px;
+            height: 16px;
+        }
+    }
+    
+    .round-dot-red {
+        background: #B91F31 0% 0% no-repeat padding-box !important;
+        width: 10px;
+        height: 10px;
+        border: 1px solid #b91f31;
+        opacity: 1;
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    .div-parent {
+        display: block;
+        overflow-x: scroll;
+        white-space: nowrap;
+        width: 100%;
+        height: calc(100vh - 192px);
+    }
+
+    .tbl-container {
+        display: block;
+        overflow-x: scroll;
+        white-space: nowrap;
+        width: 100%;
+        height: calc(100vh - 192px);
+    }
+
+    table {
+        min-width: max-content;
+        white-space: nowrap;
+    }
+
+    table th {
+        position: sticky;
+        top: 0px;
+        z-index: 9999999;
+
+    }
+
+    td {
+        vertical-align: top !important;
+        border: none !important;
+        padding: 16px 0px 0px 16px !important;
+    }
+
+    th {
+        border: none !important;
+    }
+
+    .emptyMessageDiv{
+        padding-top: 10% !important;
+    }
+}

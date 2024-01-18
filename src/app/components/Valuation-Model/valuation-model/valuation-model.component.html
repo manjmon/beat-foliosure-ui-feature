@@ -1,0 +1,115 @@
+
+<div class="report-edit-dropdown border-1 pb-2 mt-3 moduleContainer">
+    <form name="form" (ngSubmit)="form.valid" #form="ngForm" class="custom-padding">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="row">
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 pl-3  pr-0  label-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class=" p-label-padding filter-label TextTruncate" title="Fund">Fund
+                                </div>
+                                <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                    <typeahead-control name="FundData" [optionList]="fundList" [displayField]="'fundName'"
+                                        [ngModel]="selectedFund" #FundData="ngModel" (clearItem)="onFundClear()" #FundDDL
+                                        (selectItem)="onFundSelection(selectedFund, $event)" [isAscendingOptions]="false" [isRequired]="true"
+                                        [disabled]="fundList == undefined" placeholder="Select Fund"></typeahead-control>
+                                    <div *ngIf="FundData.invalid && (FundData.dirty || form.submitted)" class="text-danger">
+                                        <div *ngIf="form.submitted && !FundData.valid" class="text-danger">
+                                            Please select Fund
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 pl-3  pr-0  label-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0">
+                                <div class="p-label-padding filter-label TextTruncate" title="Company">Company
+                                </div>
+                                <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                    <typeahead-control name="CompanyData" [optionList]="companyList" [displayField]="'companyName'" [ngModel]="selectedCompany" #CompanyData="ngModel"
+                                    (selectItem)="onCompanySelection(selectedCompany, $event)" [isAscendingOptions]="false" [isRequired]="true" [disabled]="companyList == undefined" placeholder="Select Company"></typeahead-control>
+                                    <div *ngIf="CompanyData.invalid && (CompanyData.dirty || form.submitted)" class="text-danger">
+                                        <div *ngIf="form.submitted && !CompanyData.valid" class="text-danger">
+                                            Please select Company
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-2 pl-3  pr-0  label-content-padding position-label">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0">
+                                <div class="p-label-padding-style filter-label TextTruncate" title="Quarter & Year">Quarter & Year
+                                </div>
+                                <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <fieldset [disabled]="disableQuarterAndYear"
+                                   [ngClass]="disableQuarterAndYear ? 'disable-pointer-events' : ''">
+                                    <quarter-year-control class="cutsom-height" [ControlName]="'quarterYearCntrl'"
+                                        [QuarterYear]="QuarterAndYear" (onCalendarYearPicked)="quarterYearPicker(QuarterAndYear,$event)"></quarter-year-control>
+                                </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-2 col-xl-2 pr-0 label-content-padding button-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-6 col-xl-6 col-sm-12 col-12 col-xs-12 pl-0 ">
+                            <div class="col-12 ">
+                                <label for="buttons">
+                                </label>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 custom-margin">
+                                <button class="nep-button nep-button-secondary" type="submit" (click)="onApplyClick()"
+                                    [disabled]="!form.valid || disableApply">Apply</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+</form>
+</div>
+
+<div class="row ml-0 mr-0">
+<div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0 pl-0 company-finacial company-kpis">
+    <div class="valuation-model-page">
+        <div class="panel panel-default border-0 pt-2 tab-bg" *ngIf="showTabs">
+            <div class="float-right">
+                <div class="allvalues-valuation">All values in: {{selectedCompany?.companyCurrency}} (Thousands) </div>
+            </div>
+            <div class="panel-heading">
+                <div class="panel-title custom-tabs">
+                    <ul class="nav nav-tabs ">
+                        <li (click)="setTab(tab)" class="nav-item" role="presentation"  *ngFor="let tab of tabList" >
+                        <!-- <li (click)="!canDeactivateStatus ? checkStatusChanges(tab):  setTab(tab)" class="nav-item" role="presentation"  *ngFor="let tab of tabList" > -->
+                            <button class="nav-link nav-custom"[ngClass]="tab.isActive ?'active':''"  id="home-tab"
+                                data-bs-toggle="tab" type="button"  role="tab" aria-controls="home"
+                                aria-selected="true">
+                               {{tab?.name}}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <ng-container *ngIf="selectedTab?.id==valuationType.TradingComps && showTabs">
+            <app-trading-comps (childTabNameEvent)="receivedChildTabNameHandler($event)" [fundDetails]="selectedFund" [companyDetails]="selectedCompany" [QuarterAndYear]="qandyear" ></app-trading-comps>
+        </ng-container>
+        <ng-container *ngIf="selectedTab?.id==valuationType.TransactionComps && showTabs">
+            <app-transaction-comps (childTabNameEvent)="receivedChildTabNameHandler($event)" [fundDetails]="selectedFund" [companyDetails]="selectedCompany" [QuarterAndYear]="qandyear" ></app-transaction-comps>
+        </ng-container>
+
+        <div class="text-center  empty-state-1" *ngIf="!showTabs">
+            <img class="EmptyStateImgStyle" src="assets/dist/images/WorkFlowZeroState.svg" alt="" /><br />
+            <span class="font-weight-bold">Please provide the required inputs above</span><br />
+        </div>
+    </div>
+</div>
+</div>
+<div>
+  <app-trading-implied-ev *ngIf="childTabName === 'trading-valuations'" [fundDetails]="fundDetails" [selectedCompany]="selectedCompany" [quarterAndYear]="QuarterAndYear" [rawData]="dataCollection"></app-trading-implied-ev>
+  <app-transaction-implied-ev *ngIf="childTabName === 'transaction-valuations'" [fundDetails]="fundDetails" [selectedCompany]="selectedCompany" [quarterAndYear]="QuarterAndYear" [rawData]="dataCollection"></app-transaction-implied-ev>
+</div>

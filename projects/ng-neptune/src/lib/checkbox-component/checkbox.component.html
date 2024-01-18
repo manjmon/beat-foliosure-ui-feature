@@ -1,0 +1,9 @@
+<div style="width: fit-content;">
+  <label [ngClass]="disabled ? 'disable container' : 'enable container'" style="margin-bottom: 0; font-size: 14px; color: #55565a;">
+    <input id="cb" type="checkbox" [checked]="isChecked" [disabled]="disabled" >
+    <span class="checkmark" 
+    [ngStyle]="{'height': height, 'width':width+'px', 'margin-left': marginLeft, 'margin-top':marginTop}"
+    ></span>
+    {{value}}
+  </label>
+</div>

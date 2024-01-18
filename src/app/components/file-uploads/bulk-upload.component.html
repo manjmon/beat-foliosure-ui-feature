@@ -1,0 +1,296 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="add-user-component">
+            <div class="card card-main">
+                <div class="moduleContainer">
+                    <div class="row ml-0 mr-0">
+                        <div class="col-12 plrb20">
+                            <div class="d-inline-block pt20">
+                                <label for="FirstName">Module</label>
+                                <div class="pt-1">
+                                    <p-dropdown [filter]="true" [filterBy]="'pageConfigAliasName'" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="30" class="custom-scroller-height access-subfeature custom-searchable-dropdown" name="module"
+                                        [options]="masterModel.moduleList" [(ngModel)]="model.moduleDetails"
+                                        placeholder="Select Module" optionLabel="pageConfigAliasName" [showClear]="false"
+                                        (ngModelChange)="getDropdownValue($event)">
+                                        <ng-template let-company pTemplate="item">
+                                            <span class="TextTruncate" title="{{company.pageConfigAliasName==''?company.moduleName:company.pageConfigAliasName}}">
+                                                {{company.pageConfigAliasName==''?company.moduleName:company.pageConfigAliasName}}
+                                            </span>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                            <div class="d-inline-block plr20 pt20"
+                                *ngIf=" isConditionalDropDown=='common'">
+                                <label for="portfoliocompany" class="nep-form-label"
+                                    [ngClass]="CompanyDisabled ? 'disabled-label-color' : ''">Company Names</label>
+                                <div class="pt-1">
+                                    <p-dropdown [filter]="true"  [filterBy]="'companyName'" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="30" class="custom-scroller-position custom-scroller-height access-subfeature custom-searchable-dropdown"
+                                        name="portfoliocompany" [options]="PorfolioCompanies"
+                                        [(ngModel)]="portfolioCompData" placeholder="Search or select company"
+                                        optionLabel="companyName" [showClear]="false"
+                                        (ngModelChange)="CompanySelected($event)" [(disabled)]="CompanyDisabled">
+                                        <ng-template let-company pTemplate="item">
+                                            <span class="TextTruncate" title="{{company.companyName}}">
+                                                {{company.companyName}}
+                                            </span>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </div>
+                                <div *ngIf="IsValidCompany"
+                                    class="text-danger bulk-pt-pl">
+                                    Company name required</div>
+                            </div>
+
+                            <div class="d-inline-block plr20 pt20"
+                                *ngIf=" isConditionalDropDown=='fund'">
+                                <label for="fund" class="nep-form-label">Fund
+                                    Names</label>
+                                <div class="pt-1">
+                                    <p-dropdown [filter]="true" [filterBy]="'fundName'" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="44" class="access-subfeature custom-searchable-dropdown"
+                                        name="fundnames" [options]="FundsList" [(ngModel)]="fundData"
+                                        placeholder="Search or select fund" optionLabel="fundName" [showClear]="false"
+                                        (ngModelChange)="OnFundSelected($event)">
+                                        <ng-template let-company pTemplate="item">
+                                            <span class="TextTruncate" title="{{company.fundName}}">
+                                                {{company.fundName}}
+                                            </span>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </div>
+                                <div *ngIf="IsValidFundName"
+                                    class="text-danger p-error-msg">
+                                    Fund name required</div>
+                            </div>
+                            <div class="d-inline-block plr20 pt20" *ngIf="isConditionalDropDown=='FOF'">
+                                <label for="fund" class="nep-form-label">Fund
+                                    Names</label>
+                                <div class="pt-1">
+                                    <p-multiSelect class="access-subfeature custom-searchable-multiselect " [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" [(ngModel)]="fundList" [resetFilterOnHide]=true
+                                        [options]="FundsList" defaultLabel="Select Fund Name" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" optionLabel="fundName"
+                                        (onChange)="onFundChangeModel($event)">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.fundName}}">{{item.fundName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </div>
+                        </div>
+                            <div class="d-inline-block plr20 pt20"
+                                *ngIf="isConditionalDropDown=='investor'">
+                                <label for="fund" class="nep-form-label">Investor Name</label>
+                                <div class="pt-1">
+                                    <p-dropdown [filter]="true" [filterBy]="'investorName'" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="30" class="access-subfeature custom-searchable-dropdown"
+                                        name="investor" [options]="investorList" [(ngModel)]="investorData"
+                                        placeholder="Search or select investor" optionLabel="investorName"
+                                        [showClear]="false" (ngModelChange)="OnInvestorSelected($event)">
+                                        <ng-template let-company pTemplate="item">
+                                            <span class="TextTruncate" title="{{company.investorName}}">
+                                                {{company.investorName}}
+                                            </span>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </div>
+                                <div *ngIf="IsValidInvestor"
+                                    class="text-danger p-error-msg">
+                                    Investor name required</div>
+                            </div>
+                            <div class=" d-inline-block pr20 pt20"
+                                *ngIf="strModuleType=='Adhoc' && isPeriod">
+                                <label for="fund" class="nep-form-label">Period Type</label>
+                                <div class="pt-1">
+                                    <p-dropdown [virtualScroll]="true" [virtualScrollItemSize]="30"
+                                        class="access-subfeature custom-searchable-dropdown" name="period"
+                                        [options]="adhocPeriodTypes" [(ngModel)]="adhocPeriod"
+                                        placeholder="Select Period" optionLabel="type" [showClear]="false"
+                                        (onChange)="validateSelectedPeriod($event)">
+                                    </p-dropdown>
+                                    <div *ngIf="isPeriodValidate"
+                                        class="text-danger p-error-msg">
+                                        Select Period required</div>
+                                </div>
+                            </div>
+                            <div class="d-inline-block pr20 pt20"
+                                *ngIf="strModuleType=='Adhoc' && adhocPeriod.type!=''">
+                                <label for="fund" class="nep-form-label">{{adhocPeriod.type}}</label>
+                                <div class="pt-1" *ngIf="adhocPeriod.type=='Monthly'">
+                                    <p-calendar [(ngModel)]="adhocMonth" class="access-bulkupload-p-calendar"
+                                        placeholder="Select Month" view="month" dateFormat="mm/yy" [showIcon]="true"
+                                        [yearNavigator]="true" yearRange={{yearRange}} [readonlyInput]="true"
+                                        inputId="monthpicker" (onSelect)="onSelectMonth($event)"></p-calendar>
+                                    <div *ngIf="isMonthValidate"
+                                        class="text-danger p-error-msg">
+                                        Select Monthly required</div>
+                                </div>
+                                <div class="pt-1" *ngIf="adhocPeriod.type=='Quarterly'">
+                                    <quarter-year-control [ControlName]="'quarterYearValue'"
+                                        [QuarterYear]="adhocQuarter" (onCalendarYearPicked)="fromQuarterYear($event)">
+                                    </quarter-year-control>
+                                    <div *ngIf="isQuarterValidate"
+                                        class="text-danger p-error-msg">
+                                        Select Quarterly required</div>
+                                </div>
+                                <div class="pt-1" *ngIf="adhocPeriod.type=='Yearly'">
+                                    <p-dropdown [filter]="true" [filterBy]="'value'" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="30" class="access-subfeature custom-searchable-dropdown"
+                                        name="investor" [options]="yearOptions" [(ngModel)]="adhocModelYear"
+                                        (onChange)="yearOptionsChange($event);" placeholder="Select year"
+                                        optionLabel="text" [showClear]="false">
+                                        <ng-template let-company pTemplate="item">
+                                            <span class="TextTruncate" title="{{company.text}}">
+                                                {{company.text}}
+                                            </span>
+                                        </ng-template>
+                                    </p-dropdown>
+                                    <div *ngIf="isYearValidate"
+                                        class="text-danger p-error-msg">
+                                        Select Yearly required</div>
+                                </div>
+                            </div>
+                            <div class="d-inline-block pt20">
+                                <div class="download-template-container pr-3"
+                                    (click)="showClickMessage && hideUnauthorized ? DownloadTemplate():''"
+                                    [ngClass]="showClickMessage && hideUnauthorized ? 'pointerIcon':'disableIcon'">
+                                    <span class="template-icon-style-container-0">
+                                        <img *ngIf="showClickMessage && hideUnauthorized" class="template-icon-style"
+                                            [src]="'assets/dist/images/TemplateDownloadWhite.svg'" alt="">
+                                        <img *ngIf="!showClickMessage || !hideUnauthorized"
+                                            class="template-icon-style opacity-40"
+                                            [src]="'assets/dist/images/TemplateDownloadGrey.svg'" alt="">
+                                    </span>
+
+                                    <span
+                                        [ngClass]="showClickMessage && hideUnauthorized ? 'dtc-enabled' : 'dtc-disabled'"
+                                        class="template-label-style-0">
+                                        Template
+                                    </span>
+                                   
+                                    <span class="pl-1 upload-loader pt-2" *ngIf="isLoading">
+                                        <i aria-hidden="true"
+                                            class="download-circle-btn-loader fa fa-circle-o-notch fa-1x fa-fw"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 pt20"  *ngIf="showClickMessage && hideUnauthorized">
+                        <div class="title-text plr20 pb12">
+                            <strong>Download excel template and bulk upload data</strong>
+                        </div>
+                        <div class="file-upload-section-body plr20">
+                            <div>
+                                <span class="ptb12">Note:-</span>
+                                <ol class="plr20" *ngIf="moduleName !== 'exchange rates'">
+                                    <li>Template includes sample data. Replace the same with relevant data..</li>
+                                    <li>Follow the format laid out in the template. Do not modify any headers.</li>
+                                    <li>File size limit is 20MB.</li>
+                                    <li>For KPI's, allowed symbols are %, $ for KPI data.</li>
+                                    <li *ngIf="isConditionalDropDown=='FOF'">
+                                        File uploaded should be in zipped excel format.
+                                    </li>
+                                </ol>
+
+                                <ol class="plr20" *ngIf="moduleName === 'exchange rates'">
+                                    <li>The Template includes a Master Currency tab with the relevant currency codes.
+                                        <br /> Please adhere to these codes when specifying the ‘From Currency’ and ‘To
+                                        Currency’ in the template.
+                                    </li>
+                                    <li>The daily currency rates are to be entered as per the format laid out in the
+                                        template. Do not modify the ‘From Currency’ and ‘To Currency’ headers. </li>
+                                    <li>File Size limit is 20 MB.</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                        <div class="file-upload-section-header"
+                            [ngClass]="messageClass==='errorMessage' ? 'bottom-border':''">
+                            <div id="buttonSection">
+                                <span class="errors-title-container" *ngIf="messageClass==='errorMessage'">
+                                    <img class="error-info-icon" [src]="'assets/dist/images/red_info_icon.svg'" alt="">
+                                    <span class="error-title errorColor">
+                                        <strong>Errors ({{errorCount}})</strong>
+                                    </span>
+                                </span>
+                                <div class="pull-right pl12">
+                                    <nep-button Type="Primary" [disabled]="files.length === 0 || messages.length > 0 || errormessages.length > 0"
+                                        (click)="onUpload()">
+                                        Upload <span class="pl-1 upload-loader" *ngIf="loading">
+                                            <i aria-hidden="true"
+                                                class="download-circle-loader fa fa-circle-o-notch fa-1x fa-fw"></i>
+                                        </span>
+                                    </nep-button>
+
+                                </div>
+                                <div class="uploadButton pull-right d-flex">
+                                    <div class="textEllipsis uploadLogoIcon" (click)="file.click()"
+                                        title={{uploadFilePlaceholder}}>
+                                        <input class="hidefile" #file (click)="file.value = null" value=""
+                                            accept=".xlsx,.xls,.zip" (change)="onSelect($event.target.files)" type="file">
+                                        <img *ngIf="browseicon" class="pull-left browseIcon"
+                                            [src]="'assets/dist/images/Desktop Grey.svg'" alt="">
+                                        <span class="beatColor browseButton">{{uploadFilePlaceholder}}</span>
+                                    </div>
+                                    <div *ngIf="!browseicon" class="icon">
+                                        <img *ngIf="ProgressCancel" class="pull-right"
+                                            (click)="deleteiconclick(filename)"
+                                            [src]="'assets/dist/images/ClearIcon.svg'" alt="">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="error-msgs-container" *ngIf="messageClass==='errorMessage'">
+                            <div *ngFor="let item of errormessages">
+                                <div *ngIf="item.sheetname != null && item.sheetname != ''">
+                                    <div class="ptb12 error-row sheetname"
+                                        [ngClass]="item.isExpanded? 'expanded-error' : ''" (click)="isExpand(item)">
+                                        <div class="d-inline">
+                                            <span class="plr12" *ngIf="item.isExpanded"><img alt=""
+                                                    [src]="'assets/dist/images/Expand-more.svg'" /></span>
+                                            <span class="plr12" *ngIf="!item.isExpanded"><img alt=""
+                                                    [src]="'assets/dist/images/Expand-less.svg'" /></span>
+                                            <span title=""><strong>{{item.sheetname}}</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div
+                                    *ngIf="item.isExpanded || (errormessages.length == 1 && item.sheetname == '')">
+                                    <div class="ptb12 error-row row" *ngFor="let subitem of item.messages"
+                                        [ngClass]="errormessages.length > 0? 'sheets-error-pl' : 'error-pl'">
+                                        <div class="mw  errorColor"
+                                            *ngIf="subitem.cellCode != undefined && subitem.cellCode != ''" [innerHtml]="subitem.cellCode"></div>
+                                        <div *ngIf="subitem.message != undefined" class="pl-4 col-8" [innerHtml]="subitem.message">
+                                        </div>
+                                        <div *ngIf="subitem.message == undefined" class="pl-4 col-8" [innerHtml]="subitem"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="showErrorPopUp" class="nep-modal nep-modal-show nep-d-bg">
+        <div class="nep-modal-mask"></div>
+        <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nep-bulk-pdt">
+            <div class="nep-card-header nep-modal-title">
+                <div class="d-inline"><img class="yellowInfoIcon" src="assets/dist/images/yellowInfoIcon.svg"
+                        alt="" />Alert</div>
+                <div class="float-right desc-icon">
+                    <span (click)="closeErrorPopup()"><i class="fa fa-times" aria-hidden="true"></i></span>
+                </div>
+            </div>
+            <div class="nep-card-body">
+                <div> {{ popUpErrorMsg }}</div>
+            </div>
+        </div>
+    </div>
+</div>

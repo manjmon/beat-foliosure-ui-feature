@@ -1,0 +1,169 @@
+<div class="nep-modal nep-modal-show formula-builder-model nep-mdl-shw-d-bg">
+    <div class="nep-modal-mask"></div>
+    <div   class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nep-crd-pr-d">
+      <div class="nep-card-header nep-modal-title">
+        <div class="float-left">
+            {{isMapping && kpiModel?.mappingKpiId > 0 ?'Company Formula':'Standard Formula'}}
+        </div>
+        <div class="float-right close-icon"(click)="closePopUp('')">
+            <i class="pi pi-times"></i>
+        </div>
+      </div>
+      <div class="nep-card-body">
+        <div class="row mr-0 ml-0 formula-body">
+            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pr-0 pl-0 border-right">
+                <div class="row mr-0 ml-0 formula-section">
+                    <div class=" col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 pb-2 formula-column">
+                       <div title="{{kpiModel?.kpi || kpiModel?.profitAndLossLineItem || kpiModel?.balanceSheetLineItem || kpiModel?.cashFlowLineItem}}"  class="formula-line-item  TextTruncate d-inline-block">
+                        {{kpiModel?.kpi || kpiModel?.profitAndLossLineItem || kpiModel?.balanceSheetLineItem || kpiModel?.cashFlowLineItem}}
+                       </div>
+                       <div class="d-inline-block pl-2 equals-op">=</div>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 formula-builder-section">
+                            <div   tabindex=1000  #contentDivElement  (keyup)="validateFormula($event);applyEvent($event)"  
+                             (keypress)="setFormulaLogic($event);"  id="contentBox" contenteditable="true" class="border-1 custom-text-area">                           
+                            </div>                         
+                        <div class="d-none">
+                            {{formulaKPIModel}}
+                        </div>
+                        <div [ngClass]="isDisplay && kpiDropDownList.length > 0 ? 'd-block':'d-none'" class="custom-formula-ul-select" #ulDropDown>
+                            <ul>
+                                <li *ngFor="let item of kpiDropDownList" title="{{item.kpi}}" class="TextTruncate" (click)="selectedKPI(item)">
+                                    {{item.kpi}}
+                                </li>
+                            </ul>
+                        </div>
+                        <div [ngClass]="isError && kpiDropDownList.length == 0 ? 'd-block':'d-none'" class="custom-formula-ul-select error-select" #ulErrorDropDown>
+                            <ul>
+                                <li title="{{errorUlMessage}}"  class="TextTruncate" >
+                                    {{errorUlMessage}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 pr-0 pl-0">
+                <div class="row mr-0 ml-0 formula-kpi-section">
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  kpi-type">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-12 col-sm-5 col-xs-12 col-md-5 col-lg-5 col-xl-5 pr-0 pl-0">
+                                <label class="pl-2 pr-2 mb-0 pb-0">
+                                    Available KPIs
+                                </label>
+                                <p-dropdown id="kpi-select-dropdown" [virtualScrollItemSize]="30" class="kpi-list-formula-builder custom-searchable-dropdown float-right kpi-mapping-select kpi-new-group" name="module" [options]="formulaKPITypes"
+                                [(ngModel)]="selectedFormulaType" optionLabel="pageConfigAliasName" [showClear]="false"  [group]="true" [filter]="true"
+                                 (onChange)="GetSelectedKpiData($event)">
+                                 <ng-template let-group pTemplate="group">
+                                     <span id="kpi-type-name" class="TextTruncate" title="{{group.name}}">
+                                         {{group.name}}
+                                     </span>
+                                 </ng-template>
+                                 <ng-template let-options pTemplate="item">
+                                     <span id="kpi-type-name" class="TextTruncate" title="{{options.pageConfigAliasName}}">
+                                         {{options.pageConfigAliasName}}
+                                     </span>
+                                 </ng-template>
+                             </p-dropdown>
+ 
+                            </div>
+                            <div class="col-6 col-sm-7 col-xs-12 col-md-7 col-lg-7 col-xl-7 pr-0 pl-3">
+                                    <label class="mb-0 pb-0">
+                                        Available Operators
+                                    </label>
+                                <div class="formula-btns pt-2">
+                                    <div class="formula-btn text-center mr-2" (click)="applyFormula('(')">
+                                        (
+                                    </div>
+                                    <div class="formula-btn text-center mr-2"(click)="applyFormula(')')">
+                                        )
+                                    </div>
+                                    <div class="formula-btn text-center mr-2"(click)="applyFormula('+')">
+                                        +
+                                    </div>
+                                    <div class="formula-btn text-center mr-2"(click)="applyFormula('-')">
+                                        -
+                                    </div>
+                                    <div class="formula-btn text-center mr-2" (click)="applyFormula('*')">
+                                        x
+                                    </div>
+                                    <div class="formula-btn text-center mr-2 d-none"(click)="applyFormula('%')">
+                                        %
+                                    </div>
+                                    <div class="formula-btn text-center"(click)="applyFormula('/')">
+                                        /
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                        <div class="search">
+                            <span class="fa fa-search fasearchicon p-1"></span>
+                            <input #gb pInputText type="text"
+                                class="search-text-company companyListSearchHeight"
+                                placeholder="Search KPI"(input)="tblKPI.filterGlobal($event.target.value, 'contains')"
+                                />
+                        </div>
+                    </div>
+                    <div class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                         <p-table styleClass="p-datatable-gridlines" #tblKPI class="formula-kpi-table Track-Records cashflow-tbl text-left custom-kpi-table borderless invested-table pc-table list-table kpi-list-table" 
+                        [scrollHeight]="'300px'" 
+                        emptyMessage="{{blockedTable? 'Please Wait...':'No record found'}}" 
+                        
+                        scrollable="true" 
+                        sortMode="multiple" 
+                        [value]="kpiList"
+                        [globalFilterFields]="['kpi']"
+                        [columns]="kpiHeaders">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <ng-container>
+                                    <th id="col.header" *ngIf="kpiList.length !== 0">
+                                        <span class="tableHeadersStyle">KPI Name</span>
+                                        <p-sortIcon  [field]="'kpi'" [pSortableColumn]="'kpi'"></p-sortIcon>
+                                    </th>
+                                </ng-container>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr>
+                                <td (click)="applyFormulaKPI(rowData)" title="{{rowData['kpi']}}" id="{{$index+1|number}}"[ngClass]="rowData['isActive']?'active-kpi':''" class="TextTruncate" (click)="setIsActive(rowData)">                                 
+                                    <span class="text-truncate d-inline-block kpi-title"  [ngClass]="(rowData.isBoldKPI || rowData.isHeader) ? 'font-weight-bold':''"> {{rowData['kpi']}}</span>
+                                    <span *ngIf="rowData.isHeader" title="Header KPI" class="pl-3 pr-3 kpi-header" >
+                                        <img *ngIf="rowData.isHeader" class="img-header" src="assets/dist/images/kpi-header.svg" alt="kpi-header.svg"
+                                       />                
+                                    </span>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td [attr.colspan]="columns.length">
+                                    <div class="text-center mt-4">
+                                        <img alt="" src="assets/dist/images/empty-state.svg" alt="empty-state" class="showHandIcon pr-1 mt-0" />
+                                    </div>
+                                    <div class="text-center pt-2 empty-state-text"> No Data found </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="nep-card-footer nep-card-right nep-modal-footer">
+       <div class="float-right">
+        <nep-button [disabled]="isDisabledBtn" Type="Secondary" (click) ="clearFormula()" >
+            Clear
+        </nep-button>
+        <nep-button [disabled]="isDisabledBtn" class="pr-nep-btn" Type="Primary" (click)="saveFormula()">
+            Save
+        </nep-button>
+       </div>
+      </div>
+    </div>
+  </div>
+
+  <app-loader-component *ngIf="isLoader"></app-loader-component>

@@ -1,0 +1,49 @@
+@import "../../../variables.scss";
+
+    .performance-section {
+        .performance-header {
+            text-align: left;
+            font-size: 16px;
+            font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+            letter-spacing: 0px;
+            color: $nep-dark-black;
+            opacity: 1;
+        }
+        .outer-section {
+            background: $nep-base-grey 0% 0% no-repeat padding-box;
+            border: 1px solid $nep-divider;
+            border-radius: 4px 4px 4px 4px;
+            opacity: 1;
+            box-shadow: 0px 0px 12px $nep-shadow-color;
+        }
+        .nav-link {
+            background-color: transparent !important;
+            letter-spacing: 0px;
+            color: $nep-text-grey;
+            font-size: 0.9rem !important;
+            padding-top: 9px;
+            padding-bottom: 9px;
+            &.active {
+                background-color: $nep-white !important;
+                font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+                color: $nep-primary !important;
+                font-size: 0.9rem !important;
+            }
+        }
+        .tab-bg {
+            background-color: $nep-base-grey !important;
+        }
+        .content-bg {
+            background-color: $nep-white !important;
+        }
+    }
+
+    .sort-align{
+        float: right;
+        }
+        .bottom-div{
+            padding-bottom: 1.25rem;
+        }
+    .search-text-fxrates{
+        height: 35px !important;
+    }

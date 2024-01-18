@@ -1,0 +1,113 @@
+<div #advancedFilters id="filtersContainer"class="advancefilters-w-h">
+  <div id="containerHeader" class="advancefilters-hw-p">
+    <span class="advancefilters-fs-f">
+      Apply filters
+    </span>
+    <a (click)="clearAll()">
+      <span class="advancefilters-fs-fc" >
+        <!-- [ngClass]="disableApplyFilters ? 'disableClearAll' : 'enableClearAll'" -->
+    Clear all
+  </span>
+    </a>
+
+  </div>
+  <div id="containerBody" class="advancefilters-bb-bt">
+    <div class="advancefilters-d">
+      <div class="advancefilters-w-bg">
+        <a *ngFor="let filterCategory of filterCategories" (click)="selectFilterCategory(filterCategory)">
+          <div [ngClass]="activeFilterCategory === filterCategory ? 'filterHeadingStyle activeCategory' : 'filterHeadingStyle inactiveCategory'">
+          {{filterCategory}}
+        </div>
+        </a>
+
+      </div>
+      <div class="advancefilters-height">
+
+        <div
+          *ngIf="activeFilterCategory === 'File Format' || activeFilterCategory === 'Type' || activeFilterCategory === 'Sub-Type'">
+          <div *ngFor="let activerFilter of activeFilterList ; let indexOfelement=index;">
+            <div class="advancefilters-pt-pl">
+              <checkbox height="20px" width="20" [isChecked]="activerFilter.isChecked"
+                (change)="handleCheckBox($event,indexOfelement)" [value]="activerFilter.name"></checkbox>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeFilterCategory === 'Document Date'">
+          <div class="advancefilters-w-mt-ml">
+            <span  class="contentStyle">From Date</span>
+            <p-calendar name="fromDateCal" showButtonBar="true" (onClearClick)="onFromDateClear()"
+              [(ngModel)]="fromDate" #fromDateCal [monthNavigator]="true" [yearNavigator]="true" [readonlyInput]="true"
+              inputStyleClass="date-picker-input" dateFormat="dd-M-yy" [showIcon]="true" yearRange="2000:2030"
+              (ngModelChange)="onChangeFromDate(fromDate)" [inputStyle]="{'padding': '0.5vw'}"
+              placeholder="Select from date"></p-calendar>
+            <span *ngIf="hasInvalidDateInput"
+              class="advancefilters-c-pl">{{fromDateValidationMsg}}</span>
+          </div>
+          <div class="advancefilters-margintop">
+            <span  class="contentStyle">To Date</span>
+            <p-calendar name="toDateCal" showButtonBar="true" (onClearClick)="onToDateClear()" [(ngModel)]="toDate"
+              #toDateCal [monthNavigator]="true" [yearNavigator]="true" [readonlyInput]="true"
+              inputStyleClass="date-picker-input" dateFormat="dd-M-yy" [showIcon]="true" yearRange="2000:2030"
+              (ngModelChange)="onChangeToDate(toDate)" [inputStyle]="{'padding': '0.5vw'}" placeholder="Select to date">
+            </p-calendar>
+            <span *ngIf="hasInvalidDateInput"
+             class="advancefilters-cp">{{toDateValidationMsg}}</span>
+          </div>
+        </div>
+
+        <div class="advancefilters-w-mt">
+          <div *ngIf="activeFilterCategory === 'Firm Name'">
+            <div  class="contentStyle contentstyle-mb">Firm Name</div>
+            <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" name="SelectedFirms" [disabled]="firms==undefined" #SelectedFirms="ngModel"
+              [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'" [options]="firms" defaultLabel="Select Firm(s)" [(ngModel)]="selectedFirms"
+              (onChange)="onFirmChanged($event)" optionLabel="firmName">
+
+            </p-multiSelect>
+
+          </div>
+
+          <div *ngIf="activeFilterCategory === 'Fund Name'">
+            <div  class="contentStyle contentstyle-marginbottom">Fund Name</div>
+            <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" [disabled]="funds==undefined" #SelectedFirms="ngModel" [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+              [options]="funds" defaultLabel="Select Fund(s)" [(ngModel)]="selectedFunds"
+              (onChange)="onFundChanged($event)" optionLabel="fundName">
+            </p-multiSelect>
+          </div>
+
+          <div *ngIf="activeFilterCategory === 'Portfolio Company'">
+            <div  class="contentStyle contentstyle-bottom-margin">Portfolio Company Name</div>
+            <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" [disabled]="portfolioComapanies==undefined" #SelectedFirms="ngModel" [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+              [options]="portfolioComapanies" defaultLabel="Select Portfolio Company(s)"
+              [(ngModel)]="selectedPortfolioComapanies" (onChange)="onCompanyChanged($event)" optionLabel="companyName">
+            </p-multiSelect>
+          </div>
+
+          <div *ngIf="activeFilterCategory === 'Deal ID'">
+            <div  class="contentStyle contentstyle-bm" >Deal Name</div>
+            <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" [disabled]="deals==undefined" #SelectedFirms="ngModel" [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+              [options]="deals" defaultLabel="Select Deal(s)" [(ngModel)]="selectedDeals"
+              (onChange)="onDealChanged($event)" optionLabel="dealCustomID">
+            </p-multiSelect>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div id="containerFooter" class="containerfooter-hw" >
+    <div class="advancefilters-fr-p" >
+      <a (click)="onCancelFilters()">
+      <nep-button Type="Secondary">
+        Cancel
+      </nep-button>
+      </a>
+      <a (click)="onApplyFilters()">
+        <nep-button Type="Primary" [disabled]="disableApplyFilters" class="advnc-btn-pl">
+          Apply
+        </nep-button>
+      </a>
+    </div>
+  </div>
+</div>

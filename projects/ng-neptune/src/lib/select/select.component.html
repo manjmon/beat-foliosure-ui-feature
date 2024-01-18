@@ -1,0 +1,43 @@
+
+<div id ="selectComponent" #select (click)="$event.stopPropagation()" class="custom-select nep-input nep-input-textarea nep-input-focus nep-input-inline nep-select"
+    [ngClass]="{'lpreport-select' : lpreportSelect}" (click)="openSelect()">
+    <div  [ngClass]="{'nep-select-focus' : openOption}" tabindex="0" class="nep-select-inner nep-select-drop-down">
+        <div
+            [ngClass]="(selectedValue.isActive==false&&selectedValue.name!='Default Template')?'nep-select-result lpreport-padding':'nep-select-result'">
+            <span title="{{selectedValue.name}}" class="nep-select-ellipsis pr8"
+                [ngClass]="(selectedValue.isActive==false&&selectedValue.name!='Default Template')?'nep-select-ellipsis pr8  lpreport-active-column':' nep-select-ellipsis pr8'">
+                <!-- <img class="imageStyle" *ngIf="imagePath != ''" src={{imagePath}} alt="" /> -->
+                <!-- <img *ngIf="imagePath != ''&&(selectedValue.name=='Default Template'||selectedValue.isActive==true); then templateName "
+                    src={{imagePath}} alt="" /> -->
+                    <img *ngIf="imagePath == ''&&(selectedValue.icon); else templateName"
+                    src="assets/dist/images/{{selectedValue.icon}}" alt="" />
+                <ng-template #templateName>
+                    <img *ngIf="imagePath != ''" src={{imagePath}} alt="" />
+                </ng-template>
+                {{selectedValue.name}}
+            </span>
+            <span tabindex="-1" class="pi pi-chevron-down ptStyle"></span>
+        </div>
+        <div [ngStyle]="{'display': openOption ? 'block' : 'none' }" [ngClass]="{'nep-hidable-show' : openOption}"
+            class="nep-list nep-hidable nep-hidable-fade nep-hidable-scale-y nep-hidable-animation-240 nep-select-options nep-select-control-mouse"
+            type="default">
+            <div class="nep-scroll">
+                <div class="nep-scroll-iframe"></div>
+                <div  class="nep-scroll-inner custom-select-scroll">
+                    <div style="margin-top: 0px; transform: translate(0px, 0px);">
+                        <a *ngFor="let data of selectList" tabindex="-1"
+                            [ngClass]="(data.isActive==false&&data.name!='Default Template')?'nep-custom-option nep-select-option nep-select-hover option-0 lpreport-active-column':'nep-custom-option nep-select-option nep-select-hover option-0'"
+                            title="{{data.name}}" (click)="selectedOption(data)">
+                            <img *ngIf="imagePath == ''&&(data.icon); else templateName"
+                            src="assets/dist/images/{{data.icon}}" alt="" />
+                            <ng-template #templateName>
+                                <img *ngIf="imagePath != ''" src={{imagePath}} alt="" />
+                            </ng-template>
+                            {{data.name}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,450 @@
+<div class="row accordion-row top-holding-section ">
+    <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0">
+        <div class="workflow-draft">
+            <p-panel expandIcon="pi pi-chevron-down" collapseIcon="pi pi-chevron-up" [toggleable]="true"
+                [(collapsed)]="collapsed" styleClass="top-holding-panel">
+                <ng-template pTemplate="icons">
+                    <div class="float-left pb-2 pt-2  cursor-pointer filter-collapse-text TextTruncate" title="All Filters"
+                        (click)="collapsed = !collapsed">All Filters</div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <div>
+                        <p-dropdown [filter]="true" [filterBy]="'investorName'" [virtualScroll]="true" [virtualScrollItemSize]="30"
+                            class="custom-p-dropdown pr-3 custom-searchable-dropdown" (onChange)="onSelectedInvestor($event)"
+                            [options]="investorList" [(ngModel)]="selectedInvestor" name="investorDropdown" optionLabel="investorName"
+                            placeholder="Select investor">
+                            <ng-template let-investor pTemplate="item">
+                                <span title="{{investor.investorName}}">
+                                    {{investor.investorName}}
+                                </span>
+                            </ng-template>
+                        </p-dropdown>
+                        <p-dropdown placeholder="Select filter preset" [filter]="true" [filterBy]="'userReportName'"
+                            class="custom-p-dropdown icon-dropdown fund-custom-dropdown custom-searchable-dropdown internal-select"
+                            [options]="saveFiltersOptionsList" (onChange)="onselectedFilterReport($event)" [(ngModel)]="selectedFilterReport">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <div class="d-inline-block"><img class="pr-1" *ngIf="item.isDefault"
+                                        src="assets/dist/images/FeedbackStarGrey.svg" alt="" /></div>
+                                <div title="{{item.userReportName}}" class="d-inline-block custom-label">{{item.userReportName}}</div>
+                            </ng-template>
+                            <ng-template let-object pTemplate="item">
+                                <div class="custom-ui-label custom-delete-hover custom-zindex-parent cus-ui-topinvs-dele-z-d-mw">
+                                    <span title="{{object.userReportName}}" class="img-pad TextTruncate">
+                                        <img class="pr-1" *ngIf="object.isDefault" src="assets/dist/images/FeedbackStarGrey.svg"
+                                            alt="" />{{object.userReportName}}
+                                    </span>
+                                    <span class="float-right  custom-zindex-child custom-internal-top-invest-delete">
+                                        <img class="deleteicon  pl-0 pt-0 float-right" (click)="onDelete()" src="assets/dist/images/delete.svg"
+                                            alt="delete" />
+                                    </span>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="content">
+                    <div class="row mr-0 ml-0">
+                        <div class="col-lg-12 col-md-12 col-sm-12  col-12 col-xl-12  pr-1 pl-1">
+                            <form name="form" (ngSubmit)="form.valid && Submit($event)" #form="ngForm">
+                                <div class="row ml-0 mr-0">
+                                    <div class="col-sm-6 col-md-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Strategy"> Strategy</div>
+                                            </div>
+                                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pr-0 pl-0">
+                                                <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" class="top-holding-multiselect custom-searchable-multiselect" name="Strategy"
+                                                    #Strategy="ngModel" [options]="strategyList"
+                                                    defaultLabel="Select strategy" [maxSelectedLabels]="1"
+                                                    [selectedItemsLabel]="'{0} items selected'"
+                                                    [(ngModel)]="masterModel.strategyIds" optionLabel="strategy"
+                                                    (onChange)="onStrategyChanged($event)">
+                                                </p-multiSelect>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Funds">Funds</div>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" name="Funds" class="top-holding-multiselect custom-searchable-multiselect"
+                                                    #Funds="ngModel" [options]="fundList" defaultLabel="Select fund"
+                                                    [maxSelectedLabels]="1"
+                                                    [selectedItemsLabel]="'{0} items selected'"
+                                                    [(ngModel)]="masterModel.fundIds" (onChange)="OnFundChanged()"
+                                                    optionLabel="fundName">
+                                                    <ng-template let-fund pTemplate="item">
+                                                        <span title="{{fund.fundName}}">
+                                                            {{fund.fundName}}
+                                                        </span>
+                                                    </ng-template>
+                                                </p-multiSelect>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Region">Region</div>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" class="top-holding-multiselect custom-searchable-multiselect" name="Region"
+                                                    #Region="ngModel" [options]="regionList"
+                                                    defaultLabel="Select region" [maxSelectedLabels]="1"
+                                                    [selectedItemsLabel]="'{0} items selected'"
+                                                    [(ngModel)]="masterModel.regionIds" optionLabel="region"
+                                                    (onChange)="onRegionChanged($event)">
+                                                    <ng-template let-region pTemplate="item">
+                                                        <span title="{{region.region}}">
+                                                            {{region.region}}
+                                                        </span>
+                                                    </ng-template>
+                                                </p-multiSelect>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Country">Country</div>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" class="top-holding-multiselect custom-searchable-multiselect" name="Country"
+                                                    #Country="ngModel" [options]="countryList"
+                                                    defaultLabel="Select country" [maxSelectedLabels]="1"
+                                                    [selectedItemsLabel]="'{0} items selected'"
+                                                    [(ngModel)]="masterModel.countryIds" optionLabel="country"
+                                                    (onChange)="onCountryChange($event)">
+                                                    <ng-template let-country pTemplate="item">
+                                                        <span title="{{country.country}}">
+                                                            {{country.country}}
+                                                        </span>
+                                                    </ng-template>
+                                                </p-multiSelect>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Status">Status</div>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" class="top-holding-multiselect custom-searchable-multiselect"
+                                                    name="FundHoldingStatus" #FundHoldingStatus="ngModel"
+                                                    [options]="fundHoldingStatusList" defaultLabel="Select status"
+                                                    [maxSelectedLabels]="1"
+                                                    [selectedItemsLabel]="'{0} items selected'"
+                                                    [(ngModel)]="masterModel.fundHoldingStatusIds"
+                                                    optionLabel="status" (onChange)="OnStatusChanged()">
+                                                    <ng-template let-status pTemplate="item">
+                                                        <span title="{{status.status}}">
+                                                            {{status.status}}
+                                                        </span>
+                                                    </ng-template>
+                                                </p-multiSelect>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Private/Public">Private/Public</div>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" class="top-holding-multiselect custom-searchable-multiselect" name="PCStatus"
+                                                    #PcStatus="ngModel" [options]="pcStatus"
+                                                    defaultLabel="Select private/public" [maxSelectedLabels]="1"
+                                                    [selectedItemsLabel]="'{0} items selected'"
+                                                    [(ngModel)]="masterModel.pCStatusIds" optionLabel="label"
+                                                    (onChange)="onPcStatusChanged()">
+                                                    <ng-template let-pcStatus pTemplate="item">
+                                                        <span title="{{pcStatus.label}}">
+                                                            {{pcStatus.label}}
+                                                        </span>
+                                                    </ng-template>
+                                                </p-multiSelect>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0 pt-1">
+                                            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Evaluation Quarter & Year">Evaluation Quarter & Year
+                                                </div>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <quarter-year-control class="custom-quarter-year"
+                                                    [ControlName]="'quarterYearCntrl'"
+                                                    [QuarterYear]="masterModel.quarterYear"
+                                                    (onCalendarYearPicked)="quarterYearPicker($event)">
+                                                </quarter-year-control>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-none">
+                                        <button id="hiddenReset" type="submit"
+                                            class=" width-120 width-135 reset-update-portfolio-css ml-2"
+                                            name="Reset">Reset</button>
+                                        <button id="hiddenSavePreset" type="submit"
+                                            class=" width-120 width-135 reset-update-portfolio-css ml-2"
+                                            name="Save Preset">Save Preset</button>
+                                        <button id="hiddenApply" type="submit"
+                                            class=" width-120 width-135 reset-update-portfolio-css ml-2"
+                                            name="Apply">Apply</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <div class="row mr-0 ml-0">
+                        <div class="col-lg-12 col-md-12 col-sm-12  col-12 col-xl-12  pr-0 pl-0">
+                            <div class=" float-right draft-action">
+                                <span class="pr-2">
+                                    <button onclick="document.getElementById('hiddenReset').click()" name="Reset"
+                                        class="nep-button btn-space reset-btn">Reset</button>
+                                </span>
+                                <span class="pr-2">
+                                    <button [disabled]="isApplySavePreset"
+                                        onclick="document.getElementById('hiddenSavePreset').click()"
+                                        name="Save Preset" class="nep-button btn-space nep-button-secondary">Save
+                                        Preset</button>
+                                </span>
+                                <span>
+                                    <button 
+                                        onclick="document.getElementById('hiddenApply').click();" name="Apply"
+                                        class="nep-button btn-space nep-button-primary">Apply</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-panel>
+        </div>
+    </div>
+</div>
+<div class="row ml-0 mr-0">
+    <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0 pl-0 company-finacial company-kpis"
+        *ngIf="tabList.length>0">
+        <div class="financial-page">
+            <div class="panel panel-default border-0 pt-2 tab-bg">
+                <div class="panel-heading">
+                    <div class="panel-title custom-tabs">
+                        <ul class="nav nav-tabs ">
+                            <li class="nav-item" role="presentation" *ngFor="let tab of tabList;"
+                                (click)="selectTab(tab);">
+                                <button class="nav-link nav-custom" [ngClass]="tab.active?'active':''" id="home-tab"
+                                    data-bs-toggle="tab" type="button" title="{{tab.aliasname}}" role="tab" aria-controls="home"
+                                    aria-selected="true">
+                                    {{tab.aliasname}}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-bg">
+                <div class="align-items-start">
+                    <div class="ui-widget-header" [ngClass]="tableData.length==0 ?'nep-border-b':''">
+                        <div class="row mr-0 ml-0">
+                            <div
+                                class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0 pb-2 pt-2">
+                                    <div class="allvalues-kpis" *ngIf="tabName !== topholdingsConstants.TopHoldingsByGrossTvpi">All values in Millions</div>
+                                <div class="float-right">
+                                    <div class="d-inline-block">
+                                        <img class="p-action-padding download-excel"
+                                            (click)="exportTopHoldingReport()" title="Export  (Excel file)"
+                                            src="assets/dist/images/Cloud-download.svg" alt="" />
+                                        <span class="excel-load" *ngIf="isExportLoading"><i aria-hidden="true"
+                                                class="fa fa-circle-o-notch fa-1x fa-fw"></i>
+                                        </span>
+                                    </div>
+                                    <div class="d-inline">
+                                        <span class="col-divider">
+                                        </span>
+                                    </div>
+                                    <div class="d-inline-block pl-2 pref-icon"><img id="dropdownMenuButton"
+                                            [matMenuTriggerFor]="menu"
+                                            src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter"
+                                            alt="" #Trigger="matMenuTrigger" alt="" /> </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="datatable-container top-holding-table">
+                        <p-table styleClass="p-datatable-gridlines" id="table" [scrollable]="true"
+                            [columns]="tableColumns" *ngIf="tableData.length>0" [value]="tableData"
+                         
+                            class="top-holding-lastrow fixed-calculation-table Track-Records cashflow-tbl text-left investor-tr-table custom-kpi-table  invested-table top-holding-lastrow"
+                            [scrollHeight]="'calc(100vh - 332px)'">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <ng-container *ngFor="let col of frozenTableColumns;">
+                                        <th pFrozenColumn  [ngClass]="(col.header=='Portfolio Company' || col.header=='Fund')?'frozen-header-tr-Width':''"
+                                            *ngIf="col.header=='Portfolio Company' || col.header=='Fund'"
+                                            class="TextTruncate" title="{{col.header}}">
+                                            {{col.header}}
+                                        </th>
+                                    </ng-container> 
+                                    <ng-container *ngFor="let col of columns;">
+                                        <th *ngIf="col.header!='Portfolio Company' && col.header!='Fund'"
+                                            class="TextTruncate" title="{{col.header}}" scope="col">
+                                            {{col.header}}
+                                        </th>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr>
+                                    <ng-container *ngFor="let col of frozenTableColumns;">
+                                        <td pFrozenColumn [ngClass]="(col.header=='Portfolio Company' || col.header=='Fund')?'frozen-header-tr-Width':''"
+                                        *ngIf="col.header=='Portfolio Company' " [class.font-weight-bold]="rowData['Portfolio Company']=='Total'"
+                                        class="table-data-left TextTruncate"
+                                        [class.higlighted-cell]="col.header=='Gain/(Loss)' || col.header=='TVPI' || col.header=='% Contribution'"
+                                        title="{{rowData[col.field]}}">
+                                        {{
+                                        rowData[col.field]
+                                        }}
+                                    </td>
+                                    <td pFrozenColumn [ngClass]="(col.header=='Portfolio Company' || col.header=='Fund')?'frozen-header-tr-Width':''"
+                                        *ngIf="col.header=='Fund' "
+                                        [class.font-weight-bold]="rowData['Portfolio Company']=='Total'"
+                                        class="table-data-left TextTruncate"
+                                        [class.higlighted-cell]="col.header=='Gain/(Loss)' || col.header=='TVPI' || col.header=='% Contribution'">
+                                        <span>
+                                            <a class="cursor top-holding-lnk"
+                                                *ngIf="rowData[col.field].split('**').length==1"
+                                                [routerLink]="['/fund-details', rowData[col.field].split('~')[1]]" title="{{rowData[col.field].split('~')[0]}}">{{rowData[col.field].split('~')[0]}}</a>
+                                            <a class="cursor top-holding-lnk "
+                                                *ngIf="rowData[col.field].split('**').length>1"
+                                                (click)="loadFundsList(rowData[col.field])"
+                                                [matMenuTriggerFor]="menuInvestor" title="{{rowData[col.field].split('~')[0]}} + {{rowData[col.field].split('**').length-1}}" >{{rowData[col.field].split('~')[0]}}
+                                                + {{rowData[col.field].split('**').length-1}}</a>
+                                        </span>
+                                    </td>
+                                    </ng-container>
+                                    <ng-container *ngFor="let col of columns">
+                                        <td *ngIf="col.header!='Portfolio Company' && col.header!='Fund'"
+                                            [class.font-weight-bold]="rowData['Portfolio Company']=='Total'"
+                                            [ngClass]=" col.header=='TVPI'?'table-data-right':''"
+                                            class="{{miscService.checkIfStringIsFloat(rowData[col.field])? 'table-data-right':''}}"
+                                            [class.higlighted-cell]="col.header=='Gain/(Loss)' || col.header=='TVPI' || col.header=='% Contribution'">
+                                            <span [innerHtml]='
+                                            (col.header=="Gain/(Loss)")?(rowData[col.field]==null?"NA":rowData[col.field] | number : NumberDecimalConst.currencyDecimal |minusSignToBrackets):
+                                            (col.header=="TVPI")?(rowData[col.field]==null?"NA":rowData[col.field] | formatNumbers):
+                                            (col.header=="% Contribution")?(rowData[col.field]==null?"NA":rowData[col.field] | number: NumberDecimalConst.percentDecimal ):
+                                            (col.header=="Current Realized Value")?(rowData[col.field]==null?"NA":rowData[col.field] | number:NumberDecimalConst.currencyDecimal |minusSignToBrackets):
+                                            (col.header=="Current Unrealized Value")?(rowData[col.field]==null?"NA":rowData[col.field] | number: NumberDecimalConst.currencyDecimal |minusSignToBrackets):
+                                            (col.header=="Total Value")?(rowData[col.field]==null?"NA":rowData[col.field] | number: NumberDecimalConst.currencyDecimal |minusSignToBrackets):
+                                            (col.header=="Current Invested Capital")?(rowData[col.field]==null?"NA":rowData[col.field] | number: NumberDecimalConst.currencyDecimal |minusSignToBrackets):
+                                            rowData[col.field]
+                                        '></span>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <app-empty-state [isGraphImage]="false" *ngIf="tableData?.length == 0">
+                        </app-empty-state>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button #collapsedevent class="d-none" (click)="collapsed = true">Collapse</button>
+<div *ngIf="isSaveFilterPopup">
+    <confirm-modal class="AddOrUpdateKpi" primaryButtonName="Confirm" (secondaryButtonEvent)="onClose()"
+        [disablePrimaryButton]="disableConfirmSave" (primaryButtonEvent)="confirmSave();" id="add_template"
+        secondaryButtonName="Cancel" [modalTitle]="title">
+        <div class="row mr-0 ml-0">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0">
+                <div class="row mr-0 ml-0">
+                    <div class="col-lg-12 col-md-5 col-xs-5 pl-0 pr-0 ">
+                        <div class="mandatory-label">Filter Name
+                        </div>
+                        <nep-input (onBlur)="ontemplateChange($event);" (mouseout)="ontemplateChange($event);"
+                            (onChange)="ontemplateChange($event)" [ngClass]="{'custom-error-kpi-input':isexits}"
+                            [value]="filterName" [placeholder]=placeholderFilterName
+                            class="kpis-custom-select custom-nep-input filter-txt-color lp-nep-input "></nep-input>
+                        <div *ngIf="isexits" class="nep-error">Filter name already exits</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </confirm-modal>
+</div>
+<confirm-modal *ngIf="confirmDelete" primaryButtonName="Ok" secondaryButtonName="Cancel"
+    (primaryButtonEvent)="deleteFilter()" modalTitle="Delete" (secondaryButtonEvent)="CancelDelete()">
+    <div>Are you sure you want to delete the saved filter?</div>
+</confirm-modal>
+<mat-menu #menu="matMenu" [hasBackdrop]="true" class="fixed-menu">
+    <div class="filter-first" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
+        <div class="row m-0 ">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pl-3 pr-3 pb-2 sortby-padding">
+                <div class="p-label-padding">Sort By</div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pl-3 pr-3 pb-3">
+                <p-dropdown appendTo="body" (ngModelChange)="onSortChange($event)" [(ngModel)]="sortByValue"
+                    panelStyleClass="mat-menu-dropdown" optionLabel="label" optionValue="value"
+                    [options]="sortTypes" class="topholding-filter-dopdown" tabindex="1"></p-dropdown>
+            </div>
+        </div>
+        <div class="row m-0 ">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <div class="p-label-padding">Number of Companies</div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pl-3 pr-3 pb-1">
+                <nep-input (onKeyPress)="isNumericFunction($event);" (keyup)="onNumberOfCompanies($event);"
+                    value="{{numberOfCompanies}}" [placeholder]=placeholderName
+                    class="custom-nep-input default-text-color">
+                </nep-input>
+            </div>
+
+        </div>
+        <div class="row m-0 ">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12 pl-3 pr-3">
+                <div class="p-label-padding label-font-size">Enter a no. between 1 to {{masterCompaniesCount}}</div>
+                <div class="p-label-padding label-font-size nep-error" *ngIf="isMorethanNumber">Number entered is
+                    more
+                    than the total number of Companies</div>
+            </div>
+        </div>
+    </div>
+    <div class="filter-footer pr-3 pb-3">
+        <div class="d-inline ">
+            <button type="reset" (click)="menuTrigger.closeMenu();" class="btn btn-reset ">Cancel</button>
+        </div>
+        <div class="d-inline ">
+            <button type="submit" [disabled]="isMorethanNumber"   class="btn btn-light btn-app  pt-0 pb-0"(click)="toggleableApply();menuTrigger.closeMenu()">
+               Apply</button>
+        </div>
+    </div>
+</mat-menu>
+
+<mat-menu #menuInvestor="matMenu" backdropClass="investor-menu">
+    <div class="custom-investor-menu">
+        <div class="investor-menu-header">
+            <div class="float-left invest-header">
+                Funds
+            </div>
+            <div class="float-right">
+                <img class="close-img" alt="" src="assets/dist/images/Clear Grey.svg" />
+            </div>
+        </div>
+        <div class="investor-list">
+            <button mat-menu-item class="custom-invest-btn" *ngFor="let investor of fundItems">
+                <a title="{{investor?.label}}" class="invest-link TextTruncate cursor "
+                    [routerLink]="['/fund-details', investor?.value]">
+                    {{investor?.label}}</a>
+            </button>
+        </div>
+    </div>
+</mat-menu>
+
+<app-loader-component *ngIf="isLoader"></app-loader-component>

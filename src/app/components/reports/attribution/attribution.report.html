@@ -1,0 +1,470 @@
+<div class="row accordion-row top-holding-section ">
+    <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0">
+        <div class="workflow-draft">
+            <p-panel  expandIcon="pi pi-chevron-down" collapseIcon="pi pi-chevron-up"   [toggleable]="true" [(collapsed)]="collapsed" styleClass="top-holding-panel">
+                <ng-template pTemplate="icons">
+                    <div class="float-left pb-2 pt-2  cursor-pointer filter-collapse-text" (click)="collapsed = !collapsed">All Filters</div>
+                </ng-template>
+                <ng-template pTemplate="header">
+        <div >
+            <p-dropdown  placeholder="Select filter preset" [filter]="true" [filterBy]="'userReportName'"  class="custom-p-dropdown icon-dropdown fund-custom-dropdown custom-searchable-dropdown internal-select"
+                [options]="optionsList" (onChange)="OnFiltersSelected()" [(ngModel)]="selectReport">
+                <ng-template let-item pTemplate="selectedItem">
+                    <div class="d-inline-block"><img class="pr-1" *ngIf="item.isDefault" src="assets/dist/images/FeedbackStarGrey.svg" alt="" /></div>
+                    <div title="{{item.userReportName}}" class="d-inline-block custom-label">{{item.userReportName}}</div>
+                </ng-template>
+                <ng-template let-object pTemplate="item">
+                   <div class="custom-ui-label custom-delete-hover custom-zindex-parent cus-ui-topinvs-dele-z-d-mw">
+                        <span title="{{object.userReportName}}" class="img-pad TextTruncate">
+                            <img class="pr-1"
+                            *ngIf="object.isDefault" src="assets/dist/images/FeedbackStarGrey.svg" alt="" />{{object.userReportName}}
+                        </span>
+                        <span   class="float-right  custom-zindex-child custom-internal-top-invest-delete">
+                            <img class="deleteicon  pl-0 pt-0 float-right" (click)="OnDeleteFilter()" src="assets/dist/images/delete.svg"
+                                alt="delete" />
+                        </span>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+                </ng-template>
+              <ng-template pTemplate="content">
+                    <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-1 pr-1">
+                        <div class="row mr-0 ml-0  pr-0 pl-0">
+                            <form name="form" class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0" (ngSubmit)="form.valid && search(form)" #form="ngForm">
+                                <div class="row ml-0 mr-0">
+                                    <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Strategy" for="Strategy">Strategy</div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                                <span class="report-field">
+                                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true" [virtualScrollItemSize]="36" name="Strategy" [disabled]="strategyList==undefined" #Strategy="ngModel" [resetFilterOnHide]=true [options]="strategyList" defaultLabel="Select" [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'" [(ngModel)]="model.strategyIds" optionLabel="strategy" (onChange)="onStrategyChanged($event)">
+                                                    <ng-template let-strategy pTemplate="item">
+                                                        <span title="{{strategy.strategy}}">{{strategy.strategy}}</span>
+                                                    </ng-template>
+                                                    </p-multiSelect>
+                                                 </span>
+                                                <div class="loading-input-controls" *ngIf="strategyList==undefined"><i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Funds" for="Funds">Funds</div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                                <span class="report-field">
+                                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true" [virtualScrollItemSize]="36" name="Funds" [disabled]="fundList==undefined" #Funds="ngModel" [resetFilterOnHide]=true [options]="fundList" defaultLabel="Select" [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'" [(ngModel)]="model.fundIds" (onChange)="OnFundChanged($event)" optionLabel="fundName">
+                                                    <ng-template let-fund pTemplate="item">
+                                                        <span title="{{fund.fundName}}">{{fund.fundName}}</span>
+                                                    </ng-template>
+                                                    </p-multiSelect>
+                                                 </span>
+                                                <div class="loading-input-controls" *ngIf="fundList==undefined"><i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isDisplayRegion" class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Region" for="Region">Region</div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                                <span class="report-field">
+                                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true" [virtualScrollItemSize]="36"  name="Region" [disabled]="regionList==undefined" #Region="ngModel" [options]="regionList" [resetFilterOnHide]=true defaultLabel="Select" [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'" [(ngModel)]="model.regionIds" optionLabel="region" (onChange)="onRegionChange($event)">
+                                                    <ng-template let-region pTemplate="item">
+                                                        <span title="{{region.region}}"> {{region.region}}</span>
+                                                    </ng-template>
+                                                    </p-multiSelect>
+                                                </span>
+                                                <div class="loading-input-controls" *ngIf="regionList==undefined"><i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="isDisplayCountry" class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Country" for="Country">Country</div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                                <span class="report-field">
+                                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true" [virtualScrollItemSize]="36" name="Country"  [disabled]="countryLoading" #Country="ngModel" [resetFilterOnHide]=true [options]="countryList" defaultLabel="Select" [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'" [(ngModel)]="model.countryIds" optionLabel="country" (onChange)="onCountryChange($event)" >
+                                                    <ng-template let-country pTemplate="item">
+                                                        <span title="{{country.country}}">{{country.country}}</span>
+                                                    </ng-template>
+                                                    </p-multiSelect>
+                                                 </span>
+                                                <div class="loading-input-controls" *ngIf="countryLoading"><i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div  class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 pl-3  pr-3  label-content-padding">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Evaluation Quarter & Year" for="TimePeriod">Evaluation Quarter & Year</div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                                <div class="input-group attribution-report-padding" >
+                                                    <quarter-year-control [width]="333" class="custom-quarter-year col-12 pl-0 pr-0" [ControlName]="'quarterYearCntrl'"
+                                                    [QuarterYear]="model.quarterYear"
+                                                    (onCalendarYearPicked)="quarterYearPicker($event)"></quarter-year-control>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div  class="col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3 pl-3  pr-3  label-content-padding"*ngIf="!isLarissa">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-md-12 col-lg-12 pb-1 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                                <div class="p-label-padding filter-label TextTruncate" title="Range" for="HoldingsBy">Range</div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                                <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <input class="form-control range-in" placeholder="Lower" type="text" name="rangeStart" (keypress)="keyPressNumbers($event)" [(ngModel)]="model.rangeStart"  #rangeStart />
+                                                    <input class="form-control range-in" placeholder="Higher" (keypress)="keyPressNumbers($event)" type="text" name="rangeEnd" [(ngModel)]="model.rangeEnd" #rangeEnd />
+                                                    <input class="form-control range-in" placeholder="Parts" type="text" (keypress)="keyPressNumbers($event)" name="rangeParts" [(ngModel)]="model.rangeParts"  #rangeParts />
+                                                </div>
+                                                <div *ngIf="rangeInvalid" class="text-danger">Lower end of range should be lesser than higher end</div>
+                                                <div *ngIf="!rangeInvalid && partsRequired" class="text-danger">Please enter valid value of parts</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <div class="row mr-0 ml-0">
+                        <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                            <div class=" float-right draft-action">
+                                <nep-button class="custom-reset-button pref-icon" (click)="resetForm(form)">Reset</nep-button>
+                                <nep-button class="pref-icon" Type="Secondary" [disabled]="!IsEnabled" (click)="SaveFilters()">Save
+                                    Preset</nep-button>
+                                <nep-button Type="Primary" [disabled]="!IsEnabled" (click)="search($event)">Apply</nep-button>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-panel>
+        </div>
+    </div>
+</div>
+<div class="row mr-0 ml-0 header-section header-performance">
+    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 trackrecord-section">
+        <div class="financial-page">
+            <div class="panel panel-default border-0 tab-bg">
+                <div class="panel-heading">
+                    <div class="row mr-0 ml-0 pt-2 tab-shadow">
+                        <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0 pl-0">
+                            <nep-tab id="neptab" class="custom-pipeline-tab" (OnSelectTab)="selectTab($event)" [tabList]=tabList>
+                            </nep-tab>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-bg charts-parent-div">
+                <div class="col-12" *ngIf="enableTab == 'Graphs'">
+                    <div class="row" *ngFor="let data of reportData" (resized)="onResized($event)">
+                        <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12">
+                            <span></span>
+                             <!-- <p-dialog [resizable]="false" [closeOnEscape]="false" [dismissableMask]="false"
+                                (onHide)="hideFullView()" #pDialog [(visible)]="displayFullView" [modal]="true" [responsive]="true"
+                                [width]="fullViewWidth" [minY]="70" [maximizable]="false"
+                                [baseZIndex]="10000">
+                                <p-header>
+                                    {{fullViewModel.title}}
+                                </p-header>
+                                <div class="model-custom-padding">
+                                    <app-donut-chart [isDisplay]="width" [fullView]="true" [unit]="'M'"
+                                        [catField]="fullViewModel.catField" [valField]="fullViewModel.valField"
+                                        [data]="fullViewModel.data" [title]="fullViewModel.title"></app-donut-chart>
+                                </div>
+                            </p-dialog> -->
+                             <div *ngIf="displayFullView" class="nep-modal nep-modal-show custom-modal" style="display: block; background: rgba(0, 0, 0, 0.25);">
+                                <div class="nep-modal-mask"></div>
+                                <div [style.width]="fullViewWidth" class="nep-card nep-card-shadow nep-modal-panel nep-modal-default" style="position: relative; display: inline-flex; top: 6%;">
+                                    <div class="nep-card-header nep-modal-title">
+                                        <div class="float-left TextTruncate">{{fullViewModel.title}}</div>
+                                        <div class="float-right" (click)="hideFullView()">
+                                            <div class="close-icon"><i  class="pi pi-times"></i></div>
+                                        </div>
+                                    </div>
+                                    <div class="nep-card-body">
+                                       
+                                            <div class="model-custom-padding">
+                                                <app-donut-chart [isDisplay]="width" [fullView]="true" [unit]="'M'"
+                                                    [catField]="fullViewModel.catField" [valField]="fullViewModel.valField"
+                                                    [data]="fullViewModel.data" [title]="fullViewModel.title"></app-donut-chart>
+                                            </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 attribute">
+                            <div class="row ">
+                                <div class="col-sm-6 pl-0 pr-0 pad-right-0 graph-custom-padding">
+                                    <h5 class="p-0">Capital Invested</h5>
+                                    <div class="chart-bg p-0 m-top0 expand-visible empty-state-padding" *ngIf="data.Results.length == 0">
+                                        <app-empty-state [isGraphImage]="true"></app-empty-state>
+                                    </div>
+                                    <div class="chart-bg p-0 m-top0 expand-visible" *ngIf="data.Results.length !=0"
+                                        (click)="showFullView({title:'Capital Invested',catField:data.Columns[0],valField:'Capital Invested',data:data.Results})">
+                                        <div class="chart-section"> 
+                                            <app-donut-chart [isDisplay]="width" [unit]="'M'" [catField]="data.Columns[0]"
+                                                [valField]="'Capital Invested'" [data]="data.Results" [title]="'Capital Invested'">
+                                            </app-donut-chart>
+                                            <a class="expand"
+                                                (click)="showFullView({title:'Capital Invested',catField:data.Columns[0],valField:'Capital Invested',data:data.Results})"
+                                                title="Full View">
+                                                <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 pl-0 pr-0 pad-left-0  graph-custom-padding"
+                                    *ngIf="data.Columns.indexOf('Unrealized Value')>=0">
+                                    <h5 class="p-0">Unrealized Value</h5>
+                                    <div class="chart-bg p-0 m-top0 expand-visible empty-state-padding" *ngIf="data.Results.length == 0">
+                                        <app-empty-state [isGraphImage]="true"></app-empty-state>
+                                    </div>
+                                    <div class="chart-bg p-0 m-top0 expand-visible" *ngIf="data.Results.length !=0"
+                                        (click)="showFullView({title:'Unrealized Value',catField:data.Columns[0],valField:'Unrealized Value',data:data.Results})">
+                                        <div class="chart-section">
+                                            <app-donut-chart [isDisplay]="width" [unit]="'M'" [catField]="data.Columns[0]"
+                                                [valField]="'Unrealized Value'" [data]="data.Results" [title]="'Unrealized Value'">
+                                            </app-donut-chart>
+                                            <a class="expand"
+                                                (click)="showFullView({title:'Unrealized Value',catField:data.Columns[0],valField:'Unrealized Value',data:data.Results})"
+                                                title="Full View">
+                                                <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 pl-0 pr-0 pad-left-0  graph-custom-padding"
+                                    *ngIf="data.Columns.indexOf('Realized Value')>=0">
+                                    <h5 class="p-0">Realized Value</h5>
+                                    <div class="chart-bg custom-modal-height p-0 m-top0 expand-visible empty-state-padding" *ngIf="data.Results.length == 0">
+                                        <app-empty-state [isGraphImage]="true"></app-empty-state>
+                                    </div>
+                                    <div class="chart-bg p-0 m-top0 expand-visible" *ngIf="data.Results.length !=0"
+                                        (click)="showFullView({title:'Realized Value',catField:data.Columns[0],valField:'Realized Value',data:data.Results})">
+            
+                                        <div class="chart-section">
+                                            <app-donut-chart [isDisplay]="width" [unit]="'M'" [catField]="data.Columns[0]"
+                                                [valField]="'Realized Value'" [data]="data.Results" [title]="'Realized Value'">
+                                            </app-donut-chart>
+                                            <a class="expand"
+                                                (click)="showFullView({title:'Realized Value',catField:data.Columns[0],valField:'Realized Value',data:data.Results})"
+                                                title="Full View">
+                                                <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 pl-0 pr-0 pad-left-0 graph-custom-padding"
+                                    *ngIf="data.Columns.indexOf('Total Value')>=0">
+                                    <h5 class="p-0">Total Value</h5>
+                                    <div class="chart-bg p-0 m-top0 expand-visible empty-state-padding" *ngIf="data.Results.length == 0">
+                                        <app-empty-state [isGraphImage]="true"></app-empty-state>
+                                    </div>
+                                    <div class="chart-bg p-0 m-top0 expand-visible" *ngIf="data.Results.length !=0"
+                                        (click)="showFullView({title:'Total Value',catField:data.Columns[0],valField:'Total Value',data:data.Results})">
+                                        <div class="chart-section">
+                                            <app-donut-chart [isDisplay]="width" [unit]="'M'" [catField]="data.Columns[0]"
+                                                [valField]="'Total Value'" [data]="data.Results" [title]="'Total Value'">
+                                            </app-donut-chart>
+                                            <a class="expand"
+                                                (click)="showFullView({title:'Total Value',catField:data.Columns[0],valField:'Total Value',data:data.Results})"
+                                                title="Full View">
+                                                <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 pl-0 pr-0 graph-custom-bg">
+                            <div class="row ml-0 mr-0">
+                                <div class="col-sm-6 pl-0 pr-0 footer-custom-padding" *ngIf="data.Columns.indexOf('TVPI')>=0">
+                                    <h5>Total Value Paid In (TVPI)</h5>
+                                    <div class="chart-bg label-content-padding">
+                                        <div class="line-chart-section empty-state-padding" *ngIf="data.Results.length == 0">
+                                            <app-empty-state [isGraphImage]="true"></app-empty-state>
+                                        </div>
+                                        <div class="line-chart-section" *ngIf="data.Results.length !=0">
+                                            <app-bar-chart [isDecimalDisplay]="true" [isDisplay]="width" [data]="data.Results"
+                                                [xField]="data.Columns[0]" [yField]="'TVPI'" [valueSuffix]="'x'"></app-bar-chart>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 pl-0 pr-0 footer-custom-padding"
+                                    *ngIf="data.Columns.indexOf('# of Investments')>=0">
+                                    <h5>Number of Investments</h5>
+                                    <div class="chart-bg label-content-padding ">
+                                        <div class="line-chart-section empty-state-padding" *ngIf="data.Results.length == 0">
+                                            <app-empty-state [isGraphImage]="true"></app-empty-state>
+                                        </div>
+                                        <div class="line-chart-section row" *ngIf="data.Results.length != 0">
+                                            <div [hidden]="data.childChart" id="divCompanyCountBarChart" class="col-sm-12">
+                                                <app-bar-chart [isDecimalDisplay]="false" [isDisplay]="width" [data]="data.Results"
+                                                    [xField]="data.Columns[0]" [yField]="'# of Investments'"
+                                                    (barClicked)="onRegionClicked($event,data)"></app-bar-chart>
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <app-donut-chart [isDisplay]="width" [unit]="''" *ngIf="data.childChart"
+                                                    [catField]="data.childChart.Columns[0]" [valField]="data.childChart.Columns[1]"
+                                                    [data]="data.childChart.Results" [title]="'# of Companies'"></app-donut-chart>
+                                            </div>
+                                            <div id="divChildDonutChart" class="col-sm-4" [hidden]="!data.childChart"
+                                                (click)="showParentReport(data)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" *ngIf="enableTab != 'Graphs'">
+                    <div class="row">
+                        <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pl-0 pr-0 trackrecord-section boxshodow data-financial-page filter-bg">
+                            <div class="row mr-0 ml-0 fund-performance-content">
+                                <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 ui-widget-header  align-items-start chart-area chrt-area-bn"
+                                 >
+                                     <div class="row mr-0 ml-0 custom-backgroudcolor"  [ngClass]="tableData.length == 0?'empty-table-border':''" >
+                                        <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                                            <div class="float-left">
+                                            </div>
+                                            <div class="float-right-icon float-rprt-fr">
+                                                <div class="d-inline-block search">
+                                                   <img tabindex="0" 
+                                                            src="assets/dist/images/Cloud-download.svg" 
+                                                            class="cursor-filter" title="Export(Excel file)" (click)="exportTopHoldingReport()"
+                                                            alt="" /><span
+                                                            class="excel-load excel-load-marg"
+                                                            *ngIf="isExportLoading">
+                                                            <i aria-hidden="true"
+                                                                class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                                        </span>
+                                                </div>
+                                                <div class="d-inline float-left-right custom-border-right">
+                                                    <span class="col-divider">
+                                                    </span>
+                                                </div>
+                                                <div class="d-inline-block">
+                                                    <img id="dropdownMenuButton" 
+                                                        src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter"
+                                                        alt="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="datatable-container top-holding-table">
+                                        <p-table styleClass="p-datatable-gridlines" [columns]="tableColumns" [scrollable]="true"
+                                         [ngClass]="enableTab == 'Data'?'top-holding-lastrow fixed-calculation-table':''"
+                                        [value]="tableData"   [resizableColumns]="true" [scrollHeight]="'calc(100vh - 332px)'"  class="cashflow-tbl">
+                                        <ng-template pTemplate="colgroup" let-columns>
+                                            <colgroup>
+                                                <col *ngFor="let col of columns">
+                                            </colgroup>
+                                        </ng-template>
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <ng-container *ngFor="let col of frozenTableColumns;">
+                                                    <th [ngStyle]="{'width':'332px'}" pFrozenColumn  Class="frozen-header-tr-Width"
+                                                        *ngIf="(col.header=='Sector' || col.header=='Region' || col.header=='Status' || col.header=='Year' || col.header=='Investment Size'
+                                                        || col.header=='Ownership' || col.header=='Exit Method' || col.header=='Board Seat' || col.header=='Fund'
+                                                        || col.header=='Strategy' || col.header=='Security Type' || col.header=='Transaction Role' || col.header=='Deal Sourcing'   
+                                                        || col.header=='Currency' || col.header=='Holding Period')"
+                                                        class="TextTruncate" title="{{col.header}}">
+                                                        {{col.header}}
+                                                    </th>
+                                                </ng-container>
+                                                <ng-container *ngFor="let col of columns;">
+                                                    <th *ngIf="(col.header != 'Sector' && col.header != 'Region' && col.header != 'Status' && col.header != 'Year' && col.header != 'Investment Size'
+                                                    && col.header != 'Ownership' && col.header != 'Exit Method' && col.header != 'Board Seat' && col.header != 'Fund'
+                                                    && col.header != 'Strategy' && col.header != 'Security Type' && col.header != 'Transaction Role' && col.header != 'Deal Sourcing'   
+                                                    && col.header != 'Currency' && col.header != 'Holding Period')"
+                                                        class="TextTruncate" title="{{col.header}}">
+                                                        {{col.header}}  
+                                                    </th>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <tr>
+                                                <ng-container *ngFor="let col of frozenTableColumns;">
+                                                    <td  pFrozenColumn class="frozen-header-tr-Width"
+                                                    *ngIf="(col.header=='Sector' || col.header=='Region' || col.header=='Status' || col.header=='Year' || col.header=='Investment Size'
+                                                    || col.header=='Ownership' || col.header=='Exit Method' || col.header=='Board Seat' || col.header=='Fund'
+                                                    || col.header=='Strategy' || col.header=='Security Type' || col.header=='Transaction Role' || col.header=='Deal Sourcing'   
+                                                     || col.header=='Currency' || col.header=='Holding Period')" 
+                                                    [class.font-weight-bold]="rowData[col.header]=='Total'"
+                                                    class="table-data-left TextTruncate"
+                                                    title="{{rowData[col.field]}}">
+                                                    {{
+                                                    rowData[col.field]
+                                                    }} 
+                                                </td>
+                                                </ng-container>
+                                                <ng-container *ngFor="let col of columns">
+                                                    <td *ngIf="(col.header != 'Sector' && col.header != 'Region' && col.header != 'Status' && col.header != 'Year' && col.header != 'Investment Size'
+                                                    && col.header != 'Ownership' && col.header != 'Exit Method' && col.header != 'Board Seat' && col.header != 'Fund'
+                                                    && col.header != 'Strategy' && col.header != 'Security Type' && col.header != 'Transaction Role' && col.header != 'Deal Sourcing'   
+                                                    && col.header != 'Currency' && col.header != 'Holding Period')"
+                                                   class="table-data-right TextTruncate"
+                                                    >
+                                                    <span
+                                                        [innerHtml]='(col.header=="TVPI")?(rowData[col.field]==null?"NA":(rowData[col.field] | number : NumberDecimalConst.multipleDecimal)+"x") : 
+                                                        (col.header=="Capital Invested")?(rowData[col.field]==null?"NA":(rowData[col.field] | number:  NumberDecimalConst.currencyDecimal)):
+                                                        (col.header=="% of Total Capital")?(rowData[col.field]==null?"NA":(rowData[col.field] | number:  NumberDecimalConst.currencyDecimal)):
+                                                        (col.header=="Unrealized Value")?(rowData[col.field]==null?"NA":(rowData[col.field] | number:  NumberDecimalConst.currencyDecimal)):
+                                                        (col.header=="% of Unrealized Value")?(rowData[col.field]==null?"NA":(rowData[col.field] | number:  NumberDecimalConst.currencyDecimal)):
+                                                        (col.header=="Realized Value")?(rowData[col.field]==null?"NA":(rowData[col.field] | number:  NumberDecimalConst.currencyDecimal)):
+                                                        (col.header=="% of Realized Value")?(rowData[col.field]==null?"NA":(rowData[col.field] | number:  NumberDecimalConst.currencyDecimal)):
+                                                        (col.header=="Total Value")?(rowData[col.field]==null?"NA":(rowData[col.field] | number:  NumberDecimalConst.currencyDecimal)):
+                                                        (col.header=="% of Total Value")?(rowData[col.field]==null?"NA":(rowData[col.field] | number:  NumberDecimalConst.currencyDecimal)):
+                                                        rowData[col.field]|minusSignToBrackets|formatNumbers'></span>
+                                                </td>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                        <app-empty-state [isGraphImage]="false"
+                                            *ngIf="tableData?.length == 0"></app-empty-state>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="confirmSave">
+    <confirm-modal primaryButtonName="Confirm" secondaryButtonName="Cancel" modalTitle="Save Filter"
+        (primaryButtonEvent)="onSave()" [disablePrimaryButton]="disablePrimaryButton" (secondaryButtonEvent)="onCancel()">
+        <div class="nep-save-dialog">
+            <label class="nep-label mandatory-label neplbl-rprt-ff">Filter Name</label>
+            <nep-input inputstyle="outlined" placeholder="Enter filter name" (keyup)="OnFilterNamedChanged($event)"
+                value={{userReportName}}></nep-input>
+            <div *ngIf="DuplicateRecord" class="atrbtn-report-pt-pl" class="text-danger">Name already
+                exist</div>
+        </div>
+    </confirm-modal>
+</div>
+<div>
+    <confirm-modal *ngIf="confirmDelete" primaryButtonName="Ok" secondaryButtonName="Cancel"
+        (primaryButtonEvent)="Delete()" modalTitle="Delete" (secondaryButtonEvent)="CancelDelete()">
+        <div>Are you sure you want to delete the saved filter?</div>
+    </confirm-modal>
+</div>
+<nep-message *ngIf="ShowFilterUpdated">Filter updated successfully</nep-message>
+<app-loader-component *ngIf="loading"></app-loader-component>

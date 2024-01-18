@@ -1,0 +1,61 @@
+.pipeline-details {
+    margin: 0px -20px 0px -20px;
+    .pipeline-name {
+        color: #212121 !important;
+        font-weight: 500;
+        font-size: 14px;
+        font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif !important;
+    }
+    .card-body {
+        padding: 0px 20px !important;
+        a {
+            color: #212121 !important;
+        }
+        .detail-card {
+            background: #FFFFFF 0% 0% no-repeat padding-box;
+            box-shadow: 0px 0px 12px #00000014;
+            border: 1px solid #DEDFE0;
+            border-radius: 4px;
+            opacity: 1;
+            padding: 20px 16px;
+            label {
+                letter-spacing: 0.17px;
+                color: #75787B;
+                opacity: 1;
+                margin-bottom: 0px;
+            }
+            .detail-section {
+                letter-spacing: 0.17px;
+                color: #212121;
+                opacity: 1;
+            }
+            .section-padding {
+                padding-bottom: 16px;
+            }
+        }
+        .desc-section {
+            margin-top: 20px;
+            padding: 16px !important;
+        }
+        .desc-padding {
+            padding-top: 12px;
+        }
+        .detail-sec {
+            letter-spacing: 0px;
+            color: #212121;
+            opacity: 1;
+        }
+    }
+    .pipeline-value-padding{
+        padding-left: 12px !important;
+    }
+    .pipeline-label-padding{
+        padding-left: 32px !important;
+    }
+    .custom-left-width{
+        max-width: 95% !important;
+    }
+    .custom-right-width{
+        max-width: 5% !important;
+    }
+}

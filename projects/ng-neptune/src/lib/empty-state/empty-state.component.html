@@ -1,0 +1,11 @@
+<div class="row mr-0 ml-0 pt-3 pb-3">
+  <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+      <div class="text-center">
+          <img *ngIf="!isGraphImage" alt=""  src="assets/dist/images/empty-state.svg" class="showHandIcon pr-1 mt-0"/>
+          <img *ngIf="isGraphImage" alt=""   src="assets/dist/images/empty-state-graph.svg" class="showHandIcon pr-1 mt-0"/>
+      </div>
+      <div class="text-center pt-2 empty-state-text">
+          {{message!=null && message!='' ? message:'No Data found'}}
+      </div>
+  </div>
+</div>

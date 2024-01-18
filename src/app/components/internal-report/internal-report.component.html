@@ -1,0 +1,475 @@
+<div class="row internal-report-section">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0">
+        <div class="row mr-0 ml-0 report-header d-none">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                <div class="float-left">
+
+                    <div class="d-inline-block action-dropdown"
+                        [ngClass]="selectedItem?.isDefault ? 'disabledNoOfCasesDiv' :''">
+                        <p-dropdown class="custom-p-dropdown custom-choose-section internal-report-action"
+                            [disabled]="selectedItem?.isDefault" [(ngModel)]="selectedAction" [options]="actionList"
+                            optionLabel="name" [showClear]="false">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="float-right">
+
+                </div>
+            </div>
+        </div>
+        <div class="row internal-report-selection">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  internal-report-panel">
+                <div class="float-left">
+                    <div class="d-inline-block template-select">
+                        <p-dropdown placeholder="Select Template" [filter]="true" [filterBy]="'templateName'"
+                            class="custom-p-dropdown icon-dropdown fund-custom-dropdown custom-searchable-dropdown internal-select"
+                            [options]="configurationItem?.internalReportList"
+                            (onChange)="setTemplateSetting();closePanel();" [(ngModel)]="selectedItem">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <div class="d-inline-block"><img class="pr-1" *ngIf="item.isDefault"
+                                        src="assets/dist/images/FeedbackStarGrey.svg" alt="" /></div>
+                                <div title="{{item.templateName}}" class="d-inline-block custom-label">
+                                    {{item.templateName}}</div>
+                            </ng-template>
+                            <ng-template let-object pTemplate="item">
+                                <div class="custom-ui-label custom-delete-hover custom-zindex-parent cus-ui-z-d-mw"
+                                    [ngClass]="!object?.isDefault? 'pl-2':''">
+                                    <span title="{{object.templateName}}" class="img-pad TextTruncate">
+                                        <img class="pr-1" *ngIf="object.isDefault"
+                                            src="assets/dist/images/FeedbackStarGrey.svg"
+                                            alt="" />{{object.templateName}}
+
+                                    </span>
+                                    <span *ngIf="!object.isDefault"
+                                        class="float-right  custom-zindex-child custom-internal-zd">
+                                        <img class="deleteicon  pl-0 float-right"
+                                            (click)="executeAction(object);$event.stopPropagation()"
+                                            src="assets/dist/images/delete.svg" alt="delete" />
+                                    </span>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                    <div class="d-inline-block template-select-pref">
+                        <nep-button (click)="setOption()" Type="Secondary" class="field-nep-button"
+                            id="dropdownMenuButton" #dropdownMenuButton [matMenuTriggerFor]="menu"
+                            #tRecordTrigger="matMenuTrigger">
+                            <img src="assets/dist/images/configuration-blue.svg" class="cursor-filter pr-2 pref-image"
+                                alt="button-image" />
+                            <span>Preferences</span>
+                        </nep-button>
+                    </div>
+                </div>
+                <div class="float-right">
+                    <div class="d-inline-block internal-reset-button pr-12">
+                        <nep-button Type="Secondary" (click)="closePanel();saveAs()" [disabled]="saveBtn || !isApply && (selectedExcelTemplate?.name == 'Quarterly Template'?!(selectedDataType?.length > 0 && selectedPeriodType?.length > 0 && dateRange !=null):!(dateRange !=null))">
+                            Save As
+                        </nep-button>
+                    </div>
+                    <div class="d-inline-block" *ngIf="!this.selectedItem?.isDefault">
+                        <nep-button Type="Primary" (click)="save();closePanel()" [disabled]="saveBtn || !isApply && (selectedExcelTemplate?.name == 'Quarterly Template'?!(selectedDataType?.length > 0 && selectedPeriodType?.length > 0 && dateRange !=null):!(dateRange !=null))">
+                            Save
+                        </nep-button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 pc-kpi-section">
+                <div class="row mr-0 ml-0">
+                    <div class="col-4 pr-0 pl-0 col-sm-4 col-md-4 col-lg-4 col-xl-4 internal-company-section">
+                        <div class="row mr-0 ml-0 internal-pc-search">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                <div class="search"><span class="fa fa-search fasearchicon p-1"></span><input
+                                        [(ngModel)]="company" (input)="filterItem(company)" type="text"
+                                        placeholder="Search company"
+                                        class="search-text-company companyListSearchHeight TextTruncate"></div>
+                            </div>
+                        </div>
+                        <div class="row ml-0 mr-0">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12 pl-0 pr-0 company-internal-list"
+                                [ngStyle]="{'height': 'calc(100vh - 192px)'}">
+                                <div class="row mr-0 ml-0 company-info-mapping internal-report-mapping"
+                                    *ngFor="let item of filteredCompanyList  | companyFilter:companyFilterArgs;"
+                                    [ngClass]="{'company-active' : item.editable}" (click)="selectCompany(item)">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12">
+                                        <div class="row mr-0 ml-0">
+                                            <div
+                                                class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+                                                <div class="company-kpi-list d-inline-block  text-truncate float-left">
+                                                    {{item.companyName}}
+                                                </div>
+                                                <div [ngClass]="item.tick ? 'd-inline-block':'d-none'"
+                                                    class=" float-right tick-company-image">
+                                                    <img src="assets/dist/images/tick-grey.svg" alt="tick" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <app-empty-state class="ir-company-no-data" [isGraphImage]="false"
+                                    *ngIf="filteredCompanyList?.length == 0"></app-empty-state>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8 pr-0 pl-0 col-sm-8 col-md-8 col-lg-8 col-xl-8 internal-kpi-section">
+                        <div class="row mr-0 ml-0 internal-kpi-search">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 kpi-section-map">
+                                <div class="kpi-sec-search">
+                                    <div class="search"><span class="fa fa-search fasearchicon p-1"></span><input #gb
+                                            (input)="tblKpi.filterGlobal($event.target.value, 'contains')" type="text"
+                                            placeholder="Search KPIs"
+                                            class="search-text-company companyListSearchHeight"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0 internal-kpi-list">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 " pDroppable="rowData">
+                                <p-table styleClass="p-datatable-gridlines" [virtualRowHeight]="45" [globalFilterFields]="['kpi','section']" #tblKpi
+                                    class="custom-user-access-table internal-report-tbl internal-tree-table"
+                                    [columns]="headers" [value]="kpiMappingList | moduleFilter:moduleFilterArgs"
+                                    [resizableColumns]="true" [scrollable]="true" 
+                                    [scrollHeight]="'calc(100vh - 240px)'" sortMode="multiple" dataKey="key"
+                                    [expandedRowKeys]="expandedRows">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th id="col.header" *ngFor="let col of columns; index as i"
+                                                [ngClass]="col.field"
+                                                [ngStyle]="col.field === 'checkbox' ?{'padding':'0px','width':'6%', 'padding-left':'16px'}:{}">
+                                                <div *ngIf="col.header !== 'checkbox'">
+                                                    {{ col.header }}
+                                                </div>
+                                                <div *ngIf="col.header === 'checkbox'" id="checkAll"
+                                                    class="text-center style-custom-header fixed-right-column">
+                                                    <mat-checkbox class="text-center" #checkAllBox
+                                                        [checked]="isCheckAll" [disabled]="false"
+                                                        [indeterminate]="selectAllIntermidiateStatus"
+                                                        class="mat-custom-checkbox mat-subfeature-checkbox"
+                                                        (change)="handleHeaderCheckBox($event);">
+                                                    </mat-checkbox>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns"
+                                        let-expanded="expanded" let-index="rowIndex">
+                                        <tr class="custom-row-border" [pReorderableRow]="index" draggable="true"
+                                            (dragend)="onDragEnd(rowData,$event)"
+                                            (dragover)="handleDragOver($event);"
+                                            (drop)="handleDrop(rowData,'Parent');" pDraggable="rowData">
+                                            <td class="cstm-int-wh fixed-left-column" pReorderableRowHandle
+                                                style="width: 6% !important;">
+                                                <span class="drag-icon"><img src="assets/dist/images/6dots.svg"
+                                                        alt=""></span>
+                                            </td>
+                                            <td class="TextTruncate showToolTip kpi-column fixed-right-column">
+                                                <mat-checkbox class="text-center" #checkAllBox
+                                                    [checked]="rowData?.isSelected"  [indeterminate]="rowData?.intermediateStatus" [disabled]="false"
+                                                    class="mat-custom-checkbox mat-subfeature-checkbox"
+                                                    (change)="handleCheckBox(rowData,$event,'');">
+                                                </mat-checkbox>
+                                                <span class="pl-3">{{rowData.kpi}}</span>
+
+                                            </td>
+                                            <td
+                                                class="custom-column-border  TextTruncate showToolTip fixed-right-column">
+                                                {{rowData.section}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="rowexpansion" let-rowData>
+                                        <tr>
+                                            <td colspan="4" class="custom-child-table-padding">
+                                                <p-table styleClass="p-datatable-gridlines" class="child-table-border" [value]="rowData.children"
+                                                    dataKey="id">
+                                                    <ng-template pTemplate="body" let-order>
+                                        <tr class="custom-row-border" (dragover)="handleDrop(rowData,'Child');">
+                                            <td class="fixed-left-column border-right-none"></td>
+
+                                            <td class="TextTruncate  showToolTip kpi-column fixed-right-column">
+
+                                                <div class="row mr-0 margin-left-child">
+                                                    <mat-checkbox class="text-center" #checkAllBox
+                                                        [checked]="order.isSelected" [disabled]="false"
+                                                        class="mat-custom-checkbox mat-subfeature-checkbox"
+                                                        (change)="handleCheckBox(rowData,$event,order);">
+                                                    </mat-checkbox>
+                                                    <span class="pl-3"> {{order.kpi}}</span>
+                                                </div>
+                                            </td>
+                                            <td
+                                                class="TextTruncate  custom-column-border showToolTip fixed-right-column">
+                                                {{order.section}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                                </td>
+                                </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr [ngStyle]="{height:'calc(100vh - 284px)'}">
+                                        <td [attr.colspan]="columns.length" class="text-center">
+                                            <app-empty-state [isGraphImage]="false"></app-empty-state>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                </p-table>
+                            </div>
+                            <div
+                                class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 pt-2 pb-2 internal-kpi-footer">
+                                <div class="float-right footer-section">
+                                    <div class="d-inline block">
+                                        <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" [disabled]="isCopyToAll"
+                                            [(ngModel)]="selectedCopyToCompanyList" (onChange)="getButtonStatus()"
+                                            class="internal-report-multiselect lp-report-Kpilineitems multi-select-custom custom-searchable-multiselect internal-report-copy-multiselect"
+                                            name="copyToFeature" [resetFilterOnHide]=true
+                                            [options]="filteredCompanyList" defaultLabel="Copy to selected"
+                                            [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                            optionLabel="companyName">
+                                            <ng-template let-company pTemplate="item">
+                                                <span title="{{company?.companyName}}">{{company?.companyName}}</span>
+                                            </ng-template>
+                                        </p-multiSelect>
+                                    </div>
+                                    <div class="d-inline block copy-button">
+                                        <nep-button Type="Secondary" class="pr-2"
+                                            [disabled]="selectedCopyToCompanyList?.length > 0"
+                                            [ngClass]="isCopyToAll?'custom-copy-to-button-active':'custom-copy-to-button'"
+                                            (click)="setCopyToAll()">
+                                            Copy to all companies
+                                        </nep-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-menu #menu="matMenu" [hasBackdrop]="false" class="internal-report-preference-pop-up">
+    <div class="row mr-0 ml-0">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 preference-header">
+            <div class="float-left">
+                Preferences
+            </div>
+            <div class="float-right close-icon cursor-filter" (click)="closePanel()">
+                <i class="pi pi-times"></i>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 preference-content pr-0 pl-0">
+            <div class="row mr-0 ml-0">
+                <div class="col-12 col-sm-12 col-lg-12 col-md-12 col-xl-12 pr-0 pl-0">
+                    <div class="preference-label d-inline-block">
+                        <div (click)="setPreference(preference);" class="d-inline-block preference-section"
+                            [ngClass]="[preference.isActive?'preference-active':'',preference.name=='Funds' || preference.name=='Calculations' || preference.name=='Sections' || preference.name=='Currency Unit' || preference.name=='Group'?'label-req-preference':'']"
+                            *ngFor="let preference of preferenceList">
+                            {{preference?.name}}
+                            <img *ngIf="preference.name == preferenceConstants?.Funds && selectedFund?.length > 0"
+                                class="pl-2 section-tick" src="assets/dist/images/tick-grey.svg" alt="tick" />
+                            <img *ngIf="preference.name == preferenceConstants?.Sections && selectedModule?.length > 0"
+                                class="pl-2 section-tick" src="assets/dist/images/tick-grey.svg" alt="tick" />
+                            <img *ngIf="preference.name == preferenceConstants?.DataType && selectedDataType?.length > 0"
+                                class="pl-2 section-tick" src="assets/dist/images/tick-grey.svg" alt="tick" />
+                            <img *ngIf="preference.name == preferenceConstants?.Calculations && selectedCalculation?.length > 0"
+                                class="pl-2 section-tick" src="assets/dist/images/tick-grey.svg" alt="tick" />
+                            <img *ngIf="preference.name == preferenceConstants?.PeriodType && selectedPeriodType?.length > 0"
+                                class="pl-2 section-tick" src="assets/dist/images/tick-grey.svg" alt="tick" />
+                            <img *ngIf="preference.name == preferenceConstants?.Periods && (dateRange!=null)"
+                                class="pl-2 section-tick" src="assets/dist/images/tick-grey.svg" alt="tick" />
+                            <img *ngIf="preference.name == preferenceConstants?.CurrencyUnit && selectedUnit !=null"
+                                class="pl-2 section-tick" src="assets/dist/images/tick-grey.svg" alt="tick" />
+                        </div>
+                    </div>
+                    <div class="preference-label-content d-inline-block">
+                        <container-element [ngSwitch]="selectedPreference?.name">
+                            <div *ngSwitchCase="preferenceConstants?.ExcelTemplate">
+                                <div class="pb-2 preference-text-label">Excel Template</div>
+                                <p-dropdown (onChange)="hidePreference()" [maxSelectedLabels]="1" [filterBy]="'name'"
+                                    [virtualScroll]="true" [virtualScrollItemSize]="30" 
+                                    (onChange)="templateChangeEvent()"                                   
+                                    class="custom-p-dropdown icon-dropdown fund-custom-dropdown" name="module"
+                                    [options]="configurationItem?.internalExcelTemplates"
+                                    [(ngModel)]="selectedExcelTemplate" placeholder="Select Template" optionLabel="name"
+                                    [showClear]="false">
+                                    <ng-template let-template pTemplate="item">
+                                        <span title="{{template.name}}">
+                                            {{template.name}}
+                                        </span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                            <div class="d-inline-block" *ngSwitchCase="preferenceConstants?.Funds">
+                                <div class="pb-2 preference-text-label">Fund Name </div>
+                                <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" [(ngModel)]="selectedFund"
+                                    class="lp-report-Kpilineitems multi-select-custom custom-searchable-multiselect internal-report-copy-multiselect"
+                                    name="copyToFeature" [resetFilterOnHide]=true
+                                    [options]="configurationItem?.fundDetails" defaultLabel="Select Fund"
+                                    [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                    optionLabel="fundName">
+                                    <ng-template let-fund pTemplate="item">
+                                        <span title="{{fund?.fundName}}">{{fund?.fundName}}</span>
+                                    </ng-template>
+                                </p-multiSelect>
+                            </div>
+                            <div *ngSwitchCase="preferenceConstants?.Sections">
+                                <div class="pb-2 preference-text-label">Sections</div>
+                                <p-multiSelect [(ngModel)]="selectedModule" [virtualScroll]="true" [virtualScrollItemSize]="30"
+                                    class="lp-report-Kpilineitems multi-select-custom custom-searchable-multiselect internal-report-copy-multiselect"
+                                    name="copyToFeature" [resetFilterOnHide]=true
+                                    [options]="configurationItem?.kpiModules" defaultLabel="Select Section"
+                                    [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                    optionLabel="name">
+                                    <ng-template let-module pTemplate="item">
+                                        <span title="{{module?.name}}">{{module?.name}}</span>
+                                    </ng-template>
+                                </p-multiSelect>
+                            </div>
+                            <div *ngSwitchCase="preferenceConstants?.DataType">
+                                <div class="pb-2 preference-text-label">Data Type</div>
+                                <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="30" [(ngModel)]="selectedDataType"
+                                    class="lp-report-Kpilineitems multi-select-custom custom-searchable-multiselect internal-report-copy-multiselect"
+                                    name="copyToFeature" [resetFilterOnHide]="true"
+                                    [options]="configurationItem?.valueTypes" defaultLabel="Select Data type"
+                                    [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                    optionLabel="headerValue">
+                                    <ng-template let-type pTemplate="item">
+                                        <span title="{{type?.headerValue}}">{{type?.headerValue}}</span>
+                                    </ng-template>
+                                </p-multiSelect>
+                            </div>
+                            <div *ngSwitchCase="preferenceConstants?.Calculations">
+                                <div class="pb-2 preference-text-label">Calculations</div>
+                                <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="30" [(ngModel)]="selectedCalculation"
+                                    class="lp-report-Kpilineitems multi-select-custom custom-searchable-multiselect internal-report-copy-multiselect"
+                                    name="copyToFeature" [resetFilterOnHide]="true"
+                                    [options]="configurationItem?.calculations | templateFilter:selectedExcelTemplate" defaultLabel="Select calculation"
+                                    [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                    optionLabel="calculationType">
+                                    <ng-template let-calc pTemplate="item">
+                                        <span  title="{{calc?.calculationType}}">{{calc?.calculationType}}</span>
+                                    </ng-template>
+                                </p-multiSelect>
+                            </div>
+                            <div *ngSwitchCase="preferenceConstants?.PeriodType">
+                                <div class="pb-2 preference-text-label">Period Type</div>
+                                <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="30" [(ngModel)]="selectedPeriodType"
+                                    class="lp-report-Kpilineitems multi-select-custom custom-searchable-multiselect internal-report-copy-multiselect"
+                                    name="copyToFeature" [resetFilterOnHide]=true
+                                    [options]="configurationItem?.periodTypeConfigs" defaultLabel="Select Period Type"
+                                    [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                    optionLabel="periodType">
+                                    <ng-template let-period pTemplate="item">
+                                        <span title="{{period?.periodType}}">{{period?.periodType}}</span>
+                                    </ng-template>
+                                </p-multiSelect>
+                            </div>
+                            <div *ngSwitchCase="preferenceConstants?.Periods">
+                                <div class="pb-2 preference-text-label">Period for Selected Data Type(s)</div>
+                                <div class=""
+                                    [ngClass]="selectedDataType?.length > 0 && selectedPeriodType?.length > 0 ?'':'preference-section-no-data'">
+                                    <p-calendar #myCalendar [styleClass]="'internal-report-calendar'"
+                                        class="tablefilter-dropdrown-width" (onClose)="dateRangeSelected()"
+                                        inputStyleClass="p-custom-calendar date-picker-input" name="startPeriod"
+                                        [(ngModel)]="dateRange" dateFormat="M yy" [showIcon]="true"
+                                        yearRange={{yearRange}} [yearNavigator]="true" view="month"
+                                        placeholder="Select Date" selectionMode="range">
+                                    </p-calendar>
+                                    <div class="d-inline-block error-period-type pt-2"
+                                        *ngIf="(selectedDataType?.length == 0 || selectedPeriodType?.length == 0) && this.selectedExcelTemplate?.name!='Valuation Template'">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-1 pl-0 pr-0"><img class=""
+                                                    src="assets/dist/images/NotificationGrey.svg" alt="info" /></div>
+                                            <div class="col-11 pl-2 pr-0">Please select Data Type(s) and Period Type(s)
+                                                to enter Period</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div *ngSwitchCase="preferenceConstants?.CurrencyUnit">
+                                <div class="pb-2 preference-text-label">Currency Unit</div>
+                                <p-dropdown class="access-subfeature custom-searchable-dropdown" name="unit"
+                                    [options]="unitList" [(ngModel)]="selectedUnit" placeholder="Select Unit"
+                                    optionLabel="name" [showClear]="false"></p-dropdown>
+                            </div>
+                            <div *ngSwitchCase="preferenceConstants?.Group" class="internal-report-group-radio">
+                                <div class="pb-2 preference-text-label">Group</div>
+                                <p-radioButton [(ngModel)]="selectedGroup" [value]="true" label="Yes"></p-radioButton>
+                                <p-radioButton [(ngModel)]="selectedGroup" [value]="false" class="pl-3"
+                                    label="No"></p-radioButton>
+                            </div>
+                            <div *ngSwitchDefault>NA</div>
+                        </container-element>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mr-0 ml-0">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 preference-footer">
+            <div class="float-right">
+                <div class="d-inline-block internal-reset-button preference-reset-button">
+                    <nep-button Type="Secondary" (click)="reset()">
+                        Reset
+                    </nep-button>
+                </div>
+                <div class="d-inline-block">
+                    <nep-button Type="Primary" (click)="apply()"
+                        [disabled]="selectedExcelTemplate?.name == 'Quarterly Template'?!(selectedDataType?.length > 0 && selectedPeriodType?.length > 0 && dateRange !=null):!(dateRange !=null)">
+                        Apply
+                    </nep-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-menu>
+<div *ngIf="savePopUp">
+    <confirm-modal class="AddOrUpdateKpi" primaryButtonName="Confirm" (secondaryButtonEvent)="onClose()"
+        [disablePrimaryButton]="disableConfirmSave" (primaryButtonEvent)="confirmSave();" id="add_template"
+        secondaryButtonName="Cancel" [modalTitle]="title">
+        <div class="row mr-0 ml-0">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0">
+                <div class="row mr-0 ml-0">
+                    <div class="col-lg-12 col-md-5 col-xs-5 pl-0 pr-0 ">
+                        <div class="template-label">Template Name
+                        </div>
+                        <nep-input (onInput)="onTemplateInputChange($event)" (onChange)="onTemplateInputChange($event)"
+                            [ngClass]="{'custom-error-kpi-input':isTemplateExist && selectedRadio!='U'}"
+                            [value]="selectedItem?.templateName" [placeholder]="'Enter Template Name'"
+                            class="kpis-custom-select custom-nep-input default-txtcolor lp-nep-input "></nep-input>
+                        <div *ngIf="isTemplateExist && selectedRadio!='U'" class="nep-error">Template Name already
+                            exists</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </confirm-modal>
+</div>
+<div *ngIf="isPopup">
+    <modal customwidth="489px" [modalTitle]="modalTitle" primaryButtonName="Confirm" secondaryButtonName="Cancel"
+        (primaryButtonEvent)="OnUpdateTemplate($event)" (secondaryButtonEvent)="OnCancel($event)"
+        [disablePrimaryButton]="disableRenameConfirmButton">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12">
+                This will delete {{selectedItem.templateName}} template. Are you sure?
+            </div>
+        </div>
+    </modal>
+</div>
+<div *ngIf="isCompanyPopup">
+    <modal customwidth="489px" [modalTitle]="'Unsaved Changes Found'" primaryButtonName="Confirm"
+        secondaryButtonName="Cancel" (primaryButtonEvent)="onSelectCompany($event)"
+        (secondaryButtonEvent)="onDiscard($event)">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-md-12 col-xl-12 col-sm-12">
+                Selected Line Items will be not be mapped to current company without clicking on Save. Do you confirm
+                moving to another company?.
+            </div>
+        </div>
+    </modal>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

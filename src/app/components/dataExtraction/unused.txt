@@ -1,0 +1,48 @@
+   <div class="row">
+
+                <div class="col-sm-4 col-md-3 "
+                    *ngIf="(selectedPeriod.type =='FYE (Financial Year End)' && selectedPeriodType != undefined && selectedPeriodType.type =='Monthly')">
+                    <div class="form-group m-0">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="TimePeriod">Start Date
+                                    <sup class="red" title="required">*</sup>
+                                </label>
+                                <div class="input-group">
+                                    <p-calendar name="startPeriod" view="month" showButtonBar="true"
+                                        [(ngModel)]="model.fromDate" #startPeriod selectionMode="single" required="true"
+                                        [yearNavigator]="true" [readonlyInput]="true"
+                                        inputStyleClass="date-picker-input" dateFormat="mm/yy" [showIcon]="true"
+                                        yearRange={{yearRange}} (onSelect)="validateKPIPeriod(model)"></p-calendar>
+                                    <div *ngIf="(form.submitted || model.fromDate.dirty) && !model.fromDate.valid && !model.fromDate"
+                                        class="text-danger">Start date is required</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="TimePeriod">End Date
+                                    <sup class="red" title="required">*</sup>
+                                </label>
+                                <div class="input-group">
+                                    <p-calendar name="endPeriod" view="month" showButtonBar="true"
+                                        [(ngModel)]="model.toDate" #endPeriod required="true" selectionMode="single"
+                                        [yearNavigator]="true" [readonlyInput]="true"
+                                        inputStyleClass="date-picker-input" dateFormat="mm/yy" [showIcon]="true"
+                                        yearRange={{yearRange}} (onSelect)="validateKPIPeriod(model)"></p-calendar>
+                                    <div *ngIf="(form.submitted || model.toDate.dirty) && !model.toDate.valid && !model.toDate"
+                                        class="text-danger">End date is required</div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                
+            </div>

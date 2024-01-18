@@ -1,0 +1,11 @@
+﻿<div class="row tab-shadow company-kpi-financial-section">
+    <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0 pl-0">
+        <nep-tab id="neptab" class="" [tabList]=tabList (OnSelectTab)="onTabClick($event)">
+        </nep-tab>
+    </div>
+</div>
+<div class="row">
+<div class="col-12">
+    <company-financials [selectedKpi]="selectedTab" #companyFinancials [masterModel]="masterModel"></company-financials>
+</div>
+</div>

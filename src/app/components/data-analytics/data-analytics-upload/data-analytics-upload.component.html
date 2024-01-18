@@ -1,0 +1,107 @@
+<div class="data-analytics-modal nep-modal nep-modal-show nepshow-d-bg">
+    <div class="nep-modal-mask"></div>
+    <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nepshadow-po-d">
+        <div class="nep-card-header nep-modal-title p-0">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-12 user-header">
+                    <div class="float-left TextTruncate" title="Bulk upload data">Bulk upload data</div>
+                    <div class="float-right close-icon" (click)="onClose()">
+                        <i class="pi pi-times"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-body">
+            <div class="row mr-0 ml-0 ">
+                <div class="col-md-12 user-body user-upload">
+                    <div class="add-user-component">
+                        <div class="card card-main">
+                            <div class="card-body mb-0">
+                                <div class="col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 user-upload pr-0 pl-0">
+                                    <div class="row mr-0 ml-0 padding-text-bulkupload">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc desc-header TextTruncate">
+                                            Bulk upload data in excel format.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0 padding-text-note">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc desc-header TextTruncate">
+                                            Note:-
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc TextTruncate">
+                                            1. Acceptable file formats are ".xls", ".xlsx" and ".csv"
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-md-12 pr-0 pl-0 upload-desc TextTruncate">
+                                            2. File size limit is 20MB.
+                                        </div>
+                                    </div>
+                                    <div class="row mr-0 ml-0 mt-4" *ngIf="errorUploadDetails.length>0">
+                                        <div class="col-md-12 pr-0 pl-0 table-responsive card-border">
+                                            <p-table styleClass="p-datatable-gridlines"  #dt [value]="errorUploadDetails" [scrollHeight]="180 +'px'"
+                                                [scrollable]="true">
+                                                <ng-template pTemplate="header">
+                                                    <tr>
+                                                        <th>
+                                                            <span class="errorColor pr-2">
+                                                                <img class="error-info-icon"
+                                                                    [src]="'assets/dist/images/red_info_icon.svg'"
+                                                                    alt="">
+                                                            </span><span
+                                                                class="error-title errorColor pl-1">Errors</span>
+                                                        </th>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="body" let-message>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="row mr-0 ml-0">
+                                                                <div class="col-md-1 pl-0 pr-0">
+                                                                    <span class="errorColor" *ngIf="message.row>0">{{message.cellCode}}</span>
+                                                                </div>
+                                                                <div class="col-md-11 pl-1 pl-0 custom-white-space">                                                                   
+                                                                    <span class="pl-0" title="{{message.statusDescription}}">{{message.statusDescription}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+
+                                                    </tr>
+                                                </ng-template>
+                                            </p-table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="nep-card-footer  nep-modal-footer user-upload">
+            <div class="float-right d-inline-flex">
+                <div class="uploadButton d-flex" [ngStyle]="{'padding-right': browseicon ? '9px' : '6px' }">
+                    <div class="textEllipsis uploadLogoIcon" (click)="file.click()" title={{uploadFilePlaceholder}}>
+                        <input multiple class="hidefile" #file (click)="file.value = null" value="" accept=".xlsx,.xls"
+                            (change)="onSelect($event.target.files)" type="file">
+                        <img *ngIf="browseicon" class="browseIcon" [src]="'assets/dist/images/Iconmaterial-computer.svg'" alt="">
+                        <span class="beatColor browseButton" *ngIf="files.length<2">{{uploadFilePlaceholder}}</span>
+                        <span class="beatColor browseButton" *ngIf="files.length>1">{{files.length}} files selected</span>
+                    </div>
+                    <div *ngIf="!browseicon" class="icon">
+                        <img *ngIf="ProgressCancel" class="pull-right" (click)="deleteIconClick(filename)"
+                            [src]="'assets/dist/images/ClearIcon.svg'" alt="">
+                        <i *ngIf="value == 1" aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                    </div>
+                </div>
+                <nep-button Type="Primary" class="nepbt-p" [disabled]="files.length==0" (click)="onUpload()">
+                    Upload
+                </nep-button>
+              
+            </div>
+
+        </div>
+    </div>
+</div>

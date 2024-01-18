@@ -1,0 +1,6 @@
+<input [ngClass]="getStyleClass()" placeholder="{{placeholder}}" [(ngModel)]="value" 
+(change)="onChange.emit($event)" 
+(blur)="onBlur.emit()"
+(input)="onInput.emit($event)"
+(keypress)="onKeyPress.emit($event)"
+type="text"/>

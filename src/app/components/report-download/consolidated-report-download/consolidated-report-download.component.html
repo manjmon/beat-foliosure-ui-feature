@@ -1,0 +1,73 @@
+<div class="row mr-0 ml-0 consolidated-report-download-section">
+    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+        <div class="add-user-component">
+            <div class="card card-main">
+
+                <div class="card-body">
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                <div class="row mr-0 ml-0">
+                                        <div class="consolidated-report-template">
+                                            <div class="TextTruncate pb-2" title="Report Template">
+                                                Report Template 
+                                            </div>
+                                            <div>
+                                                <p-dropdown [filter]="true" [filterBy]="'templateName'" [virtualScroll]="true" [virtualScrollItemSize]="44"
+                                                    class="custom-p-dropdown access-subfeature custom-searchable-dropdown icon-dropdown report-custom-dropdown"
+                                                    [options]="templateList" optionLabel="templateName"  [resetFilterOnHide]=true  defaultLabel="Select Template"
+                                                    [(ngModel)]="selectedTemplate" (onChange)="templateChange($event)">
+                                                    <ng-template let-object pTemplate="item">
+                                                        <div tooltipPosition="top"
+                                                        tooltipStyleClass="bg-tooltip-report"
+                                                        [pTooltip]="object?.excelTemplateName"
+                                                            class="custom-ui-label custom-delete-hover custom-zindex-parent">
+                                                            <span title="{{object?.templateName}}"
+                                                                class="img-pad TextTruncate">
+                                                                {{object.templateName}}
+
+                                                            </span>
+                                                        </div>
+                                                    </ng-template>
+                                                </p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="consolidated-report-template p-0.75">
+                                            <div class="TextTruncate pb-2" title="Quarter & Year">
+                                                From Quarter & Year
+                                            </div>
+                                            <div>
+                                                <quarter-year-control [placeHolder]="'Select quarter & year'" [isReLoad]="buttonToggle" [ngClass]="[!isQuarters ? 'disableDiv' : '']" [ControlName]="'cr-Year'"
+                                                    [QuarterYear]="fromYearQuarter"
+                                                    (onCalendarYearPicked)="FromQuarterYearFunction($event)">
+                                                </quarter-year-control>
+                                            </div>
+                                        </div>
+                                        <div class="consolidated-report-template pl-0.75">
+                                            <div class="TextTruncate pb-2" title="Quarter & Year">
+                                                To Quarter & Year
+                                            </div>
+                                            <div>
+                                                <quarter-year-control [placeHolder]="'Select quarter & year'" [isReLoad]="buttonToggle" [ngClass]="[!isQuarters ? 'disableDiv' : '']"   [ControlName]="'cr-Year'"
+                                                    [QuarterYear]="toYearQuarter"
+                                                    (onCalendarYearPicked)="ToQuarterYearFunction($event)">
+                                                </quarter-year-control>
+                                            </div>
+                                        </div>
+                                        <div class="consolidated-report-template d-inline-block pl-1.25 padding-top-download">
+                                            <nep-button Type="Primary" (click)="download();" [disabled]="selectedTemplate?.templateId==0 ||isValidateQuarter">
+                                                Download <i aria-hidden="true" *ngIf="isDownload"
+                                                class="download-circle-loader fa fa-circle-o-notch fa-1x fa-fw" [ngStyle]="{'background-color': '#FFFFF !important'}"></i>
+                                            </nep-button>
+                                        </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

@@ -1,0 +1,94 @@
+<div class="filter-bg">
+    <div class="align-items-start">
+        <div class="ui-widget-header custom-padding-left">
+            <div class="row mr-0 ml-0">
+            </div>
+        </div>
+        <div class="ui-widget-header" *ngIf="!noDataFound">
+            <div class="row mr-0 ml-0">
+                <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                    <div class="float-left">
+                        <div class="nep-tabs nep-tabs-line">
+                            <div class="nep-tabs-header">
+                                <div class="nep-tabs-header-tabs">
+                                    <div class="nep-tabs-inner">
+                                        <div class="nep-tabs-scroll nep-tab-alignment-subtab financial-section">
+                                            <div class="nep-tabs-tab" *ngFor="let tab of valueTypeList"
+                                                (click)="selectValueTab(tab)" [class.nep-tabs-active]="tab.isActive">
+                                                {{tab.name}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="float-right float-right-padding">
+                        <div class="d-inline-block">
+                            <img class="p-action-padding download-excel" (click)="isOpenUpload=true"
+                                title="Download Template" src="assets/dist/images/File Upload Grey.svg" alt="" />
+                        </div>
+                        <div class="d-inline">
+                            <span class="col-divider">
+                            </span>
+                        </div>
+                        <div class="d-inline-block">
+                            <img class="p-action-padding download-excel" title="Export  (Excel file)"
+                                src="assets/dist/images/Cloud-download.svg" alt="" />
+                        </div>
+                        <div class="d-inline">
+                            <span class="col-divider">
+                            </span>
+                        </div>
+                        <div class="d-inline-block pl-2 pref-icon"><img id="dropdownMenuButton"
+                                src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter" alt="" alt="" />
+                        </div>
+                    </div>
+                    <div class="float-right pt-1">
+                        <div class="d-inline-block valuationDropdown" *ngIf="!noDataFound && tabName ==='Valuations'">
+                            <span> View: </span>
+                            <p-dropdown class="custom-p-dropdown valuation icon-dropdown"
+                                [options]="valuationMultipleOptions" [(ngModel)]="selectedValuationItem"
+                                name="displayName" optionLabel="displayName" appendTo="body"
+                                (ngModelChange)="changeKpi($event)">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="custom-top" *ngIf="!noDataFound && tabName ==='Deal Data'">
+            <app-transaction-deal-data (emptyMarketData)="emptyMarketData($event)" [fundDetails]="fundDetails"
+                [companyDetails]="companyDetails" [QuarterAndYear]="QuarterAndYear"
+                [rawData]="rowDataTransComps"></app-transaction-deal-data>
+        </div>
+        <div class="custom-top" *ngIf="!noDataFound && tabName ==='Financials'">
+            <app-transaction-financial-data (emptyMarketData)="emptyMarketData($event)" [fundDetails]="fundDetails"
+                [companyDetails]="companyDetails" [QuarterAndYear]="QuarterAndYear"
+                [rawData]="rowDataTransComps"></app-transaction-financial-data>
+        </div>
+        <div class="custom-top" *ngIf="!noDataFound && tabName ==='Valuations'">
+            <app-transaction-valuations-data (emptyMarketData)="emptyMarketData($event)" [fundDetails]="fundDetails"
+                [companyDetails]="companyDetails" [QuarterAndYear]="QuarterAndYear" [rawData]="rowDataTransComps"
+                [selectedKPIDropdown]="selectedKPIDropdown"></app-transaction-valuations-data>
+        </div>
+
+        <div *ngIf="noDataFound">
+            <div class=" text-center border-bottom custom-padding-no-data ">
+                <span class="font-weight-bold"></span><br>
+            </div>
+            <div class="text-center empty-state">
+                <img class="EmptyStateImgStyle" src="assets/dist/images/WorkFlowZeroState.svg" alt="" /><br />
+                <span class="font-weight-bold">Please click on Bulk upload button</span><br>
+                <span class="font-weight-bold"> to upload selected company’s data</span><br><br>
+                <span> <button class="nep-button nep-button-secondary" (click)="isOpenUpload=true">Bulk Upload</button>
+                </span>
+
+            </div>
+        </div>
+    </div>
+    <app-valuation-model-bulk-upload (onClosePopUpClick)="closePopup($event)" [fundDetails]="fundDetails"
+        [companyDetails]="companyDetails" [QuarterAndYear]="QuarterAndYear" [valueType]="valuationType.TransactionComps"
+        *ngIf="isOpenUpload"></app-valuation-model-bulk-upload>
+    <app-loader-component *ngIf="isLoading"></app-loader-component>

@@ -1,0 +1,170 @@
+
+<div class="border-top ">
+    <div class="row mr-0 ml-0 filterContainerPadding">
+        <div class=" col-lg-12 col-md-12 col-sm-12 pl-0 pr-0">
+            <div class="float-left">
+                <div class="pl-3" *ngIf="isChildtab">
+                    <div class="nep-tabs nep-tabs-line">
+                        <div class="nep-tabs-header">
+                            <div class="nep-tabs-header-tabs">
+                                <div class="nep-tabs-inner">
+                                    <div class="nep-tabs-scroll nep-tab-alignment-subtab financial-section">
+                                        <div class="nep-tabs-tab"   *ngFor="let tab of tabList" (click)="selectTab(tab)" [class.nep-tabs-active]="tab.active" [ngStyle]="{'padding': '0px !important'}">
+                                            {{tab.name}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pull-right headerfontsize">
+                <div class="d-inline search" *ngIf="isSearch">
+                    <span class="fa fa-search fasearchicon"></span><input type="text" pInputText class="search-text" placeholder="Search">
+                </div>
+                <div class="d-inline " *ngIf="isdecimals">
+                    <div class="d-inline leftrem">Decimals</div>
+                    <div class="d-inline pr-2 pl-1">
+                        <p-inputSwitch styleClass="ui-inputswitch2"></p-inputSwitch>
+                    </div>
+                </div>
+                <div class="d-inline textsplit" *ngIf="isdecimals"></div>
+                <div class="d-inline " *ngIf="isLogs">
+                    <div class="d-inline pl-2">Logs</div>
+                    <div class="d-inline pr-2 pl-1">
+                        <p-inputSwitch styleClass="ui-inputswitch1"></p-inputSwitch>
+                    </div>
+                </div>
+                <div class="d-inline textsplit" *ngIf="isLogs"></div>
+                <div class="d-inline  QMY_Container">
+                    <div class="d-inline">
+                        <div class="d-inline QMY_Text MStyle QMYStyle" (click)="onChangePeriodOption('isMonthly')" [ngClass]="isMonthly?'activeQMY':''">
+                            Monthly
+                        </div>
+                        <div class="d-inline QMY_Text QMYStyle" (click)="onChangePeriodOption('isQuarterly')" [ngClass]="isQuarterly?'activeQMY':''">
+                            Quarterly
+                        </div>
+                        <div class="d-inline  QMY_Text QMYStyle YStyle" (click)="onChangePeriodOption('isAnnually')" [ngClass]="isAnnually?'activeQMY':''">
+                            Annual
+                        </div>
+                    </div>
+
+                </div>
+                <div class="d-inline cloud_download download-container">
+
+                    <div class="d-inline pr-2">
+                        <img *ngIf="!isDownload" src="assets/dist/images/Cloud-download.svg" (click)="export()" class="cursor-filter" alt="">
+                        <span class="pl-1" *ngIf="isDownload">
+                            <i aria-hidden="true"
+                                class="download-circle-loader fa fa-circle-o-notch fa-1x fa-fw"></i>
+                        </span>
+                    </div>
+
+                    <div class="d-inline border-right divider-position"></div>
+
+                    <div class="d-inline pl-2"><img id="dropdownMenuButton" [matMenuTriggerFor]="menu" #filterMenuTrigger="matMenuTrigger" src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter" alt=""></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="d-none" #OutsideClick>Out click</div>
+<mat-menu #menu="matMenu" [hasBackdrop]="true" class="fixed-menu">
+    <form name="form" #form="ngForm" (ngSubmit)="form.form.valid && onSubmit()" (click)="$event.stopPropagation()">
+        <div class="filter-first">
+            <div class="row m-0 ">
+                <div class="col-12 pb-1 pt-3 label-align">
+                    Period
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" class="tablefilter-dropdrown-width kpi-prefence-filter" #periodType="ngModel" [(ngModel)]="model.periodType" (onChange)="onPeriodChange($event)" name="periodtype" [options]="periodTypes" optionLabel="type">
+                    </p-dropdown>
+                </div>
+
+            </div>
+            <div class="row m-0" *ngIf="model.periodType?.type=='Custom'">
+                <div class="col-12 pb-1 pt-3 label-align">
+                    From Quarter
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" required="{{iscustom}}" name="fromQuarter" [options]="quarterOptions" [(ngModel)]="model.fromQuarter" placeholder="From Quarter" optionLabel="text" #fromQuarter="ngModel" class="tablefilter-dropdrown-width kpi-prefence-filter">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="row m-0" *ngIf="model.periodType?.type=='Custom'">
+                <div class="col-12 pb-1 pt-3 label-align">
+                    From Year
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" required="{{iscustom}}" name="fromYear" [options]="yearOptions" [(ngModel)]="model.fromYear" class="tablefilter-dropdrown-width kpi-prefence-filter" placeholder="From Year" optionLabel="text" #fromYear="ngModel">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="row m-0" *ngIf="model.periodType?.type=='Custom'">
+                <div class="col-12 pb-1 pt-3 label-align">
+                    To Quarter
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" required="{{iscustom}}" name="toQuarter" class="tablefilter-dropdrown-width kpi-prefence-filter" [options]="quarterOptions" [(ngModel)]="model.toQuarter" placeholder="To Quarter" optionLabel="text" #toQuarter="ngModel">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="row m-0" *ngIf="model.periodType?.type=='Custom'">
+                <div class="col-12 pb-1 pt-3 label-align">
+                    To Year
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" required="{{iscustom}}" name="toYear " class="tablefilter-dropdrown-width kpi-prefence-filter" [options]="yearOptions " [(ngModel)]="model.toYear " placeholder="To Year " optionLabel="text " #toYear="ngModel ">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="row m-0" *ngIf="model.periodType?.type=='Date Range' ">
+                <div class="col-12 pb-1 pt-3 label-align ">
+                    Date Range
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-calendar appendTo="body" panelStyleClass="mat-menu-calendar" #myCalendar placeholder="Select Date Range " name="startPeriod" view="month" showButtonBar="true" [(ngModel)]="model.startPeriod" #startPeriod selectionMode="range" [yearNavigator]="true"
+                        [readonlyInput]="true" hideOnDateTimeSelect="true" inputStyleClass="date-picker-input" dateFormat="mm/yy" [showIcon]="true" yearRange={{yearRange}} [maxDate]="today" class="calender-font table-header-calender-width" (onSelect)="validateKPIPeriod(form,model) ">
+                    </p-calendar>
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="col-12 pb-1 pt-3 label-align">
+                    Fx rates
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" class="tablefilter-dropdrown-width kpi-prefence-filter" #fxRates="ngModel" name="fxRates" [(ngModel)]="model.fxRates" (onChange)="onFxRateSourceChange()" [options]="fxRatesList" optionLabel="type">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="col-12 pb-1 pt-3 label-align">
+                    Currency
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" placeholder="Select Currency" (onChange)="onCurrencyChange($event)" class="tablefilter-dropdrown-width kpi-prefence-filter" #currencyCode="ngModel" name="currencyCode" [(ngModel)]="model.currencyCode" [options]="CurrencyList" optionLabel="currencyCode">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="row m-0">
+                <div class="col-12 pb-1 pt-3 label-align">
+                    Currency Unit
+                </div>
+                <div class="col-12 pl-3 pr-3">
+                    <p-dropdown appendTo="body" panelStyleClass="mat-menu-dropdown" [disabled]="true" class="tablefilter-dropdrown-width kpi-prefence-filter" #currecyUnit="ngModel" name="currecyUnit" [(ngModel)]="model.currecyUnit" name="Unit" [options]="unitTypeList" optionLabel="unitType">
+                    </p-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="filter-footer pr-3 pb-3 mr-2">
+            <div class="d-inline ">
+                <button type="reset" (click)="$event.stopPropagation();$event.preventDefault();formreset(form) " class="btn btn-reset">Reset</button>
+            </div>
+            <div class="d-inline ">
+                <button type="submit" class="btn btn-light btn-app pt-0 pb-0">Apply</button>
+            </div>
+        </div>
+    </form>
+</mat-menu>

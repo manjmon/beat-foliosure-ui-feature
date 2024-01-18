@@ -1,0 +1,16 @@
+﻿<p-paginator [rows]="20" [totalRecords]="totalRecords" [pageLinkSize]="pageCount" [first]="first"
+    (onPageChange)="getloadPortfolioLazy($event)" [rowsPerPageOptions]="[20,50,100,200]">
+</p-paginator>
+        <div class="left-item">
+            <span class="text-content-style">{{first + 1}} - {{first + rowsPerPage}} of {{totalRecords}} items</span>
+        </div>
+        <div #rightitem class="right-item pr-3">
+            <span class="pr-2 text-content-style currentpage-span">Page</span>
+            <input id="cb" class="paginator-textbox custom-right-style text-content-style"
+                (change)="loadPortfolioLazyInput($event.target.value)" [(ngModel)]="currentTablePageNo" type="text">
+            <span class="padding-slash custom-right-style">/</span>
+            <span class="text-content-style custom-right-style">{{totalPage}}</span>
+        </div>
+        <div #enditem class="end-item">
+            <span class="text-content-style item-page-style">Items / Page</span>
+        </div>

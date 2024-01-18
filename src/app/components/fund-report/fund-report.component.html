@@ -1,0 +1,350 @@
+<div class="lpTemplateConfigContainer" (resized)="onResized($event)">
+    <div class="d-flex hfContainer bborder header-box_shadow">
+        <div class="pr12 ">
+            <p-dropdown (onChange)="templateAction($event)" class="custom-p-dropdown icon-dropdown fund-custom-dropdown"
+                [options]="allTemplates" [(ngModel)]="selectedItem">
+                <ng-template let-item pTemplate="selectedItem">
+                    <div class="d-inline-block"><img src="assets/dist/images/{{item.icon}}" alt="" /></div>
+                    <div class="d-inline-block custom-label">{{item.name}}</div>
+                </ng-template>
+                <ng-template let-object pTemplate="item">
+                    <div class="custom-ui-label"><img src="assets/dist/images/{{object.icon}}" alt="" /> <span
+                            class="img-pad">{{object.name}}</span></div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+        <div class="mr-auto">
+            <p-dropdown class="custom-p-dropdown custom-choose-section" [disabled]="isAction"
+                (onChange)="ExecuteAction($event)" [(ngModel)]="selectedAction" [options]="actions" optionLabel="name"
+                [showClear]="false">
+            </p-dropdown>
+        </div>
+        <div class="">
+            <a (click)="addSectionList();">
+                <nep-button Type="Secondary" >
+                    <em class="fa fa-plus plus"></em> New Section
+                </nep-button>
+            </a>
+        </div>
+    </div>
+    <!-- {{fundReportForm.value["reportItems"][0]["charts"]|json}} -->
+    <div class="bContainer" #target [ngClass]="isPageLoaded?'d-block':'d-none'"
+        [ngStyle]="{'height':windowHeight+'px','overflow-y':'auto'}">
+        <form [formGroup]="fundReportForm" (ngSubmit)="submit(f)" #f="ngForm">
+            <div cdkDropList (cdkDropListDropped)="drop($event)" formArrayName="reportItems">
+                <div class="row mr-0 ml-0 p-all-row"
+                    *ngFor="let Cntrl of  fundReportForm?.controls?.reportItems?.controls ; let i = index" cdkDrag
+                    #elem="cdkDrag">
+                    <div [formGroupName]="i"
+                        class=" col-12 col-md-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 pl-0 pr-0">
+                        <div class="mr-0 ml-0 box drop-card-shadow">
+                            <div class="d-inline-block box-border-right drag-icon">
+                                <img cdkDragHandle src="assets/dist/images/6dots.svg" alt="">
+                            </div>
+                            <div class="d-inline-block p-all">
+                                <app-customselect class="drag-dropdown" formControlName="sectionName"
+                                    [selectList]="sectionList"
+                                    [selectedValue]="Cntrl.value.sectionName!=null?Cntrl.value.sectionName:sectionList[0]"
+                                    (OnSelect)="sectionOnChange(i,$event)">
+                                </app-customselect>
+                            </div>
+                            <div class="d-inline-block p-all"
+                                *ngIf="Cntrl.value.sectionName==null?false:Cntrl.value.sectionName.name|TrueOrFalse">
+                                <p-dropdown class="custom-p-dropdown" formControlName="period"
+                                    [style]="{width:'100%',marginTop:'4px'}" [options]="periodList"
+                                    placeholder="Select Period" optionLabel="name" [showClear]="false">
+                                </p-dropdown>
+                            </div>
+                            <div class="d-inline-block p-all"
+                                *ngIf="Cntrl.value.sectionName==null?false:Cntrl.value.sectionName.name==='Attribution Report Graph'">
+                                <div formArrayName='nestedArray'>
+                                    <button id="multipleFilter" [style]="{marginTop:'4px'}" class="multipleFilterButton"
+                                        type="button" [ngbPopover]="popContent" placement="bottom top"container="body"
+                                        #popOver="ngbPopover" [autoClose]="'outside'"
+                                        [ngClass]="i==isHighlight ? 'activeFilterButton':''"
+                                        (mousedown)="highlightclear(i)"
+                                        (click)="onOpenFilters();highlightColorAttributionFilters(i,00);">
+                                        <span  [ngClass]="((Cntrl.controls?.nestedArray?.controls[0].value|ReturnString)!='Select filters')?'multiple-filter-active-class':''" title={{Cntrl.controls?.nestedArray?.controls[0].value|ReturnString}} >{{Cntrl.controls?.nestedArray?.controls[0].value|ReturnString}}</span>
+                                        <img class="multipleFilterIcon" src="assets/dist/images/advancedFilters.svg"
+                                            alt="" />
+                                    </button>
+
+                                    <ng-template #popContent>
+                                        <div class="attributionFilterDiv"
+                                            *ngFor="let subgroup of Cntrl.controls?.nestedArray?.controls; let idx = index;"
+                                            [formGroupName]="idx">
+                                            <div #advancedFilters id="filtersContainer" class="fundfilter-wh">
+                                                <div id="containerHeader"class="containerheader-h-p">
+                                                    <span class="fundreport-fl-c" >
+                                                        Apply filters
+                                                    </span>
+                                                    <a (click)="popOver.close();isFiltersOpen=false">
+                                                        <span  class="fund-fr-cp">
+                                                            <i class="pi pi-times"></i>
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                                <div id="containerBody" class="containerBody-bb-bt">
+                                                    <div class="fund-d">
+                                                        <div class="fund-bb-bg">
+                                                            <div [ngClass]="activeFilterCategory === filterCategory ? 'filterHeadingStyle activeCategory' : 'filterHeadingStyle inactiveCategory'"
+                                                                [ngStyle]="{'margin-bottom':filterCategory == 'Evaluation Date' ? '20px':''}"
+                                                                *ngFor="let filterCategory of filterCategories"
+                                                                (click)="selectFilterCategory(filterCategory);">
+                                                                {{filterCategory}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="fund-height">
+                                                            <div *ngIf="activeFilterCategory === 'Evaluation Date'">
+                                                                <div class="fundrep-w-mt-ml">
+                                                                    <span class="contentStyle">Evaluation date</span>
+                                                                    <p-calendar [monthNavigator]="true"
+                                                                        [yearNavigator]="true" [readonlyInput]="true"
+                                                                        inputStyleClass="date-picker-input"
+                                                                        dateFormat="dd-M-yy" yearRange="2000:2050"
+                                                                        [inputStyle]="{'padding': '0.5vw'}"
+                                                                        placeholder="Select evaluation date"
+                                                                        formControlName="evaluationDate"></p-calendar>
+                                                                </div>
+                                                            </div>
+                                                            <div class="fund-ml-mt">
+                                                                <div
+                                                                    *ngIf="activeFilterCategory === 'Attribution Type'">
+                                                                    <div class="contentStyle content-margin-b">Attribution Type <span class="red">*</span>
+                                                                    </div>
+                                                                    <p-autoComplete appBlockCutCopyPaste #pAutoComplate
+                                                                        [readonly]="true" name="typeAhead"
+                                                                        [suggestions]="results"
+                                                                        [readonly]="disabled || readonly"
+                                                                        (completeMethod)="search($event)"
+                                                                        [forceSelection]="true" field="label"
+                                                                        [dropdown]="true" placeholder="Attribution Type"
+                                                                        [inputStyle]="{paddingLeft: '8px'}"
+                                                                        [disabled]="disabled"
+                                                                        formControlName="attributionType">
+                                                                    </p-autoComplete>
+                                                                </div>
+                                                                <div *ngIf="activeFilterCategory === 'Strategies'">
+                                                                    <div class="contentStyle fund-constyle-mb">Strategies</div>
+                                                                    <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" name="Strategy"
+                                                                        [maxSelectedLabels]="1"
+                                                                        [selectedItemsLabel]="'{0} items selected'"
+                                                                        [options]="strategyList"
+                                                                        defaultLabel="Select strategy"
+                                                                        optionLabel="strategy"
+                                                                        formControlName="strategies">
+                                                                    </p-multiSelect>
+                                                                </div>
+                                                                <div *ngIf="activeFilterCategory === 'Funds'">
+                                                                    <div class="contentStyle fundrpt-contentsty-mb">Funds</div>
+                                                                    <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" [maxSelectedLabels]="1"
+                                                                        [selectedItemsLabel]="'{0} items selected'"
+                                                                        [options]="fundList" defaultLabel="Select funds"
+                                                                        optionLabel="fundName" formControlName="funds">
+                                                                    </p-multiSelect>
+                                                                </div>
+                                                                <div *ngIf="activeFilterCategory === 'Regions'">
+                                                                    <div class="contentStyle contentsty-mb"
+                                                                       >Regions</div>
+                                                                    <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36"  [maxSelectedLabels]="1"
+                                                                        [selectedItemsLabel]="'{0} items selected'"
+                                                                        [options]="regionList"
+                                                                        defaultLabel="Select regions"
+                                                                        optionLabel="region" formControlName="regions"
+                                                                        (onChange)="onRegionChange($event)">
+                                                                    </p-multiSelect>
+                                                                </div>
+
+                                                                <div *ngIf="activeFilterCategory === 'Countries'">
+                                                                    <div class="contentStyle contstyle-mb"
+                                                                        >Countries</div>
+                                                                    <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="36" [maxSelectedLabels]="1"
+                                                                        [selectedItemsLabel]="'{0} items selected'"
+                                                                        [options]="countryList"
+                                                                        defaultLabel="Select countries"
+                                                                        optionLabel="country"
+                                                                        formControlName="countries">
+                                                                    </p-multiSelect>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="containerFooter">
+                                                    <div class="container-fr-p">
+                                                        <a (click)="clearFilters(i,idx)">
+                                                        <nep-button class="nep-butn-pl" Type="Secondary" [disabled]="subgroup.invalid">
+                                                           Reset
+                                                       </nep-button>
+                                                        </a>
+           
+                                                        <!-- <nep-button Type="Primary" [disabled]="subgroup.invalid"
+                                                                                                                style="padding-left:12px"
+                                                                                                                (click)="closeAttributionFiltersPopover()">
+                                                                                                                Apply
+                                                                                                            </nep-button> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div class="d-inline-block p-all"
+                                *ngIf="Cntrl.value.sectionName==null?false:Cntrl.value.sectionName.name==='Attribution Report Graph'">
+                                <div formArrayName='charts'>
+                                    <button id="multipleFilter" [style]="{marginTop:'4px'}" class="multipleFilterButton"
+                                        type="button" [ngbPopover]="popContent" placement="bottom top"
+                                        #popOver="ngbPopover" [autoClose]="'outside'" container="body"
+                                        [ngClass]="1+i==isChartHighlight ? 'activeFilterButton':''"
+                                        (click)="onOpenCharts();highlightColorChartFilters(i,00)">
+                                        <span [ngClass]="((fundReportForm.value['reportItems'][i]['charts']|ReturnChart)!='Select Charts')?
+                                                                                'multiple-filter-active-class':''"
+                                            title="{{fundReportForm.value['reportItems'][i]['charts']|ReturnChart}}">
+                                            {{fundReportForm.value["reportItems"][i]["charts"]|ReturnChart}}</span>
+                                        <img class="multipleFilterIcon" src="assets/dist/images/advancedFilters.svg"
+                                            alt="" />
+                                    </button>
+                                    <ng-template #popContent>
+                                        <div class="chart-Box">
+                                            <div cdkDropList (cdkDropListDropped)="subdrop($event,i)">
+                                                <div class="row ml-0 mr-0"
+                                                    *ngFor="let subSubgroup of Cntrl.controls?.charts?.controls; let cidx = index;"
+                                                    [formGroupName]="cidx" cdkDrag>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0">
+                                                        <div class="d-inline-block drag-icon">
+                                                            <img class="chart-list" cdkDragHandle
+                                                                src="assets/dist/images/6dots.svg" alt="">
+                                                        </div>
+                                                        <div class="d-inline-block">
+                                                            <mat-checkbox class="chat-checkbox mat-custom-checkbox"
+                                                                formControlName="isDisable">{{subSubgroup.value.label}}</mat-checkbox>
+                                                        </div>
+                                                        <!-- <div class="d-inline-block">
+                                                            <span class="chart-list"> {{subSubgroup.value.label}}</span>
+                                                        </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                            <div class="d-inline-block  pull-right">
+                                <div class="d-inline-block box-border-left pull-right">
+                                    <em class="pi pi-times" (click)="delete(i)"></em>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div
+        class="d-flex hfContainer lptemplate-footer flex-row-reverse paddingtop col-lg-12 col-md-12 col-sm-12 fixed-footer" [ngStyle]="{'width': sideNavWidth}">
+        <div class="">
+            <a (click)="save()">
+                <nep-button Type="Primary" 
+                [disabled]="!fundReportForm.valid||fundReportForm.value['reportItems'].length<1">
+                    Save as
+                </nep-button>
+            </a>
+
+        </div>
+        <div class="pr12">
+            <nep-button Type="Secondary" [disabled]=true>
+                <img class="preview" src="assets/dist/images/Content.svg" alt="" /> Preview
+            </nep-button>
+        </div>
+        <div class="pr12">
+            <a (click)="resetCntrl()">
+                <nep-button Type="Secondary" 
+                [disabled]="!fundReportForm.valid||fundReportForm.value['reportItems'].length<1">
+                Reset
+            </nep-button>
+            </a>
+
+        </div>
+        <div class="pr12">
+            <nep-button Type="Secondary" [disabled]=true>
+                Cancel
+            </nep-button>
+        </div>
+    </div>
+    <div *ngIf="showpopup">
+        <confirm-modal class="AddOrUpdateKpi" primaryButtonName="Confirm" (secondaryButtonEvent)="onClose()"
+            [disablePrimaryButton]="disableConfirmSavebtn" (primaryButtonEvent)="confirmSave();" id="add_template"
+            secondaryButtonName="Cancel" [modalTitle]="title">
+            <div class="row mr-0 ml-0">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0">
+                    <div class="row mr-0 ml-0">
+                        <div class="col-lg-12 col-md-5 col-xs-5 pl-0 pr-0 ">
+                            <div class="">Template Name
+                            </div>
+                            <nep-input (mouseout)="onChange($event)" (onChange)="onChange($event)"
+                                [ngClass]="{'custom-error-kpi-input':isexits}" [value]="fundTemplateName"
+                                [placeholder]="placeholder"
+                                class="kpis-custom-select custom-nep-input default-txtcolor lp-nep-input "></nep-input>
+                            <div *ngIf="isexits" class="nep-error">Template name already exits</div>
+                        </div>
+                        <div class="col-lg-12 col-md-5 col-xs-5 pl-0 pr-0 pt-0 ">
+                            <div class="d-inline-block padding-radio">
+
+                                <p-radioButton [disabled]="default==selectedSection.name"
+                                    (click)="radiobtnClick('Update');" (mouseout)="removeRadioerror(selectionradio)"
+                                    value="Update" [(ngModel)]="selectionradio" name="radio" inputId="1">
+                                </p-radioButton>
+                                <span for="1">Update
+                                    current template</span>
+                            </div>
+                            <div class="padding-radio-save">
+                                <p-radioButton (click)="radiobtnClick('New');"
+                                    (mouseout)="removeRadioerror(selectionradio)" name="radio" value="New"
+                                    [(ngModel)]="selectionradio" inputId="2"></p-radioButton>
+                                <span for="2">Save as new template</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+
+    <div *ngIf="isPopup">
+        <modal customwidth="489px" [modalTitle]="modalTitle" primaryButtonName="Confirm" secondaryButtonName="Cancel"
+            (primaryButtonEvent)="OnConfig($event)" (secondaryButtonEvent)="OnCancel($event)"
+            [disablePrimaryButton]="disableRenameConfirm">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12" *ngIf="this.configObj.Status == 'Set as Active'">
+                    This will set {{this.selectedSection.name}} as active. Are you sure?
+                </div>
+                <div class="col-lg-12 col-md-12 col-xs-12" *ngIf="this.configObj.Status == 'Set as Inactive'">
+                    This will set {{this.selectedSection.name}} as Inactive and Default template as active. Are you
+                    sure?
+                </div>
+                <div class="col-lg-12 col-md-5 col-xs-5 pl-3 pr-3 " *ngIf="this.configObj.Status == 'Rename template'">
+                    <div class="">Template Name*
+                    </div>
+                    <nep-input (onInput)="ontemplateChange($event)" [ngClass]="{'custom-error-kpi-input':isexits}"
+                        [value]="templateName" placeholder=""
+                        class="kpis-custom-select custom-nep-input default-txtcolor">
+                    </nep-input>
+                    <div *ngIf="isexits" class="nep-error">Template name already exits</div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-xs-12"
+                    *ngIf="this.configObj.Status == 'Delete template' && selectedSection.name !== activeTemplateName">
+                    This will delete {{this.selectedSection.name}} template. Are you sure?
+                </div>
+                <div class="col-lg-12 col-md-12 col-xs-12"
+                    *ngIf="this.configObj.Status == 'Delete template'&& selectedSection.name === activeTemplateName">
+                    This will delete {{this.selectedSection.name}} template and set Default template as active. Are you
+                    sure?
+                </div>
+            </div>
+        </modal>
+    </div>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

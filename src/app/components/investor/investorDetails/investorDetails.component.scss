@@ -1,0 +1,159 @@
+@import "../../../../variables";
+.tab-shadow {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000014;
+    opacity: 1;
+    margin-bottom: 8px;
+    margin-top: -18.8px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-top: 12px;
+    padding-left: 5px;
+}
+.download-investor-excel {
+    background: $nep-primary 0% 0% no-repeat padding-box;
+    border-radius: 4px;
+    opacity: 1;
+    cursor: pointer;
+    padding: 5px 16px;
+    padding-bottom: 7px !important;
+    color: $nep-white;
+}
+
+.text-align-left {
+    text-align: left !important;
+    padding: 12px 16px !important;
+}
+.investor-fund-table
+{
+    .p-action-padding {
+        padding: 0px 8px 0px 12px;
+    }
+    .p-add-padding {
+        padding: 0px 0px 0px 16px;
+    }
+    .col-divider {
+        border-right: 1px solid #DEDFE0;
+    }
+    .search-text-company {
+        height: 32px !important;
+        font-size: 12px !important;
+    }
+    .fasearchicon
+    {
+        top:4px !important;
+    }
+    .pref-icon
+    {
+        padding-right: 12px !important;
+    }
+    .plus-btn
+    {
+        margin-top: -33px;
+        padding-right: 16px;
+    }
+}
+
+.TextTruncate-investor {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
+.frozen-headerWidth
+{
+width:260px !important;
+}
+.frozen-header-tr-Width
+{
+    width:300px !important;
+}
+.tc-box
+{
+background: #FFFFFF 0% 0% no-repeat padding-box;
+box-shadow: 0px 0px 12px #00000014;
+border: 1px solid #DEDFE0;
+border-radius: 4px;
+}
+.sub-feature-section {
+    padding-right: 16px;
+    display: inline-block;
+}
+.border-tr
+{
+    border-bottom: 1px solid #DEDFE0;
+}
+.financial-page {
+    background: $nep-white 0% 0% no-repeat padding-box;
+    box-shadow: 0px 0px 12px $nep-shadow-color;
+    border: 1px solid $nep-divider !important;
+    border-radius: 4px;
+    opacity: 1 ;
+}
+.company-investor-border{
+    background: $nep-white 0% 0% no-repeat padding-box;
+    border-top: 1px solid $nep-divider !important;
+    border-radius: 4px !important;
+    opacity: 1 !important;
+}
+.p-action-padding {
+    padding: 0px 8px 0px 12px;
+}
+.p-add-padding {
+    padding: 0px 0px 0px 16px;
+}
+.col-divider {
+    border-right: 1px solid #DEDFE0;
+}
+.search-text-company {
+    height: 32px !important;
+    font-size: 12px !important;
+}
+.fasearchicon
+{
+    top:4px !important;
+}
+.pref-icon
+{
+    padding-right: 12px !important;
+}
+.plus-btn
+{
+    margin-top: -33px;
+    padding-right: 16px;
+}
+.company-details-padding{
+    padding-top: 20px !important;
+}
+.search-barWithout-bg {background: #FAFAFB 0% 0% no-repeat padding-box;}
+.filter-first {
+    background: $nep-white 0% 0% no-repeat padding-box;
+    overflow-y: auto;
+    height: 256px;
+}
+.border-bottom-company{
+    border-top: 1px solid #DEDFE0 ;
+}
+.allvalues-kpis-company-performance{
+    background: #FAFAFB 0% 0% no-repeat padding-box;
+}
+.custom-investor-table{
+    tr, th, td{
+        max-width: 300px !important;
+    }
+}
+.custom-investor-table tbody>tr>td {
+    border-right: 1px solid #d5d5d5 !important;
+}
+.custom-investor-value-padding{
+    padding-left: 12px !important;
+}
+.custom-investor-padding{
+    padding-left: 32px !important;
+}
+.custom-investor-padding:first-child{
+    padding-left: 0px !important;
+}
+.custom-investor-padding:nth-child(4){
+    padding-left: 0px !important;
+}
+

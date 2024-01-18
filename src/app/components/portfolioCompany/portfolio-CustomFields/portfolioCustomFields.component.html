@@ -1,0 +1,74 @@
+<div class="row mr-0 ml-0 pc-group-menu" (click)="$event.stopPropagation();">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 preference-header ">
+        <div class="float-left menu-header">
+            {{displayName}}
+        </div>
+        <div class="float-right close-icon cursor-filter" (click)="closePanel()">
+            <i class="pi pi-times"></i>
+        </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 preference-content pr-0 pl-0 border-bottom-0">
+        <div class="row mr-0 ml-0">
+            <div class="col-12 col-sm-12 col-lg-12 col-md-12 col-xl-12 pr-0 pl-0 d-none" *ngIf="groupList?.length > 0">
+                <div class="kpi-sec-search">
+                    <div class="search"><span class="fa fa-search fasearchicon p-1"></span><input
+                            (click)="$event.stopPropagation();" type="text" placeholder="Search"
+                            [(ngModel)]="searchGroup" class="search-text-company companyListSearchHeight"></div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-lg-12 col-md-12 col-xl-12 company-group-boundary"
+                *ngIf="groupList?.length > 0">
+                <div class="row mr-0 ml-0  company-group-list" cdkDropList (cdkDropListDropped)="drop($event)">
+                    <ng-container *ngFor="let group of groupList | groupFilter:searchGroup; let i = index">
+                        <div class="col-12 col-sm-12 col-lg-12 col-md-12 col-xl-12 company-group-list-padding drag-item pl-0 pr-0 company-group-box"
+                            cdkDragBoundary=".company-group-boundary" cdkDrag *ngIf="!group.isActive">
+                            <div class="company-group-custom-placeholder" *cdkDragPlaceholder></div>
+                            <div class="float-left drag-item-content">
+                                <div class="dot-img">
+                                    <img cdkDragHandle src="assets/dist/images/6dots.svg" alt="">
+                                </div>
+                            </div>
+                            <div class="d-inline-block group-content" [ngStyle]="{'height': group.isEditable ? '28px' : '32px' }">
+                                <label *ngIf="!group.isEditable" for="group" class="mb-0 pl-2 TextTruncate"
+                                    title="">{{group?.groupName}}</label>
+                                <input *ngIf="group.isEditable" [name]="'group' + i" [(ngModel)]="group.groupName"
+                                    type="text"
+                                    class="form-control eachlabel-padding default-txt TextTruncate edit-mode-input"
+                                    name="groupName" validateRequired required value="{{group.groupName}}"
+                                    autocomplete="off" maxlength="500" />
+                            </div>
+                            <div class="float-right">
+                                <div class="float-left  icon-edit">
+                                    <a *ngIf="!group.isEditable" target="_self" (click)="editGroup(group)"><img
+                                            src="assets/dist/images/EditIcon.svg" alt="edit"></a>
+                                    <a *ngIf="group.isEditable" target="_self" (click)="cancelClick(group)"><img
+                                            src="assets/dist/images/red-tick.svg" alt="delete"></a>
+                                </div>
+                                <div class="float-right  icon-delete">
+                                    <a *ngIf="!group.isEditable" target="_self" (click)="deleteGroup(group)"><img
+                                            src="assets/dist/images/delete.svg" alt="delete"></a>
+                                    <a [ngStyle]="{'pointer-events': group.groupName == null || group.groupName == '' ? 'none' : '' }"
+                                        *ngIf="group.isEditable" target="_self" (click)="updateGroup(group)"><img
+                                            src="assets/dist/images/green-tick.svg" alt="edit"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-12 col-sm-12 col-lg-12 col-md-12 col-xl-12 content-p"
+                [ngClass]="groupList?.length > 0 ?'company-grp-add-btn-b' :''">
+                <div class="d-inline-block add-text">
+                    <input (focus)="myFunc($event)" (click)="$event.stopPropagation();" [(ngModel)]="groupName"
+                        type="text" placeholder="Enter list name here…" />
+                </div>
+                <div class="d-inline-block add-btn">
+                    <button (keyup.enter)="$event.stopPropagation();addCompanyGroup()"
+                        (click)="$event.stopPropagation();addCompanyGroup()"
+                        [disabled]="groupName==null || groupName ==''">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="hidden" id="auto_trigger" class="btn btn-warning d-none">click</button>

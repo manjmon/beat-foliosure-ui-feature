@@ -1,0 +1,107 @@
+<div id="tableContainer">
+    <p-table styleClass="p-datatable-gridlines" [resizableColumns]="true" [columns]="headers" [value]="rowValues" styleClass="p-datatable-gridlines" class="" sortMode="multiple" [scrollable]="true" [scrollHeight]="scrollheight">
+        <ng-template pTemplate="caption" *ngIf="isDynamic===true">
+            <div class="p-d-flex">
+                <span class="p-input-icon-left p-ml-auto">
+          <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')"
+            [placeholder]="placeholder" />
+        </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr [ngClass]="!hasBorder ? 'removeTableBorder rowStyle' : 'rowStyle'">
+                <th *ngIf="isCheckbox" id="checkAll" style="width: 60px;margin: auto;">
+                    <checkbox marginLeft="4px" marginTop="-9px" height="20px" width="20" [isChecked]="checkAll" (change)="handleCheckBox('checkAll',null)" [value]=""></checkbox>
+                </th>
+                <ng-container *ngFor="let col of columns">
+                    <th id="col.header" class="cellPadding repo-table audit-log-table-header" *ngIf="col.sort===false || rowValues.length === 0" [ngClass]="col.headerWidthClass">
+                        <span class="repository-table-Headers-Style" [ngStyle]="{'margin-left': (col.header==='Folder') ? '15px' : '0px'}" [title]="col.header">{{col.header}}</span>
+                    </th>
+                    <th id="col.header" *ngIf="col.sort===true && rowValues.length !== 0" [ngClass]="col.headerWidthClass" class="repo-table audit-log-table-header">
+                        <span class="repository-table-Headers-Style" [title]="col.header">{{col.header}}</span>
+                        <p-sortIcon *ngIf="col.sort===true" [field]="col.field" [pSortableColumn]="col.field"></p-sortIcon>
+                    </th>
+                </ng-container>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns" *ngIf="!loading">
+            <tr [ngClass]="!hasBorder ? 'removeTableBorder rowStyle' : 'rowStyle'">
+                <td *ngIf="isCheckbox" id="rowData.name" style="width: 60px !important;">
+                    <checkbox marginLeft="4px" marginTop="-9px" height="20px" width="20" [isChecked]="rowData.isChecked" (change)="handleCheckBox('check',rowData)" [value]=""></checkbox>
+                </td>
+                <td id="{{$index+1|number}}" *ngFor="let col of columns" [ngClass]="col.valueWidthClass" class="cellPadding">
+                    <div class="nep-message-item ImageStyleDiv"  style="display: flex;">
+                        <div *ngIf="col.field === ImageBeforeData" [ngClass]="ImageStyle" style="margin-left: -3px;margin-right: 8px;">
+                            <a href="javascript:void(0);" (click)="OnDownloadDocument(rowData.encryptedDocumentId)">
+                                <img [ngClass]="(rowData.imagePath !== undefined && rowData.imagePath !== null) ? 'fileTypeSize' : ''" [src]="(rowData.imagePath !== undefined && rowData.imagePath !== null) ? rowData.imagePath : ImageSrc" alt="" />
+                            </a>
+                        </div>
+                        <div *ngIf="col.field != 'assignedToNames' && col.field != 'comment'" ngClass="ImageBeforeData !== '' ? 'mtCell TextTruncate showToolTip rowDataStyle' : 'TextTruncate showToolTip rowDataStyle'" style="width: 97%;" (click)="OnOpenDocument(rowData.encryptedDocumentId)" title={{rowData[col.field]}}>
+                            <div class="TextTruncate" (click)="colWithClickEvent === col.field ? OnColClick(rowData): false" [ngClass]="col.field === 'folderName' && rowData.folderName === 'Final' ? 'finalFolderStyle' : col.valueCustomClass">
+                                {{col.field !== 'dateOfDocument' ? (col.field !== 'modifiedOn' ? rowData[col.field] :rowData.modifiedOn | date:'dd MMM yyyy') && (col.field !== 'createdOn' ? rowData[col.field] :rowData.createdOn | date:'dd MMM yyyy')  : rowData.dateOfDocument | date:'dd MMM yyyy'}}</div>
+                        </div>
+                        <div *ngIf="col.field == 'comment'" ngClass="ImageBeforeData !== '' ? 'mtCell TextTruncate showToolTip rowDataStyle' : 'TextTruncate showToolTip rowDataStyle'" style="width: 97%;" title={{rowData[col.field]}}>
+                            <div class="TextTruncate" (click)="colWithClickEvent === col.field ? OnColClick(rowData): false" [ngClass]="col.field === 'folderName' && rowData.folderName === 'Final' ? 'finalFolderStyle' : col.valueCustomClass">
+                                <span *ngIf="rowData.comment != null" (click)="viewCommentsPopup(rowData.comment)"><img alt="" [src]="'assets/dist/images/Comment Grey.svg'" /></span>
+                                <span *ngIf="rowData.comment == null"> - </span>
+                            </div>
+                        </div>
+                        <div style="cursor: pointer;" *ngIf="col.field === ImageAfterData">
+                            <div (click)="OnImgClick(rowData)">
+                                <img [ngClass]="ImageAfterData" src={{ImagePath}} alt="" />
+                            </div>
+                        </div>
+                        <div *ngIf="col.field === 'assignedToNames'">
+                            <div class="circles" title={{rowData[col.field]}} *ngIf="(rowData.assignedToNames==null?0:rowData.assignedToNames.length)==2">
+                                <div class="dcoumentcircle">
+                                    {{rowData.assignedToNames==null?"":rowData.assignedToNames[0].split(' ')[0].slice(0,1)+""+rowData.assignedToNames[0].split(' ')[1].slice(0,1) }}
+                                </div>
+                                <div class="dcoumentcircle">
+                                    {{rowData.assignedToNames==null?"":rowData.assignedToNames[1].split(' ')[0].slice(0,1)+""+rowData.assignedToNames[1].split(' ')[1].slice(0,1) }}
+                                </div>
+                            </div>
+                            <div class="circles" title={{rowData[col.field]}} *ngIf="(rowData.assignedToNames==null?0:rowData.assignedToNames.length)>2">
+                                <div class="dcoumentcircle">
+                                    {{rowData.assignedToNames==null?"":rowData.assignedToNames[0].split(' ')[0].slice(0,1)+""+rowData.assignedToNames[0].split(' ')[1].slice(0,1) }}
+                                </div>
+                                <div class="dcoumentcircle">
+                                    {{rowData.assignedToNames==null?"":rowData.assignedToNames[1].split(' ')[0].slice(0,1)+""+rowData.assignedToNames[1].split(' ')[1].slice(0,1) }}
+                                </div>
+                            </div>
+                            <div class="circles2" title={{rowData[col.field]}} *ngIf="(rowData.assignedToNames==null?0:rowData.assignedToNames.length)==1">
+                                <div class="dcoumentcircle">{{rowData.assignedToNames==null?"":rowData.assignedToNames[0].split(' ')[0].slice(0,1)+""+rowData.assignedToNames[0].split(' ')[1].slice(0,1) }}</div>
+                            </div>
+                            <div *ngIf="(rowData.assignedToNames==null?0:rowData.assignedToNames.length)>2" style="white-space:pre" class="moreplus" title={{rowData[col.field]}} style=""> {{rowData.assignedToNames==null?"":"+"+(rowData.assignedToNames.length-2)}}</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" *ngIf="loading">
+            <img class="landingPageLoader" src="assets/dist/images/loading-small.gif" alt="" />
+        </ng-template>
+    </p-table>
+    <app-empty-state [isGraphImage]="false"
+    *ngIf="rowValues?.length == 0"></app-empty-state>
+
+    <div *ngIf="iscommentsPopup" class="nep-modal nep-modal-show" style="display: block; background: rgba(0, 0, 0, 0.25);">
+        <div class="nep-modal-mask"></div>
+        <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default" style="position: relative; display: inline-flex; top: 35%;width:489px;">
+            <div class="nep-card-header nep-modal-title" style="padding: 12px 20px !important;">
+                <div class="d-inline">Comments</div>
+                <div class="float-right desc-icon">
+                    <span (click)="closeCommentsPopUp()"><img src="assets/dist/images/Cross Grey.svg" alt="" /></span>
+                </div>
+            </div>
+            <div class="nep-card-body" style="max-height: 340px !important; overflow-y: auto !important;">
+                <div *ngIf="comments!=null"> {{ comments }}</div>
+                <div class="text-center" *ngIf="comments === null">
+                    <img src="assets/dist/images/emptyStateKpi.svg" alt="" />
+                    <div class="pt-4 pr-4 pl-4 pb-0">
+                        No description available yet!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

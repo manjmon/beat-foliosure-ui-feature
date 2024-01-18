@@ -1,0 +1,157 @@
+<div class="portfolio-company-table">
+    <div class="border-top filter-bg" [ngClass]="objMasterKPIList.Results != null && objMasterKPIList.Results.length == 0 ?'pc-border-bottom':''">
+        <div class="row mr-0 ml-0">
+            <div class=" col-lg-12 col-md-12 col-sm-12 pl-0 pr-0">
+                <div class="allvalues">All values in: {{ModuleCurrency}} ({{unitOfCurrency}})</div>
+                <div class="pull-right headerfontsize">
+                    <div class="d-inline-block search">
+                        <span class="fa fa-search fasearchicon"></span>
+                        <input #gb pInputText (input)="dt.filterGlobal($event.target.value, 'contains')" type="text" class="search-text-company" placeholder="Search" [(ngModel)]="globalFilter">
+                    </div>
+                    <div class="d-inline-block pr-1 " [hideIfUserUnAuthorized]='kpiName =="TradingRecords"?{subFeatureId:subFeature.TradingRecords,action:actions[actions.canEdit],id:id}:{subFeatureId:subFeature.CreditKPI,action:actions[actions.canEdit],id:id}'>
+                        <div class="d-inline-block table-pref">Logs</div>
+                        <div class="d-inline-block pr-2 pl-1" title="Switch to view cell based audit trails">
+                            <p-inputSwitch (onChange)="handleChange($event)" class="toggle-switch"></p-inputSwitch>
+                        </div>
+                    </div>
+                    <div class="d-inline textsplit" [hideIfUserUnAuthorized]='{subFeatureId:subFeature.TradingRecords,action:actions[actions.canEdit],id:id}'></div>
+                    <div class="d-inline-block cloud_download">
+                        <div class="d-inline-block pr-2" [hideIfUserUnAuthorized]='{subFeatureId:subFeature.TradingRecords,action:actions[actions.canExport],id:id}' *ngIf="objMasterKPIList.Results != null && objMasterKPIList.Results.length > 0"><img src="assets/dist/images/Cloud-download.svg" class="cursor-filter" title="Export KPI (Excel file)" alt="" (click)="exportMasterKpiValues()" /><span class="excel-load" *ngIf="exportMasterKPILoading">
+                            <i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                         </span></div>
+                        <div class="d-inline textsplit" [hideIfUserUnAuthorized]='{subFeatureId:subFeature.TradingRecords,action:actions[actions.canExport],id:id}' *ngIf="objMasterKPIList.Results != null && objMasterKPIList.Results.length > 0"></div>
+                        <div class="d-inline-block pr-1 pl-2"><img id="dropdownMenuButton" [matMenuTriggerFor]="menu" src="assets/dist/images/ConfigurationWhite.svg" class="cursor-filter" alt="" #masterMenuTrigger="matMenuTrigger" /> </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="align-items-start">
+        <p-table styleClass="p-datatable-gridlines" [globalFilter]="gb" #dt [resizableColumns]="true" [autoLayout]="true" [columns]="objMasterKPIList.cols" [value]="objMasterKPIList.Results" [scrollable]="true" class="cashflow-tbl custom-kpi-table migration-frozen-table" [globalFilterFields]="masterKPICols"
+           *ngIf="objMasterKPIList.Results != null && objMasterKPIList.Results.length > 0">
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <ng-container *ngFor="let col of frozenCols;">
+                        <th pFrozenColumn [ngStyle]="{'width':'340px'}" id="headers"  [class.budget-green]="col.header.indexOf('Budget')>-1">
+                            {{ col.header }}
+                        </th>
+                    </ng-container>
+                    <ng-container *ngFor="let col of columns;">
+                        <th id="headers"  [class.budget-green]="col.header.indexOf('Budget')>-1">
+                            {{ col.header }}
+                        </th>
+                    </ng-container>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <ng-container *ngFor="let col of frozenCols;">
+                        <td  tabindex="0" pFrozenColumn class="mstkpi-o kpi-unset-bgcolor">
+                        <span class="content">
+                            <span class="ui-column-title">{{ col.header }}</span>
+                        <span *ngIf="col.header =='KPI'" title={{rowData[col.field]}} 
+                        [ngClass]="(rowData['isHeader'] || rowData['isBoldKPI'])? 'showToolTip TextTruncate bold-text' :'showToolTip TextTruncate'"
+                        [ngClass]="rowData['isHeader'] ? 'headerKpi bold-text' : rowData['isBoldKPI'] ? 'bold-text': ''"><span
+                                    *ngIf="rowData['IsChild']">-</span>{{rowData[col.field]}}</span>
+                        </span>
+                    </td>
+                    </ng-container>
+                    <ng-container *ngFor="let col of columns;">
+                        <td  tabindex="0" class="mstkpi-o"   [class.table-data-right]="col.field !='KPI' && rowData['KpiInfo'] != 'Text'" (click)="onAuditLog(rowData,col)" (dblclick)="onEditInit(rowData,col)" [ngClass]="(col.header !=='KPI' && auditToggle && printColumn(rowData,col))?'kpi-set-bgcolor':'kpi-unset-bgcolor'"
+                        [attr.title]="(col.header !=='KPI' && auditToggle && printColumn(rowData,col)) ? 'Click to view this cell logs' : ''" [ngClass]="(rowData[col.field + ' editable'] && col.header !=='KPI')?'p-0 custom-td-first':''">
+                        <span class="content">
+                            <span class="ui-column-title">{{ col.header }}</span>
+                        <span *ngIf="col.header !='KPI'" [ngClass]="rowData['isBoldKPI'] ? 'bold-text':''">
+                                <input autofocus *ngIf="rowData[col.field + ' editable'] && rowData['KpiInfo'] !='Text' && !rowData['isHeader']"
+                                class="openDocInputText fontStyle14 companyText" pattern="/^-?\d+\.?\d*$/"
+                                type="text" [value]="rowData[col.field]"
+                                [(ngModel)]="rowData[col.field]" required
+                                (blur)="onColumnEditComplete(i, col, rowData)" (keyup)="validateNumber($event)"
+                                (keyup.enter)="onColumnEdit($event)" (keypress)="validateMaxLength($event)"
+                                >
+                                <input autofocus *ngIf="rowData[col.field + ' editable'] && rowData['KpiInfo'] =='Text' && !rowData['isHeader']"
+                                class="openDocInputText fontStyle14 companyText"
+                                type="text" [value]="rowData[col.field]"
+                                [(ngModel)]="rowData[col.field]" required
+                                (blur)="onColumnEditComplete(i, col, rowData)"
+                                (keyup.enter)="onColumnEdit($event)"
+                                >
+                                <span [title]="rowData['KpiInfo']=='Text'? rowData[col.field]:''"
+                                    *ngIf="rowData[col.field]!= undefined && rowData[col.field]!=null && rowData[col.field]!='' && !rowData['isHeader'];else empty_Text">
+                                    <span
+                                        *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('(%)') == -1 && rowData['KPIWithInfo'].indexOf('(x)') == -1 && rowData['KPIWithInfo'].indexOf('($)') == -1 && !rowData[col.field + ' editable']"
+                                        [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number
+                : (showFinancialKPIValueDecimals?(modelMasterKpi.decimalPlaces!=null
+                ? modelMasterKpi.decimalPlaces.value:defaultDecimalPlace):defaultDecimalPlace) | minusSignToBrackets) : rowData[col.field]"
+                                        ></span>
+                        <span *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('($)') > -1 && !rowData[col.field + ' editable']" [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number
+                : NumberDecimalConst.currencyDecimal | minusSignToBrackets: '') : rowData[col.field]"></span>
+
+                        <span *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('(%)') > -1 && !rowData[col.field + ' editable']" [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number: NumberDecimalConst.percentDecimal | minusToBracketsWithPercentage: '%'): rowData[col.field]"></span>
+
+                        <span *ngIf="col.header !='KPI' && rowData['KPIWithInfo'].indexOf('(x)') > -1 && rowData[col.field] != 'NA' && rowData[col.field] != '' && !rowData[col.field + ' editable']" [innerHtml]="isNumberCheck(rowData[col.field]) ? (rowData[col.field] | number: NumberDecimalConst.multipleDecimal)+'x': rowData[col.field]"></span>
+                        </span>
+
+                        <ng-template #empty_Text class="detail-sec">
+                            <span *ngIf="!rowData[col.field + ' editable'] && !rowData['isHeader']">NA</span>
+                            <span *ngIf="rowData['isHeader']" ><div></div></span>
+                        </ng-template>
+
+                        </span>
+                        </span>
+                    </td>
+                    </ng-container>
+                </tr>
+            </ng-template>
+        </p-table>
+        <app-empty-state [isGraphImage] ="false" *ngIf="(objMasterKPIList.Results == null || objMasterKPIList.Results.length==0) && !isLoader"></app-empty-state>  
+    </div>
+    <div *ngIf="confirmUpdate">
+        <confirm-modal customwidth="640px" modalTitle="Update Value" primaryButtonName="Update" secondaryButtonName="Cancel" (primaryButtonEvent)="OnKpiUpdate($event)" (secondaryButtonEvent)="OnKpiUpdateCancel($event)">
+            <div>
+                <div class="row">
+                    <div class="col-8 col-kpi-fs">{{ModuleName}} - {{updateModel.header}}</div>
+                    <div class="col-4 text-right style3 col-fs-lh-p">
+                    </div>
+                </div>
+                <div class="row row-kpi-mt" >
+                    <div class="col-6">
+                        <div class="mstr-kpi-c-fs-lh">{{updateModel.rowName}} ( Current )</div>
+                        <div class="mastr-kpi-clr">
+                            <span *ngIf="updateModel.previousVal!=undefined && updateModel.previousVal!=''&& updateModel.previousVal!=0 ">{{updateModel.previousVal}}</span>
+                            <span *ngIf="updateModel.previousVal==undefined || updateModel.previousVal==''|| updateModel.previousVal==0">NA</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div  class="mstr-kpi-c-fs-lh">{{updateModel.rowName}} ( New )</div>
+                        <div class="mastr-kpi-clr">
+                            <span *ngIf="updateModel.updatedVal!='' && updateModel.updatedVal!=undefined && updateModel.updatedVal!=0">{{updateModel.updatedVal}}</span>
+                            <span *ngIf="updateModel.updatedVal=='' || updateModel.updatedVal==undefined">NA</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="kpi-mstr-mt-fs-lh">
+                    Are you sure want to replace the current value with the new value?
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+    <div *ngIf="infoUpdate">
+        <confirm-modal IsInfoPopup="true" customwidth="400px" modalTitle="Change Values in Selection" primaryButtonName="OK" (primaryButtonEvent)="CloseInfo()">
+            <div>
+                <div class="mtr-kpi-lh">
+                    To edit cell data please select numbers in <b><i>'Absolute'</i></b> under <b><i>Values in</i></b> dropdown
+                </div>
+            </div>
+        </confirm-modal>
+    </div>
+    <div>
+        <app-loader-component *ngIf="isLoader"></app-loader-component>
+    </div>
+    <mat-menu #menu="matMenu" [hasBackdrop]="true" class="fixed-menu">
+        <app-kpitablefilters isDefaultMillion="true"
+            (Kpifilter)="kpiTable_GlobalFilter($event)"></app-kpitablefilters>
+    </mat-menu>
+</div>
+    <app-foot-note [moduleId]="modelList.moduleId" [companyId]="model?.portfolioCompanyID" *ngIf="objMasterKPIList?.Results?.length > 0" class="custom-quill-editor"></app-foot-note>

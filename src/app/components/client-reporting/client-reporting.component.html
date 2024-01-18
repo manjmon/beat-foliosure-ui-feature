@@ -1,0 +1,183 @@
+<div class="row client-reporting-section" (resized)="onResized($event)">
+    <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+        <div class="row mr-0 ml-0 fixed-top-section">
+            <div class="col-10 col-xs-10 col-sm-10 col-lg-10 col-xl-10 col-md-10 pr-0 pl-0">
+                <div class="d-inline-block select-pr">
+                    <div class="d-inline-block label-padding-css" >Company Name</div>
+                    <div>
+                        <p-dropdown [filter]="true" [filterBy]="'companyName'" [virtualScroll]="true" [virtualScrollItemSize]="30"
+                            class="access-subfeature custom-searchable-dropdown" name="module" [options]="companyList"
+                            [(ngModel)]="selectedCompany" placeholder="Select Company" optionLabel="companyName"
+                            (onChange)="companyChangeEvent()" [showClear]="false">
+                            <ng-template let-company pTemplate="item">
+                                <span title="{{company.companyName}}">
+                                    {{company.companyName}}
+                                </span>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="d-inline-block pl3 pr3 select-pr">
+                    <div class="d-inline-block label-padding-css" >Period Type</div>
+                    <div>
+                    <p-dropdown [virtualScroll]="true" [virtualScrollItemSize]="36" class="access-subfeature custom-searchable-dropdown" name="period"
+                        [options]="periodTypeList" [(ngModel)]="selectedPeriodType" placeholder="Select Period" optionLabel="label"
+                        [showClear]="false" (onChange)="changePeriod($event)">
+                    </p-dropdown>
+                    </div>
+                </div>
+                <div class="d-inline-block pr3 select-pr client-p-calendar" class="{{sideNavBaseClass}}">
+                    <div *ngIf="selectedPeriodType?.label=='Monthly'" class="d-inline-block label-padding-css">From Month</div>
+                    <div *ngIf="selectedPeriodType?.label=='Monthly'">
+                        <p-calendar *ngIf="selectedPeriodType.label=='Monthly'" class="access-bulkupload-p-calendar"
+                            [ngClass]="isFromMonthYearValidation?'error-input':'access-bulkupload-p-calendar'" placeholder="Select Month"
+                            (onSelect)="onSelectMonth($event)" [(ngModel)]="selectedMonth" view="month" dateFormat="M yy" [showIcon]="true"
+                            [yearNavigator]="true" yearRange={{yearRange}} [readonlyInput]="true" inputId="monthpicker">
+                        </p-calendar>
+                    </div>
+                    <div *ngIf="selectedPeriodType?.label=='Quarterly'" class="d-inline-block label-padding-css">Quarterly</div>
+                    <div *ngIf="selectedPeriodType?.label=='Quarterly'">
+                        <quarter-year-control *ngIf="selectedPeriodType.label=='Quarterly'" [ControlName]="'quarterYearValue'"
+                            [QuarterYear]="selectedQuarter" (onCalendarYearPicked)="fromQuarterYear($event)">
+                        </quarter-year-control>
+                    </div>
+                    <div *ngIf="selectedPeriodType?.label=='Yearly'" class="d-inline-block label-padding-css">Yearly</div>
+                    <div *ngIf="selectedPeriodType?.label=='Yearly'">
+                        <p-dropdown *ngIf="selectedPeriodType.label=='Yearly'" [filter]="true" [filterBy]="'value'" [virtualScroll]="true"
+                            [virtualScrollItemSize]="30" class="access-subfeature custom-searchable-dropdown" name="year" [options]="yearOptions"
+                            placeholder="Select year" optionLabel="text" (onChange)="yearOptionsChange($event);" [showClear]="false"
+                            [(ngModel)]="selectedYear">
+                            <ng-template let-yearOpt pTemplate="item">
+                                <span class="TextTruncate" title="{{yearOpt.text}}">
+                                    {{yearOpt.text}}
+                                </span>
+                            </ng-template>
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="d-inline-block select-pr client-p-calendar" class="{{sideNavBaseClass}}">
+                    <div *ngIf="selectedPeriodType?.label=='Monthly'"  class="d-inline-block label-padding-css" >To Month</div>
+                    <div *ngIf="selectedPeriodType?.label=='Monthly'" >
+                    <p-calendar *ngIf="selectedPeriodType.label=='Monthly'" class="access-bulkupload-p-calendar"
+                        [ngClass]="isMonthYearValidation?'error-input':'access-bulkupload-p-calendar'" placeholder="Select Month"
+                        (onSelect)="onSelectToMonth($event)" [(ngModel)]="selectedToMonth" view="month" dateFormat="M yy"
+                        [showIcon]="true" [yearNavigator]="true" yearRange={{yearRange}} [readonlyInput]="true"
+                        inputId="monthpicker">
+                    </p-calendar>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2 col-xs-2 col-sm-2 col-lg-2 col-xl-2 col-md-2 pr-0 pl-0">
+                <div   class="d-inline-block label-padding-css">&nbsp;</div>
+                <div>
+                    <div class="float-right download-Selector" class="{{sideNavBaseClass}}">
+                        <div class="fund-splitButton ">
+                            <a class="loading-input-controls2">
+                            </a>
+                            <div class="download-investor-excel">
+                                <span (click)="exportFullReport()">
+                                    <img alt="" src="assets/dist/images/FileDownloadWhite.svg"
+                                        class="showHandIcon pr-2 mt-0 TextTruncate" title="Performance Report">Reports
+                                </span>
+                                <span *ngIf="isFullExportLoading"> <i *ngIf="isFullExportLoading" aria-hidden="true"
+                                        class="fa fa-spinner fa-pulse fa-1x fa-fw "></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <client-report-tabs *ngIf="adhocDataScroll.length>0 && selectedPeriodType?.label=='Monthly'" [defaultSelectedTab]="defaultSelectedTab"
+            [selectedPeriodType]="selectedPeriodType" [adhocDataScroll]="adhocDataScroll" (onSelectedActiveTab)="onClickActiveTab($event)"></client-report-tabs>
+        <div class="row portfolio-company-list-section">
+            <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pr-0 pl-0">
+                <div class="card-body portafolio-table client-card-margin">
+                    <div class="row performance-section mr-0 ml-0">
+                        <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 outer-section pl-0 pr-0">
+                            <div class="panel panel-default "
+                                [ngClass]="tabList.length > 0 ?'border-top-0 tab-bg':'bg-transparent'">
+                                <div class="panel-heading pl-0 pr-0" [ngClass]="tabList.length==0 ?'pb-0':''">
+                                    <div class="panel-title custom-tabs pc-tabs  custom-client-tab" *ngIf="tabList.length>0">
+                                        <nav mat-tab-nav-bar class="pt-2" [ngClass]="tabList.length==0 ?'filter-bg':''">
+                                            <a mat-tab-link [disableRipple]="true" *ngFor="let tab of tabList;"
+                                                (click)="selectTab(tab)"  [active]="tab.active" class="TextTruncate tab-name-max-width">
+                                               <span  class="TextTruncate" title="{{tab.name}}"> {{tab.name}}</span></a>
+                                        </nav>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-bg">
+                                <div class="row  mr-0 ml-0 filter-bg"
+                                    [ngClass]="[isLoader?'border-bottom':'',reportingList.length==0 ?'mt-0':'']">
+                                    <div
+                                        class="col-lg-12 col-md-12 col-sm-12 col-xl-12 col-12 col-xs-12 pl-0 pr-0 content-mr">
+                                        <div class="float-right">
+                                            <div class="d-inline-block search">
+                                                <span class="fa fa-search fasearchicon p-1"></span>
+                                                <input #globalFilterId pInputText type="text" (keyup)="adhocSearch()"
+                                                    class="search-text-company TextTruncate companyListSearchHeight"
+                                                    [(ngModel)]="globalFilter" placeholder="Search">
+                                            </div>
+                                            <div class="d-inline-block">
+                                                <i aria-hidden="true" *ngIf="isExportLoading"
+                                                    class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                                <img class="showHandIcon" title="Export Client Report (Excel file)"
+                                                    (click)="exportReport()" src="assets/dist/images/Cloud-download.svg"
+                                                    alt="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="datatable-container">
+                                    <p-table styleClass="p-datatable-gridlines" *ngIf="reportingList?.length >0" #adhocTable [columns]="colHeaders"
+                                        [globalFilter]="globalFilterId"
+                                        class="Track-Records cashflow-tbl text-left custom-kpi-table borderless invested-table client-reporting-virtual-table migration-frozen-table"
+                                        [value]="reportingList" [scrollable]="true"
+                                        [scrollHeight]="windowHeight-101+'px'">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <ng-container *ngFor="let col of frozenTableColumns">
+                                                    <th pFrozenColumn [frozen]="true"  [ngStyle]="{'width':customWidth}"  title="{{col.header}}" id="" class="TextTruncate">
+                                                    {{col.header}}
+                                                </th>
+                                                </ng-container>
+                                                <ng-container *ngFor="let col of columns">
+                                                    <th  title="{{col.header}}" id="" class="TextTruncate"
+                                                        >
+                                                        {{col.header}}
+                                                    </th>
+                                                </ng-container>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <tr class="cdk-row-height">
+                                                <ng-container *ngFor="let col of frozenTableColumns">
+                                                    <td pFrozenColumn [frozen]="true" class="TextTruncate">
+                                                        <span [ngClass]="col.isFrozenColumn?'row-white-space':''"
+                                                            title="{{rowData[col.field] | safeHtml}}"
+                                                            [innerHtml]='rowData[col.field]'></span>
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container *ngFor="let col of columns">
+                                                    <td class="TextTruncate">
+                                                        <span
+                                                            title="{{rowData[col.field] | safeHtml}}"
+                                                            [innerHtml]='rowData[col.field]'></span>
+                                                    </td>
+                                                </ng-container>
+                                                
+                                            </tr>
+                                        </ng-template>
+                                    </p-table>
+                                    <app-empty-state class="custom-reporting-bg" *ngIf="reportingList.length==0">
+                                    </app-empty-state>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-loader-component *ngIf="isLoader"></app-loader-component>
+</div>

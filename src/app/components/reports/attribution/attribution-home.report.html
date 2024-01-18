@@ -1,0 +1,34 @@
+﻿<div class="col-12 pl-0 pr-0 attribution-report">
+    <div class="row attribution-report-header">
+        <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 horizontal-parent">
+            <div class="horizontal-child1 float-left" [ngClass]="enableleft?'header-left-arrow':''">
+                <a class="btn pt-2" (click)="moveLeft()" (mouseleave)="stopLeftScrolling()">
+                    <i class="fa fa-chevron-left arrow-style" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div class="horizontal-child2 float-right" [ngClass]="enableright?'header-right-arrow':''">
+                <a class="btn pt-2" (click)="moveRight()" (mouseleave)="stopRightScrolling()">
+                    <i class="fa fa-chevron-right arrow-style" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div #panel class="horizontal-menu">
+                <p-selectButton  [options]="holdingsByList" [(ngModel)]="model.selectedReportTypes" name="sortBy" (onChange)="changeReportType(model.selectedReportTypes)">
+                    <ng-template let-item pTemplate>
+                        <button [title]="item.label" *ngIf="item.value ==14 && model.selectedReportTypes == 14" class="nep-button nep-button-link default-style nepbutton-td"  [ngclass]="model.selectedReportTypes === 14?'default-style':''">
+                            {{isLarissa && item.label =='By Sector' ?'By Investment Area':isLarissa && item.label =='By Security Type' ? 'By Investment Type' : item.label}}
+                        </button>
+                        <button [title]="item.label" *ngIf="item.value !=14 || model.selectedReportTypes != 14"  class="nep-button nep-button-link nepbutton-td"  [ngclass]="model.selectedReportTypes === 14?'default-style':''">
+                            {{isLarissa && item.label =='By Sector' ?'By Investment Area':isLarissa && item.label =='By Security Type' ? 'By Investment Type' : item.label}}
+                            </button>
+                    </ng-template>
+                </p-selectButton>
+            </div>
+        </div>
+    </div>
+    <div class="row mr-0 ml-0">
+        <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0">
+          <attribution-reports #attributionReport [masterModel]="masterModel"></attribution-reports>
+        </div>
+    </div>
+</div>
+<app-loader-component *ngIf="masterDataLoading"></app-loader-component>

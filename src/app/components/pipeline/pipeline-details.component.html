@@ -1,0 +1,128 @@
+﻿<div class="row pipeline-details">
+    <div class="col-lg-12 pr-0 pl-0">
+        <div class="detail-pipeline-component">
+            <div class="card card-main">
+                <div class="card-body" *ngIf="!loading">
+                    <div class="row mr-0 ml-0 pb-1">
+                        <div class="col-12 col-xs-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pl-0 pr-0">
+                            <div class="float-left pipeline-name TextTruncate custom-left-width" title="{{model?.name}}">{{model?.name}}</div>
+                            <div class="float-right pr-3 TextTruncate custom-right-width">
+                                <a [routerLink]="['/pipeline',id]" class="float-right TextTruncate" title="Edit" [hideIfUnauthorized]='{featureId:feature.Pipeline,action:"edit"}'><img alt="" src="assets/dist/images/EditIcon.svg" ng-reflect-ng-class="description"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mr-0 ml-0 detail-card">
+                        <div class="col-md-3 col-lg-3 col-12 col-xs-12 col-sm-3  col-xl-3 pr-0 pl-0 section-padding">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-md-4 col-lg-4 col-12 col-xs-12 col-sm-4 col-md-4 col-xl-4 pl-0 pr-0">
+                                    <span>
+                                        <label class="TextTruncate d-block" title="Firm Firm Name">Firm Name</label>
+                                    </span>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-12 col-xs-12 col-sm-8 col-xl-8 pr-0 pipeline-value-padding TextTruncate">
+                                    <span *ngIf="model.firmDetails!=null;else empty_Text TextTruncate" class=" d-inline">                             
+                                        <a [routerLink]="['/firm-details', model.firmDetails.encryptedFirmID]" class="click-view TextTruncate" href="javascript:void(0);">{{model.firmDetails.firmName}}</a>
+                                </span>
+                                    <span><ng-template #empty_Text class="">NA</ng-template></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-12 col-xs-12 col-sm-3 col-xl-3 pr-0 pipeline-label-padding section-padding">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-md-4 col-lg-4 col-12 col-xs-12 col-md-4 col-xl-4 pl-0 pr-0"> <span>
+                                    <label class="TextTruncate d-block" title="Stage">Stage</label>
+                                </span></div>
+                                <div class="col-md-8 col-lg-8 col-12 col-xs-12 col-sm-8 pr-0 pipeline-value-padding col-xl-8 pl-0 TextTruncate">
+                                    <span class="detail-section" *ngIf="model.pipelineStatus!=null;else empty_Text TextTruncate" title="{{model.pipelineStatus.status}}">{{model.pipelineStatus.status}}</span>
+                                    <span class="detail-section"><ng-template #empty_Text class="">NA</ng-template></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-12 col-xs-12 col-sm-3 col-xl-3 pr-0 pipeline-label-padding section-padding">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-md-4 col-lg-4 col-12 col-xs-12 col-sm-4 col-xl-4 pl-0 pr-0">
+                                    <span>
+                                        <label class="TextTruncate d-block" title="Sector">Sector</label>
+                                    </span>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-12 col-xs-12 col-sm-8 col-xl-8 pr-0 pipeline-value-padding TextTruncate">
+                                    <span class="detail-section" *ngIf="model.sectorList!=null;else empty_Text TextTruncate" title="{{model.sectorList.sector}}">{{model.sectorList.sector}}</span>
+                                    <span class="detail-section"><ng-template #empty_Text class="">NA</ng-template></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-12 col-xs-12 col-sm-3 col-xl-3 pr-0 pipeline-label-padding section-padding">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-md-4 col-lg-4 col-12 col-xs-12 col-sm-4 col-xl-4 pl-0 pr-0">
+                                    <span>
+                                        <label class="TextTruncate d-block" title="Primary Contact">Primary Contact</label>
+                                    </span>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-12 col-xs-12 col-md-8 col-xl-8 pr-0 pipeline-value-padding TextTruncate">
+                                    <span class="detail-section" *ngIf="model?.usersModel!=null;else empty_Text TextTruncate" title="{{model?.usersModel.name}}">{{model?.usersModel.name}}</span>
+                                    <span class="detail-section">
+                                        <ng-template #empty_Text class="">NA</ng-template>
+                                       </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-12 col-xs-12 col-sm-3 col-xl-3 pr-0 pl-0">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-md-4 col-lg-4 col-12 col-xs-12 col-sm-4 col-xl-4 pl-0 pr-0">
+                                    <span>
+                                        <label class="TextTruncate d-block" title="Account Type">Account Type</label>
+                                    </span>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-12 col-xs-8 col-sm-8 col-xl-8 pr-0 pipeline-value-padding TextTruncate">
+                                    <span *ngIf="model.accountTypeDetails!=null;else empty_Text" class="detail-section TextTruncate" title="{{model.accountTypeDetails.accountType}}">{{model.accountTypeDetails.accountType}}</span>
+                                    <span class="detail-section">
+                                            <ng-template #empty_Text class="">NA</ng-template>
+                                           </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-12 col-xs-12 col-sm-3 col-xl-3 pr-0 pipeline-label-padding">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-md-4 col-lg-4 col-12 col-xs-12 col-sm-4 col-xl-4 pl-0 pr-0">
+                                    <span>
+                                        <label class="TextTruncate d-block" title="Strategy">Strategy</label>
+                                    </span>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-12 col-xs-12 col-sm-8 col-xl-8 pr-0 pipeline-value-padding TextTruncate">
+                                    <span *ngIf="model.strategyDetails!=null;else empty_Text" class="detail-section TextTruncate" title="{{model.strategyDetails.strategy}}">{{model.strategyDetails.strategy}}</span>
+                                    <span class="detail-section"><ng-template #empty_Text class="">NA</ng-template></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-12 col-xs-12 col-sm-3 col-xl-3 pr-0 pipeline-label-padding">
+                            <div class="row mr-0 ml-0">
+                                <div class="col-md-4 col-lg-4 col-12 col-xs-12 col-md-4 col-xl-4 pl-0 pr-0">
+                                    <span>
+                                        <label class="TextTruncate d-block" title="Closing Date">Closing Date</label>
+                                    </span>
+                                </div>
+                                <div class="col-md-8 col-lg-8 col-12 col-xs-8 col-sm-8 col-xl-8 pr-0 pipeline-value-padding TextTruncate">
+                                    <span class="detail-section close-date TextTruncate" title="{{(model.closingDate|date:'MM/dd/yyyy')||'NA'}}">
+                                        {{(model.closingDate|date:'MM/dd/yyyy')||"NA"}}
+                                     </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mr-0 ml-0 detail-card desc-section">
+                        <div class="col-md-12 col-lg-12 col-12 col-xs-12 col-md-12 col-xl-12 pr-0 pl-0 pr-0">
+                            <label class="TextTruncate d-block" title="Description">
+                                Description
+                            </label>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-12 col-xs-12 col-md-12 col-xl-12 pr-0 pl-0 pr-0 desc-padding TextTruncate">
+                            <span class="detail-sec TextTruncate" title="{{model.description}}">
+                                {{model.description}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>

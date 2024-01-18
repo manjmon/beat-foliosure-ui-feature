@@ -1,0 +1,27 @@
+<div class="beat-autocomplete" style="margin-top:50px ; margin-bottom: 50px;">
+  <div class="ng-autocomplete">
+    <ng-autocomplete 
+      [minQueryLength]="2"
+      [data]="multiSelectdata"
+      [searchKeyword]="keyword"
+      (selected)='selectMultiEvent($event)'
+      (inputChanged)='onMultiChangeSearch($event)'
+      (inputFocused)='onMultiFocused($event)'
+      [itemTemplate]="itemMultiTemplate"
+      [placeholder]="placeholderText"
+      (inputCleared)="clearMultiText()"
+      [notFoundTemplate]="notFoundMultiTemplate">                                 
+    </ng-autocomplete>
+    <span *ngIf="isMultiSearch" class="x search-auto"><i class="fa fa-search"></i></span>
+    <ng-template #itemMultiTemplate let-item>
+    <a [innerHTML]="item.name"></a>
+    </ng-template>
+    
+    <ng-template #notFoundMultiTemplate let-notFound>
+    <div [innerHTML]="notFound"></div>
+    </ng-template>
+    </div>
+    <div style="margin-top:20px;" >
+      <div class="beat-multiselect" *ngFor=" let value of selectedData"><span>{{value.name}}</span><span class="multi-close-icon" (click)="removeSelected(value)"><i class="material-icons">close</i></span></div>
+    </div>
+</div>

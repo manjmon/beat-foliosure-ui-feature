@@ -1,0 +1,131 @@
+<div class="right-section-subfeature">
+    <div class="row mr-0 ml-0 tabradius border search-section sub-fea-brdr-btm">
+        <div class="col-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 col-md-12  feature-header pl-0 pr-0">
+            <div class="sub-feature-section">
+                <div class="pb-2">
+                    Feature
+                </div>
+                <div>
+                    <p-dropdown [filter]="true" [filterBy]="'name'" [disabled]="groupId=='0'" class="access-subfeature custom-searchable-dropdown" name="feature" [options]="featureList" [(ngModel)]="selectedFeature" placeholder="Select Feature" optionLabel="name" [showClear]="false" (ngModelChange)="GetSelectedFeatureData($event)"></p-dropdown>
+                </div>
+            </div>
+            <div class="sub-feature-section">
+                <div class="pb-2">
+                    Portfolio company
+                </div>
+                <div>
+                    <p-dropdown  [filterBy]="'name'" [filter]="true"  [virtualScroll]="true" [virtualScrollItemSize]="30" [disabled]="selectedFeature==undefined" class="access-subfeature custom-searchable-dropdown" name="module" [options]="companyList" [(ngModel)]="selectedCompany" placeholder="Select company" optionLabel="name" [showClear]="false" (ngModelChange)="GetSelectedData($event)">
+                        <ng-template let-company pTemplate="item">
+                            <span title="{{company.name}}">
+                                {{company.name}}
+                            </span>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="sub-feature-section">
+                <div class="pb-2">
+                    Copy to
+                </div>
+                <div>
+                    <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="30"  [disabled]="selectedCompany==undefined" 
+                    [(ngModel)]="selectedCopyToCompanyList" class="lp-report-Kpilineitems multi-select-custom custom-searchable-multiselect" name="copyToFeature" (onChange)="getCompanySelected()" [resetFilterOnHide]=true [options]="companyFilterList" defaultLabel="Select company(s)"
+                        [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'" optionLabel="name">
+                        <ng-template let-company pTemplate="item">
+                           <span title="{{company.name}}"> {{company.name}}</span> 
+                        </ng-template>
+                    </p-multiSelect>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 col-md-12 pl-0 pr-0 content-section">
+            <div class="row mr-0 ml-0">
+                <div class="col-sm-12 pl-0 pr-0" [ngStyle]="{'height':scrollHeight-42+'px'}">
+                    <div id="tableContainer" *ngIf="permissionList.length>0">
+                        <p-table styleClass="p-datatable-gridlines" class="subfeature-tbl migration-frozen-table"  #tblSubFeature emptyMessage="{{blockedTable? 'Please Wait...':'No record found'}}" [scrollable]="true" [columns]="permissioncols" [value]="permissionList"
+                            [scrollHeight]="scrollHeight-50+'px'">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <ng-container *ngFor="let col of frozenCols;">
+                                        <th pFrozenColumn [ngStyle]="{'width':'260px'}" scope="col" [ngClass]="col.header === 'List of Features'?'features-header':'' || col.header === 'checkbox'?'checkbox-header':''">
+                                            <div *ngIf="col.header !== 'checkbox'"  [ngClass]="col.header === 'Edit' || col.header === 'View' || col.header === 'Export' || col.header === 'Import'?'custom-align-header':''">
+                                                {{ col.header }}
+                                            </div>
+                                            <div *ngIf="col.header === 'checkbox'" id="checkAll">
+                                                <mat-checkbox class="text-center" [checked]="isCheckAll" [disabled]="false" class="mat-custom-checkbox mat-subfeature-checkbox" (change)="selectAll($event);">
+                                                </mat-checkbox>
+                                            </div>
+                                        </th>
+                                    </ng-container>
+                                    <ng-container *ngFor="let col of columns;">
+                                        <th [ngClass]="col.field">
+                                            <div *ngIf="col.header !== 'checkbox'"  [ngClass]="col.header === 'Edit' || col.header === 'View' || col.header === 'Export' || col.header === 'Import'?'custom-align-header':''">
+                                                {{ col.header }}
+                                            </div>
+                                        </th>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr>
+                                    <ng-container *ngFor="let col of frozenCols;">
+                                        <td pFrozenColumn tabindex="0" style="outline: none !important;"  [ngClass]="col.header === 'List of Features'?'features-header':'' || col.header === 'checkbox'?'checkbox-header':'' || col.field">
+                                            <div *ngIf="col.header !== 'checkbox'" [ngClass]="{'showToolTip TextTruncate':col.header === 'List of Features', 'custom-align-header':col.header === 'Edit' || col.header === 'View' || col.header === 'Export' || col.header === 'Import'}" title={{rowData[col.field]}}>
+                                                <span class="text-left" *ngIf="col.header === 'List of Features'">{{rowData.subFeatureName}}</span>
+                                            </div>
+                                            <div *ngIf="col.header === 'checkbox'">
+                                                <mat-checkbox class="text-center" [checked]="rowData.isSelected" [disabled]="false" class="mat-custom-checkbox mat-subfeature-checkbox" (change)="setSelectedAction($event,rowData)">
+                                                </mat-checkbox>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                    <ng-container *ngFor="let col of columns;">
+                                        <td tabindex="0" style="outline: none !important;"  [ngClass]="col.header === 'List of Features'?'features-header':'' || col.header === 'checkbox'?'checkbox-header':'' || col.field">
+                                            <div *ngIf="col.header !== 'checkbox'" [ngClass]="{'showToolTip TextTruncate':col.header === 'List of Features', 'custom-align-header':col.header === 'Edit' || col.header === 'View' || col.header === 'Export' || col.header === 'Import'}" title={{rowData[col.field]}}>
+                                               
+                                                <span *ngIf="col.header !== 'List of Features'">
+                                      <span *ngIf="!isActionHidden(rowData, col.header)"
+                                          title="{{rowData.subFeatureID==1 && col.header == 'Export'?'LP Report':''}}">
+                                        <mat-checkbox class="text-center"
+                                          [checked]="rowData[col.field]"
+                                          [disabled]="col.header !== 'View' ? !rowData.canView : false"
+                                          class="mat-custom-checkbox mat-subfeature-checkbox"
+                                          (change)="handleCheckBox($event,col.field,rowData);">
+                                        </mat-checkbox>
+                                       </span>
+                                                <span *ngIf="isActionHidden(rowData, col.header)">
+                                       <i class="fa fa-ban fa-lg"  title="Not applicable" aria-hidden="true"></i>
+                                      </span>
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="text-center empty-state" *ngIf="selectedCompany==undefined">
+                        <img class="EmptyStateImgStyle" src="assets/dist/images/WorkFlowZeroState.svg" alt="" /><br />
+                        <span class="font-weight-bold">Please select a feature</span><br />
+                        <span class="workflowZeroStateFontStyle">Select a feature to give access to its sub-features to the selected sub-group</span>
+                    </div>
+                </div>
+            </div>
+            <app-loader-component *ngIf="isLoader"></app-loader-component>
+        </div>
+        <div class="col-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 col-md-12 pl-0 pr-0">
+            <div class="row mr-0 ml-0 group-right-sec">
+                <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12  pl-0 pr-0">
+                    <div class="float-right">
+                        <span class="pr-2"><button  value="Reset" title="Reset" (click)="resetSubFeature()" [disabled]="isDisabledBtn"
+                              class="btn btn-nep-default"> Reset</button></span>
+                        <span><button (click)="mapSubFeature()" [disabled]="isDisabledBtn" class="btn btn-primary" title="Map" class="btn btn-nep-primary">
+                              Map <span class="pl-1 circle-loader" *ngIf="loading">
+                                <i aria-hidden="true" class="fa fa-circle-o-notch fa-1x fa-fw"></i>
+                            </span></button></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

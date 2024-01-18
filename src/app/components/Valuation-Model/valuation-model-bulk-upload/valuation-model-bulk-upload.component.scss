@@ -1,0 +1,89 @@
+.nep-modal {
+    .nep-card {
+        width: 600px !important;
+        top: 15% !important;
+        .nep-card-header {
+            padding: 0px !important;
+            .user-header {
+                font-size: 17px;
+                letter-spacing: 0.17px;
+                font-weight: bold;
+                color: #000000;
+                opacity: 1;
+                padding: 16px 20px !important;
+                .close-icon {
+                    cursor: pointer;
+                }
+            }
+        }
+        .nep-card-footer {
+            padding: 16px 20px !important;
+        }
+        .nep-card-body {
+            padding: 0px !important;
+            .user-body {
+                padding: 16px 20px !important;
+            }
+
+            .row {
+                
+                .p-datatable .p-datatable-scrollable-footer {
+                    background: #fff;
+                }
+
+            }
+        }
+        .right-border {
+            border-right: 1px solid #DEDFE0;
+        }
+        .errorColor {
+            color: #c62828 !important;
+            height: 160px;
+            overflow-y: auto;           
+            position: relative;
+
+        }
+        .errorColor.error-title{
+          font-size: 16px;
+          top: 3px;
+        }
+        .successColor {
+            color: #388e3c !important;
+        }
+        .user-upload {
+            letter-spacing: 0px;
+            color: #212121;
+            a {
+                color: #021155 !important;
+                text-decoration: underline !important;
+            }
+            .upload-desc {
+                letter-spacing: 0px !important;
+                color: #212121 !important;
+            }
+            .desc-header {
+                font-weight: bold;
+            }
+            .uploadButton {
+                cursor: pointer;
+                height: 32px;
+                border: 1px solid #021155;
+                border-radius: 4px;
+                padding-left: 9px;
+                padding-right: 9px;
+                padding-top: 3.5px;
+                opacity: 1;
+                max-width: 320px;
+            }
+            .browseIcon {
+                padding-right: 8px;
+                padding-top: 4px;
+            }
+            .browseButton {
+                top: 2.5px;
+                position: relative;
+            }
+        }
+    }
+    
+}

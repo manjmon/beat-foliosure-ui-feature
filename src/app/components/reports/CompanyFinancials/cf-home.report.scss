@@ -1,0 +1,71 @@
+﻿@import "../../../../variables";
+.tab-shadow {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000014;
+    opacity: 1;
+    margin-bottom: 20px;
+    margin-top: -18.8px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 5px;
+    position: relative;
+    z-index: 9999;
+}
+.company-kpi-financial-section
+{
+    margin:-20px;
+    .nep-tab-alignment
+    {
+        margin-top: 0px !important;
+    }
+}
+.kpis-report-section
+{
+    border-bottom: 1px solid #dedfe0;
+    padding: 8px 20px !important;
+    margin-top:20px  !important;
+    margin-left: -20px !important;
+    margin-right: -20px !important;
+    background: #FAFAFB 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000014;
+    opacity: 1;
+.form-group{
+    margin:0px !important;
+}
+.reset-update-portfolio-css
+{
+    width:84px !important;
+}
+}
+.no-image-bg{
+    position: fixed;
+    top: 50%;
+    left: 37%;
+}
+.custom-kpi-chart-text
+{
+    letter-spacing: 0px;
+    color: #55565A;
+    opacity: 1;
+}
+.kpi-section-chart
+{
+    margin-top: 16px;
+    overflow-x: hidden !important;
+    overflow-y: auto;
+    .chart-bg{
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        box-shadow: 0px 0px 12px #00000014;
+        border: 1px solid #DEDFE0;
+        border-radius: 4px;
+        opacity: 1;
+        padding: 20px 8px 0px 8px;
+    }
+    .chart-title{
+        letter-spacing: 0.17px;
+color: #55565A;
+opacity: 1;
+padding-bottom: 8px;
+font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif !important;
+    }
+}

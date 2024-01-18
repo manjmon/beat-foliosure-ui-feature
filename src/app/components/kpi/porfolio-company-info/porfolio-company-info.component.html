@@ -1,0 +1,35 @@
+<div class="card" (resized)="onResized($event)">
+    <div class="card-body">
+        <div class="row ml-0 mr-0">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12 pl-0 pr-0">
+                <div class="d-inline-block search">
+                    <span class="fa fa-search fasearchicon p-1"></span>
+                    <input [(ngModel)]="company" (input)="filterItem(company)" type="text" value=""
+                        class="search-text-company companyListSearchHeight"
+                        placeholder="Search Company"
+                        />
+                </div>
+            </div>
+        </div>
+        <div class="row ml-0 mr-0 header-bt">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12 pl-0 pr-0  pb-1">
+                <cdk-virtual-scroll-viewport class="company-info-virtual-port" [ngStyle]="{'height': companyHeight}" itemSize="30" >
+                        <div class="row mr-0 ml-0 company-info-mapping"  *cdkVirtualFor="let item of filteredCompanyList;"  [ngClass]="{'company-active' : item.editable}"  (click)="selectcompany(item,$event)">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12">
+                                <div class="row mr-0 ml-0">
+                                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+                                        <div class="company-kpi-list p-1 text-truncate">
+                                            {{item.companyName}}
+                                        </div>
+                                        <div class="company-sector-list p-1 text-truncate">
+                                            Sector : {{item?.sectorDetail?.sector != null ? item?.sectorDetail?.sector :'NA'}}
+                                        </div>                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </cdk-virtual-scroll-viewport>               
+            </div>
+        </div>
+    </div>
+</div>

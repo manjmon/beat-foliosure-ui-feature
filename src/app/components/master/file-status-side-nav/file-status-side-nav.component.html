@@ -1,0 +1,50 @@
+<p-sidebar class="notification-sidebar" [showCloseIcon]="false" [(visible)]="isOpensideNavfield" position="right">
+    <div class="">
+        <div class="col-12 col-sm-12 sidebar-header pt-3 pb-3">
+            <div class="d-inline-block notification-h1">File Status</div>
+        </div>
+        <div class="upload-list">
+            <ul >
+                <li class="overlap-group" *ngFor="let uploadedFile of uploadedFileList; let i = index">
+                    <div class="upload-list-item">
+                        <div class="upload-list-item-frame">
+                            <img class="excel-file-icon"  loading="lazy" src="assets/dist/images/{{ uploadedFile.featureId == 47 ? 'excel-file-icon.svg':'FaRegFileArchive.svg'}}" />
+                            <div *ngIf="uploadedFile.featureId == 47" class="file-name" title="{{uploadedFile.fileName}}">{{truncateFileName(uploadedFile.fileName, 32)}}</div>
+                            <div  *ngIf="uploadedFile.featureId != 47" class="file-name" title="{{uploadedFile.fileId}}">{{truncateFileName(uploadedFile.fileName, 32)}}</div>
+                            
+                            <div>
+                                <div style="display: none;">
+                                    &#10006;
+                                </div>
+                            </div>
+                            <img class="close-button" (click)="removeFilename(uploadedFile.fileId)" alt="" src="{{removecross(uploadedFile.uploadStatus)}}" />
+                        </div>
+                        <div class="upload-item-status">
+                            <div class="upload-item-status-div">
+                                <div class="process-icon-div" >
+                                    <img  alt="" class="process-icon" [ngClass]="(uploadedFile.uploadStatus == fileStatus.Uploaded || uploadedFile.uploadStatus == fileStatus.Processing) ? 'img-spinner': ''" src="{{getFileStatusIcon(uploadedFile.uploadStatus)}}" />
+                                </div>
+                                    
+                                
+                                   
+                                <div class="upload-item-status-text">{{getFileStatusText(uploadedFile.uploadStatus)}}</div>
+                                <img alt=""  title="This might take a few minutes.&#010;We will notify once your upload is ready."  src="{{uploadProgress(uploadedFile.uploadStatus)}}"/>
+                            </div>
+                            <span *ngIf="uploadedFile.uploadStatus === fileStatus.Uploaded || uploadedFile.uploadStatus === fileStatus.Processing" class="cancel" (click)="removeFilename(uploadedFile.fileId)">Cancel</span>
+                            <span *ngIf="uploadedFile.uploadStatus != fileStatus.Processing"  (click)="redirectFileUploadError(uploadedFile)" class="view cursor-pointer">View</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="upload-list-footer">
+            <div class="frame-2">
+                <button class="button" (click)="redirectFileUploadError(null)">
+                    <div class="text-3"  >All uploads</div>
+                    <img alt="" class="process-icon" src="assets/dist/images/all-upload.svg" />
+                </button>
+                <button class="button-2" (click)="clearFiles()"><div class="text-3">Clear all</div></button>
+            </div>
+        </div>
+    </div>
+</p-sidebar>

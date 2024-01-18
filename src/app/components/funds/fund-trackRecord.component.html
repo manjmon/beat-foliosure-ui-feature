@@ -1,0 +1,502 @@
+﻿﻿<app-loader-component *ngIf="isLoader"></app-loader-component>
+<form name="form" class="m-0 p-0" (ngSubmit)="f.form.valid && save(f)" #f="ngForm" novalidate
+									*ngIf="model!=undefined">
+<div class="nep-modal nep-modal-show fund-tr-model fund-nep-dbg">
+	<div class="nep-modal-mask"></div>
+	<div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nepc-fd-pr-d">
+		<div class="nep-card-header nep-modal-title p-0">
+			<div class="row mr-0 ml-0 ">
+                <div class="col-md-12 col-lg-12 col-12 col-xl-12 col-sm-12 pr-0 pl-0 user-header">
+					<div class="float-left TextTruncate" title="{{this.headerText}}">{{this.headerText}}</div>
+					<div class="float-right close-icon"(click)="onClose()">
+						<i class="pi pi-times"></i>
+					</div>
+                </div>
+            </div>
+		</div>
+		<div class="nep-card-body">
+			<div class="row mr-0 ml-0 ">
+				<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+					<div class="add-user-component">
+						<div class="card card-main">
+							<div class="card-body mb-0">
+								
+									<div class="row mr-0 ml-0">
+										<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+											<div class="row mr-0 ml-0 custom-controls">
+												<ng-container *ngFor="let staticData of fundtrackData">
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0 "
+														*ngIf="FundTrackRecordStaticinfo.Year==staticData.name">
+														<div class="form-group"
+															[ngClass]="{ 'has-error': f.submitted && !year.valid }">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label for="year"
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<typeahead-control name="year" [(ngModel)]="model.year"
+																	[placeholder]="'Select '+ staticData.displayName"
+																		[optionList]="yearOptions" validateRequired
+																		[displayField]="'text'" [resultField]="'value'"
+																		#year="ngModel" [isRequired]="true"
+																		(selectItem)="validateSelectedQuarter()"
+																		[isAscendingOptions]="false"></typeahead-control>
+																	<div *ngIf="f.submitted && !year.valid" class="text-danger">
+																		Year is required</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.Quarter==staticData.name">
+														<div class="form-group"
+															[ngClass]="{ 'has-error': f.submitted && !quarter.valid }">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label for="quarter"
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<typeahead-control name="quarter"
+																		[(ngModel)]="model.quarter"
+																		[placeholder]="'Select '+ staticData.displayName"
+																		[optionList]="quarterOptions" validateRequired
+																		[displayField]="'text'" [resultField]="'value'"
+																		#quarter="ngModel" [isRequired]="true"
+																		(selectItem)="validateSelectedQuarter()">
+																	</typeahead-control>
+		
+																	<div *ngIf="f.submitted && !quarter.valid"
+																		class="text-danger">Quarter is required</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.TotalNumberOfInvestments==staticData.name">
+														<div class="form-group">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="model.isCalculatedDetails">
+																	<span
+																		class="detail-sec TextTruncate" title="{{model.totalNumberOfInvestments}}">{{model.totalNumberOfInvestments}}</span>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="!model.isCalculatedDetails">
+																	<input placeholder="Enter {{staticData.displayName}}" autocomplete="off" numberOnly type="number" min="0"
+																		class="form-control TextTruncate" name="totalNumberOfInvestments"
+																		[(ngModel)]="model.totalNumberOfInvestments"
+																		#totalNumberOfInvestments="ngModel" validateRequired />
+																	<div *ngIf="f.submitted && !totalNumberOfInvestments.valid"
+																		class="text-danger">Total number of investments is
+																		required</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.RealizedInvestments==staticData.name">
+														<div class="form-group">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label class="control-label TextTruncate" title="{{staticData.displayName}}">
+																		{{staticData.displayName}}</label>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="model.isCalculatedDetails">
+																	<span
+																		class="detail-sec TextTruncate" title="{{model.realizedInvestments}}">{{model.realizedInvestments}}</span>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="!model.isCalculatedDetails">
+																	<input placeholder="Enter {{staticData.displayName}}" autocomplete="off" numberOnly type="number" min="0"
+																		class="form-control TextTruncate" name="realizedInvestments"
+																		[(ngModel)]="model.realizedInvestments"
+																		#realizedInvestments="ngModel" validateRequired />
+																	<div *ngIf="f.submitted && !realizedInvestments.valid"
+																		class="text-danger">Realized investments is required
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.UnRealizedInvestments==staticData.name">
+														<div class="form-group">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label class="control-label TextTruncate" title="{{staticData.displayName}}">
+																		{{staticData.displayName}}</label>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="model.isCalculatedDetails">
+																	<span
+																		class="detail-sec TextTruncate" title="{{model.unRealizedInvestments}}">{{model.unRealizedInvestments}}</span>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="!model.isCalculatedDetails">
+																	<input placeholder="Enter {{staticData.displayName}}" autocomplete="off" numberOnly type="number" min="0"
+																		class="form-control TextTruncate" name="unRealizedInvestments"
+																		[(ngModel)]="model.unRealizedInvestments"
+																		#unRealizedInvestments="ngModel" validateRequired />
+																	<div *ngIf="f.submitted && !unRealizedInvestments.valid"
+																		class="text-danger">Unrealized investments is required
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.TotalInvestedCost==staticData.name">
+														<div class="form-group">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="model.isCalculatedDetails">
+																	<span class="detail-sec TextTruncate" title="{{model.totalInvestedCost|number :
+																		NumberDecimalConst.currencyDecimal}}">{{model.totalInvestedCost|number :
+																		NumberDecimalConst.currencyDecimal}}</span>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="!model.isCalculatedDetails">
+																	<input placeholder="Enter {{staticData.displayName}}" autocomplete="off" numberOnly type="number" min="0"
+																		class="form-control TextTruncate" name="totalInvestedCost"
+																		[(ngModel)]="model.totalInvestedCost"
+																		(keyup)="onInvestmentCostChange()"
+																		#totalInvestedCost="ngModel" validateRequired />
+																	<div *ngIf="f.submitted && !totalInvestedCost.valid"
+																		class="text-danger">Total invested cost is required
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.TotalRealizedValue==staticData.name">
+														<div class="form-group">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="model.isCalculatedDetails">
+																	<span class="detail-sec TextTruncate" title="{{model.totalRealizedValue|number :
+																		NumberDecimalConst.currencyDecimal}}">{{model.totalRealizedValue|number :
+																		NumberDecimalConst.currencyDecimal}}</span>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="!model.isCalculatedDetails">
+																	<input placeholder="Enter {{staticData.displayName}}" autocomplete="off" numberOnly type="number" min="0"
+																		class="form-control TextTruncate" name="totalRealizedValue"
+																		(keyup)="onRealizedValueChange()"
+																		[(ngModel)]="model.totalRealizedValue"
+																		#totalRealizedValue="ngModel" validateRequired />
+																	<div *ngIf="f.submitted && !totalRealizedValue.valid"
+																		class="text-danger">Total realized value is required
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.TotalUnRealizedValue==staticData.name">
+														<div class="form-group">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="model.isCalculatedDetails">
+																	<span class="detail-sec TextTruncate" title="{{model.totalUnRealizedValue|number
+																		: NumberDecimalConst.currencyDecimal}}">{{model.totalUnRealizedValue|number
+																		: NumberDecimalConst.currencyDecimal}}</span>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="!model.isCalculatedDetails">
+																	<input placeholder="Enter {{staticData.displayName}}" autocomplete="off" numberOnly type="number" min="0"
+																		class="form-control TextTruncate" name="totalUnRealizedValue"
+																		(keyup)="onUnRealizedValueChange()"
+																		[(ngModel)]="model.totalUnRealizedValue"
+																		#totalUnRealizedValue="ngModel" validateRequired />
+																	<div *ngIf="f.submitted && !totalUnRealizedValue.valid"
+																		class="text-danger">Total unrealized value is required
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.TotalValue==staticData.name">
+														<div class="form-group">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label readonly="true"
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<input  type="text" disabled="true"  readonly ="true" value="{{model.totalValue==null?'NA':model.totalValue|number
+																	: NumberDecimalConst.currencyDecimal}}" class="form-control TextTruncate"  />
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.GrossMultiple==staticData.name">
+														<div class="form-group">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label readonly="true"
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<input  type="text" disabled="true"  readonly ="true" value="{{model.grossMultiple==null?'NA':model.grossMultiple|number: NumberDecimalConst.currencyDecimal}}" class="form-control TextTruncate"  />
+																</div>
+		
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.Dpi==staticData.name">
+														<div class="form-group">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label readonly="true"
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<input  type="text" disabled="true"  readonly ="true" value="{{model.dpi==null?'NA':model.dpi|number :NumberDecimalConst.currencyDecimal}}" class="form-control TextTruncate"  />
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.Rvpi==staticData.name">
+														<div class="form-group">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label readonly="true"
+																		class="control-label" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<input  type="text" disabled="true"  readonly ="true" value="{{model.rvpi==null?'NA':model.rvpi|number : NumberDecimalConst.currencyDecimal}}" class="form-control TextTruncate"  />
+																</div>
+		
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.NetMultiple==staticData.name">
+														<div class="form-group"
+															[ngClass]="{ 'has-error': f.submitted && !netMultiple.valid }">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label for="netMultiple"
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<input placeholder="Enter {{staticData.displayName}}" autocomplete="off" type="number" class="form-control TextTruncate"
+																		name="netMultiple" [(ngModel)]="model.netMultiple"
+																		#netMultiple="ngModel" validateRequired />
+																	<div *ngIf="f.submitted && !netMultiple.valid"
+																		class="text-danger">Net multiple is required</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.GrossIRR==staticData.name">
+														<div class="form-group"
+															[ngClass]="{ 'has-error': f.submitted && !grossIRR.valid }">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label for="grossIRR"
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<input placeholder="Enter {{staticData.displayName}}" autocomplete="off" type="number" class="form-control TextTruncate"
+																		name="grossIRR" [(ngModel)]="model.grossIRR"
+																		#grossIRR="ngModel" validateRequired />
+																	<div *ngIf="f.submitted && !grossIRR.valid"
+																		class="text-danger">Gross IRR is required</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="FundTrackRecordStaticinfo.NetIRR==staticData.name">
+														<div class="form-group"
+															[ngClass]="{ 'has-error': f.submitted && !netIRR.valid }">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label for="netIRR"
+																		class="control-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+																</div>
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<input placeholder="Enter {{staticData.displayName}}" autocomplete="off" type="number" class="form-control TextTruncate"
+																		name="netIRR" [(ngModel)]="model.netIRR"
+																		#netIRR="ngModel" validateRequired />
+																	<div *ngIf="f.submitted && !netIRR.valid"
+																		class="text-danger">Net IRR is required</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-md-6 col-sm-6 col-6 col-lg-6 col-xl-6 pr-0 pl-0"
+														*ngIf="staticData.name==FundTrackRecordStaticinfo.Customfield">
+														<div class="form-group">
+															<div class="row mr-0 ml-0">
+																<div
+																	class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+																	<label for="fundHoldingStatus" class="control-label TextTruncate" title="{{staticData.displayName}}">
+																		{{staticData.displayName}}</label>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="!isupdate">
+																	<input placeholder="Enter {{staticData.displayName}}"
+																		*ngIf="(staticData.dataType==mDataTypes.Number)&&(staticData.dataType!=mDataTypes.FreeText)"
+																		autocomplete="off" type="text" class="form-control TextTruncate"
+																		[(ngModel)]="staticData.value"
+																		id="{{staticData.displayName}}"
+																		name="{{staticData.displayName}}"
+																		(input)="numbersOnlyValidator($event)" />
+		
+																	<input placeholder="Enter {{staticData.displayName}}"
+																		*ngIf="(staticData.dataType==mDataTypes.CurrencyValue||staticData.dataType==mDataTypes.Percentage||staticData.dataType==mDataTypes.Multiple)&&(staticData.dataType!=mDataTypes.FreeText)"
+																		autocomplete="off" type="text" class="form-control TextTruncate"
+																		[(ngModel)]="staticData.value"
+																		id="{{staticData.displayName}}"
+																		name="{{staticData.displayName}}" 
+																		appTwoDigitDecimaNumber
+																		(input)="decimalnumbersOnlyValidator($event)" />
+		
+																	<input placeholder="Enter {{staticData.displayName}}" *ngIf="staticData.dataType===mDataTypes.FreeText"
+																		autocomplete="off" type="text" class="form-control TextTruncate"
+																		[(ngModel)]="staticData.value"
+																		id="{{staticData.displayName}}"
+																		name="{{staticData.displayName}}" />
+																	<p-calendar placeholder="Enter {{staticData.displayName}}"
+																		*ngIf="staticData.dataType===mDataTypes.Date&&(staticData.dataType!==mDataTypes.FreeText)"
+																		class="formCtrlHeight" id="{{staticData.displayName}}"
+																		name="{{staticData.displayName}}"
+																		[(ngModel)]="staticData.value" #{{staticData.name}}
+																		[monthNavigator]="true" [yearNavigator]="true"
+																		dateFormat="mm/dd/yy" readonlyInput="true"
+																		[showIcon]="true" yearRange={{yearRange}}
+																		[maxDate]="today" [required]="false">
+																	</p-calendar>
+																</div>
+																<div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+																	*ngIf="isupdate">
+		
+																	<input placeholder="Enter {{staticData.displayName}}"
+																		*ngIf="(staticData.dataType==mDataTypes.Number)&&(staticData.dataType!=mDataTypes.FreeText)"
+																		autocomplete="off" type="text" class="form-control TextTruncate"
+																		[(ngModel)]="staticData.value"
+																		id="{{staticData.displayName}}"
+																		name="{{staticData.displayName}}"
+																		(input)="numbersOnlyValidator($event)" />
+		
+																	<input placeholder="Enter {{staticData.displayName}}"
+																		*ngIf="(staticData.dataType==mDataTypes.CurrencyValue||staticData.dataType==mDataTypes.Percentage||staticData.dataType==mDataTypes.Multiple)&&(staticData.dataType!=mDataTypes.FreeText)"
+																		autocomplete="off" type="text" class="form-control TextTruncate"
+																		[(ngModel)]="staticData.value"
+																		id="{{staticData.displayName}}"
+																		name="{{staticData.displayName}}"
+																		(input)="decimalnumbersOnlyValidator($event)"
+																		appTwoDigitDecimaNumber />
+		
+																	<input placeholder="Enter {{staticData.displayName}}" *ngIf="staticData.dataType===mDataTypes.FreeText"
+																		autocomplete="off" type="text" class="form-control TextTruncate"
+																		[(ngModel)]="staticData.value"
+																		id="{{staticData.displayName}}"
+																		name="{{staticData.displayName}}" />
+																	<p-calendar placeholder="Enter {{staticData.displayName}}"
+																		*ngIf="staticData.dataType===mDataTypes.Date&&(staticData.dataType!==mDataTypes.FreeText)"
+																		class="formCtrlHeight" id="{{staticData.displayName}}"
+																		name="{{staticData.displayName}}"
+																		[(ngModel)]="staticData.value" #{{staticData.name}}
+																		[monthNavigator]="true" [yearNavigator]="true"
+																		dateFormat="mm/dd/yy" readonlyInput="true"
+																		[showIcon]="true" yearRange={{yearRange}}
+																		[maxDate]="today" [required]="false">
+																	</p-calendar>
+																</div>
+															</div>
+														</div>
+													</div>
+												</ng-container>
+												<div class="col-sm-12 col-fund-d" *ngIf="false">
+													<div class="form-group text-center">
+		
+														<div class="loading-input-controls-manual" *ngIf="loading"><i
+																aria-hidden="true"
+																class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+		
+														<button [disabled]="loading" id="hiddenSaveButton"
+															class="btn btn-primary TextTruncate" title="{{saveText}}">{{saveText}}</button>
+														<input type="reset" id="hiddenreloadButton" value="{{resetText}}"
+															title="{{resetText}}" (click)="formReset(f)"
+															class="btn btn-warning TextTruncate" />
+		
+													</div>
+												</div>
+		
+											</div>
+		
+										</div>
+									</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="nep-card-footer  nep-modal-footer">
+            <div class="float-right">
+                <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+				<nep-button (click)="formReset(f)" id="hiddenreloadButton"  class="sec-btn TextTruncate" title="{{resetText}}"  Type="Secondary">
+					{{resetText}}
+                </nep-button>
+                <button class="btn btn-primary" id="hiddenSaveButton" title="{{saveText}}" Type="Primary">
+                    {{saveText}}
+                </button>
+            </div>
+
+        </div>
+	</div>
+</div>
+</form>

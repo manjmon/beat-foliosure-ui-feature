@@ -1,0 +1,175 @@
+<div (resized)="onResized($event)" class="row main-row row-margin-bottom">
+    <div class="card-body">
+        <form name="form" class="mt-0 pt-0 pb-0 pl-0 pr-0" (ngSubmit)="f.form.valid && save(f)" #f="ngForm">
+            <div class="col-lg-12 col-md-12 col-sm-12 header-bottom">
+                <div class="pb-2 TextTruncate" title="{{dynamicfielddata[0]?.link}}" *ngIf="dynamicfielddata.length > 0"><strong>{{dynamicfielddata[0]?.link}}</strong>
+                </div>
+                <div class="row investorcontainer description d-flex dealDataContainer"  *ngIf="dynamicfielddata.length > 0" [ngClass]="(dynamicfielddata !== undefined && dynamicfielddata.length > 8) ? 'Addinvestorstaticinfo-scroll' : ''">
+                    <ng-container *ngFor="let customdata of dynamicfielddata;let i = index">
+                        <div class="col-sm-6 col-md-3 pl-0 pr-0 pl-3 pr-3 pb-3"
+                            *ngIf="customdata.name == investorinfo.InvestorName">
+                            <div class="padding-left-rem mandatory-label TextTruncate" title="{{customdata.displayName}}">{{customdata.displayName}} </div>
+                            <input autocomplete="off" type="text" class="form-control d-block eachlabel-padding default-txt TextTruncate"
+                                [(ngModel)]="customdata.value" #InvestorName="ngModel" name="InvestorName"
+                                [ngClass]="{ 'is-invalid text-box-shadow': f.submitted && InvestorName.invalid &&InvestorName.errors.required}"
+                                [placeholder]="'Enter '+customdata.displayName" required />
+                                <div *ngIf=" f.submitted && InvestorName.invalid &&InvestorName.errors.required" class="text-danger">
+                                    Please provide a investor name
+                                </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 pl-0 pr-0 pl-3 pr-3 pb-3"
+                            *ngIf="customdata.name == investorinfo.InvestorTypeId">
+                            <div class="padding-left-rem TextTruncate" title="{{customdata.displayName}}">{{customdata.displayName}}</div>
+                            <typeahead-control class="header-cntrl typeheader-margin TextTruncate" [(ngModel)]="customdata.value"
+                                [placeholder]="'Select '+customdata.displayName" [optionList]="investortypes"
+                                [(ngModel)]="customdata.value" id="{{customdata.displayName}}"
+                                name="{{customdata.displayName}}" [displayField]="'investorType'">
+                            </typeahead-control>
+                        </div>
+                        <div class="col-sm-6 col-md-3 pl-0 pr-0 pl-3 pr-3 pb-3"
+                            *ngIf="customdata.name == investorinfo.Website">
+                            <div class="padding-left-rem TextTruncate" title="{{customdata.displayName}}">{{customdata.displayName}}</div>
+                            <input validateURL autocomplete="off" type="text"
+                                class="form-control eachlabel-padding default-txt TextTruncate" [(ngModel)]="customdata.value"
+                                #Website="ngModel" name="Website"
+                                pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$"
+                                [ngClass]="{ 'is-invalid text-box-shadow':Website.errors?.pattern && (Website.touched||Website.dirty)}"
+                                [placeholder]="'Enter '+customdata.displayName" />
+                            <div *ngIf="Website.errors?.pattern && (Website.touched||Website.dirty)"
+                                class="text-danger">
+                                Please provide a valid website url
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3 pl-0 pr-0 pl-3 pr-3 pb-3"
+                            *ngIf="customdata.name == investorinfo.TotalCommitment">
+                            <div class="padding-left-rem TextTruncate" title="{{customdata.displayName}}">{{customdata.displayName}}</div>
+                            <input autocomplete="off" type="number" class="form-control eachlabel-padding default-txt TextTruncate"
+                                [(ngModel)]="customdata.value" id="{{customdata.displayName}}" (keypress)="numberOnly($event)"
+                                name="{{customdata.displayName}}" [placeholder]="'Enter '+customdata.displayName" />
+                        </div>
+                        <div class="col-sm-6 col-md-3 pl-0 pr-0 pl-3 pr-3 pb-3"
+                            *ngIf="customdata.name == investorinfo.Customfield">
+                            <div class="padding-left-rem TextTruncate" title="{{customdata.displayName}}">{{customdata.displayName}}</div>
+                            <input autocomplete="off" type="text" class="form-control eachlabel-padding default-txt TextTruncate"
+                                [(ngModel)]="customdata.value" id="{{customdata.displayName}}"
+                                name="{{customdata.displayName}}" [placeholder]="'Enter '+customdata.displayName" />
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12  header-bottom" *ngIf="dynamicBusinessData.length>0">
+                <div class="pb-2 TextTruncate" title="{{dynamicBusinessData[0]?.displayName}}" ><strong>{{dynamicBusinessData[0]?.displayName}}</strong></div>
+                <div class="row dealDataContainer d-flex flexmoduleContainer BusinessDescription-css pt-3 pb-3 pr-3 pl-3">
+                    <textarea [(ngModel)]="dynamicBusinessData[0].value" id="{{dynamicBusinessData[0]?.displayName}}"
+                        name="{{dynamicBusinessData[0]?.displayName}}" type="text"
+                        class="BusinessDescription-css form-control" rows="4" placeholder="Enter business description here…"
+                        name="BusinessDescription" autocomplete="off" maxlength="1500"></textarea>
+                </div>
+            </div>
+            <div *ngIf="dynamicGeoLocationData.length>0" class="col-lg-12 col-md-12 col-sm-12 ">
+                <div class="pb-2 TextTruncate" title="{{dynamicGeoLocationData[0]?.link}}"><strong>{{dynamicGeoLocationData[0]?.link}}</strong></div>
+                <form class="formcss investorcontainer" name="geographyForm" #geographyForm="ngForm">
+                    <div class="description row  d-flex dealDataContainer">
+                        <ng-container *ngFor="let geoCustomData of dynamicGeoLocationData;let i = index">
+                            <div class="col-sm-6 col-md-3 pl-0 pr-0 pl-3 pr-3 pb-3"
+                                *ngIf="geoCustomData.name == investorinfo.Region">
+                                <div class="padding-left-rem TextTruncate" title="{{geoCustomData.displayName}}">{{geoCustomData.displayName}}</div>
+                                <typeahead-control [isRequired]="true" name="location_region"
+                                    [(ngModel)]="geoCustomData.value" [optionList]="regionList"
+                                    [displayField]="'region'" #location_region="ngModel"
+                                    (selectItem)="onRegionChange(geoCustomData.value)"
+                                    (clearItem)="onRegionChange(geoCustomData.value)">
+                                </typeahead-control>                              
+                            </div>
+                            <div class="col-sm-6 col-md-3 pl-0 pr-0 pl-3 pr-3 pb-3"
+                                *ngIf="geoCustomData.name == investorinfo.Country">
+                                <div class="padding-left-rem TextTruncate" title="{{geoCustomData.displayName}}">{{geoCustomData.displayName}}</div>
+                                <typeahead-control name="location_country" [(ngModel)]="geoCustomData.value"
+                                    [optionList]="countryList" [displayField]="'country'" #location_country="ngModel"
+                                    (selectItem)="onCountryChange(geoCustomData.value)"
+                                    (clearItem)="onCountryChange(geoCustomData.value)" [isRequired]="true">
+                                </typeahead-control>
+
+                            </div>
+                            <div class="col-sm-6 col-md-3 pl-0 pr-0 pl-3 pr-3 pb-3"
+                                *ngIf="geoCustomData.name == investorinfo.State">
+                                <div class="padding-left-rem TextTruncate" title="{{geoCustomData.displayName}}">{{geoCustomData.displayName}}</div>
+                                <typeahead-control name="location_state" [(ngModel)]="geoCustomData.value"
+                                    [optionList]="stateList" [displayField]="'state'" #location_state="ngModel"
+                                    (selectItem)="onStateChange(geoCustomData.value)"
+                                    (clearItem)="onStateChange(geoCustomData.value)">
+                                </typeahead-control>
+
+                            </div>
+                            <div class="col-sm-6 col-md-3 pl-0 pr-0 pl-3 pr-3 pb-3"
+                                *ngIf="geoCustomData.name == investorinfo.City">
+                                <div class="padding-left-rem TextTruncate" title="{{geoCustomData.displayName}}">{{geoCustomData.displayName}}</div>
+                                <typeahead-control name="location_city" [(ngModel)]="geoCustomData.value"
+                                    [optionList]="cityList" [displayField]="'city'" #location_city="ngModel">
+                                </typeahead-control>
+                            </div>
+                        </ng-container>
+                        <div class="col-12 pl-3 pt-3 pb-3 pr-3">
+                            <div class="pull-right"> <a class="geography-clear pr-3 TextTruncate"
+                                    (click)="clearGeographicLocation(geographyForm)" title="Clear">Clear
+                                    all</a>
+                                <a class="nep-button nep-button-secondary TextTruncate"
+                                    (click)="addGeographicLocation(geographyForm)" title="Add Location">Add
+                                    Location</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-12 col-md-12 col-sm-12 pr-0 pl-0 pt-2">
+                        <div class="card card-border-style">
+                            <div class="card-body mb-0">
+                                <div class="table-responsive card-border">
+                                    <table class='table mb-0 static-info-table custom-table-addinvestor'>
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="text-align-left" title="Region">Region</th>
+                                                <th scope="col" class="text-align-left" title="Country">Country</th>
+                                                <th scope="col" class="text-align-left" title="State">State</th>
+                                                <th scope="col" class="text-align-left" title="City">City</th>
+                                                <th scope="col" class="text-center" title="Remove">Remove</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody *ngIf="tablegeographicLocationsModel?.length>0">
+                                            <tr *ngFor="let location of tablegeographicLocationsModel">
+                                                <td><span *ngIf="location.region" title="{{ location.region.region }}">{{ location.region.region }}</span> </td>
+                                                <td><span *ngIf="location.country" title="{{ location.country.country }}">{{ location.country.country }}</span>
+                                                </td>
+                                                <td><span *ngIf="location.state" title="{{ location.state.state }}">{{ location.state.state }}</span> </td>
+                                                <td><span *ngIf="location.city" title="{{ location.city.city }}">{{ location.city.city }}</span> </td>
+                                                <td class="text-center"> <span (click)="removeLocation(location.investorId)">
+                                                        <img title="Remove Location" [src]="'assets/dist/images/DeleteIcon.svg'"
+                                                         alt="">
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <app-empty-state [isGraphImage]="false" *ngIf="tablegeographicLocationsModel?.length == 0">
+                                    </app-empty-state>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="row mr-0 ml-0 fixed-footer"[ngStyle]="{'width': sideNavWidth}">
+                <div class="col-12 col-lg-12 col-md-12 col-sm-12  pr-0 pl-0" >
+                    <div class="pull-right pt-2 pb-2 pr-3">
+                        <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true"
+                                class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                        <input id="hiddenreloadButton" type="button" (click)="Reload(f)" value="{{resetText}}" title="{{resetText}}"
+                            class="nep-button nep-button-secondary reset-update-portfolio-css TextTruncate" />
+                        <button type="submit" class=" width-120 nep-button nep-button-primary width-135 reset-update-portfolio-css ml-2 TextTruncate" [disabled]="!f.form.valid"
+                            title="{{title}}">{{title}}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>

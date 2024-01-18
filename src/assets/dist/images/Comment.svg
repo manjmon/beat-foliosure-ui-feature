@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" viewBox="0 0 16 16">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="Path_639" data-name="Path 639" d="M1.6-17H14.4A1.649,1.649,0,0,1,16-15.306v8.472A1.649,1.649,0,0,1,14.4-5.14H3.459L0-2.6V-15.306A1.649,1.649,0,0,1,1.6-17Z" transform="translate(0 17)" fill="none" clip-rule="evenodd"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <path id="Path_638" data-name="Path 638" d="M-2-.668H17.2V-21H-2Z" transform="translate(2 21)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Comment_Grey" data-name="Comment Grey" transform="translate(-393 -642)">
+    <g id="Group_1382" data-name="Group 1382" transform="translate(393 642.833)">
+      <g id="Group_1371" data-name="Group 1371" clip-path="url(#clip-path)">
+        <g id="Group_1370" data-name="Group 1370" transform="translate(-1.6 -3.389)" clip-path="url(#clip-path-2)">
+          <g id="Group_1369" data-name="Group 1369" transform="translate(1.6 3.389)">
+            <path id="Path_637" data-name="Path 637" d="M1.6,0H14.4A1.649,1.649,0,0,1,16,1.694v8.472a1.649,1.649,0,0,1-1.6,1.694H3.459L0,14.4V1.694A1.649,1.649,0,0,1,1.6,0Z" fill="none" stroke="#021155" stroke-width="3"/>
+          </g>
+        </g>
+      </g>
+      <g id="Group_1589" data-name="Group 1589" transform="translate(4.5 4.5)">
+        <line id="Line_88" data-name="Line 88" x2="7" fill="none" stroke="#021155" stroke-linecap="round" stroke-width="1.5"/>
+        <line id="Line_89" data-name="Line 89" x2="4" transform="translate(0 3)" fill="none" stroke="#021155" stroke-linecap="round" stroke-width="1.5"/>
+      </g>
+    </g>
+    <rect id="Rectangle_902" data-name="Rectangle 902" width="16" height="16" transform="translate(393 642)" fill="none"/>
+  </g>
+</svg>

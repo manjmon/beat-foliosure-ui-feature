@@ -1,0 +1,296 @@
+<div class="row internal-report-section">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0  internal-report-panel">
+        <div class="row Consolidated-report-header custom-report-header consolidated-report-header">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 consolidated-report-header">
+                <div class="float-left d-inline-flex">
+                    <div class="d-inline-block template-select">
+                        <p-dropdown [filter]="true" [filterBy]="'templateName'" [virtualScroll]="true" [virtualScrollItemSize]="30" class="custom-p-dropdown icon-dropdown fund-custom-dropdown custom-p-dropdown access-subfeature custom-searchable-dropdown icon-dropdown report-custom-dropdown custom-scroller-height"
+                            [options]="configurationItem?.consolidatedReportList" (click)="closePanel()"
+                            (onChange)="setTemplateSetting();closePanel()" [(ngModel)]="selectedItem">
+                            <ng-template let-item pTemplate="selectedItem">
+                                <div class="d-inline-block"><img class="pr-1" *ngIf="item.isDefault"
+                                        src="assets/dist/images/FeedbackStarGrey.svg" alt="" /></div>
+                                <div title="{{item.templateName}}" class="d-inline-block custom-label">
+                                    {{item.templateName}}</div>
+                            </ng-template>
+                            <ng-template let-object pTemplate="item">
+                                <div class="custom-ui-label custom-delete-hover custom-zindex-parent consolidated-z-d"  [ngClass]="!object?.isDefault? 'pl-2':''">
+                                    <span title="{{object.templateName}}" class="img-pad TextTruncate">
+                                        <img class="pr-1"
+                                        *ngIf="object.isDefault" src="assets/dist/images/FeedbackStarGrey.svg" alt="" />{{object.templateName}}
+                                        
+                                    </span>
+                                    <span *ngIf="!object.isDefault"  class="float-right  custom-zindex-child consolidated-display">
+                                        <img class="deleteicon  pl-0 float-right" (click)="executeAction(object);$event.stopPropagation()" src="assets/dist/images/delete.svg"
+                                            alt="delete" />
+                                    </span>
+                                </div>
+                            </ng-template>
+                        </p-dropdown>
+                        
+                    </div>
+                    <div class="d-inline-block template-select-pref">
+                        <nep-button Type="Secondary" class="field-nep-button" id="dropdownMenuButton"
+                            #dropdownMenuButton [matMenuTriggerFor]="menu" #tRecordTrigger="matMenuTrigger">
+                            <img src="assets/dist/images/configuration-blue.svg" class="cursor-filter pr-2 pref-image"
+                                alt="button-image" />
+                            <span>Preferences</span>
+                        </nep-button>
+                    </div>
+                </div>
+                <div class="float-right">
+                    <div class="d-inline-block internal-reset-button">
+                        <button  class="nep-button-secondary custom-reset-button" [ngClass]="resetBtn?'disableResetBtn':''" (click)="resetAll();closePanel()" [disabled]="resetBtn">
+                            Reset
+                        </button>
+                    </div>
+                    <div class="d-inline-block internal-reset-button">
+                    <nep-button Type="Secondary" (click)="closePanel();saveAs()" [disabled]="saveBtn || (selectedModule?.length>0?false:true)">
+                        Save As
+                    </nep-button>
+                </div>
+                    <div class="d-inline-block" *ngIf="!this.selectedItem?.isDefault">
+                        <nep-button Type="Primary" (click)="save();closePanel()" [disabled]="disableBtn || (selectedModule?.length>0?false:true)">
+                            Save
+                        </nep-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-0 internal-report-selection custom-report-style">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 pc-kpi-section">
+                <div class="row mr-0 ml-0">
+                    <div class="col-4 pr-0 pl-0 col-sm-4 col-md-4 col-lg-4 col-xl-4 internal-company-section "
+                        *ngIf="false">
+                        <div class="row mr-0 ml-0 internal-pc-search">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                <div class="search"><span class="fa fa-search fasearchicon p-1"></span><input
+                                        [(ngModel)]="company" (input)="filterItem(company)" type="text"
+                                        placeholder="Search company"
+                                        class="search-text-company companyListSearchHeight TextTruncate"></div>
+                            </div>
+                        </div>
+                        <div class="row ml-0 mr-0">
+                            <div
+                                class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12 pl-0 pr-0 company-internal-list">
+                                <cdk-virtual-scroll-viewport class="company-info-virtual-port"
+                                    [ngStyle]="{'height': 'calc(100vh - 252px)'}" itemSize="5">
+                                    <div class="row mr-0 ml-0 company-info-mapping"
+                                        *cdkVirtualFor="let item of filteredCompanyList"
+                                        [ngClass]="{'company-active' : item.editable}" (click)="selectCompany(item)">
+                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12">
+                                            <div class="row mr-0 ml-0">
+                                                <div
+                                                    class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xs-12 pr-0 pl-0">
+                                                    <div
+                                                        class="company-kpi-list d-inline-block  text-truncate float-left">
+                                                        {{item.companyName}}
+                                                    </div>
+                                                    <div [ngClass]="item.tick ? 'd-inline-block':'d-none'"
+                                                        class=" float-right tick-company-image">
+                                                        <img src="assets/dist/images/tick-grey.svg" alt="tick" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <app-empty-state class="ir-company-no-data" [isGraphImage]="false"
+                                        *ngIf="filteredCompanyList?.length == 0"></app-empty-state>
+                                </cdk-virtual-scroll-viewport>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pr-0 pl-0 col-sm-12 col-md-12 col-lg-12 col-xl-12 internal-kpi-section">
+                        <div class="row mr-0 ml-0 internal-kpi-search">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0 kpi-section-map">
+                                <div class="kpi-sec-search">
+                                    <div class="search"><span class="fa fa-search fasearchicon p-1"></span><input #gb
+                                            (input)="tblKpi.filterGlobal($event.target.value, 'contains')" type="text"
+                                            placeholder="Search"
+                                            class="search-text-company companyListSearchHeight"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0 internal-kpi-list">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                <p-table styleClass="p-datatable-gridlines" [globalFilterFields]="['kpi','section']" #tblKpi 
+                                    class="consolidated-report-checkbox Track-Records cashflow-tbl investor-tr-table custom-kpi-table borderless company-financial-border" [columns]="headers"
+                                    [value]="kpiMappingList | moduleFilter:moduleFilterArgs" [resizableColumns]="true"
+                                    [scrollable]="true"  [scrollHeight]="'calc(100vh - 248px)'"
+                                    sortMode="multiple">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th id="col.header" *ngFor="let col of columns; index as i"
+                                                [ngClass]="col.field"
+                                                [ngStyle]="col.field === 'checkbox' ?{'padding':'0px','width':'20px'}:{}">
+                                                <div *ngIf="col.header !== 'checkbox'">
+                                                    {{ col.header }}
+                                                </div>
+                                                <div *ngIf="col.header === 'checkbox'" id="checkAll"
+                                                    class="text-center">
+                                                    <mat-checkbox class="text-center" #checkAllBox
+                                                        [checked]="isCheckAll" [disabled]="false"
+                                                        class="mat-custom-checkbox mat-subfeature-checkbox"
+                                                        (change)="handleHeaderCheckBox($event);">
+                                                    </mat-checkbox>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+
+                                        <tr>
+                                            <td class="consolidated-width">
+                                                <div>
+                                                    <checkbox class="text-center"  height="20px" width="20"
+                                                        [isChecked]="rowData?.isSelected" [value]=""
+                                                        (change)="handleCheckBox(rowData,$event)">
+                                                    </checkbox>
+                                                </div>
+                                            </td>
+                                            <td class="TextTruncate showToolTip kpi-column">
+                                                {{rowData.kpi}}
+                                            </td>
+                                            <td class="TextTruncate showToolTip">
+                                                {{rowData.section}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr [ngStyle]="{height:'calc(100vh - 344px)'}">
+                                            <td [attr.colspan]="columns.length" class="text-center">
+                                                <app-empty-state [isGraphImage]="false"></app-empty-state>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-menu #menu="matMenu" [hasBackdrop]="true" class="internal-report-preference-pop-up">
+    <div class="row mr-0 ml-0">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 preference-header">
+            <div class="float-left">
+                Preferences
+            </div>
+            <div class="float-right close-icon cursor-filter" (click)="closePanel()">
+                <i class="pi pi-times"></i>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 preference-content pr-0 pl-0">
+            <div class="row mr-0 ml-0">
+                <div class="col-12 col-sm-12 col-lg-12 col-md-12 col-xl-12 pr-0 pl-0">
+                    <div class="preference-label d-inline-block">
+                        <div (click)="setPreference(preference);" class="d-inline-block preference-section"
+                            [ngClass]="[preference.isActive?'preference-active':'',preference.name=='Funds'|| preference.name=='Calculations'?'label-req-preference':'']"
+                            *ngFor="let preference of preferenceList">{{preference.name}}</div>
+                    </div>
+                    <div class="preference-label-content d-inline-block">
+                        <container-element [ngSwitch]="selectedPreference?.name">
+                            <div class="d-inline-block" *ngSwitchCase="preferenceConstants?.Funds">
+                                <div class="pb-2 preference-text-label">Fund Name</div>
+                                <p-multiSelect (onChange)="resetFunds()" [virtualScroll]="true" [virtualScrollItemSize]="30"
+                                    [(ngModel)]="selectedFund"
+                                    class="lp-report-Kpilineitems multi-select-custom custom-searchable-multiselect"
+                                    name="copyToFeature" [resetFilterOnHide]=true
+                                    [options]="configurationItem?.fundDetails" defaultLabel="Select Fund"
+                                    [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                    optionLabel="fundName">
+                                    <ng-template let-fund pTemplate="item">
+                                        <span title="{{fund?.fundName}}">{{fund?.fundName}}</span>
+                                    </ng-template>
+                                </p-multiSelect>
+                            </div>
+                            <div *ngSwitchCase="preferenceConstants?.Sections">
+                                <div class="pb-2 preference-text-label">Sections</div>
+                                <p-multiSelect [(ngModel)]="selectedModule" [virtualScroll]="true" [virtualScrollItemSize]="36"
+                                    class="lp-report-Kpilineitems multi-select-custom custom-searchable-multiselect"
+                                    name="copyToFeature" [resetFilterOnHide]=true
+                                    [options]="configurationItem?.kpiModules" defaultLabel="Select Section"
+                                    [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                    optionLabel="name">
+                                    <ng-template let-module pTemplate="item">
+                                        <span title="{{module?.name}}">{{module?.name}}</span>
+                                    </ng-template>
+                                </p-multiSelect>
+                            </div>
+                            <div *ngSwitchCase="preferenceConstants?.ExcelTemplate">
+                                <div class="pb-2 preference-text-label">Excel Template</div>
+                                <p-dropdown [maxSelectedLabels]="1" [filterBy]="'name'" [virtualScroll]="true"
+                                    [virtualScrollItemSize]="30" class="custom-p-dropdown icon-dropdown fund-custom-dropdown"
+                                    name="module" [options]="configurationItem?.consolidatedExcelTemplates"
+                                    [(ngModel)]="selectedExcelTemplate" placeholder="Select Template" optionLabel="name"
+                                    [showClear]="false">
+                                    <ng-template let-template pTemplate="item">
+                                        <span title="{{template.name}}">
+                                            {{template.name}}
+                                        </span>
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                            <div *ngSwitchDefault>NA</div>
+                        </container-element>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mr-0 ml-0">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 preference-footer">
+            <div class="float-right">
+                <div class="d-inline-block internal-reset-button preference-reset-button">
+                    <nep-button Type="Secondary" (click)="reset()">
+                        Reset
+                    </nep-button>
+                </div>
+                <div class="d-inline-block">
+                    <nep-button Type="Primary" (click)="apply()" [disabled]="selectedModule?.length>0?false:true">
+                        Apply
+                    </nep-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-menu>
+<div *ngIf="savePopUp">
+    <confirm-modal class="AddOrUpdateKpi" primaryButtonName="Confirm" (secondaryButtonEvent)="onClose()"
+        [disablePrimaryButton]="disableConfirmSave" (primaryButtonEvent)="confirmSave();" id="add_template"
+        secondaryButtonName="Cancel" [modalTitle]="title">
+        <div class="row mr-0 ml-0">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0">
+                <div class="row mr-0 ml-0">
+                    <div class="col-lg-12 col-md-5 col-xs-5 pl-0 pr-0 ">
+                        <div class="template-label">Template Name
+                        </div>
+                        <nep-input (onInput)="onTemplateInputChange($event)"
+                            [ngClass]="{'custom-error-kpi-input':isTemplateExist && selectedRadio!='U'}"
+                            [value]="selectedItem.templateName"
+                            class="kpis-custom-select custom-nep-input default-txtcolor lp-nep-input "></nep-input>
+                        <div *ngIf="isTemplateExist && selectedRadio!='U'" class="nep-error">Template Name already
+                            exists</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </confirm-modal>
+</div>
+<div *ngIf="isPopup">
+    <modal customwidth="489px" [modalTitle]="modalTitle" primaryButtonName="Confirm" secondaryButtonName="Cancel"
+        (primaryButtonEvent)="OnUpdateTemplate($event)" (secondaryButtonEvent)="OnCancel($event)"
+        [disablePrimaryButton]="disableRenameConfirmButton">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12">
+                This will delete {{selectedItem.templateName}} template. Are you sure?
+            </div>
+        </div>
+    </modal>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

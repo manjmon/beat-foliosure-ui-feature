@@ -1,0 +1,68 @@
+@import "../../../../variables";
+
+.imagesecond-padding {
+    width: 100%;
+    position: relative;
+    text-align: center;
+}
+
+.border-grey-tab {
+    border-bottom: 1px solid #DEDFE0;
+    border-top: 1px solid #DEDFE0;
+    background: $nep-base-grey 0% 0% no-repeat padding-box;
+    position: relative;
+}
+
+.gap-image {
+    gap: 1.25rem;
+}
+
+.esg-icon-center {
+    position: relative;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.esg-icon-container {
+    display: inline-block;
+    width: 18px;
+
+}
+.no-data-div  app-empty-state.empty-state{
+    font-weight: 600 !important;
+    font-size: 1rem !important;
+    height: 29vh;
+    display: flex;
+    justify-content: center;
+}
+
+.esg-f-table {
+    width: 340px!important;
+    .p-datatable-frozen-view {
+        .p-datatable-scrollable-body {
+            table {
+                width: 600px !important;               
+            }
+
+        }
+    }
+
+    tr{
+         th:first-child,td:first-child{
+          border-left: none !important;
+        }
+    }
+
+    .frozen-header {
+        width: 340px!important;
+        .esg-custom-arrow {
+            position: absolute;
+            top: 10px;
+        }
+    }
+
+    .financial-header {
+        width: 200px !important;
+    }
+}

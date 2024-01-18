@@ -1,0 +1,16 @@
+<div class="trading-implied-ev">
+    
+    <div class="row ml-0 mr-0">
+    <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0 pl-0">
+        <div class="trading-implied-ev-section">
+            <div class="line-wrapper trading-implied-ev-title">
+                <span class="mr-2 TextTruncate impliedEVlabel">Implied EV & Equity Value</span>
+                <div class="line"></div>
+            </div>
+            <ng-container *ngIf="selectedImpliedEVTab?.id ==valuationType.Adjustment">
+                <app-adjustment-details [fundDetails]="selectedFund" [selectedCompany]="selectedCompany" [quarterAndYear]="quarterAndYear" ></app-adjustment-details>
+            </ng-container>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,60 @@
+.investorcontainer{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000014;
+    border: 1px solid #DEDFE0;
+    border-radius: 4px;
+    opacity: 1;
+}
+.text-box-shadow{
+ box-shadow: none !important;   
+}
+.description{
+    padding-top: 16px;
+}
+.BusinessDescriptionlabel{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000014;
+    border: 1px solid #DEDFE0;
+    border-radius: 4px;
+}
+.header-bottom{
+    padding-bottom: 1.25rem;
+}
+.message::-webkit-input-placeholder {
+    padding: 16px;
+ }
+ 
+ .message::-moz-input-placeholder {
+    padding: 16px;
+ }
+ 
+ .message:-moz-input-placeholder {
+    padding: 16px;
+ }
+ 
+ .message:-ms-input-placeholder {
+    padding: 16px;
+ }
+ .Addinvestorstaticinfo-scroll{
+    overflow-y: auto
+ }
+ .isheadquater {
+    margin-top: 2px;
+    position: absolute;
+}
+.row-margin-bottom{
+    margin-bottom: 100px;
+}
+.text-align-left {
+    text-align: left !important;
+    padding: 12px 16px !important;
+}
+.static-info-table{
+    border-collapse: collapse !important;
+}
+table tbody > tr > td{
+    border: 1px solid #dee2e6 !important;
+}
+.card-border-style{
+    border: none !important;
+}

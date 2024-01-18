@@ -1,0 +1,205 @@
+@keyframes spin {
+    0% { transform: rotate(Odeg);}
+    100% { transform: rotate(360deg);}
+}
+
+.img-spinner {
+    animation: spin 0.5s linear infinite;
+}
+
+
+
+.upload-list {
+    position: relative;
+    max-height: calc(100vh - 150px);
+    overflow: auto;
+}
+
+.upload-list .overlap-group {
+    top: 0px;
+    position: relative;
+    width: 100%;
+    height: 64px;
+    left: 0;
+}
+
+ul.upload-list li:last-child {
+    margin-bottom: 5px;
+}
+
+.upload-list .upload-list-item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 16px;
+    position: relative;
+    border-bottom: 1px solid var(--color-neutral-gray-neutral-gray-10, #E6E6E6);
+}
+
+.upload-list .upload-list-item-frame {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+    flex: 0 0 auto;
+}
+
+.upload-list .excel-file-icon {
+    position: relative;
+    width: 14px;
+    height: 14px;
+}
+
+.upload-list .file-name {
+    position: relative;
+    flex: 1;
+    margin-top: -1px;
+    font-family: var(--s-r-font-family);
+    font-weight: var(--s-r-font-weight);
+    color: var(--primitives-color-neutral-gray-neutral-gray-90);
+    font-size: var(--s-r-font-size);
+    letter-spacing: var(--s-r-letter-spacing);
+    line-height: var(--s-r-line-height);
+    font-style: var(--s-r-font-style);
+}
+
+.upload-list .upload-item-status {
+    padding: 0px 0px 0px 20px;
+    display: flex;
+    height: 24px;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    align-self: stretch;
+    width: 100%;
+}
+
+.upload-list .upload-item-status-div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    position: relative;
+    flex: 1;
+    flex-grow: 1;
+}
+
+.upload-list .process-icon-div {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--primitives-spacing-2);
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.upload-list .process-icon {
+    position: relative;
+    width: 16px;
+    height: 16px;
+}
+
+.upload-list .upload-item-status-text {
+    color: var(--color-neutral-gray-neutral-gray-60, #666666);
+    font-size: 12px;
+    font-style: normal;
+    font-weight: lighter;
+    line-height: 18px; /* 150% */
+}
+
+.upload-list .react-icons-md-wrapper {
+    top: 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--primitives-spacing-4);
+    position: absolute;
+    left: 252px;
+}
+
+.upload-list .overlap {
+    top: 136px;
+    position: absolute;
+    width: 350px;
+    height: 64px;
+    left: 0;
+}
+.divison{
+    position: relative;
+    border: 1px solic #ccc;
+    padding: 10px;
+    margin: 10px;
+}
+.close-button{
+    position: relative;
+    cursor: pointer;
+    color: #888;
+}
+.upload-loader{
+    position: relative;
+    top: -1px;
+}
+.upload-list-footer {
+    display: flex;
+    width: 360px;
+    height: 52px;
+    padding: 8px 16px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4px;
+    flex-shrink: 0;
+    border-top: 1px solid var(--color-neutral-gray-neutral-gray-10, #E6E6E6);
+    background: var(--background-background-primary, #FFF);
+    position: fixed;
+    bottom: 0;
+}
+
+.upload-list-footer .frame-2{
+    display: flex;
+    padding: var(--spacing-0, 0px);
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+    border-radius: var(--spacing-0, 0px);
+    text-align: right;
+    /* S-U */
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+    text-decoration-line: underline;
+    
+}
+
+.upload-list-footer .frame-2 .button,
+.upload-list-footer .frame-2 .button-2{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 4px;
+    background: #FFF;
+    color: var(--color-neutral-gray-neutral-gray-60, #666);
+    border: none;
+}
+
+.upload-list-footer .frame-2 .button-2{
+    gap: 4px !important;
+}
+.cancel{
+    cursor: pointer; 
+    color:#021155; 
+    right: -18px;
+    font-size: 0.75rem;
+   font-style: normal;
+   font-weight: 400;
+   
+}
+.cursor-pointer{
+    cursor: pointer !important;
+  }

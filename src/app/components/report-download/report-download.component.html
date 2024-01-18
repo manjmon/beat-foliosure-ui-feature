@@ -1,0 +1,11 @@
+<div class="row tab-shadow pt-0">
+    <div class="col-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 col-xs-12 pr-0 pl-0">
+        <nep-tab id="neptab" class="custom-pipeline-tab" [tabList]=reportTypes (OnSelectTab)="onTabClick($event)">
+        </nep-tab>
+    </div>
+</div>
+<container-element [ngSwitch]="selectedTab?.name">
+    <app-internal-report-download *ngSwitchCase="reportTypeConstants?.InternalReport"></app-internal-report-download>
+    <app-consolidated-report-download *ngSwitchCase="reportTypeConstants?.ConsolidatedReport"></app-consolidated-report-download>
+    <div *ngSwitchDefault></div>
+</container-element>

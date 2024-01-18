@@ -1,0 +1,1022 @@
+﻿<div class="row mr-0 ml-0 mb-4 custom-calendar-width" (resized)="onResized($event)">
+    <div class="col-lg-12 col-md-12 col-sm-12 pr-0 pl-0 col-12 col-xl-12  fund-header pr-0 pl-0 pb-2 TextTruncate"
+    *ngIf="subPageDetailList | arrayFilter: isFieldActive :fundPageSectionConstants.StaticInformation" title="{{subPageDetailList | arrayFilter: getStaticFieldDisplayName :fundPageSectionConstants.StaticInformation}}">
+        {{subPageDetailList | arrayFilter: getStaticFieldDisplayName :fundPageSectionConstants.StaticInformation}}
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 pr-0 pl-0 col-12 col-xl-12 pr-0 pl-0 fund-static">
+        <div class="card-body">
+            <form name="form" class="mt-0 pt-0 pb-0 pl-0 pr-0" (ngSubmit)="f.form.valid && save(f)" #f="ngForm"
+                novalidate *ngIf="masterModel!=undefined">
+                <div class="row mr-0 ml-0">
+                    <div class="col-lg-12 col-md-12 col-sm-12  col-12 col-xl-12 investorcontainer pb-0">
+                        <div class="row mr-0 ml-0">
+                            <ng-container *ngFor="let staticField of fundStaticInfoFieldList">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="staticField.name == fundStaticDetailConstants.FundName">
+                                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !fundName.valid }">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="fundName"
+                                                    class="mandatory-label TextTruncate" title="{{staticField.displayName}}">{{staticField.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter '+ staticField.displayName"
+                                                    autocomplete="off" type="text" class="form-control TextTruncate" name="fundName"
+                                                    maxlength="200" [(ngModel)]="model.fundName" #fundName="ngModel"
+                                                    validateRequired validateBusinessName required="true" />
+                                                <div *ngIf="f.submitted && model.fundName ==undefined"
+                                                    class="text-danger">
+                                                    <p *ngIf="f.submitted && model.fundName ==undefined">
+                                                        Please enter valid fund name</p>
+                                                    <p *ngIf="fundName.errors.validateRequired">Fund name is required
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="staticField.name == fundStaticDetailConstants.FirmName">
+                                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !firm.valid }">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="firm" class="TextTruncate" title="{{staticField.displayName}}">{{staticField.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <typeahead-control [placeholder]="'Select '+ staticField.displayName"
+                                                    name="firm" [loadingOptions]="firmLoading"
+                                                    [(ngModel)]="model.firmDetail" [optionList]="masterModel.firmList"
+                                                    [displayField]="'firmName'" #firm="ngModel" [isRequired]="false">
+                                                </typeahead-control>
+                                                <div *ngIf="(f.submitted || firm.dirty) && !firm.valid"
+                                                    class="text-danger">Firm is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="staticField.name == fundStaticDetailConstants.AccountType">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !accountType.valid }">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="accountType TextTruncate" title="{{staticField.displayName}}">{{staticField.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <typeahead-control [placeholder]="'Select ' + staticField.displayName"
+                                                    name="accountType" [loadingOptions]="accountTypeLoading"
+                                                    [(ngModel)]="model.accountTypeDetail"
+                                                    [optionList]="masterModel.accountTypeList" validateRequired
+                                                    [displayField]="'accountType'" #accountType="ngModel"
+                                                    [isRequired]="false"></typeahead-control>
+
+                                                <div *ngIf="(f.submitted || accountType.dirty) && !accountType.valid"
+                                                    class="text-danger">Account Type is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="staticField.name == fundStaticDetailConstants.Sector">
+                                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !sector.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="sector TextTruncate" title="{{staticField.displayName}}">{{staticField.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <typeahead-control [placeholder]="'Select '+ staticField.displayName"
+                                                    name="sector" [loadingOptions]="sectorLoading"
+                                                    [(ngModel)]="model.sectorDetail"
+                                                    [optionList]="masterModel.sectorList" validateRequired
+                                                    [displayField]="'sector'" #sector="ngModel" [isRequired]="false">
+                                                </typeahead-control>
+
+                                                <div *ngIf="(f.submitted || sector.dirty) && !sector.valid"
+                                                    class="text-danger">Sector is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="staticField.name == fundStaticDetailConstants.Strategy">
+                                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !strategy.valid }">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="strategy TextTruncate" title="{{staticField.displayName}}">{{staticField.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <typeahead-control [placeholder]="'Select '+ staticField.displayName"
+                                                    name="strategy" [loadingOptions]="strategyLoading"
+                                                    [(ngModel)]="model.strategyDetail"
+                                                    [optionList]="masterModel.strategyList" validateRequired
+                                                    [displayField]="'strategy'" #strategy="ngModel"
+                                                    [isRequired]="false"></typeahead-control>
+
+                                                <div *ngIf="(f.submitted || strategy.dirty) && !strategy.valid"
+                                                    class="text-danger">{{staticField.displayName}} is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="staticField.name == fundStaticDetailConstants.Currency">
+                                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !currency.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="currency"
+                                                    class="mandatory-label TextTruncate" title="{{staticField.displayName}}">{{staticField.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <typeahead-control [placeholder]="'Select '+ staticField.displayName"
+                                                    [loadingOptions]="currencyLoading" name="currency"
+                                                    [(ngModel)]="model.currencyDetail"
+                                                    [optionList]="masterModel.currencyList" validateRequired
+                                                    [displayField]="'currency'" #currency="ngModel" [isRequired]="true">
+                                                </typeahead-control>
+
+                                                <div *ngIf="(f.submitted || currency.dirty) && !currency.valid"
+                                                    class="text-danger">{{staticField.displayName}} is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="staticField.name == fundStaticDetailConstants.VintageYear">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !vintageYear.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="vintageYear" title="{{staticField.displayName}}" class="TextTruncate">{{staticField.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <typeahead-control [placeholder]="'Select '+ staticField.displayName"
+                                                    name="vintageYear" [(ngModel)]="model.vintageYear"
+                                                    [optionList]="yearOptions" validateRequired [displayField]="'text'"
+                                                    [resultField]="'value'" #vintageYear="ngModel" [isRequired]="false">
+                                                </typeahead-control>
+                                                <div *ngIf="(f.submitted || vintageYear.dirty) && !vintageYear.valid"
+                                                    class="text-danger">{{staticField.displayName}} is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="staticField.name == fundStaticDetailConstants.FundSize">
+                                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !fundSize.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="fundSize" class="TextTruncate" title="{{staticField.displayName}}">{{staticField.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter '+ staticField.displayName"
+                                                    autocomplete="off" numberOnly maxlength="15" type="text"
+                                                    class="form-control TextTruncate" name="fundSize" [(ngModel)]="model.fundSize"
+                                                    #fundSize="ngModel" validateRequired />
+                                                <div *ngIf="(f.submitted || fundSize.dirty) && !fundSize.valid"
+                                                    class="text-danger">{{staticField.displayName}} is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="staticField.name ==fundStaticDetailConstants.CustomField">
+                                    <ng-container *ngFor="let customfield of customfieldValueList">
+                                        <div class="form-group" [ngClass]="{ 'has-error': f.submitted}"
+                                        *ngIf="customfield.fieldID == staticField.fieldID">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-12 pr-0 pl-0">
+                                                    <label for="Customfield TextTruncate" title="{{customfield.displayName}}">{{customfield.displayName}}</label>
+                                                </div>
+                                                <div class="col-12 pr-0 pl-0">
+                                                    <input type="text" class="form-control TextTruncate"
+                                                        name="Customfield"
+                                                        [value]="customfield.value == 'NA' ? '' : customfield.value"
+                                                        (blur)="AddOrUpdateCustomFieldValue($event,customfield)"
+                                                        [placeholder]="'Enter '+staticField.displayName" autocomplete="off"
+                                                        maxlength="100" />
+                                                </div>
+                                            </div>
+                                        </div>                                        
+                                    </ng-container>
+                                    
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mr-0 ml-0">
+                    <div class="col-sm-12 pr-0 pl-0" *ngIf="fundStrategyDesc.isActive">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="fund-header pb-2 pt-4 TextTruncate" title="{{fundStrategyDesc.displayName}}" for="strategyDescription">
+                                        {{fundStrategyDesc.displayName}}</div>
+                                </div>
+                                <div class="col-12">
+                                    <textarea [placeholder]="'Enter ' +fundStrategyDesc.displayName +' here..'"
+                                        autocomplete="off" class="form-control text-desc" rows="4" cols="50"
+                                        maxlength="500" name="strategyDescription"
+                                        [(ngModel)]="model.strategyDescription"
+                                        #strategyDescription="ngModel"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mr-0 ml-0 pt-4" *ngIf="subPageDetailList | arrayFilter: isFieldActive :fundPageSectionConstants.FundTerm">
+                    <div class="col-lg-12 col-md-12 col-sm-12 pr-0 pl-0 col-12 col-xl-12  fund-header pr-0 pl-0 pb-2 TextTruncate" title="{{subPageDetailList | arrayFilter: getStaticFieldDisplayName
+                        :fundPageSectionConstants.FundTerm}}">
+                        {{subPageDetailList | arrayFilter: getStaticFieldDisplayName
+                        :fundPageSectionConstants.FundTerm}}
+                    </div>
+                    <div
+                        class="col-lg-12 col-md-12 col-sm-12  col-12 col-xl-12   investorcontainer pb-0">
+                        <div class="row mr-0 ml-0">
+                            <ng-container *ngFor="let field of fundTermFieldList">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.TargetCommitment">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !targetCommitment.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="targetCommitment TextTruncate" title="{{field.displayName}}">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter ' + field.displayName" autocomplete="off"
+                                                    numberOnly type="text" maxlength="15" class="form-control TextTruncate"
+                                                    name="targetCommitment" [(ngModel)]="model.targetCommitment"
+                                                    #targetCommitment="ngModel" validateRequired />
+                                                <div *ngIf="(f.submitted || targetCommitment.dirty) && !targetCommitment.valid"
+                                                    class="text-danger">Target commitment is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.MaximumCommitment">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !maximumCommitment.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="maximumCommitment TextTruncate" title="{{field.displayName}}">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter ' + field.displayName" autocomplete="off"
+                                                    numberOnly maxlength="15" type="text" class="form-control TextTruncate"
+                                                    name="maximumCommitment" [(ngModel)]="model.maximumCommitment"
+                                                    #maximumCommitment="ngModel" validateRequired />
+                                                <div *ngIf="(f.submitted || maximumCommitment.dirty) && !maximumCommitment.valid"
+                                                    class="text-danger">Maximum commitment is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.GPCommitment">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !gPCommitment.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="gPCommitment TextTruncate" title="{{field.displayName}}">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter ' + field.displayName" autocomplete="off"
+                                                    numberOnly maxlength="6" type="text" class="form-control TextTruncate"
+                                                    name="gPCommitment" [(ngModel)]="model.gpCommitment"
+                                                    #gPCommitment="ngModel" validateRequired />
+                                                <div *ngIf="(f.submitted || gPCommitment.dirty) && !gPCommitment.valid"
+                                                    class="text-danger">GP commitment percent is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.PreferredReturnPercent">
+
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !preferredReturnPercent.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="preferredReturnPercent TextTruncate" title="{{field.displayName}}">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter ' + field.displayName" autocomplete="off"
+                                                    numberOnly maxlength="6" type="text" class="form-control TextTruncate"
+                                                    name="preferredReturnPercent"
+                                                    [(ngModel)]="model.preferredReturnPercent"
+                                                    #preferredReturnPercent="ngModel" validateRequired />
+                                                <div *ngIf="(f.submitted || preferredReturnPercent.dirty) && !preferredReturnPercent.valid"
+                                                    class="text-danger">Preferred return percent is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.CarriedInterestPercent">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !carriedInterestPercent.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="carriedInterestPercent TextTruncate" title="{{field.displayName}}">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter ' + field.displayName" autocomplete="off"
+                                                    numberOnly maxlength="6" type="text" class="form-control TextTruncate"
+                                                    name="carriedInterestPercent"
+                                                    [(ngModel)]="model.carriedInterestPercent"
+                                                    #carriedInterestPercent="ngModel" validateRequired />
+                                                <div *ngIf="(f.submitted || carriedInterestPercent.dirty) && !carriedInterestPercent.valid"
+                                                    class="text-danger">Carried interest percent is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.GPCatchupPercent">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !gPCatchupPercent.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="gPCatchupPercent" class="TextTruncate" title="{{field.displayName}}">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter ' + field.displayName" autocomplete="off"
+                                                    numberOnly maxlength="6" type="text" class="form-control TextTruncate"
+                                                    name="gPCatchupPercent" [(ngModel)]="model.gpCatchupPercent"
+                                                    #gPCatchupPercent="ngModel" validateRequired />
+                                                <div *ngIf="(f.submitted || gPCatchupPercent.dirty) && !gPCatchupPercent.valid"
+                                                    class="text-danger">GP catchup percent is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                 
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.ManagementFee">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !managementFee.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="managementFee" class="TextTruncate" title="{{field.displayName}}">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter ' + field.displayName" autocomplete="off"
+                                                    numberOnly maxlength="10" type="text" class="form-control TextTruncate"
+                                                    name="managementFee" [(ngModel)]="model.managementFee"
+                                                    #managementFee="ngModel" validateRequired />
+                                                <div *ngIf="(f.submitted || managementFee.dirty) && !managementFee.valid"
+                                                    class="text-danger">Management fee is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.ManagementFeeOffset">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !managementFeeOffset.valid }">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="managementFeeOffset" title="{{field.displayName}}" class="TextTruncate">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter ' + field.displayName" autocomplete="off"
+                                                    numberOnly maxlength="10" type="text" class="form-control TextTruncate"
+                                                    name="managementFeeOffset" [(ngModel)]="model.managementFeeOffset"
+                                                    #managementFeeOffset="ngModel" validateRequired />
+                                                <div *ngIf="(f.submitted || managementFeeOffset.dirty) && !managementFeeOffset.valid"
+                                                    class="text-danger">Management fee offset is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                  <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.FundTerm">
+
+                                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !fundTerm.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="fundTerm" title="{{field.displayName}}" class="TextTruncate">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter ' + field.displayName" autocomplete="off"
+                                                    numberOnly maxlength="15" type="text" class="form-control TextTruncate"
+                                                    name="fundTerm" [(ngModel)]="model.fundTerm" #fundTerm="ngModel"
+                                                    validateRequired />
+                                                <div *ngIf="(f.submitted || fundTerm.dirty) && !fundTerm.valid"
+                                                    class="text-danger">Fund term is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.MaximumExtensionToFundTerm">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !maximumExtensionToFundTerm.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="maximumExtensionToFundTerm" title="{{field.displayName}}" class="TextTruncate">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter ' + field.displayName" autocomplete="off"
+                                                    numberOnly maxlength="15" type="text" class="form-control TextTruncate"
+                                                    name="maximumExtensionToFundTerm"
+                                                    [(ngModel)]="model.maximumExtensionToFundTerm"
+                                                    #maximumExtensionToFundTerm="ngModel" validateRequired />
+                                                <div *ngIf="(f.submitted || maximumExtensionToFundTerm.dirty) && !maximumExtensionToFundTerm.valid"
+                                                    class="text-danger">Maximum extension to fund term is required
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.FundClosingDate">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !fundClosingDate.valid }">
+                                        <div class="row mr-0 ml-0">
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="fundClosingDate" title="{{field.displayName}}" class="TextTruncate">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <div class="input-group">
+                                                    <p-calendar [placeholder]="'Select ' +field.displayName"
+                                                        class="fund-calendar"                                                      
+                                                         [(ngModel)]="model.fundClosingDate"                                                         
+                                                        appendTo="body" name="fundClosingDate" #fundClosingDate
+                                                        [monthNavigator]="true" [yearNavigator]="true"
+                                                        dateFormat="dd/mm/yy" [showIcon]="true" yearRange="2000:2030"
+                                                        [required]="false"></p-calendar>
+
+                                                </div>
+                                                <div *ngIf="(f.submitted || fundClosingDate.dirty) && !f.control.controls.fundClosingDate.valid"
+                                                    class="text-danger">Fund closing date is required</div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.OrgExpenses">
+                                    <div class="form-group"
+                                        [ngClass]="{ 'has-error': f.submitted && !orgExpenses.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="orgExpenses" title="{{field.displayName}}" class="TextTruncate">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <input [placeholder]="'Enter ' + field.displayName" autocomplete="off"
+                                                    maxlength="15" numberOnly type="text" class="form-control TextTruncate"
+                                                    name="orgExpenses" [(ngModel)]="model.orgExpenses"
+                                                    #orgExpenses="ngModel" validateRequired />
+                                                <div *ngIf="(f.submitted || orgExpenses.dirty) && !orgExpenses.valid"
+                                                    class="text-danger">Org expenses is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name == fundTermFieldConstants.Clawback">
+                                    <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !clawback.valid }">
+                                        <div class="row mr-0 ml-0">
+
+                                            <div class="col-12 pr-0 pl-0">
+                                                <label for="clawback" title="{{field.displayName}}" class="TextTruncate">{{field.displayName}}</label>
+                                            </div>
+                                            <div class="col-12 pr-0 pl-0">
+                                                <typeahead-control [placeholder]="'Select '+ field.displayName"
+                                                    name="clawback" [(ngModel)]="model.clawback"
+                                                    [optionList]="clawbackOptions" validateRequired
+                                                    [displayField]="'text'" [resultField]="'value'" #clawback="ngModel"
+                                                    [isRequired]="false"></typeahead-control>
+                                                <div *ngIf="(f.submitted || clawback.dirty)&& !clawback.valid"
+                                                    class="text-danger">Clawback is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0"
+                                    *ngIf="field.name ==fundStaticDetailConstants.CustomField">
+                                    <ng-container *ngFor="let customfield of customfieldValueList">
+                                        <div class="form-group" [ngClass]="{ 'has-error': f.submitted}"
+                                        *ngIf="field.fieldID == customfield.fieldID">
+                                            <div class="row mr-0 ml-0">
+                                                <div class="col-12 pr-0 pl-0">
+                                                    <label for="Customfield" title="{{field.displayName}}" class="TextTruncate">{{customfield.displayName}}</label>
+                                                </div>
+                                                <div class="col-12 pr-0 pl-0">
+                                                    <input type="text" class="form-control TextTruncate"
+                                                        name="Customfield" 
+                                                        [value]="customfield.value == 'NA' ? '' : customfield.value"
+                                                        (blur)="AddOrUpdateCustomFieldValue($event,customfield)"
+                                                        [placeholder]="'Enter '+field.displayName" autocomplete="off"
+                                                        maxlength="100" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </ng-container>
+                                    
+                                  
+                                    
+                                </div>
+                            <!-- -->
+
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mr-0 ml-0 header-performance mb-4">
+                    <div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12 pr-0 pl-0 trackrecord-section">
+                        <div class="financial-page">
+                            <div class="panel panel-default border-0 pt-2 tab-bg">
+                                <div class="panel-heading">
+                                    <div class="panel-title custom-tabs">
+                                        <ul class="nav nav-tabs ">
+                                            <a *ngFor="let tab of tabList;" (click)="selectTab(tab);">
+                                                <li class="nav-item" role="presentation" 
+                                                >
+                                                <button class="nav-link nav-custom TextTruncate" [ngClass]="tab.isSelected == true ?'active':''"
+                                                    id="home-tab" data-bs-toggle="tab" type="button" role="tab"
+                                                    aria-controls="home" title="{{tab.displayName}}" aria-selected="true">
+                                                    {{tab.displayName}}
+                                                </button>
+                                            </li>
+                                            </a>
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-bg">
+                                <div *ngIf="tabName =='Investors'">
+                                    <form name="investForm" #investForm="ngForm" class="mb-0">
+                                        <div class="row mr-0 ml-0 pt-3 pr-3 pl-3 pb-0">
+                                            <ng-container *ngFor="let staticData of dynamicHeader">
+                                                <div *ngIf="FundInvestorConstants.InvestorId==staticData.name"
+                                                    class="col-sm-3 col-md-3 col-3 col-lg-3 col-xl-3 col-sm-3 pr-control-fund pl-0">
+                                                    <div class="form-group">
+                                                        <div class="row mr-0 ml-0">
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <label for="InvestorName"
+                                                                    class="mandatory-label TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+                                                            </div>
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <typeahead-control
+                                                                    [placeholder]="'Select  '+ staticData.displayName"
+                                                                    name="investorName"
+                                                                    [loadingOptions]="investorLoading"
+                                                                    [(ngModel)]="fundInvestor.investor"
+                                                                    [optionList]="investorNameList"
+                                                                    [displayField]="'investorName'"
+                                                                    #investorName="ngModel" [isRequired]="true">
+                                                                </typeahead-control>
+                                                                <div *ngIf="(investorName.dirty) && !investorName.valid"
+                                                                    class="text-danger">Investor Name is required</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="FundInvestorConstants.Commitment==staticData.name"
+                                                    class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0">
+                                                    <div class="form-group">
+                                                        <div class="row mr-0 ml-0">
+
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <label for="fundSize" class="TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+                                                            </div>
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    autocomplete="off" type="number"
+                                                                    class="form-control TextTruncate" name="Commitment"
+                                                                    [(ngModel)]="fundInvestor.Commitment"
+                                                                    #commitment="ngModel" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="FundInvestorConstants.CommitmentDate==staticData.name"
+                                                    class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0">
+                                                    <div class="form-group">
+                                                        <div class="row mr-0 ml-0">
+
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <label for="fundSize" title="{{staticData.displayName}}" class="TextTruncate">{{staticData.displayName}}</label>
+                                                            </div>
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <div class="input-group">
+                                                                    <p-calendar
+                                                                       
+                                                                        placeholder="Select {{staticData.displayName}}"
+                                                                        class="fund-calendar" [maxDate]="today"
+                                                                        (ngModelChange)="onChangeCommitmentDate(fundInvestor.CommitmentDate)"
+                                                                        [(ngModel)]="fundInvestor.CommitmentDate"
+                                                                        appendTo="body" name="commitmentDate"
+                                                                        #commitmentDate [monthNavigator]="true"
+                                                                        [yearNavigator]="true" dateFormat="dd/mm/yy"
+                                                                        [showIcon]="true" yearRange="2000:2030"
+                                                                        [required]="false"></p-calendar>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="FundInvestorConstants.Ownership==staticData.name"
+                                                    class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0">
+                                                    <div class="form-group">
+                                                        <div class="row mr-0 ml-0">
+
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <label for="fundSize" class="TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+                                                            </div>
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    autocomplete="off" min="0" type="number"
+                                                                    class="form-control TextTruncate" name="ownership"
+                                                                    [(ngModel)]="fundInvestor.Ownership"
+                                                                    #ownership="ngModel" max="100"
+                                                                    (keypress)="handleKeyDown($event)" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="FundInvestorConstants.NetDrawn==staticData.name"
+                                                    class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0">
+                                                    <div class="form-group">
+                                                        <div class="row mr-0 ml-0">
+
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <label for="fundSize" title="{{staticData.displayName}}" class="TextTruncate">{{staticData.displayName}}</label>
+                                                            </div>
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    autocomplete="off" type="number"
+                                                                    class="form-control TextTruncate" name="netDrawn"
+                                                                    [(ngModel)]="fundInvestor.NetDrawn"
+                                                                    #netDrawn="ngModel" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="FundInvestorConstants.Recallable==staticData.name"
+                                                    class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0">
+                                                    <div class="form-group">
+                                                        <div class="row mr-0 ml-0">
+
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <label for="fundSize" title="{{staticData.displayName}}" class="TextTruncate">{{staticData.displayName}}</label>
+                                                            </div>
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    autocomplete="off" type="number"
+                                                                    class="form-control TextTruncate" name="Recallable"
+                                                                    [(ngModel)]="fundInvestor.Recallable"
+                                                                    #recallable="ngModel" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="FundInvestorConstants.UndrawnCommitment==staticData.name"
+                                                    class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0">
+                                                    <div class="form-group">
+                                                        <div class="row mr-0 ml-0">
+
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <label for="fundSize" class="TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+                                                            </div>
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    autocomplete="off" type="number"
+                                                                    class="form-control TextTruncate" name="undrawnCommitment"
+                                                                    [(ngModel)]="fundInvestor.UndrawnCommitment"
+                                                                    #undrawnCommitment="ngModel" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="FundInvestorConstants.AstreaTransfer==staticData.name"
+                                                    class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0">
+                                                    <div class="form-group">
+                                                        <div class="row mr-0 ml-0">
+
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <label for="fundSize" title="{{staticData.displayName}}" class="TextTruncate">{{staticData.displayName}}</label>
+                                                            </div>
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    autocomplete="off" type="number"
+                                                                    class="form-control TextTruncate" name="astreaTransfer"
+                                                                    [(ngModel)]="fundInvestor.AstreaTransfer"
+                                                                    #astreaTransfer="ngModel" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="FundInvestorConstants.CommitmentAfterAstreaTransfer==staticData.name"
+                                                    class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0">
+                                                    <div class="form-group">
+                                                        <div class="row mr-0 ml-0">
+
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <label for="fundSize" class="TextTruncate" title="{{staticData.displayName}}">{{staticData.displayName}}</label>
+                                                            </div>
+                                                            <div class="col-12 pr-0 pl-0">
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    autocomplete="off" type="number"
+                                                                    class="form-control TextTruncate"
+                                                                    name="commitmentAfterAstreaTransfer"
+                                                                    [(ngModel)]="fundInvestor.CommitmentAfterAstreaTransfer"
+                                                                    #commitmentAfterAstreaTransfer="ngModel" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div *ngIf="staticData.name==FundInvestorConstants.Customfield"
+                                                    class="col-lg-3 col-md-3 col-sm-3 col-3 col-xl-3 pr-control-fund pl-0">
+                                                    <div class="form-group">
+                                                        <div class="row mr-0 ml-0">
+                                                            <div
+                                                                class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0">
+                                                                <label for="fundSize" title="{{staticData.displayName}}" class="TextTruncate">{{staticData.displayName}}</label>
+                                                            </div>
+                                                            <div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+                                                                *ngIf="!investorEditMode">
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    *ngIf="(staticData.dataType==mDataTypes.Number)&&(staticData.dataType!=mDataTypes.FreeText)"
+                                                                    autocomplete="off" type="text" class="form-control TextTruncate"
+                                                                    [(ngModel)]="staticData.value"
+                                                                    id="{{staticData.displayName}}"
+                                                                    name="{{staticData.displayName}}"
+                                                                    (input)="numbersOnlyValidator($event)" />
+
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    *ngIf="(staticData.dataType==mDataTypes.CurrencyValue||staticData.dataType==mDataTypes.Percentage||staticData.dataType==mDataTypes.Multiple)&&(staticData.dataType!=mDataTypes.FreeText)"
+                                                                    autocomplete="off" type="text" class="form-control TextTruncate"
+                                                                    [(ngModel)]="staticData.value"
+                                                                    id="{{staticData.displayName}}"
+                                                                    name="{{staticData.displayName}}"
+                                                                    appTwoDigitDecimaNumber
+                                                                    (input)="decimalnumbersOnlyValidator($event)" />
+
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    *ngIf="staticData.dataType===mDataTypes.FreeText"
+                                                                    autocomplete="off" type="text" class="form-control TextTruncate"
+                                                                    [(ngModel)]="staticData.value"
+                                                                    id="{{staticData.displayName}}"
+                                                                    name="{{staticData.displayName}}" />
+                                                                <p-calendar
+                                                                    placeholder="Enter {{staticData.displayName}}"
+                                                                    *ngIf="staticData.dataType===mDataTypes.Date&&(staticData.dataType!==mDataTypes.FreeText)"
+                                                                    class="formCtrlHeight"
+                                                                    id="{{staticData.displayName}}"
+                                                                    name="{{staticData.displayName}}"
+                                                                    [(ngModel)]="staticData.value" #{{staticData.name}}
+                                                                    [monthNavigator]="true" [yearNavigator]="true"
+                                                                    dateFormat="dd/mm/yy" readonlyInput="true"
+                                                                    [showIcon]="true" yearRange="2000:2050"
+                                                                    [maxDate]="today" [required]="false">
+                                                                </p-calendar>
+                                                            </div>
+                                                            <div class="col-md-12 col-sm-12 col-12 col-lg-12 col-xl-12 pr-0 pl-0"
+                                                                *ngIf="investorEditMode">
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    *ngIf="(staticData.dataType==mDataTypes.Number)&&(staticData.dataType!=mDataTypes.FreeText)"
+                                                                    autocomplete="off" type="text" class="form-control TextTruncate"
+                                                                    [(ngModel)]="staticData.value"
+                                                                    id="{{staticData.displayName}}"
+                                                                    name="{{staticData.displayName}}"
+                                                                    (input)="numbersOnlyValidator($event)" />
+
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    *ngIf="(staticData.dataType==mDataTypes.CurrencyValue||staticData.dataType==mDataTypes.Percentage||staticData.dataType==mDataTypes.Multiple)&&(staticData.dataType!=mDataTypes.FreeText)"
+                                                                    autocomplete="off" type="text" class="form-control TextTruncate"
+                                                                    [(ngModel)]="staticData.value"
+                                                                    id="{{staticData.displayName}}"
+                                                                    name="{{staticData.displayName}}"
+                                                                    (input)="decimalnumbersOnlyValidator($event)"
+                                                                    appTwoDigitDecimaNumber />
+
+                                                                <input placeholder="Enter {{staticData.displayName}}"
+                                                                    *ngIf="staticData.dataType===mDataTypes.FreeText"
+                                                                    autocomplete="off" type="text" class="form-control TextTruncate"
+                                                                    [(ngModel)]="staticData.value"
+                                                                    id="{{staticData.displayName}}"
+                                                                    name="{{staticData.displayName}}" />
+                                                                <p-calendar
+                                                                    placeholder="Enter {{staticData.displayName}}"
+                                                                    *ngIf="staticData.dataType===mDataTypes.Date&&(staticData.dataType!==mDataTypes.FreeText)"
+                                                                    class="formCtrlHeight"
+                                                                    id="{{staticData.displayName}}"
+                                                                    name="{{staticData.displayName}}"
+                                                                    [(ngModel)]="staticData.value" #{{staticData.name}}
+                                                                    [monthNavigator]="true" [yearNavigator]="true"
+                                                                    dateFormat="dd/mm/yy" readonlyInput="true"
+                                                                    [showIcon]="true" yearRange="2000:2050"
+                                                                    [maxDate]="today" [required]="false">
+                                                                </p-calendar>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="row mr-0 ml-0 pr-3 pt-0 pb-3 pr-3">
+                                            <div
+                                                class="col-sm-12 col-md-12 col-12 col-lg-12 col-xl-12 col-sm-12 pr-0 pl-0">
+                                                <div class="pull-right"> <a class="geography-clear pr-3"
+                                                        (click)="clearInvestor(investForm)" title="Clear">Clear
+                                                        all</a>
+                                                    <a class="nep-button nep-button-secondary"
+                                                        (click)="addInvestor(investForm)"
+                                                        title="{{investorEditMode?'Update':'Add'}} Investor">{{investorEditMode?'Update':'Add'}}
+                                                        Investor</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="row mr-0 ml-0">
+                                        <div class="col-sm-12 col-md-12 col-12 col-lg-12 col-xl-12 col-sm-12 pr-0 pl-0">
+                                            <p-table styleClass="p-datatable-gridlines" class="geographicLocations cashflow-tbl" [columns]="fundColumns"
+                                                [resizableColumns]="true" [scrollable]="true" [rows]="100"
+                                                scrollHeight="300px" [value]="model?.investorListData" [lazy]="true"
+                                                >
+                                                <ng-template pTemplate="header">
+                                                    <tr>
+                                                        <ng-container *ngFor="let columns of fundColumns;">
+                                                            <th class="TextTruncate" title="{{columns.displayName}}" id="{{columns.subPageID}}">
+                                                                {{columns.displayName}}
+                                                            </th>
+                                                        </ng-container>
+                                                        <th class="text-center" title="Action">Action</th>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="body" let-investor>
+                                                    <tr>
+                                                        <ng-container *ngFor="let col of fundColumns">
+                                                            <td *ngIf="col.name==FundInvestorConstants.InvestorId">
+                                                                <span title="{{ investor['investorName'] || investor['Investor
+                                                                Name']}}"
+                                                                    [ngClass]="!investor.isActive?'investor-active':''">
+                                                                    {{ investor['investorName'] || investor['Investor
+                                                                    Name']}}
+                                                                </span>
+                                                            </td>
+                                                            <td *ngIf="col.name!=FundInvestorConstants.InvestorId">
+                                                                <span
+                                                                    [ngClass]="!investor.isActive?'investor-active':''">
+                                                                    {{
+                                                                    col.name==FundInvestorConstants.CommitmentDate?((investor[col.displayName]
+                                                                    !=null ||
+                                                                    investor[col.name]!=null)?((investor[col.displayName]
+                                                                    ||investor[col.name])| date:'MM/dd/yyyy'):'NA'):
+                                                                    col.name==FundInvestorConstants.Commitment?((investor[col.displayName]
+                                                                    !=null ||
+                                                                    investor[col.name]!=null)?((investor[col.displayName]||investor[col.name])|number
+                                                                    : NumberDecimalConst.currencyDecimal):'NA'):
+                                                                    col.name==FundInvestorConstants.Ownership?((investor[col.displayName]
+                                                                    !=null ||
+                                                                    investor[col.name]!=null)?((investor[col.displayName]||investor[col.name])|number
+                                                                    : NumberDecimalConst.percentDecimal)+"%":'NA'):
+                                                                    col.name==FundInvestorConstants.NetDrawn?((investor[col.displayName]
+                                                                    !=null ||
+                                                                    investor[col.name]!=null)?((investor[col.displayName]||investor[col.name])|number
+                                                                    : NumberDecimalConst.currencyDecimal):'NA'):
+                                                                    col.name==FundInvestorConstants.Recallable?((investor[col.displayName]
+                                                                    !=null||
+                                                                    investor[col.name]!=null)?((investor[col.displayName]||investor[col.name])|number
+                                                                    : NumberDecimalConst.currencyDecimal ):'NA'):
+                                                                    col.name==FundInvestorConstants.UndrawnCommitment?((investor[col.displayName]
+                                                                    !=null||
+                                                                    investor[col.name]!=null)?((investor[col.displayName]||investor[col.name])|number
+                                                                    : NumberDecimalConst.currencyDecimal ):'NA'):
+                                                                    col.name==FundInvestorConstants.AstreaTransfer?((investor[col.displayName]
+                                                                    !=null||
+                                                                    investor[col.name]!=null)?((investor[col.displayName]||investor[col.name])|number
+                                                                    : NumberDecimalConst.currencyDecimal ):'NA'):
+                                                                    col.name==FundInvestorConstants.CommitmentAfterAstreaTransfer?((investor[col.displayName]
+                                                                    !=null||
+                                                                    investor[col.name]!=null)?((investor[col.displayName]||investor[col.name])|number
+                                                                    : NumberDecimalConst.currencyDecimal):'NA'):
+                                                                    col.dataType != mDataTypes.Date?(
+                                                                    col.dataType==mDataTypes.Multiple?(investor[col.displayName]!=null
+                                                                    && investor[col.displayName]!='' &&
+                                                                    investor[col.displayName]!='NA'?(
+                                                                    investor[col.displayName] | number :
+                                                                    NumberDecimalConst.multipleDecimal)+"x":'NA'):
+                                                                    col.dataType==mDataTypes.Percentage?(investor[col.displayName]!=null
+                                                                    && investor[col.displayName]!='' &&
+                                                                    investor[col.displayName]!='NA' ?(
+                                                                    investor[col.displayName] | number :
+                                                                    NumberDecimalConst.percentDecimal)+"%":'NA'):
+                                                                    col.dataType==mDataTypes.CurrencyValue?(investor[col.displayName]!=null
+                                                                    && investor[col.displayName]!='' &&
+                                                                    investor[col.displayName]!='NA' ?(
+                                                                    investor[col.displayName] | number :
+                                                                    NumberDecimalConst.currencyDecimal):'NA'):
+                                                                    col.dataType==mDataTypes.Number?(investor[col.displayName]!=null
+                                                                    && investor[col.displayName]!='' &&
+                                                                    investor[col.displayName]!='NA' ?(
+                                                                    investor[col.displayName] | number :
+                                                                    NumberDecimalConst.noDecimal):'NA'):(investor[col.displayName]==null
+                                                                    || investor[col.displayName]==""
+                                                                    )?'NA':investor[col.displayName]
+                                                                    ):
+                                                                    investor[col.displayName]!=null &&
+                                                                    investor[col.displayName]!='' &&
+                                                                    investor[col.displayName]!='NA' ?
+                                                                    (investor[col.displayName]| date:'MM/dd/yyyy' ):
+                                                                    'NA'
+                                                                    }}
+                                                                </span>
+                                                            </td>
+                                                        </ng-container>
+                                                        <td class="text-center"><span class="pr-3"
+                                                                (click)="editInvestor(investor)"><a><img alt=""
+                                                                        src="assets/dist/images/EditIcon.svg"></a></span>
+                                                            <span
+                                                                (click)="setLinkDelinkInvestor(investor);linkText=investor.isActive?true:false"><a
+                                                                    class="">
+                                                                    <img tooltipPosition="top"
+                                                                        tooltipStyleClass="bg-tooltip-fund-color"
+                                                                        [pTooltip]="'De-link Investor'"
+                                                                        *ngIf="investor.isActive" alt=""
+                                                                        src="assets/dist/images/De-link.svg" />
+                                                                    <img tooltipPosition="top"
+                                                                        tooltipStyleClass="bg-tooltip-fund-color"
+                                                                        [pTooltip]="'Link Investor'"
+                                                                        *ngIf="!investor.isActive" alt=""
+                                                                        src="assets/dist/images/Link.svg" />
+                                                                </a> </span> </td>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="emptymessage" let-columns>
+                                                    <tr>
+                                                        <td class="table-data-center" [attr.colspan]="columns?.length">
+                                                            No records found
+                                                        </td>
+                                                    </tr>
+                                                </ng-template>
+                                            </p-table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="tabName =='Geographic Locations' ">
+                                    <div [ngClass]="{ 'has-error': f.submitted && !geography.valid }" class="pt-3 pb-3">
+                                        <location-control class="custom-geo" name="geography"
+                                            [(ngModel)]="model.geographyDetail" [locationMaster]="masterModel"
+                                            [countryRequired]="false" [loadingCountry]="countryLoading"
+                                            [locationFieldConfigs]="geographicLocationFieldList"
+                                            #geography="ngModel"></location-control>
+                                    </div>
+                                </div>
+                                <div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mr-0 ml-0 fixed-footer" [ngStyle]="{'width': sideNavWidth}">
+                    <div class="col-12 col-lg-12 col-md-12 col-sm-12  pr-0 pl-0">
+                        <div class="pull-right pt-2 pb-2 pr-3">
+                            <div class="loading-input-controls-manual" *ngIf="loading"><i aria-hidden="true"
+                                    class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></div>
+                            <input id="hiddenreloadButton" type="button" (click)=" formReset(f)" value="{{resetText}}"
+                                title="{{resetText}}"
+                                class="nep-button nep-button-secondary TextTruncate reset-update-portfolio-css" />
+                            <button type="submit"
+                                class=" width-120 nep-button nep-button-primary width-135 reset-update-portfolio-css ml-2"
+                                [disabled]="!f.form.valid" title="{{title}}">{{title}}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div *ngIf="isOpenconfirmPopUp">
+    <modal customwidth="448px" modalTitle="{{linkText?'De-link Investor':'Link Investor'}}" primaryButtonName="Confirm"
+        secondaryButtonName="Cancel" (primaryButtonEvent)="OnConfirmLinkAndUnlink($event)"
+        (secondaryButtonEvent)="OnCancel($event)">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12">
+                This will {{linkText?'de-link':'link'}} the investor from this fund. Do you Confirm?
+            </div>
+        </div>
+    </modal>
+</div>

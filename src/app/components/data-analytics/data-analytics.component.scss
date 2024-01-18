@@ -1,0 +1,83 @@
+@import "../../../variables";
+.data-alalytics{
+    margin: -20px -20px 0px -20px !important;
+}
+.group-text
+{
+    color: #000 !important; 
+}
+.data-input-css{
+    border: 0px solid #ced4da;
+    border-radius: 0rem;
+    border-bottom: 1px solid #C9C9D4;
+    font-size: inherit;
+    color: #000 !important;
+}
+.reveal-bi-component-view{
+    width: 100%;
+      position: relative;
+      height: calc(100vh - 150px) !important;
+      overflow-y: auto;
+      overflow-x: auto;
+}
+.tab-shadow-home{
+    background: #FAFAFB 0% 0% no-repeat padding-box;
+    opacity: 1;
+    margin-bottom: 20px;
+    margin-top: -18.8px;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 5px;
+    padding-top: 8px !important;
+    height: 41px !important;
+  }
+
+  .horizontal-child1 {
+    width: 44px !important;
+    height: 41px !important;
+    text-align: center;
+    background: #FAFAFB 0% 0% no-repeat padding-box !important;
+    border-right: 1px solid #E7E9ED !important;
+    opacity: 1 !important;
+    margin-top: -8px !important;
+    border-bottom: 1px solid  #E7E9ED !important;
+}
+
+.horizontal-child1 a {
+    padding-top: 12px !important;
+}
+
+.horizontal-child2 a {
+    padding-top: 12px !important;
+}
+
+.horizontal-child2 {
+    width: 44px !important;
+    height: 41px !important;
+    text-align: center;
+    background: #FAFAFB 0% 0% no-repeat padding-box !important;
+    border-left: 1px solid #E7E9ED !important;
+    opacity: 1 !important;
+    margin-top: -8px !important;
+    border-bottom: 1px solid  #E7E9ED !important;
+}
+.nep-button-link{
+    color: #55565A !important;
+}
+.p-selectbutton .p-button.p-highlight{
+    color: #021155 !important;
+    background: #FFFFFF !important;
+}
+.default-style {
+    color: #021155 !important;
+    font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+    border-radius: 4px 4px 0px 0px;
+    border: 1px solid #DEDFE0;
+    background: #FFFFFF !important;
+    border-bottom: none !important;
+}
+.boxBorder-dashboard{
+    border: 1px solid #dedfe0;
+border-radius: 4px;
+background-color: #FFFFFF !important;
+}

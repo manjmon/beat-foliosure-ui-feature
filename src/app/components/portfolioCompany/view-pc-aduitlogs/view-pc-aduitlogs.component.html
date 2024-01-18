@@ -1,0 +1,34 @@
+<div>
+    <div class="style1">{{KPI}}</div>
+    <div class="row row-pc-mt">
+        <div class="col-8 style3">All activity history is listed as individual items, starting with the most recent.</div>
+        <div class="col-4 text-right"><span class="style3 style-clr">All values in {{data.currency}}</span>
+            <span class="vl"></span>
+            <img class="showHandIcon" title="Download audit log" src="assets/dist/images/Cloud-download.svg" alt="" (click)="isMasterKpiData ? DownloadMasterAudit() : DownloadAudit()" /></div>
+    </div>
+    <div class="view-pc-mt">
+        <nep-table [headers]="docTableHeaders" ImageAfterData="modofchange" ImagePath="assets/dist/images/Audit_Restore.svg" colWithClickEvent="modofchange" [isCheckbox]="false" (OnImageClick)="RowItemClicked($event)" [rowValues]="documents" [hasBorder]=true></nep-table>
+    </div>
+</div>
+
+<confirm-modal class="custom-audit-model" *ngIf="ShowRestoreDialog" primaryButtonName="Revert" secondaryButtonName="Cancel" (primaryButtonEvent)="RestoreEvent()" modalTitle="Revert Changes" (secondaryButtonEvent)="CancelEvent()">
+    <div>
+        <div class="row">
+            <div class="col-8 col-pc-fs-lh label-code">{{data.KPI}} - {{this.data.header}}</div>
+        </div>
+        <div class="row row-view-mt">
+            <div class="col-6">
+                <div class="view-pc-clr-fs-lh label-code">Current Value</div>
+                <div class="aduit-pc-clr label-code-value">{{eventdata.newvalue}}</div>
+            </div>
+            <div class="col-6">
+                <div class="view-pc-clr-fs-lh label-code">Old Value</div>
+                <div class="aduit-pc-clr label-code-value">{{eventdata.oldvalue}}</div>
+            </div>
+        </div>
+        <div class="view-audit-mt-fs">
+            Do you want to revert changes? This will change the data from current to old.
+        </div>
+    </div>
+</confirm-modal>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

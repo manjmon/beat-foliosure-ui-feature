@@ -1,0 +1,86 @@
+﻿<div id="bg"></div>
+<div class="container">
+   <div class="row">
+      <div class="mx-auto d-block col-md-4">
+         <div class="row form-group">
+            <div class="col-sm-12 text-center login-mt">
+               <img src="assets/dist/images/Acuity-logo.svg" alt="">
+            </div>
+         </div>
+         <div class="row form-group" *ngIf="isIdsEnabled">
+          <img *ngIf="loading" class="loading-login" src="assets/dist/images/loading-small.gif" />
+          <br />
+        </div>
+         <div *ngIf="!isIdsEnabled">
+         <form name="form" class="" id="login-form-id" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+         <div class="card card-pt-pb">
+            <div class="text-center;">
+               <img  alt="" class="img-fluid" src="assets/dist/images/logo.svg" />
+            </div>
+            <div class="card-body">
+               <div *ngIf='msgs!=""' class="text-danger error-msg-login">
+                  <div class="alert alert-danger">
+                     {{msgs}}
+                  </div>
+               </div>
+               <div class="row form-group has-danger" [ngClass]="{ 'has-error': f.submitted && !Email.valid }">
+                  <div class="col-sm-12">
+                     <label for="email">Email Id</label>
+                     <input type="text" name="email" class="form-control" id="email"
+                     placeholder="you@domain.com" [(ngModel)]="model.Email" #Email="ngModel"
+                     validateRequired autofocus autocomplete="off" maxlength="100" />
+                     <span class="text-danger align-middle">
+                        <div *ngIf="Email.invalid && (Email.dirty|| f.submitted)" class="text-danger">
+                           <p *ngIf="Email.errors.validateRequired">Please enter username</p>
+                        </div>
+                     </span>
+                  </div>
+               </div>
+               <div class="row form-group" [ngClass]="{ 'has-error': f.submitted && !Password.valid }">
+                  <div class="col-sm-12">
+                     <label for="pwd">Password</label>
+                     <input type="Password" class="form-control" name="Password" [(ngModel)]="model.Password"
+                     #Password="ngModel" placeholder="Password" validateRequired autocomplete="off" />
+                     <span class="text-danger align-middle">
+                        <div *ngIf="Password.invalid && (Password.dirty|| f.submitted)" class="text-danger">
+                           <p *ngIf="Password.errors.validateRequired">Please enter password</p>
+                        </div>
+                     </span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-12 text-center logincol-mt">
+                     <button [disabled]="loading" class="nep-button nep-button-primary btn-login">Login</button>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <img *ngIf="loading" class="loading-login" src="assets/dist/images/loading-small.gif" />
+                  <br />
+               </div>
+            </div>
+            <div class="row form-group">
+               <div class="col-sm-12 text-center">
+                  <div class="contactus">In case of any concern, <a href="mailto:#" class="mailto">contact
+                     us</a>
+                  </div>
+               </div>
+            </div>
+         </div>
+         </form>
+         </div>
+      </div>
+      <p-dialog [resizable]="false" [closeOnEscape]="false" [dismissableMask]="false" #pDialog
+      [(visible)]="displayForgotPasswordDialog" [modal]="true" [responsive]="true"
+      [minY]="70" [maximizable]="false" [baseZIndex]="10000"  [style]="{'width':'500px','min-width':'350px' }">
+      <p-header>
+         Forgot Password
+      </p-header>
+      <div>
+         <app-reset-password [resetPasswordData]="forgetModel" [eventName]="'forgotPassword'"
+         (onReset)="onReset($event)"></app-reset-password>
+      </div>
+      </p-dialog>
+      <div>
+      </div>
+   </div>
+</div>

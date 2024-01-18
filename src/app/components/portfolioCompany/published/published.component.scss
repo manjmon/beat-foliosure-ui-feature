@@ -1,0 +1,132 @@
+    @import "../../../../variables";
+    .portfolio-company-list-table {
+        .companyListSearchHeight {
+            height: 42px !important;
+            width: 400px !important;
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+        }
+        .filter-bg {
+            margin-top: -2px !important;
+        }
+        .nav-link {
+            font-size: 14px !important;
+            .fa {
+                padding-right: 4px !important;
+            }
+        }
+        .fa-globe {
+            color: $nep-primary !important;
+            font-size: 18px !important;
+        }
+        .textsplit {
+            margin: 0px 12px;
+        }
+        a {
+            color: $nep-black;
+        }
+        .cloud-icon {
+            border-right: 1px solid $nep-divider;
+        }
+        .showHandIcon {
+            margin-top: -4px !important;
+            padding: 9px 12px;
+        }
+        tr {
+            text-align: left;
+            font-size: 14px;
+            letter-spacing: 0px;
+            color: $nep-dark-black;
+            opacity: 1;
+            .company-buttons {
+                display: none;
+                margin-bottom: -5px;
+                margin-top: -4px;
+            }
+            .items {
+                padding: 20px 12px;
+                .TextTruncate {
+                    overflow: inherit !important;
+                }
+            }
+            .sectorHeadQuarter {
+                background: $nep-white 0% 0% no-repeat padding-box;
+                border: 1px solid $nep-divider;
+                border-radius: 4px;
+                opacity: 1;
+                padding: 4px 12px;
+            }
+            &:hover {
+                background: $nep-row-active 0% 0% no-repeat padding-box !important;
+                border: 1px solid $nep-divider;
+                .company-buttons {
+                    display: block;
+                }
+            }
+        }
+    }
+    
+    .nep-modal {
+        .nep-card {
+            width: 452px !important;
+            top: 15% !important;
+            .nep-card-header {
+                padding: 0px !important;
+                .user-header {
+                    font-size: 24px;
+                    letter-spacing: 0px;
+                    color: #212121;
+                    opacity: 1;
+                    padding: 12px 20px !important;
+                }
+            }
+            .nep-card-footer {
+                padding: 12px 20px !important;
+                background: #FAFAFB 0% 0% no-repeat padding-box;
+                border-radius: 0px 0px 4px 4px;
+            }
+            .nep-card-body {
+                padding: 20px !important;
+                label {
+                    margin-top: 0px;
+                    letter-spacing: 0px;
+                    color: #55565A;
+                    opacity: 1;
+                    margin-bottom: 4px !important;
+                }
+                .control-padding {
+                    padding-top: 16px;
+                }
+                .form-group {
+                    margin: 0px !important;
+                }
+                .form-group.required .control-label:after {
+                    content: "*";
+                    color: red;
+                }
+            }
+        }
+    }
+    .fund-list-table
+{
+    tr{
+        td:first-child,th:first-child
+        {
+            max-width: 200px !important;
+        }
+        th{
+            border:none !important;
+            padding: 12px 16px !important;
+        }
+    }
+    thead{
+        tr{
+            border-bottom: 1px solid $nep-divider !important;
+        }
+    }
+}
+
+.sector-width
+{
+    width:75% !important;
+}

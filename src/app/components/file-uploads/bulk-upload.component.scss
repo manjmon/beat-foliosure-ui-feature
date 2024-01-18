@@ -1,0 +1,273 @@
+﻿.bulkMessage {
+    font-weight: bold;
+    color: green
+}
+.errorMessage {
+    font-weight: bold;
+    color: red
+}
+.infoMessage {
+    font-weight: bold;
+    color: deepskyblue
+}
+
+.file-upload-section-header{
+    height: 56px;
+    background: #FAFAFB 0% 0% no-repeat padding-box;
+    border-top: 1px solid #DEDFE0;
+    border-radius: 0px 0px 4px 4px;
+    opacity: 1;
+    padding: 0.75rem 1.25rem;
+}
+
+.file-upload-section-container{
+    display: block;
+    overflow: auto;
+    padding-bottom: 20px;    
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000014;
+    border: 1px solid #DEDFE0;
+    border-radius: 4px;
+    opacity: 1;
+}
+
+.file-upload-section-body{
+    text-align: left;
+    font-size: 14px;
+    color: #000000;
+    opacity: 1;
+}
+
+.beatColor{
+    color: #021155!important;
+}
+.plr20{
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.plr12{
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.ptb12{
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+
+.pt12{
+    padding-top: 12px;
+}
+
+.pb12{
+    padding-bottom: 12px;
+}
+
+
+.uploadButton {
+    cursor: pointer;
+    height: 32px;
+    border: 1px solid #021155;
+    border-radius: 4px;
+    min-width: 111px;
+    max-width: 325px;
+    width: fit-content;
+    padding-left: 9px;
+    padding-top: 3px;
+    opacity: 1;
+}
+
+.LoaderIcon{
+    height: 25px;
+    width: 20px;
+    position: relative;
+    top: -0.5px;
+}
+
+.browseIcon{
+    padding-right: 8px;
+}
+
+.pl12{
+    padding-left: 12px;
+}
+
+.pb20{
+    padding-bottom: 20px;
+}
+ 
+.browseButton{
+    top: 1.5px;
+    position: relative;
+}
+
+.moduleContainer{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #00000014;
+    border: 1px solid #DEDFE0;
+    border-radius: 4px;
+    opacity: 1;
+}
+
+.w30{
+    width: 30%;
+}
+
+.companyDropdown{
+    position: relative;
+    top: 2.5%;
+}
+
+.errorColor{
+    color: #c62828 !important;
+}
+
+.successColor{
+    color:#388e3c !important;
+}
+
+.icon{
+    padding: 0px 8px;
+}
+.nep-button{
+    .fa-circle-o-notch
+    {
+        color: #FFFFFF !important;
+    }
+}
+.download-circle-loader
+{
+    color:#FFFFFF !important;
+}
+.download-circle-btn-loader
+{
+    color:#021155 !important;
+}
+
+.download-template-container{
+    padding: 4px;
+    border-radius: 0.25rem;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #C9C9D4;
+    opacity: 1;
+}
+
+.dtc-disabled{
+    color: #A9A9AC;
+}
+
+.dtc-enabled{
+    color: #2B2B33;
+}
+
+.template-label-style{
+    padding-right: 0.75rem;
+    top: 0.25rem;
+    bottom: 0.25rem;
+    position: relative;
+}
+
+.template-icon-style{
+    height: 16px;
+    width: 13px;
+}
+
+.template-icon-style-container-0{
+    padding-left: 8px;
+    padding-bottom: 2px;
+}
+
+.opacity-40{
+     opacity: 40%!important;
+}
+.pr20{
+    padding-right: 1.25rem;
+}
+
+.title-text{
+    text-align: left;
+    color: #212121;
+}
+
+.disableIcon:hover{
+    cursor: not-allowed;
+}
+.pointerIcon:hover {
+    cursor: pointer !important;
+}
+
+.upload-loader{
+    position: relative;
+    top: -1px;
+}
+
+.error-info-icon{
+    height: 20px;
+    width: 20px;
+    position: relative;
+    top: -2px;
+}
+
+.errors-title-container{
+    position: relative;
+    top: 0.25rem;
+}
+
+.error-title{
+    padding-left: 0.5rem;
+}
+
+.bottom-border{
+    border-bottom: 1px solid #DEDFE0;
+}
+
+.error-msgs-container{
+    overflow-y: auto;
+    max-height: 47vh;
+    overflow-x: hidden;
+}
+
+.error-row{    
+    min-height: 48px;
+    border-bottom: 1px solid #DEDFE0;
+    opacity: 1;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+}
+
+.sheetname:hover{
+    background: #F7F8FC  0% 0% no-repeat padding-box;
+    cursor: pointer;
+}
+
+.expanded-error{
+    background: #EFF0F9 0% 0% no-repeat padding-box;
+}
+
+.sheets-error-pl{
+    padding-left: 65px;
+}
+
+.error-pl{
+    padding-left: 2.5rem;
+}
+
+.mw{
+    width: 3rem!important;
+}
+
+.disabled-label-color{
+    color: #AAAAAC !important;
+}
+.plrb20{
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
+.pt20{
+    padding-top: 20px !important;
+}
+.p-error-msg{
+    padding-top:2px;padding-left:4px;
+    display: table;
+}

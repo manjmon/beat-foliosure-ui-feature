@@ -1,0 +1,699 @@
+<div class="row mr-0 ml-0 filter-panel-header">
+    <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+        <div class="float-left">
+            <nep-tab id="neptab" class="custom-data-analytics-tab" [tabList]=tabList (OnSelectTab)="onTabClick($event)">
+            </nep-tab>
+        </div>
+        <div class="float-right filter-margin-top d-none">
+            <p-dropdown placeholder="Select filter preset" [filter]="true" [filterBy]="'userReportName'"
+            class="data-presetfilter-dropdown custom-p-dropdown icon-dropdown fund-custom-dropdown custom-searchable-dropdown internal-select"
+            [options]="saveFiltersOptionsList" (onChange)="OnFiltersSelected()" [(ngModel)]="SelectedReport">
+            <ng-template let-item pTemplate="selectedItem">
+                <div class="d-inline-block"><img class="pr-1" *ngIf="item.isDefault"
+                        src="assets/dist/images/FeedbackStarGrey.svg" alt="" /></div>
+                <div title="{{item.userReportName}}" class="d-inline-block custom-label">{{item.userReportName}}</div>
+            </ng-template>
+            <ng-template let-object pTemplate="item">
+                <div class="custom-ui-label custom-delete-hover custom-zindex-parent cus-ui-topinvs-dele-z-d-mw">
+                    <span title="{{object.userReportName}}" class="img-pad TextTruncate">
+                        <img class="pr-1" *ngIf="object.isDefault" src="assets/dist/images/FeedbackStarGrey.svg"
+                            alt="" />{{object.userReportName}}
+                    </span>
+                    <span class="float-right  custom-zindex-child custom-internal-top-invest-delete">
+                        <img class="deleteicon  pl-0 pt-0 float-right" (click)="OnDeleteFilter()"
+                            src="assets/dist/images/delete.svg" alt="delete" />
+                    </span>
+                </div>
+            </ng-template>
+        </p-dropdown>
+        </div>
+    </div>
+</div>
+<ng-container >
+    <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-1 pr-0 pb-4 data-analytics-filter">
+        <div class="row mr-0 ml-0  pr-0 pl-0">
+            <form name="form" class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0"
+                (ngSubmit)="form.valid" #form="ngForm">
+
+                <div class="row ml-0 mr-0" *ngIf="tabName == 'Portfolio Company'">
+                    <!-- Fund Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label static-padding-left-label TextTruncate" title="Fund"
+                                    for="PCFunds">Fund</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="PCFunds"
+                                        [disabled]="portfolioCompanyList.fundList==undefined" [(ngModel)]="portfolioCompanyModel.fundList"
+                                        [resetFilterOnHide]=true [options]="portfolioCompanyList.fundList"
+                                        (onChange)="onChangeModel($event,'PCFunds')" defaultLabel="Select Fund Name"
+                                        [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                        optionLabel="fundName">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.fundName}}">{{item.fundName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="portfolioCompanyList.fundList==undefined"><i
+                                        aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Company Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding mandatory-label filter-label TextTruncate static-padding-left-label"
+                                    title="Company Name" for="PCCompany">Company</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="PCCompany"
+                                        [disabled]="portfolioCompanyList.companyList==undefined" [(ngModel)]="portfolioCompanyModel.companyList"
+                                        [resetFilterOnHide]=true [options]="portfolioCompanyList.companyList"
+                                        (onChange)="onChangeModel($event,'PCCompany')"
+                                        defaultLabel="Select Company Name" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" optionLabel="companyName">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.companyName}}">{{item.companyName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="portfolioCompanyList.companyList==undefined">
+                                    <i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- KPI Type Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label mandatory-label TextTruncate static-padding-left-label" title="KPI Type"
+                                    for="PCModule">KPI Type</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="PCModule"
+                                        [disabled]="portfolioCompanyList.moduleList==undefined" [(ngModel)]="portfolioCompanyModel.moduleList"
+                                        [resetFilterOnHide]=true [options]="portfolioCompanyList.moduleList"
+                                        (onChange)="onChangeModel($event,'PCModule')" defaultLabel="Select Kpi Type"
+                                        [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                        optionLabel="name">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.name}}">{{item.name}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="portfolioCompanyList.moduleList==undefined"><i
+                                        aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- KPI Item Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label mandatory-label TextTruncate static-padding-left-label" title="KPI Type"
+                                    for="PCKpiItem">KPI Line items</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect custom-multiselect-texttruncate" [group]="true" 
+                                        [virtualScrollItemSize]="36" name="PCKpiItem"
+                                        [disabled]="portfolioCompanyList.kpiItems==undefined || portfolioCompanyModel.moduleList?.length == 0 || portfolioCompanyModel.companyList?.length ==0" [resetFilterOnHide]=true
+                                        [options]="portfolioCompanyList.kpiItems" [(ngModel)]="portfolioCompanyModel.kpiItems"
+                                        defaultLabel="Select Kpi Item" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" optionLabel="kpi"
+                                        optionGroupLabel="moduleName"
+                                        optionGroupChildren="items"
+                                        (onChange)="onChangeModel($event,'PCKpiItem')">
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="portfolioCompanyList.kpiItems==undefined"><i
+                                        aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fx Rates Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label TextTruncate static-padding-left-label" title="Fx Rates"
+                                    for="PCFxRates">Fx Rates</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <div class="report-field">
+                                    <p-dropdown appendTo="body" placeholder="Select Currency" panelStyleClass="data-analytics-dropdown"
+                                       class="data-analytics-dropdown kpi-prefence-filter"
+                                         #PCFxRates="ngModel" name="PCFxRates"
+                                        [(ngModel)]="portfolioCompanyModel.fxRates" 
+                                        [options]="portfolioCompanyList.fxRates" 
+                                        (onChange)="onChangeModel($event,'PCFxRates')" optionLabel="type">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Currency Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label TextTruncate static-padding-left-label" title="Currency"
+                                    for="PCCurrency">Currency</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <div class="report-field">
+                                    <p-dropdown appendTo="body" panelStyleClass="data-analytics-dropdown" name="PCCurrency"
+                                        placeholder="Select Currency" [options]="portfolioCompanyList.currenceList" (onChange)="onChangeModel($event,'PCCurrency')"
+                                        [(ngModel)]="portfolioCompanyModel.currenceList" optionLabel="currency" #PCCurrency="ngModel"
+                                        class="data-analytics-dropdown kpi-prefence-filter">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Period Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label mandatory-label TextTruncate static-padding-left-label"
+                                    title="Period Range" for="PCPeriod">Period</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <div class="report-field">
+                                    <p-calendar #myCalendar [styleClass]="'data-analytics-calendar'"
+                                    class="tablefilter-dropdrown-width" [readonlyInput]="true"
+                                    inputStyleClass="p-custom-calendar date-picker-input" name="PCPeriod"
+                                    [(ngModel)]="portfolioCompanyModel.period" dateFormat="yy" [showIcon]="true"
+                                    yearRange={{yearRange}} [yearNavigator]="true" view="year"
+                                    placeholder="Select Year" selectionMode="range"
+                                    (ngModelChange)="onChangeModel($event,'PCPeriod')">
+                                </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row ml-0 mr-0" *ngIf="tabName == 'Deal'">
+                    <!-- Fund Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding mandatory-label filter-label TextTruncate static-padding-left-label" title="Fund"
+                                    for="DealFunds">Fund</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="DealFunds"
+                                        [disabled]="dealList.fundList==undefined" [(ngModel)]="dealModel.fundList"
+                                        [resetFilterOnHide]=true [options]="dealList.fundList"
+                                        (onChange)="onChangeModel($event,'DealFunds')" defaultLabel="Select Fund Name"
+                                        [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                        optionLabel="fundName">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.fundName}}">{{item.fundName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="dealList.fundList==undefined"><i
+                                        aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Company Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding mandatory-label filter-label TextTruncate static-padding-left-label"
+                                    title="Company Name" for="DealCompany">Company</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="DealCompany"
+                                        [disabled]="dealList.companyList==undefined ||dealModel.fundList.length==0" [(ngModel)]="dealModel.companyList"
+                                        [resetFilterOnHide]=true [options]="dealList.companyList"
+                                        (onChange)="onChangeModel($event,'DealCompany')"
+                                        defaultLabel="Select Company Name" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" optionLabel="companyName">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.companyName}}">{{item.companyName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="dealList.companyList==undefined">
+                                    <i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- KPI Type Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label mandatory-label TextTruncate static-padding-left-label"
+                                    title="KPI Type" for="DealModule">Data items</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true" [virtualScrollItemSize]="36"
+                                        name="DealModule" [disabled]="dealList?.moduleList==undefined"
+                                        [(ngModel)]="dealModel.moduleList" [resetFilterOnHide]=true
+                                        [options]="dealList?.moduleList" (onChange)="onChangeModel($event,'DealModule')"
+                                        defaultLabel="Select Kpi Type" [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                        optionLabel="name">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.name}}">{{item.name}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="dealList.moduleList==undefined"><i aria-hidden="true"
+                                        class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- KPI Item Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label mandatory-label TextTruncate static-padding-left-label"
+                                    title="KPI Type" for="DealKpiItem">Data line item</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect custom-multiselect-texttruncate" [group]="true"
+                                        [virtualScrollItemSize]="36" name="DealKpiItem"
+                                        [disabled]="dealList?.kpiItems==undefined || dealModel?.moduleList?.length == 0 || dealModel?.companyList?.length ==0"
+                                        [resetFilterOnHide]=true [options]="dealList?.kpiItems"
+                                        [(ngModel)]="dealModel.kpiItems" defaultLabel="Select Kpi Item" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" optionLabel="kpi" optionGroupLabel="moduleName"
+                                        optionGroupChildren="items" (onChange)="onChangeModel($event,'DealKpiItem')">
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="dealList.kpiItems==undefined"><i aria-hidden="true"
+                                        class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Period Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label mandatory-label TextTruncate static-padding-left-label"
+                                    title="Period Range" for="DealPeriod">Period</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <div class="report-field">
+                                    <p-calendar #myCalendar [styleClass]="'data-analytics-calendar'"
+                                    class="tablefilter-dropdrown-width analytics-period-dropdown" [readonlyInput]="true"
+                                    inputStyleClass="p-custom-calendar date-picker-input" name="PCPeriod"
+                                    [(ngModel)]="dealModel.period" dateFormat="yy" [showIcon]="true"
+                                    yearRange={{yearRange}} [yearNavigator]="true" view="year" inputId="yearpicker"
+                                    placeholder="Select Year" selectionMode="range"
+                                    (ngModelChange)="onChangeModel($event,'DealPeriod')">
+                                </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row ml-0 mr-0" *ngIf="tabName == 'Fund'">
+                    <!-- Fund Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding mandatory-label filter-label TextTruncate static-padding-left-label" title="Fund"
+                                    for="FundsList">Fund</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="FundsList"
+                                        [disabled]="fundList.fundList==undefined" [(ngModel)]="fundModel.fundList"
+                                        [resetFilterOnHide]=true [options]="fundList.fundList"
+                                        (onChange)="onChangeModel($event,'FundsList')" defaultLabel="Select Fund Name"
+                                        [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                        optionLabel="fundName">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.fundName}}">{{item.fundName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="fundList.fundList==undefined"><i
+                                        aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Period Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label mandatory-label TextTruncate static-padding-left-label"
+                                    title="Period Range" for="FundPeriod">Period</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <div class="report-field">
+                                    <p-calendar #myCalendar [styleClass]="'data-analytics-calendar'"
+                                    class="tablefilter-dropdrown-width analytics-period-dropdown" [readonlyInput]="true"
+                                    inputStyleClass="p-custom-calendar date-picker-input" name="PCPeriod"
+                                    [(ngModel)]="fundModel.period" dateFormat="yy" [showIcon]="true"
+                                    yearRange={{yearRange}} [yearNavigator]="true" view="year" inputId="yearpicker"
+                                    placeholder="Select Year" selectionMode="range"
+                                    (ngModelChange)="onChangeModel($event,'FundPeriod')">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row ml-0 mr-0" *ngIf="tabName == 'Investor'">
+
+                    <!-- Investor Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding mandatory-label filter-label TextTruncate static-padding-left-label" title="Fund"
+                                    for="InvestorList">Investor</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="InvestorList"
+                                        [disabled]="investorList.investorList==undefined" [(ngModel)]="investorModel.investorList"
+                                        [resetFilterOnHide]=true [options]="investorList.investorList"
+                                        (onChange)="onChangeModel($event,'InvestorList')"
+                                        defaultLabel="Select Fund Name" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" optionLabel="investorName">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.investorName}}">{{item.investorName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="investorList.investorList==undefined"><i
+                                        aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fund Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding mandatory-label filter-label TextTruncate static-padding-left-label" title="Fund"
+                                    for="InvestorFunds">Fund</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="InvestorFunds"
+                                        [disabled]="investorList.fundList==undefined ||investorModel.investorList.length == 0"
+                                        [(ngModel)]="investorModel.fundList" [resetFilterOnHide]=true
+                                        [options]="investorList.fundList"
+                                        (onChange)="onChangeModel($event,'InvestorFunds')"
+                                        defaultLabel="Select Fund Name" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" optionLabel="fundName">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.fundName}}">{{item.fundName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="investorList.fundList==undefined"><i
+                                        aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Company Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding mandatory-label filter-label TextTruncate static-padding-left-label"
+                                    title="Company Name" for="InvestorCompany">Company</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="InvestorCompany"
+                                        [disabled]="investorList.companyList==undefined ||investorModel.investorList.length == 0 ||investorModel.fundList.length == 0"
+                                        [(ngModel)]="investorModel.companyList" [resetFilterOnHide]=true
+                                        [options]="investorList.companyList"
+                                        (onChange)="onChangeModel($event,'InvestorCompany')"
+                                        defaultLabel="Select Company Name" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" optionLabel="companyName">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.companyName}}">{{item.companyName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="investorList.companyList==undefined">
+                                    <i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Company Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding mandatory-label filter-label TextTruncate static-padding-left-label" title="Sections"
+                                    for="InvestorSections">Sections</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <div class="report-field">
+                                    <p-dropdown appendTo="body" placeholder="Select Currency" panelStyleClass="data-analytics-dropdown"
+                                       class="analytics-dropdown-pc investor-sections-dropdown"
+                                         #InvestorSections="ngModel" name="InvestorSections"
+                                        [(ngModel)]="investorModel.investorSections" (onChange)="onChangeModel($event,'InvestorSections')"
+                                        [options]="investorList.investorSections" optionLabel="type">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Period Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label mandatory-label TextTruncate static-padding-left-label"
+                                    title="Period Range" for="InvestorPeriod">Period</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <div class="report-field">
+                                    <p-calendar #myCalendar [styleClass]="'data-analytics-calendar'"
+                                    class="tablefilter-dropdrown-width" [readonlyInput]="true"
+                                    inputStyleClass="p-custom-calendar date-picker-input"
+                                    name="PCPeriod"
+                                    [(ngModel)]="investorModel.period" dateFormat="yy" [showIcon]="true"
+                                    yearRange={{yearRange}} [yearNavigator]="true" view="year" inputId="yearpicker"
+                                    placeholder="Select Year" selectionMode="range"
+                                    (ngModelChange)="onChangeModel($event,'InvestorPeriod')">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row ml-0 mr-0" *ngIf="tabName == 'ESG'">
+                    <!-- Fund Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label static-padding-left-label TextTruncate" title="Fund"
+                                    for="ESGFunds">Fund</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="ESGFunds"
+                                        [disabled]="ESGList.fundList==undefined" [(ngModel)]="ESGModel.fundList"
+                                        [resetFilterOnHide]=true [options]="ESGList.fundList"
+                                        (onChange)="onChangeModel($event,'ESGFunds')" defaultLabel="Select Fund Name"
+                                        [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                        optionLabel="fundName">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.fundName}}">{{item.fundName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="ESGList.fundList==undefined"><i
+                                        aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Company Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding mandatory-label filter-label TextTruncate static-padding-left-label"
+                                    title="Company Name" for="ESGCompany">Company</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="ESGCompany"
+                                        [disabled]="ESGList.companyList==undefined" [(ngModel)]="ESGModel.companyList"
+                                        [resetFilterOnHide]=true [options]="ESGList.companyList"
+                                        (onChange)="onChangeModel($event,'ESGCompany')"
+                                        defaultLabel="Select Company Name" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" optionLabel="companyName">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.companyName}}">{{item.companyName}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="ESGList.companyList==undefined">
+                                    <i aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- KPI Type Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label mandatory-label TextTruncate static-padding-left-label" title="KPI Type"
+                                    for="ESGModule">KPI Type</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect analytics-filter-multi-select-items" [virtualScroll]="true"
+                                        [virtualScrollItemSize]="36" name="ESGModule" 
+                                        [disabled]="ESGList.moduleList==undefined" [(ngModel)]="ESGModel.moduleList"
+                                        [resetFilterOnHide]=true [options]="ESGList.moduleList"
+                                        (onChange)="onChangeModel($event,'ESGModule')" defaultLabel="Select Kpi Type"
+                                        [maxSelectedLabels]="1" [selectedItemsLabel]="'{0} items selected'"
+                                        optionLabel="name">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.name}}">{{item.name}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="ESGList.moduleList==undefined"><i
+                                        aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- KPI Item Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label mandatory-label TextTruncate static-padding-left-label" title="KPI Type"
+                                    for="ESGKpiItem">KPI Line items</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <span class="report-field">
+                                    <p-multiSelect class="custom-searchable-multiselect custom-multiselect-texttruncate align-multi-select-items"
+                                        [virtualScrollItemSize]="36" name="ESGKpiItem"
+                                        [disabled]="ESGList.kpiItems==undefined || ESGModel.moduleList?.length == 0 || ESGModel.companyList?.length ==0" [resetFilterOnHide]=true
+                                        [options]="ESGList.kpiItems" [(ngModel)]="ESGModel.kpiItems"
+                                        defaultLabel="Select Kpi Item" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" optionLabel="kpi"
+                                        (onChange)="onChangeModel($event,'ESGKpiItem')">
+                                        <ng-template let-item pTemplate="item">
+                                            <span title="{{item.kpi}}">{{item.kpi}}</span>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </span>
+                                <div class="loading-input-controls" *ngIf="ESGList.kpiItems==undefined"><i
+                                        aria-hidden="true" class="fa fa-spinner fa-pulse fa-1x fa-fw"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fx Rates Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label TextTruncate static-padding-left-label" title="Fx Rates"
+                                    for="ESGFxRates">Fx Rates</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <div class="report-field">
+                                    <p-dropdown appendTo="body" placeholder="Select Currency" panelStyleClass="data-analytics-dropdown"
+                                       class="data-analytics-dropdown kpi-prefence-filter"
+                                         #ESGFxRates="ngModel" name="ESGFxRates"
+                                        [(ngModel)]="ESGModel.fxRates" 
+                                        [options]="portfolioCompanyList.fxRates" 
+                                        (onChange)="onChangeModel($event,'ESGFxRates')" optionLabel="type">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Currency Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label TextTruncate static-padding-left-label" title="Currency"
+                                    for="ESGCurrency">Currency</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <div class="report-field">
+                                    <p-dropdown appendTo="body" panelStyleClass="data-analytics-dropdown" name="ESGCurrency"
+                                        placeholder="Select Currency" [options]="portfolioCompanyList.currenceList" (onChange)="onChangeModel($event,'ESGCurrency')"
+                                        [(ngModel)]="ESGModel.currenceList" optionLabel="currency" #ESGCurrency="ngModel"
+                                        class="data-analytics-dropdown kpi-prefence-filter">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Period Control -->
+                    <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 pl-3  pr-3  filter-content-padding">
+
+                        <div class="row mr-0 ml-0">
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pl-0 pr-0 ">
+                                <div class="p-label-padding filter-label mandatory-label TextTruncate static-padding-left-label"
+                                    title="Period Range" for="ESGPeriod">Period</div>
+                            </div>
+                            <div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 col-xs-12 pr-0 pl-0">
+                                <div class="report-field">
+                                    <p-calendar #myCalendar [styleClass]="'data-analytics-calendar'"
+                                    class="tablefilter-dropdrown-width" [readonlyInput]="true"
+                                    inputStyleClass="p-custom-calendar date-picker-input" name="ESGPeriod"
+                                    [(ngModel)]="ESGModel.period" dateFormat="yy" [showIcon]="true"
+                                    yearRange={{yearRange}} [yearNavigator]="true" view="year"
+                                    placeholder="Select Year" selectionMode="range"
+                                    (ngModelChange)="onChangeModel($event,'ESGPeriod')">
+                                </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-container>
+<div>
+    <confirm-modal *ngIf="confirmDelete" primaryButtonName="Ok" secondaryButtonName="Cancel"
+        (primaryButtonEvent)="Delete()" modalTitle="Delete" (secondaryButtonEvent)="CancelDelete()">
+        <div>Are you sure you want to delete the saved filter?</div>
+    </confirm-modal>
+</div>

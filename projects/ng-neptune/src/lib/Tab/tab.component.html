@@ -1,0 +1,20 @@
+<div class="nep-tabs nep-tabs-line">
+    <div class="nep-tabs-header">
+        <div class="nep-tabs-header-tabs">
+            <div class="nep-tabs-inner">
+                <div class="nep-tabs-scroll" [ngClass]="nav==true?'nep-tabs-custom nep-tab-alignment2':'nep-tab-alignment'">
+                    <div class="nep-tabs-tab pl-0 pr-0" style="max-width: 100% !important;" *ngFor="let tab of tabList" title="{{tab.name}}" (click)="selectTab(tab)" [class.nep-tabs-active]="tab.active">
+                        {{tab.name}}
+                    </div>
+                    <div class="nep-tabs-tab" *ngIf="isfilter" style="float: right">
+                        <img *ngIf="collapsed&&tabName !='Trading Records'" (click)="expand()" [src]="'assets/dist/images/KPI_Filter.svg'" alt="KPI Filter's">
+                        <img *ngIf="!collapsed&&tabName !='Trading Records'" (click)="collapse()" [src]="'assets/dist/images/KPI_Filter.svg'" alt="KPI Filter's">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="nep-tabs-panel nep-tabs-show" style="background:#fafafb">
+        <ng-content></ng-content>
+    </div>
+</div>

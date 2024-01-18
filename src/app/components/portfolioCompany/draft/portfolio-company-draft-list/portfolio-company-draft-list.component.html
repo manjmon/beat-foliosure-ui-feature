@@ -1,0 +1,71 @@
+<app-loader-component *ngIf="isLoader"></app-loader-component>
+
+<div class="portfolio-company-draft-list">
+    <div class="row mr-0 ml-0 filter-bg border-top border-bottom">
+        <div class="col-lg-12 col-md-12 col-sm-12 pl-0 pr-0">
+            <div class="float-right">
+                <div class="d-inline-block search">
+                    <span class="fa fa-search fasearchicon p-1"></span>
+                    <input pInputText type="text" class="search-text-company TextTruncate companyListSearchHeight" (input)="searchDraftList()"
+                        placeholder="Search Company" [(ngModel)]="filterSearch">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <cdk-virtual-scroll-viewport #scroller itemSize="100"  class="tbl-container" id="scroll-container"  >
+        <div class="tbl-fixed" *ngIf="pcDraftListData?.length != 0">
+            <table>
+                <thead>
+                    <th [ngStyle]="{'width':panelWidth,'min-width':panelWidth, 'max-width':panelWidth, 'position':tablePosition}"
+                        *ngFor="let header of pcDraftListHeaderData" class="filter-bg">
+                        <div class="status-header border-bottom">
+                            {{header?.name}} ({{header?.totalRecord}})
+                        </div>
+                    </th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td *cdkVirtualFor="let header of pcDraftListHeaderData" 
+                            [ngStyle]="{'width':panelWidth,'min-width':panelWidth, 'max-width':panelWidth}">
+                            <div class="wf-content" *ngFor="let data of pcDraftListData">
+                                <div class="card wf-card" *ngIf="data.statusId == header.statusId">
+                                    <div class="card-body" (click)="setCompanyValues(data)">
+                                        <div class="wf-company-name TextTruncate">
+                                            <span class="round-dot-red float-right" *ngIf="data?.hasRework == 1"
+                                                tooltipStyleClass="bg-grey-color draft-p-tooltip-text" [pTooltip]="'Rework'"
+                                                tooltipPosition="top"></span>
+                                                <span tooltipStyleClass="bg-grey-color draft-p-tooltip-text" [pTooltip]="data.companyName"
+                                                tooltipPosition="top">{{data.companyName}}</span>
+                                        </div>
+
+                                        <div class="wf-draft-name TextTruncate">
+                                            <span class="wf-title">Draft Name</span>
+                                            <span class="wf-details" tooltipStyleClass="bg-grey-color draft-p-tooltip-text" [pTooltip]="data.workflowRequestName"
+                                            tooltipPosition="top">{{data.workflowRequestName}}</span>
+
+                                        </div>
+                                        <div class="wf-created-on">
+                                            <span class="wf-title">Created on</span>
+                                            <span class="wf-details">{{data.createdOn | date:appConfig?.WorkflowDefaultDateFormat}}</span>
+                                            <span class="wf-info float-right d-inline"><img alt=""
+                                                    src="assets/dist/images/InfoGrey.svg"
+                                                    tooltipStyleClass="bg-grey-color draft-p-tooltip-text" [pTooltip]="toolTipString"
+                                                    [escape]="false" tooltipPosition="right"
+                                                    (mouseenter)="mouseEnter(data);"></span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="emptyMessageDiv" *ngIf="pcDraftListData?.length == 0">
+            <app-empty-state [isGraphImage] ="false"></app-empty-state>
+        </div>
+         
+    </cdk-virtual-scroll-viewport>
+</div>

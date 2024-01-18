@@ -1,0 +1,175 @@
+<div class="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-12 pr-3 pl-3 pt-3 pb-2 margin-check">
+    <div class="line-wrapper absolute-mgn">
+        <span class="mr-2 TextTruncate" title="Attribute Value">Attribute Value</span>
+        <div class="line"></div>
+    </div>
+    <div class="row mr-0 ml-0">
+        <div class="col-lg-2.5 pl-0 pr-0">
+            <div class="mandatory-label p-label-padding filter-label TextTruncate attribut-margin">Attribute Type
+            </div>
+            <div>
+                <div class="border-width margin-align">
+                    <typeahead-control #subtypes="ngModel" name="Attribute value" [displayField]="'header'"
+                        (clearItem)="onAttibutTypeClear()" [optionList]="dropdownValuesArray" placeholder="Select Type"
+                        [(ngModel)]="selectedAttribute" (selectItem)="onAttributeValueChange()"
+                        [isRequired]="true"></typeahead-control>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 pl-0 pr-0 attribut-margin">
+            <div class=" p-label-padding filter-label mandatory-label TextTruncate attribut-margin"
+                [ngClass]="{'grayed-out':!isYearDropdownEnabled}">Year
+            </div>
+            <div class="margin-align" [ngClass]="{'grayed-out':!isYearDropdownEnabled}">
+                <typeahead-control #subtypes="ngModel" [displayField]="'year'" [optionList]="yearsWithE"
+                    (selectItem)="onYearValueChange()" [(ngModel)]="selectedYear" placeholder="Select year"
+                    [disabled]="!isYearDropdownEnabled" [isRequired]="true"
+                    (clearItem)="onAttibutYearClear()"></typeahead-control>
+            </div>
+        </div>
+        <div class="col-lg-2 pl-0 pr-0 attribut-margin">
+            <div class="p-label-padding filter-label text-margin">Attribute Value</div>
+            <div class="form-control border-mgn"
+                [innerHTML]="finalvalue !== 'NA' ? (finalvalue | number:'1.1-1' | minusSignToBrackets) : finalvalue">
+            </div>
+        </div>
+    </div>
+    <div class="line-wrapper custom-margin">
+        <span class="mr-2 TextTruncate" title="{{contentTitle}}"> {{equityTitle1}}
+            <img class="p-action-padding qy-img-css" src="assets/dist/images/NotificIcon.svg" alt="" />
+        </span>
+        <div class="line"></div>
+        <div class="float-right edit-icon-left margin-right fund-static-header edit-icon-right"><a title="Edit "
+                (click)="showequityheaderpopup()"><img alt="image not found" src="assets/dist/images/EditIcon.svg"></a></div>
+    </div>
+    <div class="row mr-0 ml-0">
+        <div class="col-lg-3 pl-0 pr-0">
+            <div class=" p-label-padding filter-label attribut-margin border-right">{{companyEquityHeaders[0]?.headerAliasName}}</div>
+            <div class="col-12 margin-align">
+                <input type="text" class="form-control margin-check" [ngModel]="netDebt | number:'1.0-1'"
+                    (change)="getNetDebtValue($event)" />
+            </div>
+        </div>
+        <div class="col-lg-3 pl-0 pr-0">
+            <div class=" p-label-padding filter-label attribut-margin border-right">{{companyEquityHeaders[1]?.headerAliasName}}
+            </div>
+            <div class="col-12 mrgn-bottom">
+                <input type="text" class="form-control" [ngModel]="preferredEquity | number:'1.1-1'"
+                    (change)="getPreferrdValue($event)" />
+            </div>
+        </div>
+        <div class="col-lg-3 pl-0 pr-0">
+            <div class=" p-label-padding filter-label attribut-margin">{{companyEquityHeaders[2]?.headerAliasName}}
+            </div>
+            <div class="col-12 mrgn-bottom">
+                <input type="text" class="form-control" [ngModel]="minorityInterest | number:'1.1-1'"
+                    (change)="getMinorityValue($event)" />
+            </div>
+        </div>
+        <div class="col-lg-3 pl-0 pr-0">
+            <div class=" p-label-padding filter-label attribut-margin">{{companyEquityHeaders[3]?.headerAliasName}}
+            </div>
+            <div class="col-12 mrgn-bottom">
+                <input type="text" class="form-control" [ngModel]="otherValue | number:'1.1-1'"
+                    (change)="getOtherValue($event)" />
+            </div>
+        </div>
+
+    </div>
+    <!-- Popup div -->
+    <div *ngIf="showEditHeader">
+        <div id="kpi-add-dialog" class="col-12 col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12  add-or-update-modal">
+            <div class="nep-modal nep-modal-show kpi-add-edit-modal nep-kpi-bg">
+                <div class="nep-modal-mask"></div>
+                <div [style.width]="customwidth" [style.top]="customTop"
+                    class="equity-company-header nep-card nep-card-shadow nep-modal-panel nep-modal-default nep-kpilist-pr">
+                    <div class=" header-right nep-card-header"
+                        [ngClass]="hasHeaderStyle? 'nep-modal-title-custom':'nep-modal-title'">
+                        Edit Changes
+
+                    </div>
+                    <div>
+                        <div class="info-header"><span>Making these edits will change field names</span></div>
+                        <div class="label-header-top row mr-0 ml-0">
+
+                            <div class="label-left col-4 col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 kpi-label-value pl-0 pr-0">
+                                <div class="border-label-right text-color popupcommon-labelpadding kpi-mandatory-label">Net Debt</div>
+                            </div>
+                            <div class="col-4 col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 kpi-label-value pl-0 pr-0">
+                                <input   autocomplete="off" class="form-control textbox-text-color" type="text" maxlength="30"
+                                    [(ngModel)]="companyEquityHeadersActual[0].headerAliasName" (change)="setDisablebutton()" (mouseout)="setDisablebutton()"
+                                   />
+
+                            </div>
+                        </div>
+                        <div class="row mr-0 ml-0">
+                            <div class="label-left col-4 col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 kpi-label-value pl-0 pr-0">
+                                <div class="border-label-right text-color popupcommon-labelpadding kpi-mandatory-label">Preferred Equity</div>
+                            </div>
+                            <div class="col-4 col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 kpi-label-value pl-0 pr-0">
+                                <input autocomplete="off" type="text" class="form-control textbox-text-color" (change)="setDisablebutton()" 
+                                    [(ngModel)]="companyEquityHeadersActual[1].headerAliasName" maxlength="30"
+                                    value="companyEquityHeadersActual[1].headerAliasName" />
+                            </div>
+                        </div>
+
+                        <div class="row mr-0 ml-0">
+                            <div class="label-left col-4 col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 kpi-label-value pl-0 pr-0">
+                                <div class="border-label-right text-color popupcommon-labelpadding kpi-mandatory-label">Minority Interest</div>
+                            </div>
+                            <div class="col-4 col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 kpi-label-value pl-0 pr-0">
+                                <input autocomplete="off" type="text"  class="textbox-text-color form-control" (change)="setDisablebutton()" (mouseout)="setDisablebutton()"
+                                	[(ngModel)]="companyEquityHeadersActual[2].headerAliasName" maxlength="30" value="companyEquityHeadersActual[2].headerAliasName"/>
+                            </div>
+                        </div>
+
+                        <div class="row mr-0 ml-0">
+                            <div class="label-left col-4 col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 kpi-label-value pl-0 pr-0">
+                                <div class="border-label-right text-color popupcommon-labelpadding kpi-mandatory-label">Other</div>
+                            </div>
+                            <div class="col-4 col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 kpi-label-value pl-0 pr-0">
+                                <input autocomplete="off" type="text" min="0" class="textbox-text-color form-control" (change)="setDisablebutton()"
+                                	[(ngModel)]="companyEquityHeadersActual[3].headerAliasName" maxlength="30" value="companyEquityHeadersActual[3].headerAliasName"/>
+                        </div>
+                    </div>
+                    <div class="footer-top nep-card-footer-bottom nep-card-right nep-modal-footer add-or-update-modal-footer">                      
+                            <button  type="button" (click)="hideequityheaderpopup()" class="nep-button nep-button-secondary">Cancel</button>
+                        <nep-button (click)="updateCompanyEquityHeader(companyEquityHeadersActual)" Type="Primary" [disabled]="btndisable"
+                             class="kpinep-butn-pl">
+                            Confirm
+                        </nep-button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="box-item custom-margin">
+        <span title="{{tooltip1}}">{{equityTitle2}} <img class="p-action-padding qy-img-css"
+                src="assets/dist/images/NotificIcon.svg" alt="" /> :</span>
+        <span [innerHTML]="grandTotal !== 'NA' ? (grandTotal | number:'1.1-1' | minusSignToBrackets) : grandTotal">
+        </span>
+    </div>
+    <div class="line-wrapper custom-margin">
+        <span class="mr-2 TextTruncate">Company Fair Value</span>
+        <div class="line"></div>
+    </div>
+    <div class="col-lg-2 pl-0 pr-0">
+        <div class=" p-label-padding filter-label attribut-margin border-width">Fund Ownership (%)
+        </div>
+        <div cl="col-lg-3">
+            <input type="number" (change)="validateFundOwnership($event)" [ngModel]="fundOwnership | number:'1.1-1'"
+                min="0" max="100" class="form-control border-mgn border-width margin-align">
+          
+        </div>
+    </div>
+    <div class="box-item custom-margin">
+        <span title="Fair Value : {{fundOwnerShiptitle}}">Fair Value <img class="p-action-padding qy-img-css"
+                src="assets/dist/images/NotificIcon.svg" alt="" />
+            :</span>
+        <span
+            [innerHTML]="GetFinalfairValue !== 'NA' ? (GetFinalfairValue | number:'1.1-1' | minusSignToBrackets) : GetFinalfairValue">
+        </span>
+    </div>
+</div>

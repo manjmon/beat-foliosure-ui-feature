@@ -1,0 +1,116 @@
+.data-analytics-modal {
+    .nep-card {
+        width: 600px !important;
+        top: 35% !important;
+        .nep-card-header {
+            padding: 0px !important;
+            .user-header {
+                font-size: 14px;
+                letter-spacing: 0.17px;
+                font-weight: bold;
+                color: #000000;
+                opacity: 1;
+                padding: 16px 20px !important;
+                .close-icon {
+                    cursor: pointer;
+                }
+            }
+        }
+        .nep-card-footer {
+            padding: 11px 20px !important;
+        }
+        .nep-card-body {
+            padding: 0px !important;
+            .user-body {
+                padding: 16px 20px !important;
+            }
+        }
+        .errorColor {
+            color: #c62828 !important;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+        .successColor {
+            color: #388e3c !important;
+        }
+        .user-upload {
+            letter-spacing: 0px;
+            color: #212121;
+            a {
+                color: #021155 !important;
+                text-decoration: underline !important;
+            }
+            .upload-desc {
+                letter-spacing: 0px !important;
+                color: #212121 !important;
+            }
+            .desc-header {
+                font-weight: bold;
+            }
+            .uploadButton {
+                cursor: pointer;
+                height: 32px;
+                border: 1px solid #021155;
+                border-radius: 4px;
+                padding-left: 9px;
+                padding-right: 9px;
+                padding-top: 2px;
+                opacity: 1;
+                max-width: 320px;
+            }
+            .browseIcon {
+                padding-right: 8px;
+                padding-top: 4px;
+            }
+            .browseButton {
+                top: 2.5px;
+                position: relative;
+            }
+        }
+    }
+}
+
+.download-fund-excel {
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #C9C9D4;
+    border-radius: 4px;
+    opacity: 1;
+    cursor: pointer;
+    padding: 5px 16px;
+    width: 125px;
+    padding-bottom: 7px !important;
+}
+
+.showHandIcon {
+    margin-top: 0px !important;
+}
+
+label {
+    letter-spacing: 0px !important;
+    color: #55565A !important;
+    opacity: 1 !important
+}
+
+.download-icon {
+    padding-top: 15px;
+}
+
+input {
+    padding-left: 0px !important;
+}
+
+.alert-message {
+    letter-spacing: 0px;
+    color: #C62828 !important;
+    font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif;
+}
+.custom-white-space{
+    white-space: break-spaces;
+}
+.padding-text-bulkupload {
+    padding-bottom: 1.25rem !important;
+}
+
+.padding-text-note {
+    padding-bottom: 0.75rem !important;
+}

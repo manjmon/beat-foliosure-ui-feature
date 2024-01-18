@@ -1,0 +1,183 @@
+<div class="group-section">
+    <div class="panel panel-default  tab-bg border-left-0 border-right-0">
+        <div class="row mr-0 ml-0  tabradius tabs-shadow search-section">
+            <div class="col-12 col-sm-12 col-xs-12 col-lg-12 col-xl-12 col-md-12 group-search pl-0 pr-0">
+                <div class="search">
+                    <span class="fa fa-search fasearchicon p-1"></span>
+                    <input type="text" (keyup)="search()" [(ngModel)]="globalFilter" class="search-groups companyListSearchHeight TextTruncate" placeholder="Search Group">
+                </div>
+            </div>
+        </div>
+        <div class="row mr-0 ml-0 group-full-sec" [ngStyle]="{'height':windowHeight+'px','overflow-y':'auto'}">
+            <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12  pl-0 pr-0">
+                <div class="row mr-0 ml-0">
+                    <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pl-0 pr-0">
+                        <div *ngFor="let group of groupList;">
+                            <div class="row mr-0 ml-0 group-section">
+                                <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pl-0 pr-0">
+                                    <div class="d-inline" [ngClass]="(group.groups?.length==0) ? 'pl-2' : ''"> <span class="pr-2 collapse-icon" *ngIf="group.isExpanded && group.groups?.length>0" (click)="isExpand(group)"><img alt="" [src]="'assets/dist/images/Expand-more.svg'" /></span>
+                                        <span class="pr-2 collapse-icon" *ngIf="!group.isExpanded && group.groups?.length>0" (click)="isExpand(group)"><img alt="" [src]="'assets/dist/images/Expand-less.svg'" /></span>
+                                        <span class="pr-2 collapse-text TextTruncate" title="{{group.masterGroupName}}">{{group.masterGroupName}} </span></div>
+                                    <div class="float-right d-inline">
+                                        <span class="pr-2" (click)="viewDescription(group)"><img alt="" [src]="'assets/dist/images/More_Border Grey.svg'" /></span>
+                                        <span *ngIf="(!group.isDefaultGroup && !group.isAdminGroup) || (isAdmin && !group.isAdminGroup)" class="pr-2" (click)="OnCreateSubGroup(group)"> <img alt="" [src]="'assets/dist/images/Add Grey.svg'" /></span>
+                                        <span *ngIf="(!group.isDefaultGroup && !group.isAdminGroup) || (isAdmin && !group.isAdminGroup)"> <img alt="" mat-icon-button [matMenuTriggerFor]="appGroupMenu" [matMenuTriggerData]="{name: group}"  [src]="'assets/dist/images/More_Vertical Grey.svg'" /></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="group.isExpanded">
+                                <div class="row mr-0 ml-0 sub-group-section" [ngClass]="subGroup.isSelected?'active-subgroup':''" (click)="setActiveGroup(subGroup,group,t.menuOpen)" *ngFor="let subGroup of group.groups">
+                                    <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12 pl-0 pr-0">
+                                        <div class="d-inline-block TextTruncate" [ngClass]="!subGroup.isActive?'subgroup-text-inActive':''" title="{{subGroup.groupName}}">{{subGroup.groupName}}</div>
+                                        <div class="float-right subgroup-icon">
+                                            <span class="pr-2" (click)="viewDescription(subGroup)">
+                                                <img alt ="" [src]="'assets/dist/images/More_Border Grey.svg'" />
+                                            </span>
+                                            <span *ngIf="(!group.isDefaultGroup && !group.isAdminGroup) || (isAdmin && !group.isAdminGroup)">
+                                                <img *ngIf="(!group.isDefaultGroup && !group.isAdminGroup) || (isAdmin && !group.isAdminGroup)" alt ="" #t="matMenuTrigger"  mat-icon-button [matMenuTriggerFor]="appMenu" [matMenuTriggerData]="{name: subGroup}" [src]="'assets/dist/images/More_Vertical Grey.svg'" />
+                                            </span>
+                                        </div>
+                                        <div #t="matMenuTrigger"  mat-icon-button [matMenuTriggerFor]="appMenu" [matMenuTriggerData]="{name: subGroup}"></div>
+                                    </div>
+                                </div>        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mr-0 ml-0 group-add-sec">
+            <div class="col-12 col-sm-12 col-md-12 col-xl-12 col-lg-12  pl-0 pr-0">
+                <span><button   class="btn btn-nep-default TextTruncate" title="Group" (click)="OnCreateGroup()" ><i  class="fa fa-plus" aria-hidden="true"></i> Group</button></span>
+            </div>
+        </div>
+    </div>
+</div>
+    <div *ngIf="isOpenPopup">
+        <modal customwidth="489px" modalTitle="{{groupTitle}}" primaryButtonName="{{primaryButtonName}}" secondaryButtonName="Cancel" (primaryButtonEvent)="OnSaveGroup($event)" (secondaryButtonEvent)="OnCancelGroup($event)" [disablePrimaryButton]="disableAdd">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12 group-rows">
+                    <div class="popupcommon-labelpadding"><span>Name</span> <span class="required-field">*</span></div>
+                    <nep-input (onChange)="onGroupNameChange($event)" (onBlur)="onGroupNameChange($event);onGroupNameUpdate();" (mouseout)="onGroupNameChange($event);onGroupNameUpdate();" ngDefaultControl [value]="addGroupName" [placeholder]="placeholderGroupName" class="kpis-custom-select custom-nep-input default-txtcolor group-input"></nep-input>
+                    <div *ngIf="isError" class="nep-error pt-1">{{ErrorMessage}}</div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    <div class="popupcommon-labelpadding pb-2">Description</div>
+                    <div class="custom-nep-input ">
+                        <label class="nep-input nep-input-textarea kpitext-label workflow-add-group">
+                            <textarea [value]="addGroupDesc" class="group-text" rows="2" ngDefaultControl  placeholder="input something" spellcheck="false"
+                                data-ms-editor="true" placeholder="Enter Description"
+                                 [(ngModel)]="addGroupDesc"
+                                 (onBlur)="onDescChange();onGroupNameUpdate();" (mouseout)="onDescChange();onGroupNameUpdate();"
+                                 (change)="onDescChange()"></textarea>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </modal>
+    </div>
+
+    <mat-menu #appMenu="matMenu" xPosition="before" class="group-menu">
+        <ng-template matMenuContent let-name="name">
+            <button mat-menu-item (click)="editSubGroup(name)">Edit sub-group</button>
+            <button mat-menu-item (click)="setStatus(name)">{{name.isActive? 'Set as Inactive':'Set as active'}}</button>
+            <button mat-menu-item (click)="deleteSubGroup(name)">Delete sub-group</button>
+        </ng-template>
+    </mat-menu>
+    <mat-menu #appGroupMenu="matMenu" xPosition="before" class="group-menu">
+        <ng-template matMenuContent let-name="name">
+            <button mat-menu-item (click)="editGroup(name)">Edit group</button>
+            <button mat-menu-item (click)="deleteGroup(name)">Delete group</button>
+        </ng-template>
+    </mat-menu>
+
+    <div *ngIf="isDescPopup" class="nep-modal nep-modal-show nep-wrkflw-db-bg">
+        <div class="nep-modal-mask"></div>
+        <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default nep-wrk-dft-pr-dif">
+            <div class="nep-card-header nep-modal-title">
+                <div class="d-inline">Description</div>
+                <div class="float-right desc-icon">
+                    <span (click)="closeDescPopUp()"><i class="fa fa-times" aria-hidden="true"></i></span>
+                </div>
+            </div>
+            <div class="nep-card-body">
+                <div *ngIf="popUpDescription?.length>0 && popUpDescription!=null"> {{ popUpDescription }}</div>
+                <div class="text-center" *ngIf="popUpDescription==='' || popUpDescription===null">
+                    <img src="assets/dist/images/emptyStateKpi.svg" alt="" />
+                    <div class="pt-4 pr-4 pl-4 pb-0">
+                        No description available yet!
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isDeletePopup">
+        <modal customwidth="489px" modalTitle="Confirmation" primaryButtonName="Confirm" secondaryButtonName="Cancel" (primaryButtonEvent)="OnDeleteGroup($event)" (secondaryButtonEvent)="OnCancelDeleteGroup($event)">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    Are you sure you want to delete this group along with its mapping & access?
+                </div>
+            </div>
+        </modal>
+    </div>
+
+    <div *ngIf="isOpenSubGroupPopup">
+        <modal customwidth="489px" modalTitle="{{subGroupTitle}}" primaryButtonName="{{subGroupprimaryButtonName}}" secondaryButtonName="Cancel" (primaryButtonEvent)="OnSaveSubGroup($event)" (secondaryButtonEvent)="OnCancelSubGroup($event)" [disablePrimaryButton]="disableSubGroupAdd">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12 group-rows">
+                    <div class="popupcommon-labelpadding">Name<span class="required-field">*</span></div>
+                    <nep-input (onChange)="onSubGroupNameChange($event)" (onBlur)="onSubGroupNameChange($event);onSubGroupNameUpdate();" (mouseout)="onSubGroupNameChange($event);onSubGroupNameUpdate();" ngDefaultControl [value]="addSubGroupName" [placeholder]="placeholderGroupName"
+                        class="kpis-custom-select custom-nep-input default-txtcolor group-input"></nep-input>
+                    <div *ngIf="isError" class="nep-error pt-1">{{ErrorMessage}}</div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    <div class="popupcommon-labelpadding pb-2">Description</div>
+                    <div class="custom-nep-input">
+                        <label class="nep-input nep-input-textarea kpitext-label">
+                            <textarea [value]="addSubGroupDesc" class="group-text" rows="2" ngDefaultControl  placeholder="input something" spellcheck="false"
+                                data-ms-editor="true" placeholder="Enter Description"
+                                 [(ngModel)]="addSubGroupDesc"
+                                 (onBlur)="onSubGroupDescChange();onSubGroupNameUpdate();" (mouseout)="onSubGroupDescChange();onSubGroupNameUpdate();"
+                                 (change)="onSubGroupDescChange()"></textarea>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </modal>
+    </div>
+    <div *ngIf="isDeleteSubGroupPopup">
+        <modal customwidth="489px" modalTitle="Confirmation" primaryButtonName="Confirm" secondaryButtonName="Cancel" (primaryButtonEvent)="OnDeleteSubGroup($event)" (secondaryButtonEvent)="OnCancelDeleteSubGroup($event)">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    Are you sure you want to delete this sub-group along with its mapping & access?
+                </div>
+
+            </div>
+        </modal>
+    </div>
+
+    <div *ngIf="isStatusPopup">
+        <modal customwidth="489px" modalTitle="Confirmation" primaryButtonName="Confirm" secondaryButtonName="Cancel" (primaryButtonEvent)="OnStatusGroup($event)" (secondaryButtonEvent)="OnCancelStatusGroup($event)">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-xs-12">
+                    Are you sure you want to set this sub-group as {{statusName}}?
+                </div>
+            </div>
+        </modal>
+    </div>
+
+    <div *ngIf="showMoveProfilesPopUp" class="nep-modal nep-modal-show nep-modal-workflw-db-bg">
+    <div class="nep-modal-mask"></div>
+    <div class="nep-card nep-card-shadow nep-modal-panel nep-modal-default wrkflow-nep-pr-dif-top-wid">
+      <div class="nep-card-header nep-modal-title">
+        <div class="d-inline"><img class="yellowInfoIcon yellow-info-pr-pb"  src="assets/dist/images/yellowInfoIcon.svg" alt="" />Alert</div>
+        <div class="float-right desc-icon">
+          <span (click)="closeMoveProfilesPopUp()"><i class="fa fa-times" aria-hidden="true"></i></span>
+        </div>
+      </div>
+      <div class="nep-card-body">
+        <div> {{ moveProfilesMsg }}</div>
+      </div>
+    </div>
+  </div>

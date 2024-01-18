@@ -1,0 +1,17 @@
+@import "../../../../variables";
+.portfolio-detail-component {
+    .chart-bg {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+}
+
+.allvalues{
+  float:left;
+  font-size:12px;
+  margin-right:12px;
+  color: $nep-icon-grey;
+  padding-left: 16px !important;
+  padding-top: 8px !important;
+}
+

@@ -1,0 +1,290 @@
+<div class="lpTemplateConfigContainer" (resized)="onResized($event)">
+    <div class="d-flex hfContainer bborder lptemconfig-box-shdw">
+        <div class="pr12">
+            <app-select class="lpTemplateConfig-app-select" [selectList]="allTemplates"
+                (OnSelect)="GetSelectedTemplate($event)" [selectedValue]="selectedTemplate"
+                imagePath="{{activesource}}">
+            </app-select>
+        </div>
+        <div class="mr-auto" [ngClass]="isAction?'disabledNoOfCasesDiv':''">
+            <app-select (OnSelect)="ExecuteAction($event)" class="lpTemplateConfig-app-select lpborder-app-select"
+                [selectList]="actions" [selectedValue]="selectedAction">
+            </app-select>
+        </div>
+        <div class="">
+            <div class="justify">
+                <img src="assets/dist/images/Justify.svg" alt="" />
+            </div>
+        </div>
+        <div class="pr12">
+            <div class="group">
+                <img src="assets/dist/images/Group9288.svg" alt="" />
+            </div>
+        </div>
+        <div class="">
+            <a (click)="AddSectionList()">
+                <nep-button Type="Secondary">
+                    <em class="fa fa-plus plus"></em> New Section
+                </nep-button>
+            </a>
+        </div>
+    </div>
+
+    <div class="bContainer" #target [ngClass]="isPageLoaded?'d-block':'d-none'"
+        [ngStyle]="{'height':windowHeight+'px','overflow-y':'scroll'}">
+        <form [formGroup]="dragForm" (ngSubmit)="submitActions(f)" #f="ngForm">
+            <div cdkDropList (cdkDropListDropped)="drop($event)" formArrayName="items">
+                <div class="row mr-0 ml-0 p-all-row"
+                    *ngFor="let Cntrl of  dragForm?.controls?.items?.controls ; let i = index" cdkDrag #elem="cdkDrag">
+                    <div [formGroupName]="i" class="col-md-12 pl-0 pr-0">
+                        <div class="mr-0 ml-0 box LpTemplate-bs1" >
+                            <div class="d-inline-block box-border-right drag-icon">
+                                <img cdkDragHandle src="assets/dist/images/6dots.svg" alt="">
+                            </div>
+                            <div class="d-inline-block" [ngClass]="Cntrl.value.actionname.isActive == null ? '' : !Cntrl.value.actionname.isActive ?'disabled-div' : ''">
+                                <div class="d-inline-block p-all">
+                                    <a (click)="checkValid()">
+                                        <app-customselect-ext class="drag-dropdown" formControlName="actionname"
+                                        [selectList]="masterList"
+                                        [selectedValue]="Cntrl.value.actionname!=null?Cntrl.value.actionname:masterList[0]"
+                                        (OnSelect)="GetSelectedSectionData($event,i)" >
+                                    </app-customselect-ext>
+                                    </a>
+                                </div>
+                                <div class="d-inline-block p-all"
+                                    *ngIf="isKpilineitemcheck(Cntrl.value.actionname.name)&&Cntrl.value.actionname.name!='Company Financials'">
+                                    <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="30"
+                                        (onChange)="onKpiLineItemChange($event,i,Cntrl.value.actionname.name)"
+                                        class="lp-report-Kpilineitems" name="Kpilineitems" [resetFilterOnHide]=true
+                                        [options]="kpi_items_DRP" defaultLabel="Select KPI Item" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" formControlName="kpilineitem"
+                                        optionLabel="name">
+                                        <ng-template let-lineitems pTemplate="item">
+                                            {{lineitems.name}}
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </div>
+                                <div class="d-inline-block p-all"
+                                    *ngIf="isKpilineitemcheck(Cntrl.value.actionname.name)&&Cntrl.value.actionname.name=='Company Financials'">
+                                    <p-multiSelect [virtualScroll]="true" [virtualScrollItemSize]="30"
+                                        (onChange)="onKpiFinancialsLineItemChange($event,i,Cntrl.value.actionname.name)"
+                                        class="lp-report-Kpilineitems" name="Kpilineitems" [resetFilterOnHide]=true
+                                        [options]="kpi_items_DRP" defaultLabel="Select KPI Item" [maxSelectedLabels]="1"
+                                        [selectedItemsLabel]="'{0} items selected'" formControlName="kpilineitem"
+                                        optionLabel="name">
+                                        <ng-template let-lineitems pTemplate="item">
+                                            {{lineitems.name}}
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </div>
+
+                                <div class="d-inline-block p-all" *ngIf="isKpiGraph(Cntrl.value.actionname.name)">
+                                    <p-dropdown (onChange)="onGraphLineItemChange($event,i,Cntrl.value.actionname.name)"
+                                        class="custom-p-dropdown" [style]="{width:'100%',marginTop:'4px'}" name="module"
+                                        formControlName="graphlineitem" [options]="kpi_items_DRP"
+                                        placeholder="Select KPI Line Item" optionLabel="name" [showClear]="false">
+                                    </p-dropdown>
+                                </div>
+                                <div class="d-inline-block p-all"
+                                    *ngIf="isKpilineitemcheck(Cntrl.value.actionname.name)||isKpiGraph(Cntrl.value.actionname.name)">
+                                    <!-- {{isCopyArrayOriginalLength|json}} -->
+                                    <!-- {{ this.isArrayOriginalLength|json}}   -->
+                                    <p-dropdown (onChange)="onPeriodChange($event,i,Cntrl.value.actionname.name)"
+                                        class="custom-p-dropdown lp-report-period" [style]="{width:'100%',marginTop:'4px'}"
+                                        formControlName="period" [options]="periodTypes" placeholder="Select Period"
+                                        optionLabel="name" [showClear]="false">
+                                    </p-dropdown>
+                                </div>
+                                <div class="d-inline-block pl-1 showToolTip"
+                                    title="If no period is selected, last one year data will be populated in the report by default"
+                                    *ngIf="isKpilineitemcheck(Cntrl.value.actionname.name) && Cntrl.value.actionname.name!== 'Company Financials'">
+                                    <img src="assets/dist/images/NotificationGrey.svg" alt="" />
+                                </div>
+                                <div class="d-inline-block pl-1 showToolTip" title="The sequence in which the line item is selected will be the same way
+                                    it will be displayed in the report. If no period is selected,
+                                    last one year data will be populated in the report by default."
+                                    *ngIf="isKpilineitemcheck(Cntrl.value.actionname.name) && Cntrl.value.actionname.name === 'Company Financials'">
+                                    <img src="assets/dist/images/NotificationGrey.svg" alt="" />
+                                </div>
+                                <span class="pl-3 alignment-comp-name" *ngIf="Cntrl.value.actionname.name=='CI - Company Logo & Name'">Company Name</span>
+                                
+                                <div class="d-inline-block comp-name-align-icons" *ngIf="Cntrl.value.actionname.name=='CI - Company Logo & Name'">
+                                    <div class="d-inline-block align pl-3 fa-lg showToolTip" title="Left align">
+                                    <a (click)="patchDynamicFormBlockValue(i,'left','name')">
+                                        <em class="fa fa-align-left fs12"
+                                        [ngClass]="Cntrl.value.justify=='left' ? 'ff' : 'fa fa-align-left ff-inactive'"
+                                        ></em>
+                                    </a>   
+                                </div>
+                                <div class="d-inline-block align pl-3 fa-lg showToolTip" title="Center align">
+                                    <a (click)="patchDynamicFormBlockValue(i,'center','name')">
+                                        <em class="fs12" [ngClass]="Cntrl.value.justify=='center' ? 'fa fa-align-justify ff' : 'fa fa-align-justify ff-inactive'"
+                                        ></em>
+                                    </a>
+                                </div>
+                                <div class="d-inline-block align pl-3 fa-lg showToolTip" title="Right align">
+                                    <a  (click)="patchDynamicFormBlockValue(i,'right','name')">
+                                        <em [ngClass]="Cntrl.value.justify=='right' ? 'fa fa-align-right ff' : 'fa fa-align-right ff-inactive'"
+                                        class="fs12"></em>
+                                    </a>
+                                </div>
+                                </div>
+                                <span class="comp-logo alignment-comp-name" *ngIf="Cntrl.value.actionname.name=='CI - Company Logo & Name'">Logo</span>
+                                <div class="d-inline-block comp-name-align-icons" *ngIf="Cntrl.value.actionname.name=='CI - Company Logo & Name'">
+                                    <div class="d-inline-block align comp-logo fa-lg showToolTip" title="Left align">
+                                        <a (click)="patchDynamicFormBlockValue(i,'left','logo')">
+                                            <em class="fa fa-align-left fs12"
+                                            [ngClass]="Cntrl.value.justifyLogo=='left' ? 'ff' : 'fa fa-align-left ff-inactive'"
+                                            ></em>
+                                        </a>
+                                </div>
+                                <div class="d-inline-block align pl-3 fa-lg showToolTip" title="Center align">
+                                    <a (click)="patchDynamicFormBlockValue(i,'center','logo')">
+                                        <em [ngClass]="Cntrl.value.justifyLogo=='center' ? 'fa fa-align-justify ff' : 'fa fa-align-justify ff-inactive'"
+                                        class="fs12" ></em>
+                                    </a>
+                                </div>
+                                <div class="d-inline-block align pl-3 fa-lg showToolTip" title="Right align">
+                                    <a (click)="patchDynamicFormBlockValue(i,'right','logo')">
+                                        <em [ngClass]="Cntrl.value.justifyLogo=='right' ? 'fa fa-align-right ff' : 'fa fa-align-right ff-inactive'"
+                                        class="fs12" ></em>
+                                    </a>
+                                </div>
+                                </div>
+                                <div class="d-inline-block pl-3" *ngIf="Cntrl.value.actionname.name== 'Company Financials'||Cntrl.value.actionname.name== 'KPI - Trading Record Table'||Cntrl.value.actionname.name== 'KPI - Operational Table'||Cntrl.value.actionname.name== 'KPI - Investment Table'||Cntrl.value.actionname.name== 'KPI - Company Table'||Cntrl.value.actionname.name== 'KPI - Impact Table'||Cntrl.value.actionname.name== 'KPI - Credit Table'">
+                                    <div class="d-inline-block">
+                                        <mat-checkbox (change)="footNoteCheck($event,i,Cntrl.value.actionname.name)" label class="mat-custom-checkbox mat-custom-checkbox-lp-report" formControlName="footnote" name="footNote">
+                                        </mat-checkbox>
+                                        <div class="d-inline-block pl-2"><span>Include Footnotes</span></div>                                        
+                                    </div>                                   
+                                </div>
+                            </div>
+                            <div class="d-inline-block  pull-right">
+                                <div class="d-inline-block  pull-left">
+                                    <span class="d-inline-block fullwidthselector"
+                                        *ngIf="Cntrl.value.actionname.name=='CI - Company Logo & Name'">(Full
+                                        Width)</span>
+                                    <span class="d-inline-block fullwidthselector"
+                                        *ngIf="Cntrl.value.actionname.isActive == null ? false : Cntrl.value.actionname.isActive ? false : true">(Hidden on page configuration)</span>
+    
+    
+                                </div>
+    
+                                <div class="d-inline-block box-border-left pull-left">
+                                    <a (click)="delete(i)">
+                                        <em class="pi pi-times"></em>
+                                    </a>                                  
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <button id="hiddenSaveButton"class="LpTemplate-d" type="submit"></button>
+        </form>
+    </div>
+    <div
+        class="d-flex hfContainer lptemplate-footer flex-row-reverse paddingtop col-lg-12 col-md-12 col-sm-12 fixed-footer"[ngStyle]="{'width': sideNavWidth}">
+        <div class="">
+            <a (click)="Savepopup()">
+                <nep-button [disabled]="!this.ischecksections()" Type="Primary" >
+                    Save as
+                </nep-button>
+            </a>
+        </div>
+        <div class="pr12">
+            <nep-button Type="Secondary" [disabled]=true>
+                <img class="preview" src="assets/dist/images/Content.svg" alt="" /> Preview
+            </nep-button>
+        </div>
+        <div class="pr12">
+            <a (click)="resetcntrl()">
+                <nep-button Type="Secondary" [disabled]="!this.ischecksections()" >
+                    Reset
+                </nep-button>
+            </a>
+        </div>
+        <div class="pr12">
+            <a (click)="resetcntrl()">
+                <nep-button Type="Secondary"  [disabled]=true>
+                    Cancel
+                </nep-button>
+            </a>
+
+        </div>
+    </div>
+</div>
+<div *ngIf="showpopup">
+    <confirm-modal class="AddOrUpdateKpi" primaryButtonName="Confirm" (secondaryButtonEvent)="onClose()"
+        [disablePrimaryButton]="disableConfirmSave" (primaryButtonEvent)="confirmSave();" id="add_template"
+        secondaryButtonName="Cancel" [modalTitle]="title">
+        <div class="row mr-0 ml-0">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pl-0 pr-0">
+                <div class="row mr-0 ml-0">
+                    <div class="col-lg-12 col-md-5 col-xs-5 pl-0 pr-0 ">
+                        <div class="">Template Name*
+                        </div>
+                        <nep-input (onChange)="ontemplateChange($event)" [ngClass]="{'custom-error-kpi-input':isexits}"
+                            [value]="templateName" [placeholder]=placeholderKPIName
+                            class="kpis-custom-select custom-nep-input default-txtcolor lp-nep-input "></nep-input>
+                        <div *ngIf="isexits" class="nep-error">Template name already exits</div>
+                    </div>
+                    <div class="col-lg-12 col-md-5 col-xs-5 pl-0 pr-0 pt-0 ">
+                        <div class="d-inline-block padding-radio">
+                            <a (click)="radiotextClick(1);" (mouseout)="deSelecterror(selection)">
+                                <p-radioButton name="radio" 
+                                 [disabled]="default==selectedTemplate.name"
+                                value="U" [(ngModel)]="selection" inputId="1">
+                            </p-radioButton>
+                            </a>
+
+                            <span for="1" [ngStyle]="default==selectedTemplate.name?{'opacity': '40%'} : ''">Update
+                                current template</span>
+                        </div>
+                        <div class="padding-radio-save">
+                            <a (click)="radiotextClick(2);" (mouseout)="deSelecterror(selection)">
+                                <p-radioButton  
+                                name="radio" value="N" [(ngModel)]="selection" inputId="2"></p-radioButton>
+                            </a>
+                            <span for="2">Save as new template</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </confirm-modal>
+</div>
+<div *ngIf="isPopup">
+    <modal customwidth="489px" [modalTitle]="modalTitle" primaryButtonName="Confirm" secondaryButtonName="Cancel"
+        (primaryButtonEvent)="OnConfig($event)" (secondaryButtonEvent)="OnCancel($event)"
+        [disablePrimaryButton]="disableRenameConfirm">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-xs-12" *ngIf="this.configObj.Status == 'Set as Active'">
+                This will set {{this.selectedTemplate.name}} as active. Are you sure?
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12" *ngIf="this.configObj.Status == 'Set as Inactive'">
+                This will set {{this.selectedTemplate.name}} as Inactive and Default template as active. Are you sure?
+            </div>
+            <div class="col-lg-12 col-md-5 col-xs-5 pl-3 pr-3 " *ngIf="this.configObj.Status == 'Rename template'">
+                <div class="">Template Name*
+                </div>
+                <nep-input (onInput)="ontemplateChange($event)" [ngClass]="{'custom-error-kpi-input':isexits}"
+                    [value]="templateName" placeholder="" class="kpis-custom-select custom-nep-input default-txtcolor">
+                </nep-input>
+                <div *ngIf="isexits" class="nep-error">Template name already exits</div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12"
+                *ngIf="this.configObj.Status == 'Delete template' && selectedTemplate.name !== activeTemplateName">
+                This will delete {{this.selectedTemplate.name}} template. Are you sure?
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12"
+                *ngIf="this.configObj.Status == 'Delete template'&& selectedTemplate.name === activeTemplateName">
+                This will delete {{this.selectedTemplate.name}} template and set Default template as active. Are you
+                sure?
+            </div>
+        </div>
+    </modal>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

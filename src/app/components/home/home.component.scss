@@ -1,0 +1,226 @@
+h5 {
+  border-bottom: none;
+  margin: 0;
+  padding: 0;
+  padding-top: 20px !important;
+  padding-bottom: 8px !important;
+  font-size: 14px !important;
+}
+
+.regionDiv {
+  /* Layout Properties */
+  /* UI Properties */
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  box-shadow: 0px 0px 12px #00000014;
+  border: 1px solid #DEDFE0;
+  border-radius: 4px;
+  opacity: 1;
+}
+.bar-chart-padd {
+  // padding-left: 44.5px !important;
+  padding-top: 44.5px !important;
+  padding-bottom: 0
+}
+.line-padding{
+  padding-top:20px !important
+}
+.donutHeight{
+  height: 423px !important;
+}
+.maxWidth{
+  max-width: 200px !important;
+}
+
+.paddingLeft{
+  padding-left: 0px !important;  
+}
+
+.regionButton {
+  width: 164px;
+  text-align: left;
+  padding-left: 16px !important;
+  height: 60px;
+  /* UI Properties */
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  box-shadow: 0px 0px 12px #00000014;
+  font-size: 14px !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  border-bottom: 1px solid #DEDFE0;
+}
+.regionButton:last-child
+{
+  border-bottom: none !important;
+  border-radius: 0 0px 4px 4px;
+}
+.regionButton:first-child
+{
+  border-radius: 4px 4px 0px 0px;
+}
+.regionButtonActive{
+  background-color: #EFF0F9 !important;
+}
+.defaultFontSize{
+  font-size: 14px !important;
+}
+.highcharts-axis-title{
+  font-size: 14px !important;
+}
+.highcharts-xaxis-labels span{
+  font-size: 14px !important;
+}
+.sectionHeader {
+  text-align: left;
+  font-family: "Helvetica Neue LT W05_65 Medium",Arial, Verdana, Tahoma,sans-serif, 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 14px !important;
+  letter-spacing: 0.17px;
+  color: #212121;
+  opacity: 1;
+ 
+}
+
+.p-inputtext{
+  border-bottom: none;
+}
+.yearCalendar{
+  width: 200px !important;
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #C9C9D4;
+  border-radius: 2px;
+  opacity: 1;
+}
+
+.boxBorder{
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  box-shadow: 0px 0px 12px #00000014;
+  border: 1px solid #DEDFE0;
+  border-radius: 4px;
+  opacity: 1;
+}
+button:hover {
+  background: #F7F8FC 0% 0% no-repeat padding-box;
+}
+button::selection {
+  background-color: #EFF0F9 !important;
+}
+
+.p-button.p-button-icon-only{
+  border-bottom: none;
+}
+
+.vintageDate{
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  border: 1px solid #C9C9D4;
+  border-radius: 4px;
+  opacity: 1;
+  border-bottom: 0;
+  padding: 1px;
+}
+
+.input-group {
+  width: 200px !important;
+}
+.toyear-p
+{
+  padding-left: 9px !important;
+}
+.region-button-p
+{
+  padding-top: 21.5px;
+}
+.region-div{
+  height: 302px;
+  overflow-y: auto;
+}
+.tab-home-bg
+{
+  background-color: #fafafb !important;
+}
+.custom-tab-panel-heading
+{
+  border-bottom: none !important;
+}
+//countercard css
+.investor-dashboard-container {
+  background: #F7F8FC 0% 0% no-repeat padding-box;
+  box-shadow: 0px 0px 12px #02115529;
+  border: 1px solid #DEDFE0;
+  border-radius: 4px;
+  opacity: 1;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  border-left: 4px solid #00ACC1;
+  width: calc(calc(100% - 32px)/5)!important;
+}
+.countercls {
+  overflow: hidden;
+  text-align: center !important;
+  padding: 16px !important;
+  width: 100% !important
+}
+.dynamicDisplayNameCss {
+  color: var(--unnamed-color-55565a);
+  color: #55565A;
+}
+.UnitValueCss {
+  text-align: center;
+  font-family: 'Helvetica Neue LT W05_65 Medium', Arial, sans-serif !important;
+  font-size: 16px !important;
+  letter-spacing: 0px;
+  color: #1e1e1e;
+  opacity: 1;
+}
+.CurrencyCss {
+  color: #75787B;
+}
+.CurrencyandUnitcustom {
+  font-family: "Helvetica Neue LT W05_55 Roman", Arial, Verdana, Tahoma, sans-serif !important;
+  font-size: 14px !important; 
+  opacity: 1;
+  text-align: center;
+  letter-spacing: 0px;
+}
+.tab-shadow-home{
+  background: #FFFFFF 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #00000014;
+  opacity: 1;
+  margin-bottom: 20px;
+  margin-top: -18.8px;
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-left: 5px;
+}
+.data-filter-icons{
+  text-align: right !important;
+  padding-right: 1rem !important;
+  cursor: pointer;
+}
+.custom-total-fund{
+  margin-top: 19px !important;
+}
+.button-padding-reset{
+  padding: 0px 8px !important;
+}
+.filter-collapse-text-bi
+{
+  font-family: "Helvetica Neue LT W05_65 Medium", Arial, Verdana, Tahoma, sans-serif !important;
+  letter-spacing: 0px;
+  color: #212121;
+  cursor: pointer;
+}
+.header-pi-icon{
+  height: 2rem;
+  color: #6c757d;
+  border: 0 none;
+  background: transparent;
+  border-radius: 50%;
+  transition: box-shadow 0.15s;
+  .pi{
+    color: #6c757d;
+  }
+}
+.data-analytics-filter-model .nep-modal .nep-card{
+    top: 50% !important;
+}

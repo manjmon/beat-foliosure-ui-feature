@@ -1,0 +1,119 @@
+﻿<div class="row">
+    <div class="col-lg-12">
+        <div class="add-user-component">
+            <div class="card card-main">
+                <div class="card-header card-header-main p-0 border-bottom-0">
+                    <div class="row mr-0 ml-0 fundlist-header"[ngClass]="fundStaticConfiguartionData ?.length == 0 ?'border-bottom':''">
+                        <div class="col-12 col-xs-12 col-sm-12 col-lg-12 col-xl-12 col-md-12 pr-0 pl-0">
+                            <div class="float-right">
+                                <div class="d-inline-block search">
+                                    <span class="fa fa-search fasearchicon p-1"></span>
+                                    <input #gb pInputText type="text"
+                                    (input)="searchLoadPCLazy()"
+                                        class="search-text-company companyListSearchHeight TextTruncate" placeholder="Search fund"
+                                        [(ngModel)]="globalFilter">
+                                </div>
+                                <div class="d-inline-block"
+                                    [hideIfUnauthorized]='{featureId:feature.Fund,action:"export"}'>
+                                    <img class="p-action-padding download-excel" title="Export Fund (Excel file)" alt=""
+                                        (click)="exportFundList()" src="assets/dist/images/Cloud-download.svg" />
+                                </div>
+                                <div class="d-inline" [hideIfUnauthorized]='{featureId:feature.Fund,action:"export"}'>
+                                    <span class="col-divider">
+                                    </span>
+                                </div>
+                                <div class="d-inline-block"
+                                    [hideIfUnauthorized]='{featureId:feature.Fund,action:"add"}'>
+                                    <div class="add-icon p-add-padding">
+                                        <a [routerLink]="['/create-fund']" title="Add fund">
+                                            <img class="" title="Add Fund" src="assets/dist/images/plus.svg" alt=""/></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div *ngIf="funds==undefined">
+                        <img alt="" src="assets/dist/images/loading.gif" class="loading-img" />
+                    </div>
+                    <p-table styleClass="p-datatable-gridlines" [scrollHeight]="'calc(100vh - 188px)'" class="cashflow-tbl text-left custom-kpi-table borderless company-financial-border custom-table-paginator" [resizableColumns]="true" #tblFund
+                        emptyMessage="{{blockedTable? 'Please Wait...':'No record found'}}"
+                        [totalRecords]="totalRecords" [value]="fundStaticConfiguartionData" [lazy]="true" 
+                        (onLazyLoad)="loadFundsLazy($event)"
+                        scrollable="true"  [rows]="20"
+                        [globalFilter]="gb" sortMode="multiple">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th id= "header" title="{{item.header}}" pSortableColumn="{{item.sortFieldName}}" *ngFor="let item of headers">{{item.header}}
+                                    <p-sortIcon field="{{item.sortFieldName}}"></p-sortIcon>                                  
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-fund>
+                            <tr (click)="redirectToFund(fund)">
+                                <td class="TextTruncate" *ngIf = "fund.valueColumn1 != null" >
+                                    <a *ngIf = "fund.valueColumn1.link != ''" class="click-view TextTruncate" title="{{fund.valueColumn1.value}}" href="javascript:void(0);"
+                                    [routerLink]="[fund.valueColumn1.link, fund.valueColumn1.encryptedId]"
+                                    title="View Details"
+                                    [hideIfUnauthorized]='{featureId:feature.Fund,action:"view"}'>{{fund.valueColumn1.value}}</a>
+
+                                    <div *ngIf = "fund.valueColumn1.link == ''" class="row mr-0 ml-0 fundl-cd">
+                                        <div class="col-12 pr-0 pl-0">
+                                            <div class="  TextTruncate"><span
+                                                    class="TextTruncate">{{fund.valueColumn1.value}}</span></div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="TextTruncate" *ngIf = "fund.valueColumn2 != null" >
+                                    <a *ngIf = "fund.valueColumn2.link != ''" class="click-view TextTruncate" title="{{fund.valueColumn2.value}}" href="javascript:void(0);"
+                                    [routerLink]="[fund.valueColumn2.link, fund.valueColumn2.encryptedId]"
+                                    title="View Details"
+                                    [hideIfUnauthorized]='{featureId:feature.Fund,action:"view"}'>{{fund.valueColumn2.value}}</a>
+
+                                    <div *ngIf = "fund.valueColumn2.link == ''" class="row mr-0 ml-0 flist-cd">
+                                        <div class="col-12 pr-0 pl-0">
+                                            <div class="  TextTruncate"><span
+                                                    class="TextTruncate">{{fund.valueColumn2.value}}</span></div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="TextTruncate" *ngIf = "fund.valueColumn3 != null" >
+                                    <a *ngIf = "fund.valueColumn3.link != ''" class="click-view TextTruncate" title="{{fund.valueColumn3.value}}" href="javascript:void(0);"
+                                    [routerLink]="[fund.valueColumn3.link, fund.valueColumn3.encryptedId]"
+                                    title="View Details"
+                                    [hideIfUnauthorized]='{featureId:feature.Fund,action:"view"}'>{{fund.valueColumn3.value}}</a>
+
+                                    <div *ngIf = "fund.valueColumn3.link == ''" class="row mr-0 ml-0 fundlist-cd">
+                                        <div class="col-12 pr-0 pl-0">
+                                            <div class="TextTruncate">{{fund.valueColumn3.value}}</div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="TextTruncate" *ngIf = "fund.valueColumn4 != null" >
+                                    <a *ngIf = "fund.valueColumn4.link != ''" class="click-view TextTruncate" title="{{fund.valueColumn4.value}}" href="javascript:void(0);"
+                                    [routerLink]="[fund.valueColumn4.link, fund.valueColumn4.encryptedId]"
+                                    title="View Details"
+                                    [hideIfUnauthorized]='{featureId:feature.Fund,action:"view"}'>{{fund.valueColumn4.value}}</a>
+
+                                    <div *ngIf = "fund.valueColumn4.link == ''" class="row mr-0 ml-0 fl-cursord" >
+                                        <div class="col-12 pr-0 pl-0">
+                                            <div class="  TextTruncate">{{fund.valueColumn4.value}}</div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <paginator-control class="custom-table-paginator" *ngIf="fundStaticConfiguartionData?.length >0" [rowsPerPage]="fundStaticConfiguartionData?.length" [totalRecords]="totalRecords" [totalPage]="totalPage" [inputSearch] = "globalFilter"  (loadPortfolioLazy)="loadFundsLazy($event)"></paginator-control>
+                    <app-empty-state [isGraphImage] ="false" *ngIf="fundStaticConfiguartionData?.length == 0"></app-empty-state>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-loader-component *ngIf="isLoader"></app-loader-component>

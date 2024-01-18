@@ -1,0 +1,19 @@
+<svg id="Admin" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <path id="Path" d="M0,0H24V24H0Z" fill="none" fill-rule="evenodd"/>
+  <g id="Bar_Chart" data-name="Bar Chart" transform="translate(-101 -362)">
+    <g id="Group_2444" data-name="Group 2444" transform="translate(-36 -62)">
+      <g id="Group_2432" data-name="Group 2432" transform="translate(-1083 -19)">
+        <g id="Rectangle_1308" data-name="Rectangle 1308" transform="translate(1224 447)" fill="none" stroke="#fff" stroke-width="1.5">
+          <rect width="16" height="16" rx="2" stroke="none"/>
+          <rect x="0.75" y="0.75" width="14.5" height="14.5" rx="1.25" fill="none"/>
+        </g>
+      </g>
+      <rect id="Rectangle_1310" data-name="Rectangle 1310" width="1.5" height="5.5" transform="translate(144.75 435)" fill="#fff"/>
+      <rect id="Rectangle_1311" data-name="Rectangle 1311" width="1.5" height="9" transform="translate(148.25 431.5)" fill="#fff"/>
+      <rect id="Rectangle_1312" data-name="Rectangle 1312" width="1.5" height="3.5" transform="translate(151.75 437)" fill="#fff"/>
+    </g>
+    <g id="Group_2445" data-name="Group 2445" transform="translate(51)">
+      <rect id="Rectangle_1313" data-name="Rectangle 1313" width="24" height="24" transform="translate(50 362)" fill="none"/>
+    </g>
+  </g>
+</svg>
